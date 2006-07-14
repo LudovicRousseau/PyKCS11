@@ -1,0 +1,990 @@
+<HTML>
+	<HEAD>
+		<meta name="vs_showGrid" content="True">
+		<title>PyKCS11 Documentation - A Python wrapper for the PKCS#11 API</title>
+		<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+	    <style type="text/css">
+<!--
+.typename {
+	color: #3366FF;
+	font-weight: bold;
+}
+.functionname {
+	font-weight: bold;
+	color: #FF0000;
+}
+.codesnipet {
+	font-family: "Courier New", Courier, mono;
+	color: #006600;
+}
+.parametername {
+	font-weight: bold;
+	color: #0000CC;
+}
+-->
+        </style>
+	</HEAD>
+	<body>
+		<h1>PyKCS11, a Python wrapper for the PKCS#11 API</h1>
+		<p>Copyright (C) 2004 Midori (<a href="http:/www.paipai.net/texts/components.htm">http:/www.paipai.net/</a>)<br>
+Verbatim copying and distribution of this entire article are permitted worldwide,
+  without royalty, in any medium, provided this notice, and the copyright notice,
+  are preserved.</p>
+		<p><form action="https://www.paypal.com/cgi-bin/webscr" method="post">
+<input type="hidden" name="cmd" value="_s-xclick">
+<input type="image" src="https://www.paypal.com/en_US/i/btn/x-click-but04.gif" border="0" name="submit" alt="Please support free software: make a donation using PayPal.">
+<input type="hidden" name="encrypted" value="-----BEGIN PKCS7-----MIIHRwYJKoZIhvcNAQcEoIIHODCCBzQCAQExggEwMIIBLAIBADCBlDCBjjELMAkGA1UEBhMCVVMxCzAJBgNVBAgTAkNBMRYwFAYDVQQHEw1Nb3VudGFpbiBWaWV3MRQwEgYDVQQKEwtQYXlQYWwgSW5jLjETMBEGA1UECxQKbGl2ZV9jZXJ0czERMA8GA1UEAxQIbGl2ZV9hcGkxHDAaBgkqhkiG9w0BCQEWDXJlQHBheXBhbC5jb20CAQAwDQYJKoZIhvcNAQEBBQAEgYAIt90Qm2jMluEGDUco0DNzzPlnCP6iFlE3RV5saEbBY3SBv+tWRC7m3/4KoUCalFT4iiL5sZH8O35/smWXHSR76LovsFpNqc4Egzte4VqOAoj8X79h6fp2Y9kQpNl1waDoQVjktA7pWHd2uxoY4i3rsi6/pekwnd570qI/hMotTDELMAkGBSsOAwIaBQAwgcQGCSqGSIb3DQEHATAUBggqhkiG9w0DBwQIW1WvEqGDmG2AgaAJfiVa+/aiKsSEQ3R+FR/E7ogpIJgtUyESEDR4UDELDH6RCk2nAw48jb0Qc1m8eXvxhMxqOcZAI73isuRx6fRletfKW8+duHJhdl/+TNyxKxxJln04cZvRZ7v2V2SXQyNkJHE60bOKBuEHfu8WQ3HWzPQzv/gpKPd9G6epTRrUt5qO8YR/vSSrZhmUSVplrUESVSGVIk5ZnxqgQRDoDrrWoIIDhzCCA4MwggLsoAMCAQICAQAwDQYJKoZIhvcNAQEFBQAwgY4xCzAJBgNVBAYTAlVTMQswCQYDVQQIEwJDQTEWMBQGA1UEBxMNTW91bnRhaW4gVmlldzEUMBIGA1UEChMLUGF5UGFsIEluYy4xEzARBgNVBAsUCmxpdmVfY2VydHMxETAPBgNVBAMUCGxpdmVfYXBpMRwwGgYJKoZIhvcNAQkBFg1yZUBwYXlwYWwuY29tMB4XDTA0MDIxMzEwMTMxNVoXDTM1MDIxMzEwMTMxNVowgY4xCzAJBgNVBAYTAlVTMQswCQYDVQQIEwJDQTEWMBQGA1UEBxMNTW91bnRhaW4gVmlldzEUMBIGA1UEChMLUGF5UGFsIEluYy4xEzARBgNVBAsUCmxpdmVfY2VydHMxETAPBgNVBAMUCGxpdmVfYXBpMRwwGgYJKoZIhvcNAQkBFg1yZUBwYXlwYWwuY29tMIGfMA0GCSqGSIb3DQEBAQUAA4GNADCBiQKBgQDBR07d/ETMS1ycjtkpkvjXZe9k+6CieLuLsPumsJ7QC1odNz3sJiCbs2wC0nLE0uLGaEtXynIgRqIddYCHx88pb5HTXv4SZeuv0Rqq4+axW9PLAAATU8w04qqjaSXgbGLP3NmohqM6bV9kZZwZLR/klDaQGo1u9uDb9lr4Yn+rBQIDAQABo4HuMIHrMB0GA1UdDgQWBBSWn3y7xm8XvVk/UtcKG+wQ1mSUazCBuwYDVR0jBIGzMIGwgBSWn3y7xm8XvVk/UtcKG+wQ1mSUa6GBlKSBkTCBjjELMAkGA1UEBhMCVVMxCzAJBgNVBAgTAkNBMRYwFAYDVQQHEw1Nb3VudGFpbiBWaWV3MRQwEgYDVQQKEwtQYXlQYWwgSW5jLjETMBEGA1UECxQKbGl2ZV9jZXJ0czERMA8GA1UEAxQIbGl2ZV9hcGkxHDAaBgkqhkiG9w0BCQEWDXJlQHBheXBhbC5jb22CAQAwDAYDVR0TBAUwAwEB/zANBgkqhkiG9w0BAQUFAAOBgQCBXzpWmoBa5e9fo6ujionW1hUhPkOBakTr3YCDjbYfvJEiv/2P+IobhOGJr85+XHhN0v4gUkEDI8r2/rNk1m0GA8HKddvTjyGw/XqXa+LSTlDYkqI8OwR8GEYj4efEtcRpRYBxV8KxAW93YDWzFGvruKnnLbDAF6VR5w/cCMn5hzGCAZowggGWAgEBMIGUMIGOMQswCQYDVQQGEwJVUzELMAkGA1UECBMCQ0ExFjAUBgNVBAcTDU1vdW50YWluIFZpZXcxFDASBgNVBAoTC1BheVBhbCBJbmMuMRMwEQYDVQQLFApsaXZlX2NlcnRzMREwDwYDVQQDFAhsaXZlX2FwaTEcMBoGCSqGSIb3DQEJARYNcmVAcGF5cGFsLmNvbQIBADAJBgUrDgMCGgUAoF0wGAYJKoZIhvcNAQkDMQsGCSqGSIb3DQEHATAcBgkqhkiG9w0BCQUxDxcNMDUwMjI2MTUxMTQ4WjAjBgkqhkiG9w0BCQQxFgQUGPsZ2G5YM0tEa6SekFHB15rL/1YwDQYJKoZIhvcNAQEBBQAEgYAWrGOSPBVDRLy7TQxZ3KNa4uF5jLrZcwLmQus4rsFjPmCa/QFwDlvyeFGldf96bSzfN8k+13W1eY/Hr2lSYLNMfSBGjD75Wi61PkWIpX9KEpWTuI/HnCXIlQLbDXjqSpkpEdx7Tg9a/oJv8VC5AxYanuWZ9yfKbOWcW4z5YNdQZA==-----END PKCS7-----
+">
+</form></p>
+		<p>Contents:</p>
+		<ul>
+		  <li><a href="#Foreword">Foreword</a>
+		    <ul>
+		      <li><a href="#AboutDocumentation">About this Documentation</a></li>
+	        </ul>
+		  </li>
+          <li><a href="#generalrules">Basic principles used to write this wrapper</a> <strong>(Python
+              and PKCS#11 gurus: start here)</strong></li>
+          <li><a href="#reference">PyKCS11 Reference</a>
+            <ul>
+              <li><a href="#how_to_call">How to call PyKCS11</a></li>
+              <li><a href="#ObjectsAndTypes">PyKCS11 Objects and Types</a></li>
+              <li><a href="#CK_ATTRIBUTE_SMARTReference">CK_ATTRIBUTE_SMART Reference</a></li>
+              <li><a href="#CPKCS11LibReference">CPKCS11Lib Reference</a>
+                <ul>
+                  <li><a href="#CPKCS11LibSpecific">CPKCS11Lib specific methods
+                  </a> (loading and unloading a PKCS#11 module)
+                  <ul>
+                      <li><a href="#Load">Load()</a></li>
+                      <li><a href="#Unload">Unload()</a></li>
+                      <li><a href="#notes_multiple_load">Notes on loading same Library more than once inside
+                      the same process</a></li>
+                  </ul>
+                  </li>
+                  <li><a href="#GeneralPurpose">General purpose Methods
+                </a>                    <ul>
+                      <li><a href="#C_Initialize">C_Initialize()</a></li>
+                      <li><a href="#C_Initialize">C_Finalize()</a></li>
+                      <li><a href="#C_Initialize">C_GetInfo()</a></li>
+                    </ul>
+                  </li>
+                  <li><a href="#SlotManagement">Slot management Methods
+                </a>                    <ul>
+                      <li><a href="#C_GetSlotList">C_GetSlotList()</a></li>
+                      <li><a href="#C_GetSlotInfo">C_GetSlotInfo()</a></li>
+                    </ul>
+                  </li>
+                  <li><a href="#TokenManagement">Token management Methods </a>                    <ul>
+                      <li><a href="#C_InitToken">C_InitToken()</a></li>
+                      <li><a href="#C_GetTokenInfo">C_GetTokenInfo()</a></li>
+                      <li><a href="#C_SetPin">C_SetPin()</a></li>
+                      <li><a href="#C_InitPin">C_InitPin()</a></li>
+                    </ul>
+                  </li>
+                  <li><a href="#SessionManagement">Session management Methods</a>                    <ul>
+                      <li><a href="#C_OpenSession">C_OpenSession()</a></li>
+                      <li><a href="#C_GetSessionInfo">C_GetSessionInfo()</a></li>
+                      <li><a href="#C_CloseSession">C_CloseSession()</a></li>
+                      <li><a href="#C_CloseAllSessions">C_CloseAllSessions()</a></li>
+                      <li><a href="#C_Login">C_Login()</a></li>
+                      <li><a href="#C_Logout">C_Logout()</a></li>
+                    </ul>
+                  </li>
+                  <li><a href="#ObjectManagement%20">Object management Methods
+                  </a>                    <ul>
+                      <li><a href="#C_FindObjectsInit">C_FindObjectsInit</a>()</li>
+                      <li><a href="#C_FindObjects">C_FindObjects</a>()</li>
+                      <li><a href="#C_FindObjectsFinal">C_FindObjectsFinal</a>()</li>
+                      <li><a href="#C_GetAttributeValue">C_GetAttributeValue</a>()</li>
+                      <li><a href="#C_SetAttributeValue">C_SetAttributeValue</a>()</li>
+                      <li><a href="#C_CreateObject">C_CreateObject</a>()</li>
+                      <li><a href="#C_GenerateKeyPair">C_GenerateKeyPair</a>()</li>
+                      <li><a href="#C_DestroyObject">C_DestroyObject</a>()</li>
+                      <li><a href="#C_GetObjectSize">C_GetObjectSize</a>()</li>
+                  </ul>
+                  </li>
+                  <li><a href="#Cryptokgrapic">Cryptokgrapic Methods</a>                    <ul>
+                      <li><a href="#C_SignInit">C_SignInit</a>()</li>
+                      <li><a href="#C_Sign">C_Sign</a>()</li>
+                      <li><a href="#C_DecryptInit">C_DecryptInit</a>()</li>
+                      <li><a href="#C_Decrypt">C_Decrypt</a>()</li>
+                      <li><a href="#C_EncryptInit">C_EncryptInit</a>()</li>
+                      <li><a href="#C_Encrypt">C_Encrypt</a>()</li>
+                    </ul>
+                  </li>
+                  <li><a href="#OtherMethods">Other Methods</a></li>
+                </ul>
+              </li>
+            </ul>
+          </li>
+    </ul>
+		<p>&nbsp;</p>
+		<h2>Foreword<a name="Foreword"></a></h2>
+		<p>This wrapper has been generated with the help of the <a href="http://www.swig.org/"><strong>SWIG</strong></a> compiler, a wrapper
+			generator.<br>
+			Just  differences from original PKCS#11 API are documented.
+			Anything	not	documented here can be found on the <a href="http://www.rsasecurity.com/rsalabs/node.asp?id=2133">PKCS#11
+			specification</a>.<br>
+			Please don't think about this documentation as a replacement for the PKCS#11
+	manual :)</p>
+		<p>The PKCS#11 API is very C oriented, 
+		  so a C++ wrapper over the original PKCS#11 API has been created<br>
+		  This C++ wrapper exports the interface of
+		    some PKCS#11 function in a
+			  more &quot;Python oriented&quot; way (using stl collections, that are well
+		  wrapped by SWIG	and are easy to use with Python because are very
+  similar to                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                       <strong>Lists
+  and Tuples</strong>).<br>
+  The C++ has been choosed as wrapping language because SWIG supports it very
+  well.</p>
+		<p>&nbsp;</p>
+		<h3>About this documentation <a name="AboutDocumentation"></a></h3>
+		<p>This document <strong>ISN'T A PKCS#11 API reference replacement</strong>.
+		  <strong>You</strong><em><strong> NEED</strong></em> to know most of the PKCS#11
+		  API you need if you want to use <strong>PyKCS11</strong>.<br>
+		  The PKCS#11 reference contained in
+		  this document just shows differences between PyKCS11 and the original
+		  PKCS#11 API.<br>
+		  Please don't ask us how to use the PKCS#11 API, consult instead the
+		  original RSA PKCS#11 documentation:<br>
+		  <a href="http://www.rsasecurity.com/rsalabs">http://www.rsasecurity.com/rsalabs</a><br>
+		  <a href="http://www.rsasecurity.com/rsalabs/node.asp?id=2133">http://www.rsasecurity.com/rsalabs/node.asp?id=2133</a><br>
+	      <a href="ftp://ftp.rsasecurity.com/pub/pkcs/pkcs-11/v211/pkcs-11v2-11r1.pdf">ftp://ftp.rsasecurity.com/pub/pkcs/pkcs-11/v2-20/pkcs-11v2-20.pdf</a></p>
+		<p>&nbsp;</p>
+		<h2>	      Basic principles used to write this wrapper<a name="generalrules"></a></h2>
+    <p><br>
+		<strong>1)</strong> Since most PKCS#11 structures are read only, s<strong>trings
+			located	inside	such	a structure</strong>	(i.e.	a	fixed	length string padded
+			with space	character, <strong>not</strong> null
+			terminated) is	not accessed	directly, but
+			using an accessor function named <strong><font color="#FF0000">Get</font></strong><em><font color="#0000FF">TheOriginalNameOfTheStringVar</font></em>(),
+			that convert the PKCS#11 padded string to a Python string.</p>
+		<p><strong>Example:</strong><br>
+			typedef struct <span class="typename">CK_INFO</span> {<br>
+			<span class="typename">CK_VERSION</span> cryptokiVersion;<br>
+			unsigned char manufacturerID[32];<br>
+			unsigned long flags;<br>
+			unsigned char libraryDescription[32];<br>
+			<span class="typename">CK_VERSION</span> libraryVersion;<br>
+			} <span class="typename">CK_INFO</span>;<br>
+		</p>
+	<p>The <strong><em>manufacturerID</em></strong> field is accedded using the <span class="functionname"><strong>Get<em>ManufacturerI</em>D</strong></span><strong>()</strong>
+			method of a CK_INFO instance.<br>
+			The <strong><em>libraryDescription</em></strong> field is accedded using the <strong>
+				<span class="functionname">Get<em>LibraryDescription</em></span>()</strong> method of a CK_INFO instance.<br>
+<br>
+			ckInfo =<span class="typename"> PyKCS11.CK_INFO</span>()<br>
+			...<br>
+		print "Manufacturer is: ", ckInfo.<span class="functionname"><strong>Get<em>ManufacturerI</em>D</strong></span><strong>()</strong></p>
+	<p><br>
+		<strong>2)</strong> Any <strong>string input parameter</strong> passed as
+		array/lenght pair is wrapped as
+			<strong>Python <span class="typename">string</span></strong></p>
+<p>In example, the <span class="functionname">C_Login</span> function:<br>
+			<strong>C_Login's <em>original</em> prototype</strong>: <span class="functionname">C_Login</span>(<span class="typename">CK_SESSION_HANDLE</span> hSession, CK_CHAR*
+			pPin, CK_ULONG ulPinLen)<br>
+  <strong>C_Login's <em>prototype</em> in PyKCS11</strong>: <span class="functionname">C_Login</span>(<span class="typename">CK_SESSION_HANDLE</span> hSession, <span class="typename">String</span> Pin)</p>
+		<p>So in a Python script:</p>
+		<p class="codesnipet"> p11Lib = PyKCS11.CPKCS11Lib()<br>
+	  # ...                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                        other P11 calls ...<br>
+	  Pin = &quot;123456&quot;
+	  <br>
+  rv = p11Lib.C_Login(PyKCS11.CKU_USER, Pin)<br>
+  print &quot;C_Login returned &quot;, rv</p>
+		<p><strong>3)</strong> All input and output bytes array parameters are
+		  passed as
+		  <span class="typename">ckbytelist</span>
+			type, instead of <STRONG>array/len pair</STRONG>.<br>
+		  The&nbsp;<span class="typename">ckbytelist</span>&nbsp;
+			is much like a Python <STRONG>list</STRONG>.<br>
+			The PKCS#11 API uses a <STRONG>convention to	retrieve	unknown	length data</STRONG>;
+			usually this convention is leaved <strong>unchanged</strong> (an exception
+			is	the <strong>C_GetSlotList</strong> function).<BR>
+			<STRONG>Why that</STRONG> ? This wrapper dont' have the the purpose to simplify
+			the	usage of the PKCS#11 API inside Python. It just is a tool to
+			call	the	PKCS#11 in the way you would do using 	C (that is, the
+				extension is designed to be a PKCS#11 testing tool to create
+			test script in a simpler way).<br>
+			So, to retrive unknown length byte array you should create an empty <span class="typename">ckbytelist</span> object;<STRONG>&nbsp;</STRONG>then
+			you should call the PKCS#11 function a first time:
+			this	first	call	just	returns	the	data length; now
+			you should call the function again using exactly same parameters
+			to retrieve	 actual data.</p>
+	<p><strong>4)</strong> <strong>PKCS#11 Templates</strong> (<span class="typename">CK_ATTRIBUTE</span> arrays)
+		  are passed as <span class="typename">ckattrlist</span> type. The	<span class="typename">ckattrlist</span>		  is
+		  much like a Python list.<br>
+			<span class="typename">ckattrlist</span> is a list of <span class="typename">CK_ATTRIBUTE_SMART</span> structures,
+			a <span class="typename">CK_ATTRIBUTE</span> extension; <span class="typename">CK_ATTRIBUTE_SMART</span> has
+			some helper method that	let you
+			set	and	get	values	using	Python	basic types.<br>
+		<strong>Additional notes</strong> about the  <span class="functionname"><a href="#C_GetAttributeValue">C_GetAttributeValue</a></span>()
+			function, the only one that 	uses attribute templates as output.
+		This function should be called twice, once to know the values' length and another
+		time to retrieve actual values.</p>
+		<p><strong>5) </strong>PKCS#11 wrapped functions retruns the PKCS#11 <strong>error
+		  codes</strong>		  unchanged.
+		  No exceptions are trown while a PKCS#11 error is returned, you should
+		  check return value for errors exactly as you would do in
+		  C.</p>
+		<p><strong>6) </strong>All PKCS#11 <strong>defines</strong> (return codes,
+		  attribute types, mechanism types, etc) are declared as <strong>constants</strong> in
+		  the PyKCS11 module. The name of each constant
+		  is
+			exactly the C define name (i.e. <strong>CKR_OK</strong>, <strong>CKA_LABEL</strong>, <strong>CKM_RSA_PKCS</strong>,
+			<strong>CKU_USER</strong>, etc.)</p>
+		<p>&nbsp;</p>
+		<h2>PyKCS11 Reference<a name="reference"></a></h2>
+		<h3>How to call PyKCS11<a name="how_to_call"></a></h3>
+		<p>PyKCS11 is composed by 2 Python modules, <strong>_PyKCS11.dll</strong> (or
+		  .so, or any other Dynamic Library extension your OS uses) and <strong>PyKCS11.py</strong>.<br>
+	      <strong>_PyKCS11.dll</strong>	is the native code wrapper, a native
+	      Python module that  calls the PKCS#11 API. <strong>PyKCS11.py</strong> is
+	      a pure-Python helper module that just incapsulates <strong>_PyKCS11.dll</strong> functions
+	    inside nice Python <strong>objects</strong> (that is, <strong>_PyKCS11.dll</strong> interface
+	    is not object oriented, while <strong>PyKCS11.py</strong> does).<br>
+	    <br>
+    To call <strong>PyKCS11</strong>, you should place<strong>_PyKCS11.dll</strong> and <strong>PyKCS11.py </strong> files
+    inside the Python's libs folder or in the script folder, then you should
+    import the <strong>PyKCS11 module</strong> in your script, i.e. like this:</p>
+		<p class="codesnipet">import PyKCS11</p>
+		<p>&nbsp;</p>
+		<h3>PyKCS11 Objects and Types<a name="ObjectsAndTypes"></a></h3>
+		<p>PyKCS11 module defines some custom data type, used i.e. to return session
+		  and object handles, list of slots and binary data.<br>
+		  There is also a group ofwrappers for all PKCS#11 structures, such as
+		  <span class="typename">CK_SESSION_INFO</span>.</p>
+		<table width="100%" border="0" cellspacing="4" cellpadding="4">
+		  <tr>
+            <td valign="top" class="typename">ck[...]list<br>
+            </td>
+            <td><p>The <span class="typename">ck[...]list</span> types are used
+                by <strong>PyKCS11</strong> to
+                receive or return collections of data. i.e. the <span class="typename">ckintlist</span> is
+                used to get
+              or pass list of numeric values, while <span class="typename">ckbytelist</span> is
+              just like a byte array and is used to pass or get binary data.<br>
+              Each <span class="typename">ck[...]list</span> type has a really
+              similar interface. You can use them as Python lists, using them
+              in iterations or accessing it
+              with []:</p>
+              <p class="codesnipet"> Example 1:<br>
+                slotList = PyKCS11.ckintlist()<br>
+                p11Lib.C_GetSlotList(0, slotList) <br>
+                for x in range(len(slotList)):<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;print &quot;SlotID:&quot;, slotList[x]</p>
+            <p class="codesnipet">Example 2:<br>
+  ToBeSignedBuffer = PyKCS11.ckintlist(1024)<br>
+SignatureBuffer = PyKCS11.ckintlist()<br>
+[...]<br>
+rv = p11Lib.C_Sign(Session, ToBeSignedBuffer, SignatureBuffer)<br>
+rv = p11Lib.C_Sign(Session,
+ToBeSignedBuffer, SignatureBuffer)<br>
+              [...]</p>
+            <p>There is also some other method, as <span class="functionname">size</span>() and <span class="functionname">clear</span>(). Usually
+            you don't need to call that methods while using this types with <strong>PyKCS11</strong>,
+            so they are not documented (you can see them in the <strong>PyKCS11.py</strong> file)</p></td>
+	      </tr>
+		  <tr>
+		    <td width="23%" valign="top" class="typename">ckintlist</td>
+		    <td width="77%"><p>A list of numeric values. Is used to pass or get lists
+		      of numeric value; i.e. is used by C_GetSlotList() to return a list
+		      of available slots (as a list of SlotIDs).<br>
+		      </p>
+	        </td>
+	      </tr>
+		  <tr>
+		    <td valign="top" class="typename">ckbytelist</td>
+		    <td>Represents an array of bytes; is used every time a bynary buffer should
+		      be passed to PKCS#11 function. Can be used as a list, so you can
+		      iterate on it like this:<br>
+		      <p><strong>Note</strong>: <em>to avoid the double call mechanism</em> you can use the <span class="typename">ckintlist</span>'s
+		        method <span class="functionname">reserve(new_list_len)</span> or you can specify an initial len when
+		        you create the <span class="typename">ckintlist</span> intance:</p>
+		      <p class="codesnipet">ToBeSignedBuffer = PyKCS11.ckbytelist(1024)<br>
+  SignatureBuffer = PyKCS11.ckbytelist()<br>
+  # fills the ToBeSignedBuffer<br>
+  SignatureBuffer.reserve(128)<br>
+  rv = p11Lib.C_Sign(Session,ToBeSignedBuffer, SignatureBuffer)<br>
+  [...]<br>
+  <br>
+		      </p></td>
+	      </tr>
+		  <tr>
+		    <td valign="top" class="typename">ckattrlist</td>
+		    <td>Represents an array of <span class="typename">CK_ATTRIBUTE_SMART</span> objects.
+		      Is used every time a PKCS#11 Template is involved. The <a href="#C_GetAttributeValue">C_GetAttributeValue</a>()
+		      function is the <strong>only</strong> one that use this type as <strong>output</strong>.</td>
+	      </tr>
+		  <tr>
+            <td valign="top" class="typename">CK_ATTRIBUTE_SMART</td>
+            <td><p>Is an extension for the PKCS#11 structure CK_ATTRIBUTE.
+                The CK_ATTRIBUTE structure (se
+                also PKCS#11 templates) is widely used in the PKCS#11 API to
+                set or
+                get Object's
+              attributes or while creating objects or generating keys. A CK_ATTRIBUTE
+              can contains any type of value as internally it is stored ad a
+              byte array.<br>
+              Since CK_ATTRUBUTE structure is very C oriented, this wrapper was
+              created to let assign or get variables ina a more friendly way;
+              it extends the
+              CK_ATTRIBUTE type adding some helper function that let you set
+              or get the internal
+              CK_ATTRIBUTE value
+              using Python basic types, such as numeric, string and tuple.<br>
+              Please see <a href="#CK_ATTRIBUTE_SMARTReference">next paragraph</a> for a complete <span class="typename">CK_ATTRIBUTE_SMART</span> interface
+              reference.</p>
+            </td>
+	      </tr>
+		  <tr>
+		    <td valign="top" class="typename">CK_VERSION</td>
+		    <td>See the PKCS#11 API reference</td>
+	      </tr>
+		  <tr>
+		    <td valign="top" class="typename">CK_INFO</td>
+		    <td>The manufacturerID and libraryDescription fields can be accessed using
+		      <span class="functionname">GetManufacturerID</span>() and <span class="functionname">GetLibraryVersion</span>() methods. For more details
+		      about this structure please consult the PKCS#11 API reference.</td>
+	      </tr>
+		  <tr>
+		    <td valign="top" class="typename">CK_SLOT_INFO</td>
+		    <td>The manufacturerID, slotDescription, hardwareVersion and firmwareVersion
+		      fields can be accessed using <span class="functionname">GetManufacturerID</span>(), <span class="functionname">GetSlotDescription</span>(),
+		      <span class="functionname">GetHardwareVersion</span>() and <span class="functionname">GetFirmwareVersion</span>() methods.
+		      For more details
+	      about this structure please consult the PKCS#11 API reference.                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                       </td>
+	      </tr>
+		  <tr>
+		    <td valign="top" class="typename">CK_TOKEN_INFO</td>
+		    <td>The manufacturerID, model and firmwareVersion
+		      fields can be accessed using <span class="functionname">GetManufacturerID</span>(), <span class="functionname">GetModel</span>()
+		      and <span class="functionname">GetFirmwareVersion</span>() methods. For
+	      more details about this structure please consult the PKCS#11 API reference.                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                        </td>
+	      </tr>
+		  <tr>
+		    <td valign="top" class="typename">CK_SESSION_INFO</td>
+		    <td>See the PKCS#11 API reference</td>
+	      </tr>
+		  <tr>
+		    <td valign="top" class="typename">CK_DATE</td>
+		    <td>The year, month and day fields can be accessed using <span class="functionname">GetYear</span>(), <span class="functionname">GetMonth</span>()
+		      and <span class="functionname">GetDay</span>() methods. For
+	      more details about this structure please consult the PKCS#11 API reference.                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                        </td>
+	      </tr>
+		  <tr>
+		    <td valign="top" class="typename">CK_MECHANISM</td>
+		    <td>See the PKCS#11 API reference</td>
+	      </tr>
+		  <tr>
+		    <td valign="top" class="typename">CK_MECHANISM_INFO</td>
+		    <td>See the PKCS#11 API reference</td>
+	      </tr>
+    </table>
+		<h3><br>
+          <br>
+          CK_ATTRIBUTE_SMART Reference<a name="CK_ATTRIBUTE_SMARTReference"></a><br>
+	</h3>
+		<p><span class="typename">CK_ATTRIBUTE_SMART</span> Methods:</p>
+		<table width="100%" border="0" cellspacing="0" cellpadding="0">
+		  <tr>
+		    <td width="24%" class="functionname">Reset()</td>
+		    <td width="76%">Make the object instance empty: reset the value and the
+		      type</td>
+	      </tr>
+		  <tr>
+		    <td class="functionname">ResetValue()</td>
+		    <td>Just make the value empty, leaving the type unchanged.</td>
+	      </tr>
+		  <tr>
+		    <td class="functionname">Reserve(numeric <span class="parametername">len</span>)</td>
+		    <td>Allocates enough space to store a number of bytes specified in the
+		       <span class="parametername">len</span> parameter.</td>
+	      </tr>
+		  <tr>
+		    <td class="functionname">GetType()</td>
+		    <td>Retruns the Attribute Type (look for CK_ATTRIBUTE_TYPE in the PKCS#11
+		      API Reference)</td>
+	      </tr>
+		  <tr>
+		    <td class="functionname">SetType()</td>
+		    <td>Set the Attribute Type</td>
+	      </tr>
+		  <tr>
+		    <td class="functionname">GetLen()</td>
+		    <td>Get the Attribute size expressed in bytes</td>
+	      </tr>
+		  <tr>
+		    <td class="functionname">IsString()</td>
+		    <td>Retruns true if the value contained is a string (the type contained
+		      is detected using the Attribute Type value)</td>
+	      </tr>
+		  <tr>
+		    <td class="functionname">IsBool()</td>
+		    <td>Retruns true if the value contained is boolean (the type contained
+	      is detected using the Attribute Type value)                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                       </td>
+	      </tr>
+		  <tr>
+		    <td class="functionname">IsNum()</td>
+		    <td>Retruns true if the value contained is numeric (the type contained
+	      is detected using the Attribute Type value)                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                        </td>
+	      </tr>
+		  <tr>
+		    <td class="functionname">IsBin()</td>
+		    <td>Retruns true if the value contained isn't boolean, string or
+		      numeric (equivalent to not <span class="functionname">IsNum</span>() and not <span class="functionname">IsBool</span>() and not <span class="functionname">IsString</span>()
+		      )</td>
+	      </tr>
+		  <tr>
+		    <td class="functionname">GetString()</td>
+		    <td>Retruns the contained value as string (no conversion is performed:
+		      if the value contained is not a PKCS#11 string, invalid data may
+		      be returned)</td>
+	      </tr>
+		  <tr>
+		    <td class="functionname">SetString(string <span class="parametername">new_value</span>)</td>
+		    <td>Set the Attribute value to the string <span class="parametername">new_value</span></td>
+	      </tr>
+		  <tr>
+		    <td class="functionname">GetNum()</td>
+		    <td>Retruns the the contained value as Numeric. Note that if the Attribute
+		      doesn't contains a numeric value, always 0 is returned.</td>
+	      </tr>
+		  <tr>
+		    <td class="functionname">SetNum(numeric <span class="parametername">new_value</span>)</td>
+		    <td>Set the Attribute value to the numeric <span class="parametername">new_value</span></td>
+	      </tr>
+		  <tr>
+		    <td class="functionname">GetBool()</td>
+		    <td>Retruns the the contained value as Boolean. Note that if the Attribute
+	      doesn't contains a Boolean value, always false is returned.                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                       </td>
+	      </tr>
+		  <tr>
+		    <td class="functionname">SetBool()</td>
+		    <td>Set the Attribute value to the boolean <span class="parametername">new_value</span></td>
+	      </tr>
+		  <tr>
+		    <td class="functionname">GetBin()</td>
+		    <td>Return the raw Attribute Value, as a tuple of byte (returns
+		      a <span class="typename">ckbytelist</span>		      object)</td>
+	      </tr>
+		  <tr>
+		    <td class="functionname">SetBin(list/tuple <span class="parametername">new_value</span>)</td>
+		    <td>Set the Attribute value to the raw <span class="parametername">new_value</span>.
+		      The <span class="parametername">new_value</span> should be a list or
+		      tuple</td>
+	      </tr>
+    </table>
+		<p>&nbsp;</p>
+		<h3>CPKCS11Lib  Reference<a name="CPKCS11LibReference"></a></h3>
+		<p><strong>CPKCS11Lib</strong> represents a PKCS#11 library instance. It almost
+		  exposes the complete PKCS#11 interface ann some additional methods
+  as                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                       <a href="#Load">Load</a>() and <a href="#Unload">Unload</a>().</p>
+		<p><br>
+	      Example of use: </p>
+		<p class="codesnipet"><br>
+  import PyKCS11</p>
+		<p class="codesnipet">p11Lib = PyKCS11.CPKCS11Lib() # creates a <strong>CPKCS11Lib</strong> instance<br>
+  lib_path = &quot;PKCS11Lib.dll&quot;<br>
+  info = PyKCS11.CK_INFO() # creates a  CK_INFO instance<br>
+  slotInfo = PyKCS11.CK_SLOT_INFO()  # creates a  CK_SLOT_INFO instance<br>
+    slotList = PyKCS11.ckintlist() # creates a ckintlist instance to store the
+    SlotList<br>
+    rv = p11Lib.Load(lib_path,
+    1)<br>
+    print &quot;Load():&quot;, rv<br>
+    rv = p11Lib.C_GetInfo(info)<br>
+    print &quot;C_GetInfo():&quot;, rv    <br>
+    print &quot;manufacturerID:&quot;, info.GetManufacturerID()<br>
+  del info<br>
+  rv = p11Lib.C_GetSlotList(0, slotList)  <br>
+  print &quot;C_GetSlotList():&quot;, rv <br>
+  print &quot;\tAvailable Slots: &quot; + str(len(slotList))<br>
+    </p>
+		<p>&nbsp;		  </p>
+		<h4>CPKCS11Lib specific methods (loading and unloading a PKCS#11 module)<a name="CPKCS11LibSpecific"></a></h4>
+		<p></p>
+		<p><strong>bool CPKCS11Lib.<span class="functionname">Load</span>(string szLib, bool bAutoCallInitialize)<a name="Load"></a></strong></p>
+		<p>Loads a PKCS#11 Library.</p>
+		<table width="100%" border="0" cellspacing="0" cellpadding="0">
+			<tr>
+				<td width="25%" bgcolor="#eeeeee"><strong>szLib</strong></td>
+				<td>The library to load (name or full path)</td>
+			</tr>
+			<tr>
+				<td width="25%" bgcolor="#eeeeee"><strong>bAutoCallInitialize</strong></td>
+				<td>Automatically calls C_Initialize(), if needed</td>
+			</tr>
+			<tr>
+				<td bgcolor="#d5ffd5">Returns</td>
+				<td>True if the load succeeded</td>
+			</tr>
+		</table>
+		<p>
+		</p>
+		<p><strong>bool CPKCS11Lib.<span class="functionname">Unload</span>()<a name="Unload"></a></strong></p>
+		<p>Unloads a PKCS#11 Library.</p>
+		<table width="100%" border="0" cellspacing="0" cellpadding="0">
+			<tr>
+				<td width="25%" bgcolor="#d5ffd5">Returns</td>
+				<td>Nothing</td>
+			</tr>
+	</table>
+		<p class="codesnipet">Example of use:<br>
+		  import PyKCS11		  <br>
+		  p11 = PyKCS11.CPKCS11Lib() #create a lib instance<br>
+  bLoadResult = p11.Load("p11lib.dll", true) #load a lib and calls C_Initialize.<br>
+  ...<br>
+  if bLoadResult: p11.Unload()</p>
+		<h4>Notes on loading same Library more than once inside the same process<a name="notes_multiple_load"></a></h4>
+	<p><strong>Abstact of what follows</strong>: PKCS#11 API is not designed to
+	  be used by different modules that runs inside a single process,
+	  if that modules doesn't
+	  are aware of each other presence!</p>
+	<p><strong>PyKCS11</strong> is able to load same PKCS#11 Library<em> more than
+		    once </em>in a transparent
+		  way if you pass the <strong>bAutoCallInitialize</strong> parameter as <em>true</em>.<br>
+		  PKCS#11 API says that the <span class="functionname">C_Initialize</span>()
+		  <em>MUST</em> be called <em>only
+		  once</em> by
+		  a single process; if you call it more than once, an error is reported;
+		  but this is not the problem.<br>
+		  Problems begins when <span class="functionname">C_Finalize</span>() is called!
+		  The library became unusable when <span class="functionname">C_Finalize</span>()
+		  is called, so if you load same library more than once
+		  the <span class="functionname">C_Finalize</span>() MUST be called only when
+		  there is no more code that needs to use the Library.<br>
+	  So, if you call the <span class="functionname">Load</span>() method using the                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                        <strong>bAutoCallInitialize</strong> parameter
+	  set to <em>true</em>, the <span class="functionname">C_Finalize</span>() is called only when the last <strong>CPKCS11Lib</strong> instance
+	  is deleted.<br>
+  Some issue still exists:</p>
+<ol>
+		  <li>Some <em>&quot;other code&quot;</em> in the process loads a
+		    library and calls <span class="functionname">C_Initialize</span>() <strong>BEFORE</strong>		    PyKCS11
+		    does. PyKCS11 would detect this scenario and never calls the <span class="functionname">C_Finalize</span>(),
+		    that should be called by that <em>&quot;other code&quot;</em>. <br>
+		     If tath <em>&quot;other code&quot;</em>  calls <span class="functionname">C_Finalize</span>()
+		     while PyKCS11 is using the library, PyKCS11 detects this and calls <span class="functionname">C_Initialize</span>()
+		     automatically. This avoid the invalidation of ALL
+		     PyKCS11 instances, but can't avoid the invalidation of all sessions
+	     and object handles (that is, all sessions are closed and all objects
+		     must be searched again or recreated).</li>
+          <li>Some <em>&quot;other code&quot;</em> in the process loads a library
+            and calls <span class="functionname">C_Initialize</span>()
+            <strong>AFTER</strong> PyKCS11 did. This <em>&quot;other code&quot;</em> should
+            get an error calling <span class="functionname">C_Initialize</span>()
+          and in most cases it just doesn't works. If that <em>&quot;other code&quot;</em>          expected
+          this error an so continue working fine, it can make a call
+          to <span class="functionname">C_Finalize</span>()
+          while PyKCS11 is using the library. PyKCS11 detects this and calls <span class="functionname">C_Initialize</span>()
+          automatically. This avoid the invalidation of ALL PyKCS11 instances,
+          but can't avoid the invalidation of all sessions and object handles
+          (that is, all sessions are closed and all objects must be searched
+          again or recreated).</li>
+	</ol>
+		<p></p>
+		<p></p>
+		<h4>General purpose Methods<a name="GeneralPurpose"></a></h4>
+	<p><strong>CK_RV CPKCS11Lib.<span class="functionname">C_Initialize</span>()<a name="C_Initialize"></a><br>
+		  </strong>Initializes the loaded library. Doesn't take any parameter (the
+	    original PKCS#11 takes void* parameter; NULL will be passed to the PKCS#11
+		  library)<br>
+          <br>
+        <strong>CK_RV CPKCS11Lib.<span class="functionname">C_Finalize</span>()<a name="C_Initialize"></a><br>
+        </strong>Finalize the loaded library. Doesn't take any parameter (the
+        original PKCS#11 takes void* parameter; NULL will be passed to the PKCS#11
+        library)<strong><br>
+        <br>
+        CK_RV CPKCS11Lib.<span class="functionname">C_GetInfo</span>(<span class="typename">CK_INFO</span>        Info)<a name="C_Initialize"></a><br>
+		</strong>Get Library informations. Can be used to detect if the library is
+		Initialized (CKR_CRYPTOKI_NOT_INITIALIZED is returned if C_Initialize
+		needs to be called)<br>
+	Takes a <span class="typename">CK_INFO</span> instance as parameter.</p>
+		<p><span class="codesnipet">Example of use:<br>
+    import PyKCS11 <br>
+    p11 = PyKCS11.CPKCS11Lib() #create a lib instance<br>
+    bLoadResult = p11.Load("p11lib.dll", true) #load a lib and calls C_Initialize.<br>
+    info = PyKCS11.CK_INFO()<br>
+    rv = p11.C_GetInfo(info)</span><strong> </strong> </p>
+		<p>&nbsp;</p>
+		<h4>Slot management Methods<a name="SlotManagement"></a></h4>
+	<p><br>
+			    <strong>CK_RV CPKCS11Lib.<span class="functionname">C_GetSlotList</span> (bool <span class="parametername">TokenPresent</span>, <span class="typename">ckintlist</span>        <span class="parametername">slotList</span>)</strong><a name="C_GetSlotList"></a><br>
+		        Get a list of available slots. The list is placed inside the
+		        <span class="parametername">slotList</span> parameter. The function
+		        can be called passing a <span class="parametername">slotList</span>        instance
+		        of any length: it would be resized to contain the actual slot
+		        list size (this is an exception to the normal behavior)<br>
+            <span class="parametername">slotList</span> parameter is used
+                instead of the pair <em>CK_SLOT_ID* pSlotList </em>and<em> CK_UNLOG
+                uCount</em>      PKCS#11 original parameters.</p>
+		<p><span class="codesnipet">Example of use:<br>
+import PyKCS11<br>
+p11 = PyKCS11.CPKCS11Lib() #create a lib instance<br>
+slotList = PyKCS11.ckintlist()<br>
+bLoadResult = p11.Load("p11lib.dll", true) #load a lib and calls C_Initialize.<br>
+rv = p11.C_GetSlotList(0, slotList) <br>
+print &quot;C_GetSlotList():&quot;, rv <br>
+print &quot;\tAvailable Slots: &quot; + str(len(slotList))</span></p>
+	<p><strong><br>
+    CK_RV CPKCS11Lib.<span class="functionname">C_GetSlotInfo</span> ( int <span class="parametername">slotID</span>, <span class="typename">CK_SLOT_INFO</span> <span class="parametername">pInfo</span> )</strong><a name="C_GetSlotInfo"></a><br>
+    Get informations about a slot. Accept a slot id (see <span class="functionname"><strong><a href="#C_GetSlotList">C_GetSlotList</a></strong></span>()
+    function, a value contained in the <strong><span class="parametername">slotList</span></strong> parameter),
+    and a <span class="typename"><strong>CK_SLOT_INFO</strong></span> instance.</p>
+	<p><span class="codesnipet">Example of use:<br>
+import PyKCS11<br>
+<span class="codesnipet">SlotInfos = PyKCS11</span>.CK_SLOT_INFO()<br>
+p11 = PyKCS11.CPKCS11Lib() #create a lib instance<br>
+bLoadResult = p11.Load("p11lib.dll", true) #load a lib and calls C_Initialize.<br>
+rv = p11.C_GetSlotList(0, slotList) <br>
+print &quot;C_GetSlotList():&quot;, rv<br>
+print &quot;\tAvailable Slots: &quot; + str(len(slotList))<br>
+rv = p11.C_GetSlotInfo(</span><span class="codesnipet">slotList[0], <span class="codesnipet">SlotInfos</span>)<br>
+print &quot;\tSlot &quot;, slotList[0], &quot; name:&quot;, <span class="codesnipet">SlotInfos</span>.GetSlotDescription()<br>
+</span><br>
+    </p>
+	<p><strong>Token management Methods<a name="TokenManagement"></a></strong></p>
+	<p><strong><br>
+      CK_RV CPKCS11Lib.<span class="functionname">C_GetTokenInfo</span> ( int <span class="parametername">slotID</span>, <span class="typename">CK_Token_INFO</span><span class="parametername"> Info</span> )</strong><a name="C_GetTokenInfo"></a><br>
+      Get informations about a Token placed in a slot. Accept a slot id (see <span class="functionname"><strong><a href="#C_GetSlotList">C_GetSlotList</a></strong></span>()
+      function, a value contained in the <strong><span class="parametername">slotList</span></strong> parameter),
+      and a <span class="typename"><strong>CK_TOKEN_INFO</strong></span> instance.</p>
+	<p><span class="codesnipet">Example of use:<br>
+  import PyKCS11<br>
+  <span class="codesnipet">TokenInfos = PyKCS11</span>.CK_TOKEN_INFO()<br>
+  p11 = PyKCS11.CPKCS11Lib() #create a lib instance<br>
+  bLoadResult = p11.Load("p11lib.dll", true) #load a lib and calls C_Initialize.<br>
+  rv = p11.C_GetSlotList(0, slotList) <br>
+  print &quot;C_GetSlotList():&quot;, rv<br>
+  print &quot;\tAvailable Slots: &quot; + str(len(slotList))<br>
+  rv = p11.C_GetTokenInfo(</span><span class="codesnipet">slotList[0], <span class="codesnipet">TokenInfos</span>)<br>
+  print &quot;\tSlot &quot;, slotList[0], &quot; name:&quot;, <span class="codesnipet">TokenInfos</span>.GetSlotDescription()</span></p>
+	<p><strong>CK_RV CPKCS11Lib.<span class="functionname">C_InitToken</span>(int <span class="parametername">slotID</span>, string <span class="parametername">Pin</span>, string <span class="parametername">Label</span>)<a name="C_InitToken"></a><br>
+	  </strong>Initialize a Token. Accept a slot id (see <span class="functionname"><strong><a href="#C_GetSlotList">C_GetSlotList</a></strong></span>()
+	  function, a value contained in the <strong><span class="parametername">slotList</span></strong> parameter),
+	  a <span class="parametername">Pin</span> and a token <span class="parametername">Label</span>.<br>
+	  The original PKCS#11 function takes a pair &quot;<em>CK_CHAR* pPin, CK_ULONG
+	  uPunLen</em>&quot;, that  became a Python string, passed as <span class="parametername">Pin</span> parameter;
+	  and another parameter &quot;CK_CHAR Label[32]&quot;, a fixed length string
+	  padded with the blanks (ASCII space character, 0x20), that became a Python
+	  string
+	  passed as <span class="parametername">Label</span> parameter. <span class="parametername">Label</span> length
+  can be between 0 and 32.                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                       </p>
+	<p><strong>CK_RV CPKCS11Lib.<span class="functionname">C_InitPIN</span>    (<span class="typename">CK_SESSION_HANDLE</span> <span class="parametername">hSession</span>, string <span class="parametername">Pin</span>)</strong><a name="C_InitPIN"></a><br>
+	    Initialize or reset the user Pin. Accept a session handle as first parameter
+	    (<span class="parametername">hSession</span>), and a new <span class="parametername">Pin</span>.<br>
+      The
+	    original PKCS#11 function takes a pair &quot;<em>CK_CHAR* pPin, CK_ULONG
+	    uPunLen</em>&quot;, that became a Python string, passed as <span class="parametername">Pin</span> parameter.</p>
+	<p> <strong>CK_RV CPKCS11Lib.<span class="functionname">C_SetPIN</span> (<span class="typename">CK_SESSION_HANDLE</span> <span class="parametername">hSession</span>, string <span class="parametername">OldPin</span>,
+	    string<span class="parametername"> NewPin</span> )<a name="C_SetPIN"></a><br>
+	  </strong>Changes  a Pin. Accept a session handle as first
+	  parameter (<span class="parametername">hSession</span>) and the strings <span class="parametername">OldPin</span> and
+	  the
+	  <span class="parametername">NewPin</span>.<br>
+	  The original PKCS#11 function takes a pair &quot;<em>CK_CHAR* pOldPin, CK_ULONG
+uOldPunLen</em>&quot;, that became a Python string, passed as <span class="parametername">OldPin</span> parameter;
+and takes a pair &quot;<em>CK_CHAR* pNewPin, CK_ULONG
+uNewPunLen</em>&quot;, that became a Python string, passed as <span class="parametername">NewPin</span> parameter.</p>
+	<p><strong>    </strong></p>
+	<h4>Session management Methods<a name="SessionManagement"></a></h4>
+	<p><strong>CK_RV</strong> <strong>CPKCS11Lib</strong>.<span class="functionname">C_OpenSession</span> (int
+	  <span class="parametername">slotID</span>, int <span class="parametername">flags</span>, <span class="typename">CK_SESSION_HANDLE</span> <span class="parametername">newhSession</span> ) <a name="C_OpenSession"></a></p>
+	<p>Open a new session on a Token. In the original prototype the <span class="parametername">newhSession</span> parameter
+	  was a <span class="typename">CK_SESSION_HANDLE</span> pointer.</p>
+	<p><strong>CK_RV</strong> <strong>CPKCS11Lib</strong>.<span class="functionname">C_CloseSession</span>(
+    <span class="typename">CK_SESSION_HANDLE</span> <span class="parametername">hSession</span>	  )<a name="C_CloseSession"></a></p>
+	<p>Closes a session  opened using <a href="#C_OpenSession">C_OpenSession</a>.</p>
+	<p> <strong>CK_RV</strong> <strong>CPKCS11Lib</strong>.<span class="functionname">C_CloseAllSessions</span> ( int <span class="parametername">slotID</span> )<a name="C_CloseAllSessions"></a></p>
+	<p>Closes all session opened on a Token.</p>
+	<p><strong>CK_RV</strong> <strong>CPKCS11Lib</strong>.<span class="functionname">C_Login</span>    (<span class="typename">CK_SESSION_HANDLE</span> <span class="parametername">hSession</span>, int <span class="parametername">userType</span>, string <span class="parametername">Pin</span> )<a name="C_Login"></a></p>
+	<p>Login a user on all sessions open on a Token. Accept a session handle obtained
+	  calling the <a href="#C_OpenSession">C_OpenSession</a> function, the type
+	  of user to login and the Pin to use.</p>
+	<p> <strong>CK_RV</strong> <strong>CPKCS11Lib</strong>.<span class="functionname">C_Logout</span> ( <span class="typename">CK_SESSION_HANDLE</span> <span class="parametername">hSession</span> )<a name="C_Logout"></a></p>
+	<p>Logout  all sessions open on a Token. Accept a session handle obtained
+  calling the                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                        <a href="#C_OpenSession">C_OpenSession</a>.</p>
+	<p><strong>CK_RV CPKCS11Lib.<span class="functionname">C_GetSessionInfo</span> ( <span class="typename">CK_SESSION_HANDLE</span> <span class="parametername">hSession</span>, <span class="typename">CK_SESSION_INFO</span>    <span class="parametername">Info</span>    )<a name="C_GetSessionInfo"></a></strong></p>
+	<p>Get some information about the specified session and copy them in the Info
+	  object. In the original prototype the <strong><span class="parametername">Info</span></strong> was
+	  a <strong><span class="typename">CK_SESSION_INFO</span></strong> pointer.<br>
+	  <br>
+      <span class="codesnipet"><br>
+      Example of use:<br>
+      import PyKCS11<br>
+      <span class="codesnipet">TokenInfos = PyKCS11</span>.CK_TOKEN_INFO()<br>
+      p11 = PyKCS11.CPKCS11Lib() #create a lib instance<br>
+      bLoadResult = p11.Load("p11lib.dll", true) #load a lib and calls C_Initialize.<br>
+      rv = p11.C_GetSlotList(0, slotList) </span><span class="codesnipet"><br>
+session = <span class="codesnipet">PyKCS11</span>.CK_SESSION_HANDLE()<br>
+sessionInfo = <span class="codesnipet">PyKCS11</span>.CK_SESSION_INFO()<br>
+rv = p11.C_OpenSession(</span><span class="codesnipet">slotList[0], PyKCS11.CKF_SERIAL_SESSION,
+session)<br>
+</span>
+<span class="codesnipet">rv = p11.C_Login(</span><span class="codesnipet">session,
+PyKCS11.CKU_USER,
+&quot;123456&quot;)</span>	<br>
+<span class="codesnipet">rv = p11.C_GetSessionInfo(</span><span class="codesnipet">session,
+sessionInfo)<br>
+rv = p11.C_Logout(</span><span class="codesnipet">session)</span><br>
+<span class="codesnipet">rv = p11.C_CloseSession(</span><span class="codesnipet">session)</span><span class="codesnipet"></span><br>
+	</p>
+	<p>&nbsp;	  </p>
+	<h4>Object management Methods<a name="ObjectManagement"></a></h4>
+	<p>
+			<strong>CK_RV CPKCS11Lib.</strong><span class="functionname">C_CreateObject</span> ( <span class="typename">CK_SESSION_HANDLE</span> <span class="parametername">hSession</span>, <span class="typename">vectorattr</span>	  <span class="parametername">Template</span>, <span class="typename">CK_OBJECT_HANDLE</span> <span class="parametername">outhObject</span> )<strong><a name="C_CreateObject"></a></strong></p>
+	<p>This method can be used to create a new object. The Object template (that
+	  is, object's attributes) is passed using the <span class="parametername">Template</span> argument,
+	  while the object handle is placed in the <span class="parametername">outhObject</span> argument.
+	  In the original prototype, <span class="parametername">Template</span> was
+	  a pair of arguments: a CK_TEMPLATE array and a numeric  length of  array,
+	  while <span class="parametername">outhObject</span><strong> </strong> was
+	  a <span class="typename">CK_OBJECT_HANDLE</span> pointer.<br>
+    Template is a <span class="typename">vectorattr</span> object type, a list
+    of <span class="typename">CK_ATTRIBUTE_SMART</span>    objects.</p>
+	<p class="codesnipet">Example of use:<br>
+import PyKCS11<br>
+p11 = PyKCS11.CPKCS11Lib() #create a lib instance<br>
+bLoadResult = p11.Load("p11lib.dll", true) #load a lib and calls C_Initialize.<br>
+rv = p11.C_GetSlotList(0, slotList) <br>
+session = PyKCS11.CK_SESSION_HANDLE()<br>
+sessionInfo = PyKCS11.CK_SESSION_INFO()<br>
+rv = p11.C_OpenSession(slotList[0], <span class="codesnipet">PyKCS11.</span>CKF_SERIAL_SESSION,
+session)<br>
+rv = p11.C_Login(session,
+PyKCS11.CKU_USER, &quot;123456&quot;) <br>
+objTemplate = PyKCS11.vectorattr(4)<br>
+objValues = PyKCS11.vectorattr(2)<br>
+newObjValues = PyKCS11.vectorattr(1)<br>
+hObject = PyKCS11.CK_OBJECT_HANDLE()<br>
+objTemplate(0).SetBool(PyKCS11.CKA_TOKEN, 1)<br>
+objTemplate(1).SetNum(PyKCS11.CKA_CLASS, PyKCS11.CKO_DATA)<br>
+objTemplate(2).SetString(PyKCS11.CKA_LABEL, &quot;TestDataObject&quot;)<br>
+objTemplate(3).SetString(PyKCS11.CKA_VALUE, &quot;This is a sample Data Object&quot;)<br>
+rv = p11.C_CreateObject(session,
+objTemplate, hObject)<br>
+objValues(0).SetType(PyKCS11.CKA_MODIFIABLE)<br>
+objValues(1).SetType(PyKCS11.CKA_PRIVATE)<br>
+rv = p11.C_GetAttributeValue(session, hObject,
+objValues) # first call: just get sizes<br>
+rv = p11.C_GetAttributeValue(session,
+hObject, objValues) # second call: get actual data<br>
+newObjValues(0).SetString(PyKCS11.CKA_APPLICATION, &quot;Test&quot;)<br>
+rv = p11.C_SetAttributeValue(session, hObject, newObjValues)<br>
+rv = p11.C_DestroyObject(session, hObject)<br>
+rv = p11.C_Logout(session)<br>
+rv = p11.C_CloseSession(session)</p>
+	<p>
+			<strong>CK_RV CPKCS11Lib.</strong><span class="functionname">C_DestroyObject</span>(<span class="typename">CK_SESSION_HANDLE</span> <span class="parametername">hSession</span>, <span class="typename">CK_OBJECT_HANDLE</span>	  <span class="parametername">hObject</span>)<strong><a name="C_DestroyObject"></a></strong></p>
+	<p>This function destroy an object. You specify the object to destroy passing
+	  an object handle previously obtained by <a href="#C_FindObjects">C_FindObjects</a>()
+	  or any object creation function, such as <a href="#C_CreateObject">C_CreateObject</a>().<br>
+	  <br>
+    Example of use: see <a href="#C_CreateObject">C_CreateObject</a>().	</p>
+	<p><strong>CK_RV CPKCS11Lib.</strong><span class="functionname">C_GetObjectSize</span> (<span class="typename">CK_SESSION_HANDLE</span> <span class="parametername">hSession</span>, <span class="typename">CK_OBJECT_HANDLE</span>	  <span class="parametername">hObject</span>,
+  int                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                        <span class="parametername">outulSize</span>)<strong><a name="C_GetObjectSize"></a></strong></p>
+	<p>Returns the size of an object. The object's size is returned in the <span class="parametername">outulSize</span> argument. In
+	  the original ptototype the <span class="parametername">outulSize</span> was
+	  a pointer to an unsigned long.<br>
+	  <br>
+    Example of use: see <a href="#C_CreateObject">C_CreateObject</a>().	</p>
+	<p>
+			<strong>CK_RV CPKCS11Lib.</strong><span class="functionname">C_GetAttributeValue</span> (<span class="typename">CK_SESSION_HANDLE</span> <span class="parametername">hSession</span>,
+			<span class="typename">CK_OBJECT_HANDLE</span> <span class="parametername">hObject</span>, <span class="typename">vectorattr</span> <span class="parametername">outTemplate</span>)<strong><a name="C_GetAttributeValue"></a></strong></p>
+	<p>Get object's attributes. <span class="parametername">outTemplate</span> is
+	   a <span class="typename">vectorattr</span> object type, a list
+	  of <span class="typename">CK_ATTRIBUTE_SMART</span> objects. In the oroginal
+	  prototype <span class="parametername">outTemplate</span> was a pair of arguments:
+	  a CK_TEMPLATE array and a numeric length of that array.<br>
+	  <br>
+    Example of use: see <a href="#C_CreateObject">C_CreateObject</a>().	</p>
+	<p>
+			<br>
+            <strong>CK_RV CPKCS11Lib.</strong><span class="functionname">C_SetAttributeValue</span>(<span class="typename">CK_SESSION_HANDLE</span> <span class="parametername">hSession</span>,                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                        <span class="typename">CK_OBJECT_HANDLE</span>    <span class="parametername">hObject</span>, <span class="typename">vectorattr</span> <span class="parametername">Template</span> )<strong><a name="C_SetAttributeValue"></a></strong></p>
+	<p>Assign new values to object's attributes. Template is
+	  a <span class="typename">vectorattr</span> object type, a list of <span class="typename">CK_ATTRIBUTE_SMART</span> objects.
+	  In the original prototype <span class="parametername">outTemplate</span> was
+	  a pair of arguments: a CK_TEMPLATE array and a numeric length of that
+	  array.<br>
+      <br>
+Example of use: see <a href="#C_CreateObject">C_CreateObject</a>(). <br>
+	</p>
+	<p>
+		  <strong>CK_RV CPKCS11Lib.</strong><span class="functionname">C_FindObjectsInit</span>( <span class="typename">CK_SESSION_HANDLE</span> <span class="parametername">hSession</span>, <span class="typename">vectorattr</span>	  <span class="parametername">Template</span> )<a name="C_FindObjectsInit"></a></p>
+	<p>Begin a search on a session using Template as search filter. In the original
+	  prototype <span class="parametername">Template</span> was a pair of arguments:
+  a CK_TEMPLATE array and a numeric length of that array.</p>
+	<p class="codesnipet">Example of use:<br>
+  import PyKCS11<br>
+  p11 = PyKCS11.CPKCS11Lib() #create a lib instance<br>
+  bLoadResult = p11.Load("p11lib.dll", true) #load a lib and calls C_Initialize.<br>
+  rv = p11.C_GetSlotList(0, slotList) <br>
+  session = PyKCS11.CK_SESSION_HANDLE()<br>
+  rv = p11.C_OpenSession(slotList[0], <span class="codesnipet">PyKCS11.</span>CKF_SERIAL_SESSION, session)<br>
+  rv = p11.C_Login(session, PyKCS11.CKU_USER, &quot;123456&quot;)<br>
+  SearchResult = PyKCS11.ckintlist(10)  <br>
+  searchTemplate = PyKCS11.vectorattr(2)<br>
+  searchTemplate[0].SetBool(PyKCS11.CKA_TOKEN, 1)<br>
+  searchTemplate[1].SetNum(PyKCS11.CKA_CLASS, PyKCS11.CKO_CERTIFICATE)  <br>
+  rv = p11.C_FindObjectsInit(session, searchTemplate) <br>
+  rv = p11.C_FindObjects(session, SearchResult)<br>
+  rv = p11.C_FindObjectsFinal(session)<br>
+  for x in SearchResult:<br>
+&nbsp;&nbsp;&nbsp;print &quot;object &quot; + hex(x)<br>
+&nbsp;&nbsp;&nbsp;valTemplate = PyKCS11.ckattrlist(1)<br>
+&nbsp;&nbsp;&nbsp;valTemplate[0].SetType(PyKCS11.CKA_LABEL)<br>
+&nbsp;&nbsp;&nbsp;rv = p11.C_GetAttributeValue(session,
+x, valTemplate)<br>
+&nbsp;&nbsp;&nbsp;print &quot;CKA_LABEL: &quot;, valTemplate[0].GetString()<br>
+</p>
+	<p>&nbsp;	</p>
+	<p><strong>CK_RV CPKCS11Lib.</strong><span class="functionname">C_FindObjects</span>( <span class="typename">CK_SESSION_HANDLE</span> <span class="parametername">hSession</span>, <span class="typename">ckintlist</span>	  <span class="parametername">outObjectsList</span> )<a name="C_FindObjects"></a></p>
+	<p>Continue a search operation started by <a href="#C_FindObjectsInit">C_FindObjectsInit</a>()
+	  on a session. Returns a list of object handles in the <span class="parametername">outObjectsList</span> argument.
+	  In the original prototype <span class="parametername">outObjectsList</span> was
+	  a pair of arguments: an array of CK_OBJECT_HANDLE and a numeric length
+	  of that array.</p>
+	<p>Example of use: see <a href="#C_FindObjectsInit">C_FindObjectsInit</a>().<br>
+	</p>
+	<p>
+	<strong>CK_RV CPKCS11Lib.</strong><span class="functionname">C_FindObjectsFinal</span>( <span class="typename">CK_SESSION_HANDLE</span> <span class="parametername">hSession</span> )<a name="C_FindObjectsFinal"></a></p>
+	<p>Ends a search started on a session by  <a href="#C_FindObjectsInit">C_FindObjectsInit</a>().</p>
+	<p>Example of use: see <a href="#C_FindObjectsInit">C_FindObjectsInit</a>().</p>
+	<p>&nbsp;</p>
+	<p><strong>CK_RV CPKCS11Lib.</strong><span class="functionname">C_GenerateKeyPair</span>(
+	  <span class="typename">CK_SESSION_HANDLE</span> <span class="parametername">hSession</span>, <span class="typename">CK_MECHANISM</span> <span class="parametername">Mechanism</span>,
+	  <span class="typename">ckattrlist</span> <span class="parametername">PublicKeyTemplate</span>,	<span class="typename">ckattrlist</span> <span class="parametername">PrivateKeyTemplate</span>,
+	  <span class="typename">CK_OBJECT_HANDLE</span> <span class="parametername">outhPublicKey</span>,<br>
+	  <span class="typename">CK_OBJECT_HANDLE</span> <span class="parametername">outhPrivateKey</span> )<a name="C_GenerateKeyPair"></a></p>
+	<p>Generates a new key pair using the specified templates for private and public
+	  keys. The generated object handles are placed in <span class="parametername">outhPublicKey</span> and
+	  <span class="parametername">outhPrivateKey</span>.<br>
+	  In the original prototype <span class="parametername">PublicKeyTemplate</span>/<span class="parametername">PrivateKeyTemplate</span> were  a
+	  pair of arguments: an array of CK_ATTRIBUTE and a numeric length of
+	  that array. While <span class="parametername">outhPublicKey/outhPrivateKey</span> were
+	  a CK_OBJECT_HANDLE pointer.</p>
+	<p>Example of use: the uese of this function is very similar to <a href="#C_CreateObject">C_CreateObject</a>().</p>
+	<h4>&nbsp;</h4>
+	<h4>Cryptokgrapic Methods<a name="Cryptokgrapic"></a></h4>
+	<p><strong>CK_RV CPKCS11Lib.</strong><span class="functionname">C_SignInit</span>( <span class="typename">CK_SESSION_HANDLE</span> <span class="parametername">hSession</span>, <span class="typename">CK_MECHANISM</span> <span class="parametername">Mechanism</span>, <span class="typename">CK_OBJECT_HANDLE</span>  <span class="parametername">hKey</span> )<a name="C_SignInit"></a></p>
+	<p>Starts a signature on a session using the specified key.</p>
+	<p>Example of use: see <a href="#C_Sign">C_Sign</a>(). </p>
+	<p> <strong>CK_RV CPKCS11Lib.</strong><span class="functionname">C_Sign</span>(
+	  <span class="typename">CK_SESSION_HANDLE</span> <span class="parametername">hSession</span>, <span class="typename">ckbytelist</span> <span class="parametername">inData</span>,
+	  <span class="typename">ckbytelist</span> <span class="parametername">outSignature</span> )<a name="C_Sign"></a></p>
+	<p>Performs a signature operation. <span class="parametername">inData</span> contains
+	  the data to sign; after a successfull call <span class="parametername">outSignature</span> should
+	  contain the signed data.<br>
+	  In the original prototype <span class="parametername">inData</span> was
+	  a pair of arguments: an array of CK_BYTE and a numeric length of that array;
+	  while <span class="parametername">outSignature</span> was another pair of
+	  arguments: an array of CK_BYTE and a numeric length of that array used
+	  to pass array
+  size and to ger actual data length.<br>
+  	</p>
+	<p class="codesnipet">Example of use:<br>
+import PyKCS11<br>
+p11 = PyKCS11.CPKCS11Lib() #create a lib instance<br>
+bLoadResult = p11.Load("p11lib.dll", true) #load a lib and calls C_Initialize.<br>
+rv = p11.C_GetSlotList(0, slotList) <br>
+session = PyKCS11.CK_SESSION_HANDLE()<br>
+rv = p11.C_OpenSession(slotList[0], <span class="codesnipet">PyKCS11.</span>CKF_SERIAL_SESSION,
+session)<br>
+rv = p11.C_Login(session, PyKCS11.CKU_USER, &quot;123456&quot;)<br>
+SearchResult = PyKCS11.ckintlist(10) <br>
+searchTemplate = PyKCS11.vectorattr(2)<br>
+searchTemplate[0].SetBool(PyKCS11.CKA_TOKEN, 1)<br>
+searchTemplate[1].SetNum(PyKCS11.CKA_CLASS, PyKCS11.CKO_PRIVATE_KEY) <br>
+rv = p11.C_FindObjectsInit(session, searchTemplate) <br>
+rv = p11.C_FindObjects(session, SearchResult)<br>
+rv = p11.C_FindObjectsFinal(session)<br>
+DataToSign = PyKCS11.ckbytelist(5)<br>
+Signature = PyKCS11.ckbytelist() <br>
+DataToSign[0] = 1<br>
+DataToSign[1] = 2<br>
+DataToSign[2] = 3<br>
+DataToSign[3] = 4<br>
+DataToSign[4] = 5<br>
+Mechanism = PyKCS11.CK_MECHANISM()<br>
+Mechanism.mechanism = PyKCS11.CKM_RSA_PKCS<br>
+for x in SearchResult:<br>
+&nbsp;&nbsp;&nbsp;rv = p11.C_SignInit(session, Mechanism, x)<br>
+&nbsp;&nbsp;&nbsp;rv = p11.C_Sign(session, DataToSign, Signature) # first
+call get size<br>
+&nbsp;&nbsp;&nbsp;rv = p11.C_Sign(session, DataToSign, Signature)	# second
+call get the signature</p>
+	<p></p>
+	<p><strong>CK_RV CPKCS11Lib.</strong><span class="functionname">C_DecryptInit</span> ( <span class="typename">CK_SESSION_HANDLE</span> <span class="parametername">hSession</span>, <span class="typename">CK_MECHANISM</span>  <span class="parametername">Mechanism</span>, <span class="typename">CK_OBJECT_HANDLE</span> <span class="parametername">hKey</span>) <a name="C_DecryptInit"></a></p>
+	<p>Starts a decryption on a session using the specified key.</p>
+	<p>Example of use: see <a href="#C_Decrypt">C_Decrypt</a>(). </p>
+	<p><strong>CK_RV CPKCS11Lib.</strong><span class="functionname">C_Decrypt</span> ( <span class="typename">CK_SESSION_HANDLE</span> <span class="parametername">hSession</span>,
+	  <span class="typename">ckbytelist</span> <span class="parametername">inEncryptedData</span>, <span class="typename">ckbytelist</span> <span class="parametername">outData</span>	  )<a name="C_Decrypt"></a></p>
+	<p>Performs a decryption on the specified session. <span class="parametername">inEncryptedData</span> is
+	  the data to decrypt, <span class="parametername">outData</span> is where the
+	  decrypted data would be placed.<br>
+	  In the original prototype <span class="parametername">inEncryptedData</span> was
+	  a pair of arguments: an array of CK_BYTE and a numeric length of that array;
+	  while <span class="parametername">outData</span>  was
+	  another pair of arguments: an array of CK_BYTE and a  numeric
+	  length of that array used to pass array size and to ger actual data length.</p>
+	<p class="codesnipet">Example of use:<br>
+  import PyKCS11<br>
+  p11 = PyKCS11.CPKCS11Lib() #create a lib instance<br>
+  bLoadResult = p11.Load("p11lib.dll", true) #load a lib and calls C_Initialize.<br>
+  rv = p11.C_GetSlotList(0, slotList) <br>
+  session = PyKCS11.CK_SESSION_HANDLE()<br>
+  rv = p11.C_OpenSession(slotList[0], <span class="codesnipet">PyKCS11.</span>CKF_SERIAL_SESSION, session)<br>
+  rv = p11.C_Login(session, PyKCS11.CKU_USER, &quot;123456&quot;)<br>
+  SearchResult = PyKCS11.ckintlist(10) <br>
+  searchTemplate = PyKCS11.vectorattr(2)<br>
+  searchTemplate[0].SetBool(PyKCS11.CKA_TOKEN, 1)<br>
+  searchTemplate[1].SetNum(PyKCS11.CKA_CLASS, PyKCS11.CKO_PRIVATE_KEY) <br>
+  rv = p11.C_FindObjectsInit(session, searchTemplate) <br>
+  rv = p11.C_FindObjects(session, SearchResult)<br>
+  rv = p11.C_FindObjectsFinal(session)<br>
+  DataToDecrypt = 
+  PyKCS11.ckbytelist(128)<br>
+  DecryptedData = PyKCS11.ckbytelist()  <br>
+  # ... fill the 
+  DataToDecrypt variable<br>
+	  Mechanism = PyKCS11.CK_MECHANISM()<br>
+	  Mechanism.mechanism = PyKCS11.CKM_RSA_PKCS<br>
+	  for x in SearchResult:<br>
+&nbsp;&nbsp;&nbsp;rv =  p11.C_DecryptInit(session, Mechanism, x)<br>
+&nbsp;&nbsp;&nbsp;rv = p11.C_Decrypt(session, DataToDecrypt, DecryptedData) #
+first call get the size<br>
+&nbsp;&nbsp;&nbsp;rv = p11.C_Decrypt(session, DataToDecrypt, DecryptedData) #
+second call get the data<br>
+    </p>
+	<p></p>
+	<p>
+			<strong>CK_RV CPKCS11Lib.</strong><span class="functionname">C_EncryptInit</span> ( <span class="typename">CK_SESSION_HANDLE</span> <span class="parametername">hSession</span>, <span class="typename">CK_MECHANISM</span>	  <span class="parametername">Mechanism</span>,
+			<span class="typename">CK_OBJECT_HANDLE</span> <span class="parametername">hKey</span> )<a name="C_EncryptInit"></a></p>
+		<p>Starts an encryption on a session using the specified key.</p>
+		<p>Example of use: see <a href="#C_Encrypt">C_Encrypt</a>().</p>
+		<p>&nbsp;</p>
+		<p><strong>CK_RV CPKCS11Lib.</strong><span class="functionname">C_Encrypt</span> ( <span class="typename">CK_SESSION_HANDLE</span> <span class="parametername">hSession</span>, <span class="typename">ckbytelist</span> <span class="parametername">inData</span>, <span class="typename">ckbytelist</span> <span class="parametername">outEncryptedData</span> )<a name="C_Encrypt"></a></p>
+		<p>Performs an encryption on the specified session. <span class="parametername">inData</span> is
+		  the data to decrypt, <span class="parametername">outEncryptedData</span> is where
+		  the decrypted data would be placed.<br>
+In the original prototype <span class="parametername">inData</span> was
+a pair of arguments: an array of CK_BYTE and a numeric length of that array;
+while <span class="parametername">outEncryptedData</span> was another pair of arguments:
+an array of CK_BYTE and a numeric length of that array used to pass array size
+and to ger actual data length.</p>
+		<p>Example of use: the usage is very similar to <a href="#C_Decrypt">C_Encrypt</a>().</p>
+		<p>&nbsp;</p>
+		<h4>Other Methods<a name="OtherMethods"></a></h4>
+		<p>This reference ends here.<br>
+		  We think that the above documentation is enough
+		  to understand how to use  all function of this wrapper; if you
+		    need to know how to use other methods, please see the <a href="#generalrules">basic
+		    principles used to create this wrapper</a> and the official PKCS#11 manual
+		    from RSA.</p>
+		<p>&nbsp;</p>
+		<p>Copyright (C) 2004 Midori (<a href="http:/www.paipai.net/texts/components.htm">http:/www.paipai.net/</a>)<br>
+Verbatim copying and distribution of this entire article are permitted worldwide,
+  without royalty, in any medium, provided this notice, and the copyright notice,
+  are preserved.</p>
+	    <p></p>
+	</body>
+</HTML>
