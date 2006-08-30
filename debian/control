@@ -1,0 +1,19 @@
+Source: pykcs11
+Priority: optional
+Maintainer: Ludovic Rousseau <rousseau@debian.org>
+Build-Depends: debhelper (>= 5), swig, python-support, python-dev
+Standards-Version: 3.7.2
+Section: libs
+XS-Python-Version: all
+
+Package: python-pykcs11
+Section: libs
+Architecture: any
+Depends: ${shlibs:Depends}, ${misc:Depends}, ${python:Depends}
+Provides: ${python:Provides}
+XB-Python-Version: ${python:Versions}
+Description: Python wrapper above a PKCS#11 library
+ This package contains a wrapper to use a PKCS#11 library from a Python
+ program.
+ .
+  Homepage: http://www.bit4id.org/trac/pykcs11/

@@ -1,0 +1,12 @@
+pykcs11 (1.1.0-1) unstable; urgency=low
+
+  * new upstream version
+
+ -- Ludovic Rousseau <rousseau@debian.org>  Fri, 25 Aug 2006 00:35:11 +0200
+
+pykcs11 (1.0.2-1) unstable; urgency=low
+
+  * Initial release
+
+ -- Ludovic Rousseau <rousseau@debian.org>  Mon,  7 Aug 2006 14:46:44 +0200
+
