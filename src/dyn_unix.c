@@ -21,8 +21,8 @@
 
 #include "dyn_generic.h"
 
-#define Log2(a, b) printf("%s:%d:%s() " a, __FILE__, __LINE__, __FUNCTION__, b);
-#define Log3(a, b, c) printf("%s:%d:%s() " a, __FILE__, __LINE__, __FUNCTION__, b, c);
+#define Log2(a, b) printf("%s:%d:%s() " a "\n", __FILE__, __LINE__, __FUNCTION__, b);
+#define Log3(a, b, c) printf("%s:%d:%s() " a "\n", __FILE__, __LINE__, __FUNCTION__, b, c);
 
 int SYS_dyn_LoadLibrary(void **handle, const char *library_name)
 {
