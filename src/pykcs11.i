@@ -183,6 +183,10 @@ typedef struct CK_TOKEN_INFO {
 		sprintf(szVal, "%d.%02d", self->firmwareVersion.major, self->firmwareVersion.minor);
 		return PyKCS11String(szVal);
 	}		
+	PyKCS11String GetUtcTime()
+	{
+		return PyKCS11String(self->utcTime, sizeof(self->utcTime));
+	}
 };
 
 typedef struct CK_SESSION_INFO {
