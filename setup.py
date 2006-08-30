@@ -3,7 +3,8 @@
 
 from distutils.core import setup, Extension
 
-setup(name="PyKCS11", version="1.0.2",
+setup(name="PyKCS11",
+    version="1.1.0",
 	ext_modules=[
 		Extension(
 			"PyKCS11/_LowLevel",
