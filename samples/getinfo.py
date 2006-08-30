@@ -49,7 +49,7 @@ for o, a in opts:
         pin_available = True
         open_session = True
     if o in ("-s", "--slot"):
-        slot = a
+        slot = int(a)
     if o in ("-d", "--lib"):
         lib = a
     if o in ("-o", "--opensession"):
