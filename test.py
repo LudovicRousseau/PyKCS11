@@ -16,16 +16,17 @@
 # along with this program; if not, write to the Free Software
 # Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
 
-import PyKCS11
+import PyKCS11.LowLevel
 
-a = PyKCS11.CPKCS11Lib()
-info = PyKCS11.CK_INFO()
-slotInfo = PyKCS11.CK_SLOT_INFO()
-lib = "incryptoki2.dll"
-session = PyKCS11.CK_SESSION_HANDLE()
-sessionInfo = PyKCS11.CK_SESSION_INFO()
-tokenInfo = PyKCS11.CK_TOKEN_INFO()
-slotList = PyKCS11.ckintlist()
+a = PyKCS11.LowLevel.CPKCS11Lib()
+info = PyKCS11.LowLevel.CK_INFO()
+slotInfo = PyKCS11.LowLevel.CK_SLOT_INFO()
+#lib = "incryptoki2.dll"
+lib = "/usr/lib/gemsafe/libgemsafe.so"
+session = PyKCS11.LowLevel.CK_SESSION_HANDLE()
+sessionInfo = PyKCS11.LowLevel.CK_SESSION_INFO()
+tokenInfo = PyKCS11.LowLevel.CK_TOKEN_INFO()
+slotList = PyKCS11.LowLevel.ckintlist()
 pin = "12345678"
 
 print "Load of " + lib + ": " + str(a.Load(lib, 1))
@@ -39,7 +40,7 @@ print "\tAvailable Slots: " + str(len(slotList))
 for x in range(len(slotList)):
     print "\tC_SlotInfo(): " + hex(a.C_GetSlotInfo(slotList[x], slotInfo))
     print "\t\tSlot N." + str(x) + ": ID=" + str(slotList[x]) + ", name='" + slotInfo.GetSlotDescription() + "'"
-    print "\tC_OpenSession(): " + hex(a.C_OpenSession(slotList[x], PyKCS11.CKF_SERIAL_SESSION|PyKCS11.CKF_RW_SESSION, session))
+    print "\tC_OpenSession(): " + hex(a.C_OpenSession(slotList[x], PyKCS11.LowLevel.CKF_SERIAL_SESSION|PyKCS11.LowLevel.CKF_RW_SESSION, session))
     print "\t\tSession:" + str(session)
     print "\tC_GetSessionInfo(): " + hex(a.C_GetSessionInfo(session, sessionInfo))
     print "\t\tSessionInfo: state=" + hex(sessionInfo.state) + ", flags=" + hex(sessionInfo.flags)
@@ -48,17 +49,17 @@ for x in range(len(slotList)):
     print "\t\tTokenInfo: Label=" + tokenInfo.GetLabel() + ", ManufacturerID=" + tokenInfo.GetManufacturerID()
     print "\t\tTokenInfo: flags=" + hex(tokenInfo.flags) + ", Model=" + tokenInfo.GetModel()
     
-    print "\tC_Login(): " + hex(a.C_Login(session, PyKCS11.CKU_USER, pin))
+    print "\tC_Login(): " + hex(a.C_Login(session, PyKCS11.LowLevel.CKU_USER, pin))
     print "\tC_Logout(): " + hex(a.C_Logout(session))
     print "\tC_CloseSession(): " + hex(a.C_CloseSession(session))
 
-print "C_OpenSession(): " + hex(a.C_OpenSession(slotList[0], PyKCS11.CKF_SERIAL_SESSION, session))
-print "C_Login(): " + hex(a.C_Login(session, PyKCS11.CKU_USER, pin))
+print "C_OpenSession(): " + hex(a.C_OpenSession(slotList[0], PyKCS11.LowLevel.CKF_SERIAL_SESSION, session))
+print "C_Login(): " + hex(a.C_Login(session, PyKCS11.LowLevel.CKU_USER, pin))
 
 SearchResult = PyKCS11.ckintlist(10)
 SearchTemplate = PyKCS11.ckattrlist(2)
-SearchTemplate[0].SetNum(PyKCS11.CKA_CLASS, PyKCS11.CKO_CERTIFICATE)
-SearchTemplate[1].SetBool(PyKCS11.CKA_TOKEN, True)
+SearchTemplate[0].SetNum(PyKCS11.LowLevel.CKA_CLASS, PyKCS11.LowLevel.CKO_CERTIFICATE)
+SearchTemplate[1].SetBool(PyKCS11.LowLevel.CKA_TOKEN, True)
 
 print "C_FindObjectsInit: " +  hex(a.C_FindObjectsInit(session, SearchTemplate))
 print "C_FindObjects: " +  hex(a.C_FindObjects(session, SearchResult))
@@ -67,9 +68,9 @@ print "C_FindObjectsFinal: " +  hex(a.C_FindObjectsFinal(session))
 for x in SearchResult:
     print "object: " + hex(x)
     valTemplate = PyKCS11.ckattrlist(2)
-    valTemplate[0].SetType(PyKCS11.CKA_LABEL)
+    valTemplate[0].SetType(PyKCS11.LowLevel.CKA_LABEL)
     #valTemplate[0].Reserve(128)
-    valTemplate[1].SetType(PyKCS11.CKA_CLASS)
+    valTemplate[1].SetType(PyKCS11.LowLevel.CKA_CLASS)
     #valTemplate[1].Reserve(4)
     print "C_GetAttributeValue(): " + hex(a.C_GetAttributeValue(session, x, valTemplate))
     print "CKA_LABEL Len: ", valTemplate[0].GetLen(), " CKA_CLASS Len: ",valTemplate[1].GetLen()
