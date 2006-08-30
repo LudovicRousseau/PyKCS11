@@ -13,6 +13,7 @@ clean:
 	rm -f src/unix_pykcs11_wrap.cpp
 	rm -rf build
 	rm -f *.pyc PyKCS11/*.pyc
+	rm PyKCS11/LowLevel.py
 
 rebuild: clean build
 
