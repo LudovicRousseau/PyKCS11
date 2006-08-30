@@ -24,5 +24,5 @@ src/pykcs11.i: src/rsaref/cryptoki.h src/pkcs11lib.h src/pykcs11string.h src/ck_
 	touch $@
 
 doc:
-	epydoc PyKCS11
+	PYTHONPATH=build/lib.linux-i686-2.4/PyKCS11 epydoc PyKCS11
 
