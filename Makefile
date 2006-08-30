@@ -22,3 +22,6 @@ src/unix_pykcs11_wrap.cpp: src/pykcs11.i
 src/pykcs11.i: src/rsaref/cryptoki.h src/pkcs11lib.h src/pykcs11string.h src/ck_attribute_smart.h
 	touch $@
 
+doc:
+	epydoc PyKCS11
+
