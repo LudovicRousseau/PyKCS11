@@ -16,16 +16,16 @@
 # along with this program; if not, write to the Free Software
 # Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
 
-import PyKCS11
+import PyKCS11.LowLevel
 
-a = PyKCS11.CPKCS11Lib()
-info = PyKCS11.CK_INFO()
-slotInfo = PyKCS11.CK_SLOT_INFO()
+a = PyKCS11.LowLevel.CPKCS11Lib()
+info = PyKCS11.LowLevel.CK_INFO()
+slotInfo = PyKCS11.LowLevel.CK_SLOT_INFO()
 lib = "pkcs11_lib.dll"
-session = PyKCS11.CK_SESSION_HANDLE()
-sessionInfo = PyKCS11.CK_SESSION_INFO()
-tokenInfo = PyKCS11.CK_TOKEN_INFO()
-slotList = PyKCS11.ckintlist()
+session = PyKCS11.LowLevel.CK_SESSION_HANDLE()
+sessionInfo = PyKCS11.LowLevel.CK_SESSION_INFO()
+tokenInfo = PyKCS11.LowLevel.CK_TOKEN_INFO()
+slotList = PyKCS11.LowLevel.ckintlist()
 pin = "123456"
 puk = "12345678"
 Label = "PyKCS#11 Initialized Token      "
@@ -50,12 +50,12 @@ if len(slotList) != 0:
     print "\t\tTokenInfo: Label=" + tokenInfo.GetLabel() + ", ManufacturerID=" + tokenInfo.GetManufacturerID()
     print "\t\tTokenInfo: flags=" + hex(tokenInfo.flags) + ", Model=" + tokenInfo.GetModel()
 
-    print "\tC_OpenSession(): " + hex(a.C_OpenSession(slotList[0], PyKCS11.CKF_SERIAL_SESSION|PyKCS11.CKF_RW_SESSION, session))
+    print "\tC_OpenSession(): " + hex(a.C_OpenSession(slotList[0], PyKCS11.LowLevel.CKF_SERIAL_SESSION|PyKCS11.LowLevel.CKF_RW_SESSION, session))
     print "\t\tSession:" + str(session)
     print "\tC_GetSessionInfo(): " + hex(a.C_GetSessionInfo(session, sessionInfo))
     print "\t\tSessionInfo: state=" + hex(sessionInfo.state) + ", flags=" + hex(sessionInfo.flags)
 
-    print "\tC_Login(SO): " + hex(a.C_Login(session, PyKCS11.CKU_SO, puk))
+    print "\tC_Login(SO): " + hex(a.C_Login(session, PyKCS11.LowLevel.CKU_SO, puk))
     print "\tC_InitPIN(): " + hex(a.C_InitPIN(session, pin))
     print "\tC_Logout(SO): " + hex(a.C_Logout(session))
 
@@ -63,7 +63,7 @@ if len(slotList) != 0:
     print "\t\tTokenInfo: Label=" + tokenInfo.GetLabel() + ", ManufacturerID=" + tokenInfo.GetManufacturerID()
     print "\t\tTokenInfo: flags=" + hex(tokenInfo.flags) + ", Model=" + tokenInfo.GetModel()
 
-    print "C_Login(USER): " + hex(a.C_Login(session, PyKCS11.CKU_USER, pin))
+    print "C_Login(USER): " + hex(a.C_Login(session, PyKCS11.LowLevel.CKU_USER, pin))
     print "C_Logout(USER): " + hex(a.C_Logout(session))
     print "C_CloseSession(): " + hex(a.C_CloseSession(session))
 
