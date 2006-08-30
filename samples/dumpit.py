@@ -40,18 +40,16 @@ def dump(src, length = 8):
 def usage():
     print "Usage:", sys.argv[0],
     print "[-p pin][--pin=pin]",
-    print "[-s slot][--slot=slot]",
     print "[-c lib][--lib=lib]",
     print "[-h][--help]",
 
 try:
-    opts, args = getopt.getopt(sys.argv[1:], "p:s:c:h", ["pin=", "slot=", "lib=", "help"])
+    opts, args = getopt.getopt(sys.argv[1:], "p:c:h", ["pin=", "lib=", "help"])
 except getopt.GetoptError:
     # print help information and exit:
     usage()
     sys.exit(2)
 
-slot = 0
 pin_available = False
 for o, a in opts:
     if o in ("-h", "--help"):
@@ -60,8 +58,6 @@ for o, a in opts:
     if o in ("-p", "--pin"):
         pin = a
         pin_available = True
-    if o in ("-s", "--slot"):
-        slot = a
     if o in ("-d", "--lib"):
         lib = a
 
