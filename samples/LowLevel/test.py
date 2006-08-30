@@ -21,8 +21,7 @@ import PyKCS11.LowLevel
 a = PyKCS11.LowLevel.CPKCS11Lib()
 info = PyKCS11.LowLevel.CK_INFO()
 slotInfo = PyKCS11.LowLevel.CK_SLOT_INFO()
-#lib = "incryptoki2.dll"
-lib = "/usr/lib/gemsafe/libgemsafe.so"
+lib = "incryptoki2.dll"
 session = PyKCS11.LowLevel.CK_SESSION_HANDLE()
 sessionInfo = PyKCS11.LowLevel.CK_SESSION_INFO()
 tokenInfo = PyKCS11.LowLevel.CK_TOKEN_INFO()
