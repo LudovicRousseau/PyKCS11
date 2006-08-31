@@ -1216,7 +1216,6 @@ class Session:
         C_CloseAllSession
         """
         rv = self.lib.C_CloseAllSession(self.slot)
-        print hex(rv)
         if rv != CKR_OK:
             raise PyKCS11Error(rv)
 
