@@ -941,7 +941,7 @@ class CK_TOKEN_INFO:
 class PyKCS11Error:
     """ define the possible PKCS#11 error codes """
     errors = {
-        -1: "Unkown PKCS#11 type",
+        -2: "Unkown PKCS#11 type",
         -1: "Load",
         CKR_OK: "CKR_OK",
         CKR_CANCEL: "CKR_CANCEL",
