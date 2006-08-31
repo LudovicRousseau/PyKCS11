@@ -2,6 +2,7 @@
 # PYTHONPATH=/tmp/p/usr/lib/python2.4/site-packages python test.py 
 
 from distutils.core import setup, Extension
+from sys import version_info as pyver
 
 setup(name="PyKCS11",
     version="1.1.0",
@@ -12,7 +13,7 @@ setup(name="PyKCS11",
 			"src/pykcs11string.cpp", "src/unix_pykcs11_wrap.cpp",
 			"src/utility.cpp", "src/dyn_unix.c"],
 			include_dirs = ["src"],
-			libraries = ["python2.4"]
+			libraries = ["python%d.%d" % pyver[:2]]
 		)
 	],
 	py_modules=["PyKCS11/__init__", "PyKCS11/LowLevel"],
