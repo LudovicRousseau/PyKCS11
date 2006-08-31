@@ -1242,6 +1242,30 @@ class Session:
 
         del self
 
+    def initToken(self, pin, label):
+        """
+        C_InitToken
+        """
+        rv = self.lib.C_InitToken(self.session, pin, label)
+        if rv != CKR_OK:
+            raise PyKCS11Error(rv)
+
+    def initPin(self, new_pin):
+        """
+        C_InitPIN
+        """
+        rv = self.lib.C_InitPIN(self.session, new_pin)
+        if rv != CKR_OK:
+            raise PyKCS11Error(rv)
+
+    def setPin(self, old_pin, new_pin):
+        """
+        C_SetPIN
+        """
+        rv = self.lib.C_SetPIN(self.session, old_pin, new_pin)
+        if rv != CKR_OK:
+            raise PyKCS11Error(rv)
+
     def isNum(self, type):
         if type in (CKA_CERTIFICATE_TYPE,
             CKA_CLASS,
