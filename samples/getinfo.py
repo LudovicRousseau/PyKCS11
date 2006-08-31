@@ -80,7 +80,7 @@ try:
     colorize("  firmwareVersion:", i.firmwareVersion)
 
     if open_session:
-        session = pkcs11.openSession(s)
+        session = pkcs11.openSession(slots[slot])
 
     if pin_available:
         session.login(pin = pin)
