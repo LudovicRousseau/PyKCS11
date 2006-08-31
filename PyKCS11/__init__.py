@@ -1065,7 +1065,7 @@ class PyKCS11Lib:
         if pkcs11dll_filename == None:
             pkcs11dll_filename = os.getenv("PYKCS11LIB")
             if pkcs11dll_filename == None:
-                raise PyKCS11Error(-1, "No PKCS11 library specified")
+                raise PyKCS11Error(-1, "No PKCS11 library specified (set PYKCS11LIB env variable)")
         rv = self.lib.Load(pkcs11dll_filename, 1)
         if rv == 0:
             raise PyKCS11Error(-1, pkcs11dll_filename)
