@@ -1,15 +1,19 @@
 # give some default values
 PREFIX ?= /usr
 DESTDIR ?= /
+ifeq (, $(PYTHONVER))
+	PYTHONVER=2.4
+endif
+PYTHON=python$(PYTHONVER)
 
 build: src/unix_pykcs11_wrap.cpp
-	python setup.py build
+	$(PYTHON) setup.py build
 
 install: build
-	python setup.py install --prefix=$(PREFIX) --root=$(DESTDIR)
+	$(PYTHON) setup.py install --prefix=$(PREFIX) --root=$(DESTDIR)
 
 clean:
-	python setup.py clean
+	$(PYTHON) setup.py clean
 	rm -f src/unix_pykcs11_wrap.cpp
 	rm -rf build
 	rm -f *.pyc PyKCS11/*.pyc
