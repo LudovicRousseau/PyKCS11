@@ -29,5 +29,5 @@ src/pykcs11.i: src/rsaref/cryptoki.h src/pkcs11lib.h src/pykcs11string.h src/ck_
 
 doc: build
 	rm -rf html
-	PYTHONPATH=build/lib.linux-i686-2.4/PyKCS11 epydoc PyKCS11
+	PYTHONPATH=`find build -name PyKCS11` epydoc PyKCS11
 
