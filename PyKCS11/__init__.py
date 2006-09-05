@@ -940,6 +940,7 @@ class CK_TOKEN_INFO:
 
 class PyKCS11Error:
     """ define the possible PKCS#11 error codes """
+
     errors = {
         -2: "Unkown PKCS#11 type",
         -1: "Load",
@@ -1046,6 +1047,7 @@ class PyKCS11Error:
 
 class PyKCS11Lib:
     """ high level PKCS#11 binding """
+
     def __init__(self):
         self.lib = PyKCS11.LowLevel.CPKCS11Lib()
 
@@ -1203,6 +1205,8 @@ class PyKCS11Lib:
         return s
 
 class Session:
+    """ Manage L{PyKCS11Lib.openSession} objects """
+
     def closeSession(self):
         """
         C_CloseSession
@@ -1223,9 +1227,10 @@ class Session:
         """
         C_Login
 
-        @param pin: the user's PI
+        @param pin: the user's PIN
         @type pin: string
-        @param user_type: the user type. The default value is CKU_USER
+        @param user_type: the user type. The default value is
+        L{CKU_USER}. You may also use L{CKU_SO}
         @type user_type: integer
         """
         rv = self.lib.C_Login(self.session, user_type, pin)
