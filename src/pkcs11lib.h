@@ -23,7 +23,7 @@
 //	#define CK_SESSION_HANDLE unsigned long
 
 #else
-	
+
 	typedef CK_ATTRIBUTE CK_ATTRIBUTE_INTERNAL;
 #ifdef WIN32
 	#pragma warning(disable: 4800 4244)
@@ -58,7 +58,7 @@ public:
 	CK_RV   C_Finalize();
 	CK_RV   C_GetInfo( CK_INFO*   pInfo);
 	CK_RV   C_GetSlotList(unsigned char tokenPresent,
-							vector<int>& slotList );
+							vector<long>& slotList );
 
 
 	CK_RV C_GetSlotInfo(unsigned long slotID,CK_SLOT_INFO* pInfo);
@@ -67,24 +67,24 @@ public:
 	CK_RV C_GetTokenInfo(unsigned long slotID,CK_TOKEN_INFO* pInfo);
 
 #ifdef SWIG
-%apply (char *STRING, int LENGTH) { (unsigned char* pPin, unsigned long ulPinLen),
-									(unsigned char* pOldPin, unsigned long ulOldLen), 
-									(unsigned char* pNewPin, unsigned long ulNewLen) };
-%apply (char *STRING) { (unsigned char* pLabel)};
+%apply (char *STRING, int LENGTH) { (char* pPin, unsigned long ulPinLen),
+									(char* pOldPin, unsigned long ulOldLen), 
+									(char* pNewPin, unsigned long ulNewLen) };
+%apply (char *STRING) { (char* pLabel)};
 
 #endif
 	CK_RV   C_InitToken(unsigned long      slotID,
-		unsigned char* pPin, unsigned long ulPinLen
+		char* pPin, unsigned long ulPinLen
 		, const char* pLabel);
 
 
 	CK_RV   C_InitPIN
-	(CK_SESSION_HANDLE hSession, unsigned char* pPin, unsigned long ulPinLen	);
+	(CK_SESSION_HANDLE hSession, char* pPin, unsigned long ulPinLen	);
 
 	CK_RV   C_SetPIN
 	(CK_SESSION_HANDLE hSession,
-	unsigned char*   pOldPin,unsigned long ulOldLen,
-	unsigned char*   pNewPin, unsigned long ulNewLen
+	char*   pOldPin,unsigned long ulOldLen,
+	char*   pNewPin, unsigned long ulNewLen
 	);
 
 
@@ -101,12 +101,12 @@ public:
 	(	CK_SESSION_HANDLE   hSession,	CK_SESSION_INFO* pInfo	);
 
 
-	CK_RV C_Login( CK_SESSION_HANDLE hSession, unsigned long userType, unsigned char* pPin, unsigned long ulPinLen);
+	CK_RV C_Login( CK_SESSION_HANDLE hSession, unsigned long userType, char* pPin, unsigned long ulPinLen);
 #ifdef SWIG
-%clear (unsigned char* pPin, unsigned long ulPinLen),
-	   (unsigned char* pOldPin, unsigned long ulOldLen),
-	   (unsigned char* pNewPin, unsigned long ulNewLen) ;
-%clear (unsigned char* pLabel);
+%clear (char* pPin, unsigned long ulPinLen),
+	   (char* pOldPin, unsigned long ulOldLen),
+	   (char* pNewPin, unsigned long ulNewLen) ;
+%clear (char* pLabel);
 #endif
 
 	CK_RV C_Logout(CK_SESSION_HANDLE hSession);
@@ -114,11 +114,11 @@ public:
 
 	CK_RV C_CreateObject(CK_SESSION_HANDLE hSession,
 		vector<CK_ATTRIBUTE_SMART> Template,
-		CK_OBJECT_HANDLE& outhObject
+		long& outhObject
 	);
 
 	CK_RV   C_DestroyObject
-	(CK_SESSION_HANDLE hSession, CK_OBJECT_HANDLE  hObject
+	(CK_SESSION_HANDLE hSession, long  hObject
 	);
 
 
@@ -126,7 +126,7 @@ public:
 
 	(
 	CK_SESSION_HANDLE hSession,
-	CK_OBJECT_HANDLE  hObject,
+	long  hObject,
 	unsigned long*      pulSize
 	);
 
@@ -134,14 +134,14 @@ public:
 	CK_RV   C_GetAttributeValue
 	(
 	CK_SESSION_HANDLE hSession,
-	CK_OBJECT_HANDLE  hObject,
+	long  hObject,
 	vector<CK_ATTRIBUTE_SMART> &Template);
 
 
 	CK_RV   C_SetAttributeValue
 	(
 	CK_SESSION_HANDLE hSession,
-	CK_OBJECT_HANDLE  hObject,
+	long  hObject,
 	vector<CK_ATTRIBUTE_SMART> Template
 	);
 
@@ -158,7 +158,7 @@ public:
 
 	(
 	CK_SESSION_HANDLE    hSession,
-	vector<int> &slotList );
+	vector<long> &objectsList );
 
 
 	CK_RV   C_FindObjectsFinal
@@ -169,7 +169,7 @@ public:
 	(
 	CK_SESSION_HANDLE hSession,
 	CK_MECHANISM*  pMechanism,
-	CK_OBJECT_HANDLE  hKey
+	long  hKey
 	);
 
 
@@ -203,7 +203,7 @@ public:
 	(
 	CK_SESSION_HANDLE hSession,
 	CK_MECHANISM*  pMechanism,
-	CK_OBJECT_HANDLE  hKey
+	long  hKey
 	);
 
 
@@ -261,7 +261,7 @@ public:
 
 	(
 	CK_SESSION_HANDLE hSession,
-	CK_OBJECT_HANDLE  hKey
+	long  hKey
 	);
 
 
@@ -278,7 +278,7 @@ public:
 	(
 	CK_SESSION_HANDLE hSession,
 	CK_MECHANISM*  pMechanism,
-	CK_OBJECT_HANDLE  hKey
+	long  hKey
 	);
 
 
@@ -312,7 +312,7 @@ public:
 	(
 	CK_SESSION_HANDLE hSession,
 	CK_MECHANISM*  pMechanism,
-	CK_OBJECT_HANDLE  hKey
+	long  hKey
 	);
 
 
@@ -346,7 +346,7 @@ public:
 	CK_SESSION_HANDLE    hSession,
 	CK_MECHANISM*     pMechanism,
 	vector<CK_ATTRIBUTE_SMART> Template,
-	CK_OBJECT_HANDLE & outhKey
+	long & outhKey
 	);
 
 
@@ -359,8 +359,8 @@ public:
 	CK_MECHANISM*     pMechanism,
 	vector<CK_ATTRIBUTE_SMART> PublicKeyTemplate,
 	vector<CK_ATTRIBUTE_SMART> PrivateKeyTemplate,
-	CK_OBJECT_HANDLE& outhPublicKey,
-	CK_OBJECT_HANDLE& outhPrivateKey
+	long& outhPublicKey,
+	long& outhPrivateKey
 
 
 	);
@@ -370,8 +370,8 @@ public:
 	(
 	CK_SESSION_HANDLE hSession,
 	CK_MECHANISM*  pMechanism,
-	CK_OBJECT_HANDLE  hWrappingKey,
-	CK_OBJECT_HANDLE  hKey,
+	long  hWrappingKey,
+	long  hKey,
 	vector<unsigned char> &WrappedKey
 	);
 
@@ -380,10 +380,10 @@ public:
 	(
 	CK_SESSION_HANDLE    hSession,
 	CK_MECHANISM*     pMechanism,
-	CK_OBJECT_HANDLE     hUnwrappingKey,
+	long     hUnwrappingKey,
 	vector<unsigned char> WrappedKey,
 	vector<CK_ATTRIBUTE_SMART> Template,
-	CK_OBJECT_HANDLE & outhKey
+	long & outhKey
 	);
 
 
