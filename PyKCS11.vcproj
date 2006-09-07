@@ -26,18 +26,19 @@
 				RuntimeLibrary="1"
 				RuntimeTypeInfo="TRUE"
 				UsePrecompiledHeader="3"
+				PrecompiledHeaderFile="$(IntDir)/_LowLevel.pch"
 				WarningLevel="3"
 				DebugInformationFormat="4"/>
 			<Tool
 				Name="VCCustomBuildTool"/>
 			<Tool
 				Name="VCLinkerTool"
-				OutputFile="$(OutDir)/_PyKCS11.dll"
+				OutputFile="$(OutDir)/_LowLevel.dll"
 				LinkIncremental="2"
 				GenerateDebugInformation="TRUE"
 				ProgramDatabaseFile="$(OutDir)/_$(ProjectName).pdb"
 				SubSystem="2"
-				ImportLibrary="$(OutDir)/_$(ProjectName).lib"
+				ImportLibrary="$(OutDir)/_LowLevel.lib"
 				TargetMachine="1"/>
 			<Tool
 				Name="VCMIDLTool"/>
@@ -68,30 +69,32 @@
 			CharacterSet="2">
 			<Tool
 				Name="VCCLCompilerTool"
-				Optimization="0"
+				Optimization="1"
 				PreprocessorDefinitions="WIN32;NDEBUG;_WINDOWS;_USRDLL;PYKCS11_EXPORTS;SWIG_STD_NOASSIGN_STL__"
 				RuntimeLibrary="0"
 				RuntimeTypeInfo="TRUE"
 				UsePrecompiledHeader="3"
+				PrecompiledHeaderFile="$(IntDir)/_LowLevel.pch"
 				WarningLevel="3"
 				DebugInformationFormat="3"/>
 			<Tool
 				Name="VCCustomBuildTool"/>
 			<Tool
 				Name="VCLinkerTool"
-				OutputFile="$(OutDir)/_PyKCS11.dll"
+				OutputFile="$(OutDir)/_LowLevel.dll"
 				LinkIncremental="1"
 				GenerateDebugInformation="TRUE"
 				ProgramDatabaseFile="$(OutDir)/_$(ProjectName).pdb"
 				SubSystem="2"
 				OptimizeReferences="2"
 				EnableCOMDATFolding="2"
-				ImportLibrary="$(OutDir)/_$(ProjectName).lib"
+				ImportLibrary="$(OutDir)/_LowLevel.lib"
 				TargetMachine="1"/>
 			<Tool
 				Name="VCMIDLTool"/>
 			<Tool
-				Name="VCPostBuildEventTool"/>
+				Name="VCPostBuildEventTool"
+				CommandLine="copy &quot;$(TargetPath)&quot; PyKCS11\"/>
 			<Tool
 				Name="VCPreBuildEventTool"/>
 			<Tool
@@ -241,9 +244,11 @@
 				Name="Debug|Win32">
 				<Tool
 					Name="VCCustomBuildTool"
-					CommandLine="swig.exe -c++ -Fmicrosoft -o &quot;$(InputDir)\win32_$(InputName)_wrap.cpp&quot; -python &quot;$(InputPath)&quot;
-"
-					Outputs="$(InputDir)\win32_$(InputName)_wrap.cpp;$(InputDir)\$(InputName).py"/>
+					Description="Generating SWIG wrapper"
+					CommandLine="swig.exe  -c++ -Fmicrosoft -o &quot;$(InputDir)\win32_$(InputName)_wrap.cpp&quot; -python &quot;$(InputPath)&quot;
+copy &quot;$(InputDir)\LowLevel.py&quot; PyKCS11\"
+					AdditionalDependencies="$(InputDir)\pkcs11lib.h"
+					Outputs="$(InputDir)\win32_$(InputName)_wrap.cpp;$(InputDir)\LowLevel.py"/>
 			</FileConfiguration>
 			<FileConfiguration
 				Name="Release|Win32">
@@ -251,9 +256,9 @@
 					Name="VCCustomBuildTool"
 					Description="Generating SWIG wrapper"
 					CommandLine="swig.exe  -c++ -Fmicrosoft -o &quot;$(InputDir)\win32_$(InputName)_wrap.cpp&quot; -python &quot;$(InputPath)&quot;
-"
-					AdditionalDependencies="src\pkcs11lib.h"
-					Outputs="src\win32_$(InputName)_wrap.cpp;src\$(InputName).py"/>
+copy &quot;$(InputDir)\LowLevel.py&quot; PyKCS11\"
+					AdditionalDependencies="$(InputDir)\pkcs11lib.h"
+					Outputs="$(InputDir)\win32_$(InputName)_wrap.cpp;$(InputDir)\LowLevel.py"/>
 			</FileConfiguration>
 		</File>
 		<File

@@ -47,7 +47,7 @@ using namespace std;
 %include typemaps.i
 %include std_vector.i
 
-%template(ckintlist) vector<int>;
+%template(ckintlist) vector<long>;
 %template(ckbytelist) vector<unsigned char>;
 %template(ckattrlist) vector<CK_ATTRIBUTE_SMART>;
 
