@@ -52,6 +52,7 @@ using namespace std;
 %template(ckattrlist) vector<CK_ATTRIBUTE_SMART>;
 
 %pointer_class(CK_SESSION_HANDLE, CK_SESSION_HANDLE);
+%array_class(char,byteArray);
 
 #if SWIGPYTHON
 %typemap(out) PyKCS11String {
