@@ -13,7 +13,7 @@
  */
 
 //#include "config.h"
-#ifdef WIN32
+#if defined(WIN32) || defined(_WIN32)
 #include <string.h>
 
 #include "windows.h"
@@ -64,7 +64,7 @@ int SYS_dyn_GetAddress(void *pvLHandle, function_ptr *pvFHandle,
 	const char *pcFunctionName;
 
 	/*
-	 * Zero out everything 
+	 * Zero out everything
 	 */
 	rv = 0;
 	pcFunctionName = NULL;
