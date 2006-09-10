@@ -1104,7 +1104,7 @@ class PyKCS11Lib:
             raise PyKCS11Error(rv)
 
         s = []
-        for x in range(len(slotList)):
+        for x in xrange(len(slotList)):
             s.append(slotList[x])
         return s
 
@@ -1204,6 +1204,15 @@ class PyKCS11Lib:
         s.session = se
         return s
 
+class MechanismRSAPKCS1:
+        mechanism = CKM_RSA_PKCS
+        param = None
+
+class Mechanism:
+    def __init__(self, mechanism, param):
+        self.mechanism = mechanism
+        self.param = param
+
 class Session:
     """ Manage L{PyKCS11Lib.openSession} objects """
 
@@ -1270,7 +1279,119 @@ class Session:
         rv = self.lib.C_SetPIN(self.session, old_pin, new_pin)
         if rv != CKR_OK:
             raise PyKCS11Error(rv)
-
+            
+    def sign(self, key, data, mecha=MechanismRSAPKCS1):
+        """
+        C_SignInit/C_Sign
+        
+        @param key: a key handle, obtained calling L{findObjects}.
+        @type key: integer
+        @param data: the data to be signed
+        @type data:  (binary) sring or list/tuple of bytes
+        @param mecha: the signing mechanism to be used; use MechanismRSAPKCS1 for CKM_RSA_PKCS or
+        an istance of L{Mechanism} if you want specify another mechanism.
+        @type mecha: L{Mechanism} instance or L{MechanismRSAPKCS1}
+        @return: the computed signature
+        @rtype: list of bytes
+        
+        Remarks:
+        the returned value is an istance of L{LowLevel.ckbytelist}.
+        You can easly convert it to a binary string with::
+        ''.join(chr(i) for i in ckbytelistSignature)
+        """
+        m = PyKCS11.LowLevel.CK_MECHANISM()
+        signature = PyKCS11.LowLevel.ckbytelist()
+        ba = None # must be declared here or may be deallocated too early
+        m.mechanism = mecha.mechanism
+        if (mecha.param):
+            ba = PyKCS11.LowLevel.byteArray(len(mecha.param))
+            if type(mecha.param) is type(''):
+                for c in xrange(len(mecha.param)):
+                    ba[c] = ord(mecha.param[c])
+            else:
+                for c in xrange(len(mecha.param)):
+                    ba[c] = mecha.param[c]
+            # with cast() the ba object continue to own internal pointer (avoids a leak).
+            # pParameter is an opaque pointer, never garbage collected.
+            m.pParameter = ba.cast()
+            m.ulParameterLen = len(mecha.param)
+        data1 = PyKCS11.LowLevel.ckbytelist()
+        data1.reserve(len(data))
+        if type(data) is type(''):
+            for x in data:
+                data1.append(ord(x))
+        else:
+            for c in xrange(len(data)):
+                data1.append(data[c])
+        rv = self.lib.C_SignInit(self.session, m, key)
+        if (rv != 0):
+            raise PyKCS11Error(rv)
+        #first call get signature size
+        rv = self.lib.C_Sign(self.session, data1, signature);
+        if (rv != 0):
+            raise PyKCS11Error(rv)
+        #second call get actual signature data
+        rv = self.lib.C_Sign(self.session, data1, signature);
+        if (rv != 0):
+            raise PyKCS11Error(rv)
+        return signature
+        
+    def decrypt(self, key, data, mecha=MechanismRSAPKCS1):
+        """
+        C_DecryptInit/C_Decrypt
+        
+        @param key: a key handle, obtained calling L{findObjects}.
+        @type key: integer
+        @param data: the data to be decrypted
+        @type data:  (binary) sring or list/tuple of bytes
+        @param mecha: the signing mechanism to be used; use MechanismRSAPKCS1 for CKM_RSA_PKCS or
+        an istance of L{Mechanism} if you want specify another mechanism.
+        @type mecha: L{Mechanism} instance or L{MechanismRSAPKCS1}
+        @return: the decrypted data
+        @rtype: list of bytes
+        
+        Remarks:
+        the returned value is an istance of L{LowLevel.ckbytelist}.
+        You can easly convert it to a binary string with::
+        ''.join(chr(i) for i in ckbytelistData)
+        """
+        m = PyKCS11.LowLevel.CK_MECHANISM()
+        decrypted = PyKCS11.LowLevel.ckbytelist()
+        ba = None # must be declared here or may be deallocated too early
+        m.mechanism = mecha.mechanism
+        if (mecha.param):
+            ba = PyKCS11.LowLevel.byteArray(len(mecha.param))
+            if type(mecha.param) is type(''):
+                for c in xrange(len(mecha.param)):
+                    ba[c] = ord(mecha.param[c])
+            else:
+                for c in xrange(len(mecha.param)):
+                    ba[c] = mecha.param[c]
+            # with cast() the ba object continue to own internal pointer (avoids a leak).
+            # pParameter is an opaque pointer, never garbage collected.
+            m.pParameter = ba.cast()
+            m.ulParameterLen = len(mecha.param)
+        data1 = PyKCS11.LowLevel.ckbytelist()
+        data1.reserve(len(data))
+        if type(data) is type(''):
+            for x in data:
+                data1.append(ord(x))
+        else:
+            for c in xrange(len(data)):
+                data1.append(data[c])
+        rv = self.lib.C_DecryptInit(self.session, m, key)
+        if (rv != 0):
+            raise PyKCS11Error(rv)
+        #first call get decrypted size
+        rv = self.lib.C_Decrypt(self.session, data1, decrypted);
+        if (rv != 0):
+            raise PyKCS11Error(rv)
+        #second call get actual decrypted data
+        rv = self.lib.C_Decrypt(self.session, data1, decrypted);
+        if (rv != 0):
+            raise PyKCS11Error(rv)
+        return decrypted
+        
     def isNum(self, type):
         if type in (CKA_CERTIFICATE_TYPE,
             CKA_CLASS,
@@ -1325,7 +1446,7 @@ class Session:
         @rtype: list
         """
         t = PyKCS11.LowLevel.ckattrlist(len(template))
-        for x in range(len(template)):
+        for x in xrange(len(template)):
             attr = template[x]
             if self.isNum(attr[0]):
                 t[x].SetNum(attr[0], attr[1])
@@ -1354,7 +1475,7 @@ class Session:
         self.lib.C_FindObjectsFinal(self.session)
         return res
 
-    def getAttributeValue(self, obj_id, attr):
+    def getAttributeValue(self, obj_id, attr, allAsBinary = False):
         """
         C_GetAttributeValue
 
@@ -1362,17 +1483,28 @@ class Session:
         @type obj_id: integer
         @param attr: list of attributes
         @type attr: list
+        @param allAsBinary: return all values as bynary data; default is False.
+        @type allAsBinary: Boolean
         @return: a list of values corresponding to the list of
         attributes
         @rtype: list
+        
+        Remarks:
+        if allAsBinary is True the function don't converts results to Python types 
+        (i.e.: CKA_TOKEN to Bool, CKA_CLASS to int, ...).
+        Binary data is returned as L{LowLevel.ckbytelist} type, usable as a list containing only bytes.
+        You can easly convert it to a binary string with::
+        ''.join(chr(i) for i in ckbytelistVariable)
+
         """
         valTemplate = PyKCS11.LowLevel.ckattrlist(len(attr))
-        for x in range(len(attr)):
+        for x in xrange(len(attr)):
             valTemplate[x].SetType(attr[x])
         # first call to get the attribute size and reserve the memory
         rv = self.lib.C_GetAttributeValue(self.session, obj_id, valTemplate)
-        if rv == CKR_ATTRIBUTE_TYPE_INVALID:
-            return self.getAttributeValue_fragmented(obj_id, attr)
+        if rv == CKR_ATTRIBUTE_TYPE_INVALID \
+           or rv == CKR_ATTRIBUTE_SENSITIVE:
+            return self.getAttributeValue_fragmented(obj_id, attr, allAsBinary)
 
         if rv != CKR_OK:
             raise PyKCS11Error(rv)
@@ -1382,8 +1514,10 @@ class Session:
             raise PyKCS11Error(rv)
 
         res = []
-        for x in range(len(attr)):
-            if valTemplate[x].IsNum():
+        for x in xrange(len(attr)):
+            if (allAsBinary):
+                res.append(valTemplate[x].GetBin())
+            elif valTemplate[x].IsNum():
                 res.append(valTemplate[x].GetNum())
             elif valTemplate[x].IsBool():
                 res.append(valTemplate[x].GetBool())
@@ -1396,17 +1530,26 @@ class Session:
 
         return res
 
-    def getAttributeValue_fragmented(self, obj_id, attr):
+    def getAttributeValue_fragmented(self, obj_id, attr, allAsBinary = False):
+        """
+        Same as L{getAttributeValue} except that when some attribute
+        is sensitive or unknown an empty value (None) is retruned.
+        
+        Note: this is achived getting attributes one by one.
+        
+        @see: getAttributeValue
+        """
         # some attributes does not exists or is sensitive
         # but we don't know which ones. So try one by one
         valTemplate = PyKCS11.LowLevel.ckattrlist(1)
         res = []
-        for x in range(len(attr)):
+        for x in xrange(len(attr)):
             valTemplate[0].Reset()
             valTemplate[0].SetType(attr[x])
             # first call to get the attribute size and reserve the memory
             rv = self.lib.C_GetAttributeValue(self.session, obj_id, valTemplate)
-            if rv == CKR_ATTRIBUTE_TYPE_INVALID:
+            if rv == CKR_ATTRIBUTE_TYPE_INVALID \
+               or rv == CKR_ATTRIBUTE_SENSITIVE:
                 # append an empty value
                 res.append(None)
                 continue
@@ -1417,8 +1560,10 @@ class Session:
             rv = self.lib.C_GetAttributeValue(self.session, obj_id, valTemplate)
             if rv != CKR_OK:
                 raise PyKCS11Error(rv)
-
-            if valTemplate[0].IsNum():
+            
+            if (allAsBinary):
+                res.append(valTemplate[0].GetBin())
+            elif valTemplate[0].IsNum():
                 res.append(valTemplate[0].GetNum())
             elif valTemplate[0].IsBool():
                 res.append(valTemplate[0].GetBool())

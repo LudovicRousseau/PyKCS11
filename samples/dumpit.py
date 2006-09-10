@@ -18,6 +18,7 @@
 
 import PyKCS11
 import getopt, sys
+import platform
 
 # from http://aspn.activestate.com/ASPN/Cookbook/Python/Recipe/142812
 # Title: Hex dumper
@@ -26,6 +27,13 @@ import getopt, sys
 # Version no: 1.0 
 
 FILTER=''.join([(len(repr(chr(x)))==3) and chr(x) or '.' for x in range(256)])
+def hexx(intval):
+    x = hex(intval)[2:]
+    if (x[-1:].upper() == 'L'):
+        x = x[:-1]
+    if len(x) % 2 != 0:
+        return "0%s" % x
+    return x
 
 def dump(src, length = 8):
     N=0; result=''
@@ -41,28 +49,36 @@ def usage():
     print "Usage:", sys.argv[0],
     print "[-p pin][--pin=pin]",
     print "[-c lib][--lib=lib]",
+    print "[-s] [--sign]",
     print "[-h][--help]",
 
 try:
-    opts, args = getopt.getopt(sys.argv[1:], "p:c:h", ["pin=", "lib=", "help"])
+    opts, args = getopt.getopt(sys.argv[1:], "p:c:s:d:h", ["pin=", "lib=", "sign", "decrypt", "help"])
 except getopt.GetoptError:
     # print help information and exit:
     usage()
     sys.exit(2)
 
 pin_available = False
+decrypt = sign = False
+lib = None
 for o, a in opts:
     if o in ("-h", "--help"):
         usage()
         sys.exit()
-    if o in ("-p", "--pin"):
+    elif o in ("-p", "--pin"):
         pin = a
         pin_available = True
-    if o in ("-d", "--lib"):
+    elif o in ("-c", "--lib"):
         lib = a
-
+        print "using PKCS11 lib:", lib
+    elif o in ("-s", "--sign"):
+        sign = True
+    elif o in ("-d", "--decrypt"):
+        decrypt = True
+        
 red = blue = magenta = normal = ""
-if sys.stdout.isatty():
+if sys.stdout.isatty() and platform.system().lower() != 'windows':
     red = "\x1b[01;31m"
     blue = "\x1b[34m"
     magenta = "\x1b[35m"
@@ -73,7 +89,7 @@ format_binary = magenta + "  %s:" + blue + " %d bytes" + normal
 format_normal = magenta + "  %s:" + blue + " %s" + normal
 
 pkcs11 = PyKCS11.PyKCS11Lib()
-pkcs11.load()
+pkcs11.load(lib)
 info = pkcs11.getInfo()
 print "Library manufacturerID: " + info.manufacturerID
 
@@ -114,11 +130,68 @@ for s in slots:
         print
         print (red + "==================== Object: %d ====================" + normal) % o
         attributes = session.getAttributeValue(o, all_attributes)
+        attrDict = dict(zip(all_attributes, attributes))
+        if attrDict[PyKCS11.CKA_CLASS] == PyKCS11.CKO_PRIVATE_KEY \
+           and attrDict[PyKCS11.CKA_KEY_TYPE] == PyKCS11.CKK_RSA:
+            m = attrDict[PyKCS11.CKA_MODULUS]
+            e = attrDict[PyKCS11.CKA_PUBLIC_EXPONENT]
+            if m and e:
+                mx = eval('0x%s' % ''.join(chr(c) for c in m).encode('hex'))
+                ex = eval('0x%s' % ''.join(chr(c) for c in e).encode('hex'))
+            if sign:
+                try:
+                    toSign="12345678901234567890" # 20 bytes, SHA1 digest
+                    print "* Signing with %d following data: %s" % (o, toSign)
+                    signature = session.sign(o, toSign) 
+                    s = ''.join(chr(c) for c in signature).encode('hex')
+                    sx = eval('0x%s' % s)
+                    print "Signature:"
+                    print dump(''.join(map(chr, signature)), 16)
+                    if m and e:
+                        print "Verifying using following public key:"
+                        print "Modulus:"
+                        print dump(''.join(map(chr, m)), 16)
+                        print "Exponent:"
+                        print dump(''.join(map(chr, e)), 16)
+                        decrypted = pow(sx, ex, mx) # RSA
+                        if toSign == hexx(decrypted).decode('hex')[-20:]:
+                            print "*** signature VERIFIED!\n"
+                        else:
+                            print "*** signature NOT VERIFIED; decrypted value:"
+                            print hex(decrypted), "\n"
+                    else:
+                        print "Unable to verify signature: MODULUS/PUBLIC_EXP not found"
+                except:
+                    print "Sign failed, exception:", str(sys.exc_info()[1])
+            if decrypt:
+                if m and e:
+                    try:
+                        toEncrypt="12345678901234567890"
+                        # note: PKCS1 BT2 padding should be random data,
+                        # but this is just a test and we use 0xFF...
+                        padded = "\x02%s\x00%s" % ("\xFF" * (128 - (len(toEncrypt)) -2), toEncrypt)
+                        print "* Decrypting with %d following data: %s" % (o, toEncrypt)
+                        print "padded:\n",  dump(padded, 16)
+                        encrypted = pow(eval('0x%sL' % padded.encode('hex')), ex, mx) # RSA
+                        encrypted1 = hexx(encrypted).decode('hex')
+                        print "encrypted:\n", dump(encrypted1, 16)
+                        decrypted = session.decrypt(o, encrypted1)
+                        decrypted1 = ''.join(chr(i) for i in decrypted)
+                        print "decrypted:\n", dump(decrypted1, 16)
+                        if decrypted1 == toEncrypt:
+                            print "decryption SUCCESSFULL!\n"
+                        else:
+                            print "decryption FAILED!\n"
+                    except:
+                        print "Decrypt failed, exception:", str(sys.exc_info()[1])
+                else:
+                    print "ERROR: Private key %d don't have MODULUS/PUBLIC_EXP"
+                
+        print "Dumping attributes:"
         for q, a in zip(all_attributes, attributes):
             if a == None:
-                # undefined (CKR_ATTRIBUTE_TYPE_INVALID) attribut
+                # undefined (CKR_ATTRIBUTE_TYPE_INVALID) attribute
                 continue
-
             if q == PyKCS11.CKA_CLASS:
                 print format_long % (PyKCS11.CKA[q], PyKCS11.CKO[a], a)
             if q == PyKCS11.CKA_CERTIFICATE_TYPE:
@@ -133,6 +206,7 @@ for s in slots:
                     print dump(a, 16),
             else:
                 print format_normal % (PyKCS11.CKA[q], a)
+
 
     if pin_available:
         session.logout()
