@@ -141,7 +141,7 @@ for s in slots:
             if sign:
                 try:
                     toSign="12345678901234567890" # 20 bytes, SHA1 digest
-                    print "* Signing with %d following data: %s" % (o, toSign)
+                    print "* Signing with object %d following data: %s" % (o, toSign)
                     signature = session.sign(o, toSign) 
                     s = ''.join(chr(c) for c in signature).encode('hex')
                     sx = eval('0x%s' % s)
@@ -194,9 +194,9 @@ for s in slots:
                 continue
             if q == PyKCS11.CKA_CLASS:
                 print format_long % (PyKCS11.CKA[q], PyKCS11.CKO[a], a)
-            if q == PyKCS11.CKA_CERTIFICATE_TYPE:
+            elif q == PyKCS11.CKA_CERTIFICATE_TYPE:
                 print format_long % (PyKCS11.CKA[q], PyKCS11.CKC[a], a)
-            if q == PyKCS11.CKA_KEY_TYPE:
+            elif q == PyKCS11.CKA_KEY_TYPE:
                 print format_long % (PyKCS11.CKA[q], PyKCS11.CKK[a], a)
             elif session.isBin(q):
                 print format_binary % (PyKCS11.CKA[q], len(a))
