@@ -196,6 +196,8 @@ for s in slots:
                 print format_long % (PyKCS11.CKA[q], PyKCS11.CKO[a], a)
             if q == PyKCS11.CKA_CERTIFICATE_TYPE:
                 print format_long % (PyKCS11.CKA[q], PyKCS11.CKC[a], a)
+            if q == PyKCS11.CKA_KEY_TYPE:
+                print format_long % (PyKCS11.CKA[q], PyKCS11.CKK[a], a)
             elif session.isBin(q):
                 print format_binary % (PyKCS11.CKA[q], len(a))
                 if a:
