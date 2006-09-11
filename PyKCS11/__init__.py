@@ -1204,14 +1204,22 @@ class PyKCS11Lib:
         s.session = se
         return s
 
-class MechanismRSAPKCS1:
-        mechanism = CKM_RSA_PKCS
-        param = None
-
 class Mechanism:
+    """Wraps CK_MECHANISM"""
     def __init__(self, mechanism, param):
+        """
+        @param mechanism: the mechanism to be used
+        @type mechanism: integer, any CKM_* value
+        @param param: data to be used as crypto operation parameter
+        (i.e. the IV for some agorithms)
+        @type param: string or list/tuple of bytes
+        
+        @see: L{Session.decrypt}, L{Session.sign}
+        """
         self.mechanism = mechanism
         self.param = param
+
+MechanismRSAPKCS1 = Mechanism(CKM_RSA_PKCS, None)
 
 class Session:
     """ Manage L{PyKCS11Lib.openSession} objects """
@@ -1288,16 +1296,16 @@ class Session:
         @type key: integer
         @param data: the data to be signed
         @type data:  (binary) sring or list/tuple of bytes
-        @param mecha: the signing mechanism to be used; use MechanismRSAPKCS1 for CKM_RSA_PKCS or
-        an istance of L{Mechanism} if you want specify another mechanism.
-        @type mecha: L{Mechanism} instance or L{MechanismRSAPKCS1}
+        @param mecha: the signing mechanism to be used
+        @type mecha: L{Mechanism} instance or L{MechanismRSAPKCS1} 
+        for L{CKM_RSA_PKCS}
         @return: the computed signature
         @rtype: list of bytes
         
-        Remarks:
-        the returned value is an istance of L{LowLevel.ckbytelist}.
+        @note: the returned value is an istance of L{LowLevel.ckbytelist}.
         You can easly convert it to a binary string with::
-        ''.join(chr(i) for i in ckbytelistSignature)
+            ''.join(chr(i) for i in ckbytelistSignature)
+        
         """
         m = PyKCS11.LowLevel.CK_MECHANISM()
         signature = PyKCS11.LowLevel.ckbytelist()
@@ -1344,16 +1352,16 @@ class Session:
         @type key: integer
         @param data: the data to be decrypted
         @type data:  (binary) sring or list/tuple of bytes
-        @param mecha: the signing mechanism to be used; use MechanismRSAPKCS1 for CKM_RSA_PKCS or
-        an istance of L{Mechanism} if you want specify another mechanism.
+        @param mecha: the decrypt mechanism to be used
         @type mecha: L{Mechanism} instance or L{MechanismRSAPKCS1}
+        for L{CKM_RSA_PKCS}
         @return: the decrypted data
         @rtype: list of bytes
         
-        Remarks:
-        the returned value is an istance of L{LowLevel.ckbytelist}.
+        @note: the returned value is an istance of L{LowLevel.ckbytelist}.
         You can easly convert it to a binary string with::
-        ''.join(chr(i) for i in ckbytelistData)
+            ''.join(chr(i) for i in ckbytelistData)
+        
         """
         m = PyKCS11.LowLevel.CK_MECHANISM()
         decrypted = PyKCS11.LowLevel.ckbytelist()
@@ -1489,13 +1497,15 @@ class Session:
         attributes
         @rtype: list
         
-        Remarks:
-        if allAsBinary is True the function don't converts results to
+        @see: L{getAttributeValue_fragmented}
+        
+        @note: if allAsBinary is True the function don't converts results to
         Python types (i.e.: CKA_TOKEN to Bool, CKA_CLASS to int, ...).
         Binary data is returned as L{LowLevel.ckbytelist} type, usable
         as a list containing only bytes.
-        You can easly convert it to a binary string with:
-        ''.join(chr(i) for i in ckbytelistVariable)
+        You can easly convert it to a binary string with::
+            ''.join(chr(i) for i in ckbytelistVariable)
+        
         """
         valTemplate = PyKCS11.LowLevel.ckattrlist(len(attr))
         for x in xrange(len(attr)):
@@ -1537,7 +1547,7 @@ class Session:
         
         Note: this is achived getting attributes one by one.
         
-        @see: getAttributeValue
+        @see: L{getAttributeValue}
         """
         # some attributes does not exists or is sensitive
         # but we don't know which ones. So try one by one
