@@ -53,7 +53,7 @@ def usage():
     print "[-h][--help]",
 
 try:
-    opts, args = getopt.getopt(sys.argv[1:], "p:c:s:d:h", ["pin=", "lib=", "sign", "decrypt", "help"])
+    opts, args = getopt.getopt(sys.argv[1:], "p:c:sd:h", ["pin=", "lib=", "sign", "decrypt", "help"])
 except getopt.GetoptError:
     # print help information and exit:
     usage()
