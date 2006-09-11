@@ -49,7 +49,7 @@ def usage():
     print "Usage:", sys.argv[0],
     print "[-p pin][--pin=pin]",
     print "[-c lib][--lib=lib]",
-    print "[-s] [--sign]",
+    print "[-s][--sign]",
     print "[-h][--help]",
 
 try:
