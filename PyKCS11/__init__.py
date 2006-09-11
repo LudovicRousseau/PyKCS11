@@ -1483,19 +1483,19 @@ class Session:
         @type obj_id: integer
         @param attr: list of attributes
         @type attr: list
-        @param allAsBinary: return all values as bynary data; default is False.
+        @param allAsBinary: return all values as binary data; default is False.
         @type allAsBinary: Boolean
         @return: a list of values corresponding to the list of
         attributes
         @rtype: list
         
         Remarks:
-        if allAsBinary is True the function don't converts results to Python types 
-        (i.e.: CKA_TOKEN to Bool, CKA_CLASS to int, ...).
-        Binary data is returned as L{LowLevel.ckbytelist} type, usable as a list containing only bytes.
-        You can easly convert it to a binary string with::
+        if allAsBinary is True the function don't converts results to
+        Python types (i.e.: CKA_TOKEN to Bool, CKA_CLASS to int, ...).
+        Binary data is returned as L{LowLevel.ckbytelist} type, usable
+        as a list containing only bytes.
+        You can easly convert it to a binary string with:
         ''.join(chr(i) for i in ckbytelistVariable)
-
         """
         valTemplate = PyKCS11.LowLevel.ckattrlist(len(attr))
         for x in xrange(len(attr)):
