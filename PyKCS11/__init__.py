@@ -1412,8 +1412,7 @@ class Session:
 
     def isString(self, type):
         if type in (CKA_LABEL,
-            CKA_APPLICATION,
-            CKA_SERIAL_NUMBER):
+            CKA_APPLICATION):
             return True
         return False
 
