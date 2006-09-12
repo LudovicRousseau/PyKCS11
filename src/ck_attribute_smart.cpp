@@ -83,7 +83,6 @@
 		{
 		case CKA_LABEL:
 		case CKA_APPLICATION:
-		case CKA_SERIAL_NUMBER:
 			return true;
 		default:
 			return false;
