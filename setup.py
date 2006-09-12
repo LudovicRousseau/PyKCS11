@@ -36,17 +36,21 @@ source_files = ["src/ck_attribute_smart.cpp",
                 "src/pykcs11string.cpp",
                 "src/utility.cpp",
                 "src/pykcs11.cpp"]
-                
+define_macros = []
+extra_compile_args =[]
+extra_link_args = []
 if (platform.system().lower() == 'windows'):
     source_files.append("src/dyn_win32.c")
     source_files.append("pykcs11.rc")
     source_files.append("src/win32_pykcs11_wrap.cpp")
     libraries_val = ["python%d%d" % pyver[:2]]
+    extra_compile_args = ["/Fdvc70.pdb", "/Zi"]
+    extra_link_args = ["/DEBUG", "/PDB:_LowLevel.pdb", "/SUBSYSTEM:WINDOWS", "/OPT:REF", "/OPT:ICF"]
 else:
     source_files.append("src/dyn_unix.c")
     source_files.append("src/unix_pykcs11_wrap.cpp")
     libraries_val = ["python%d.%d" % pyver[:2]]
-
+    
 setup(name="PyKCS11",
     version="1.1.0",
     description="A Full PKCS#11 wrapper for Pyton",
@@ -66,6 +70,9 @@ setup(name="PyKCS11",
             include_dirs = inc_dirs,
             library_dirs = lib_dirs,
             libraries = libraries_val,
+            define_macros = define_macros,
+            extra_compile_args = extra_compile_args,
+            extra_link_args = extra_link_args
         )
     ],
     py_modules=["PyKCS11.__init__", "PyKCS11.LowLevel"],
