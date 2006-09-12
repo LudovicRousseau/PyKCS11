@@ -13,7 +13,7 @@
  */
 
 //#include "config.h"
-#ifdef WIN32
+#if defined(WIN32) || defined(_WIN32)
 #include <string.h>
 
 #include "windows.h"

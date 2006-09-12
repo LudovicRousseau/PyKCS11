@@ -12,17 +12,20 @@
 //
 // You should have received a copy of the GNU General Public License
 // along with this program; if not, write to the Free Software
-// Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
+// Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301 USA.
 
 // PyKCS11.cpp : Defines the entry point for the DLL application.
 //
-
 #include "stdafx.h"
-BOOL APIENTRY DllMain( HANDLE hModule, 
+
+#if defined(WIN32) || defined(_WIN32)
+#include <windows.h>
+BOOL WINAPI DllMain( HMODULE hModule, 
                        DWORD  ul_reason_for_call, 
                        LPVOID lpReserved
 					 )
 {
     return TRUE;
 }
+#endif
 
