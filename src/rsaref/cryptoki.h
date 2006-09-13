@@ -23,11 +23,11 @@
 #ifndef ___CRYPTOKI_H_INC___
 #define ___CRYPTOKI_H_INC___
 
-#ifdef WIN32
+#if defined(WIN32) || defined(_WIN32)
 #pragma pack(push, cryptoki, 1)
 #endif
 
-#ifndef _WIN32
+#if defined(WIN32) || defined(_WIN32)
 #define CK_IMPORT_SPEC
 #define CK_EXPORT_SPEC
 #define CK_CALL_SPEC
@@ -72,7 +72,7 @@
 
 #include "pkcs11.h"
 
-#ifdef WIN32
+#if defined(WIN32) || defined(_WIN32)
 #pragma pack(pop, cryptoki)
 #endif
 
