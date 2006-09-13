@@ -5,6 +5,7 @@ setup.py
 PyKCS11.sln
 PyKCS11.vcproj
 Makefile
+Makefile.win32
 COPYING
 MANIFEST
 documentation.htm

@@ -18,6 +18,7 @@
 
 import PyKCS11
 import getopt, sys
+import platform
 
 def usage():
     print "Usage:", sys.argv[0],
@@ -38,6 +39,7 @@ except getopt.GetoptError:
     sys.exit(2)
 
 slot = 0
+lib = None
 open_session = False
 pin_available = False
 for o, a in opts:
@@ -56,7 +58,7 @@ for o, a in opts:
         open_session = True
 
 red = blue = magenta = normal = ""
-if sys.stdout.isatty():
+if sys.stdout.isatty() and platform.system().lower() != 'windows':
     red = "\x1b[01;31m"
     blue = "\x1b[34m"
     magenta = "\x1b[35m"
@@ -64,7 +66,7 @@ if sys.stdout.isatty():
 
 pkcs11 = PyKCS11.PyKCS11Lib()
 try:
-    pkcs11.load()
+    pkcs11.load(lib)
     info = pkcs11.getInfo()
     colorize("Library manufacturerID: ", info.manufacturerID)
 
