@@ -27,7 +27,7 @@
 #pragma pack(push, cryptoki, 1)
 #endif
 
-#if defined(WIN32) || defined(_WIN32)
+#if !defined(WIN32) && !defined(_WIN32)
 #define CK_IMPORT_SPEC
 #define CK_EXPORT_SPEC
 #define CK_CALL_SPEC
