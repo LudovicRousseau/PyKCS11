@@ -110,7 +110,10 @@ for s in slots:
 
     session = pkcs11.openSession(s)
     if pin_available:
-        session.login(pin = pin)
+        try:
+            session.login(pin = pin)
+        except:
+            print "login failed, exception:", str(sys.exc_info()[1])
 
     objects = session.findObjects()
     print
@@ -208,10 +211,13 @@ for s in slots:
                     print dump(a, 16),
             else:
                 print format_normal % (PyKCS11.CKA[q], a)
-
+    print
 
     if pin_available:
-        session.logout()
+        try:
+            session.logout()
+        except:
+            print "logout failed, exception:", str(sys.exc_info()[1])
 
     session.closeSession()
 
