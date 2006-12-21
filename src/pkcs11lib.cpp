@@ -312,7 +312,7 @@ bool CPKCS11Lib::Unload()
 	(
 	CK_SESSION_HANDLE hSession,
 	vector<CK_ATTRIBUTE_SMART> Template,
-	long& outhObject
+	CK_OBJECT_HANDLE& outhObject
 	)
 	{
 		CPKCS11LIB_PROLOGUE(C_CreateObject);
@@ -324,14 +324,14 @@ bool CPKCS11Lib::Unload()
 		rv = m_pFunc->C_CreateObject(hSession, pTemplate, ulCount, &hObj);
 		if (pTemplate)
 			DestroyTemplate(pTemplate, ulCount);
-		outhObject = static_cast<long>(hObj);
+		outhObject = static_cast<CK_OBJECT_HANDLE>(hObj);
 		CPKCS11LIB_EPILOGUE;
 		return rv;
 	}
 
 	CK_RV CPKCS11Lib::   C_DestroyObject(
 		CK_SESSION_HANDLE hSession,
-		long  hObject)
+		CK_OBJECT_HANDLE  hObject)
 	{
 		CPKCS11LIB_PROLOGUE(C_DestroyObject);
 		rv =  m_pFunc->C_DestroyObject(hSession, (CK_OBJECT_HANDLE)hObject);
@@ -342,7 +342,7 @@ bool CPKCS11Lib::Unload()
 
 	CK_RV CPKCS11Lib::   C_GetObjectSize
 		(CK_SESSION_HANDLE hSession,
-		long  hObject,
+		CK_OBJECT_HANDLE  hObject,
 		CK_ULONG*      pulSize)
 	{
 		CPKCS11LIB_PROLOGUE(C_GetObjectSize);
@@ -355,7 +355,7 @@ bool CPKCS11Lib::Unload()
 
 	CK_RV CPKCS11Lib::C_GetAttributeValue
 	(CK_SESSION_HANDLE hSession,
-	long  hObject,
+	CK_OBJECT_HANDLE  hObject,
 	vector<CK_ATTRIBUTE_SMART> &Template)
 	{
 		CPKCS11LIB_PROLOGUE(C_GetAttributeValue);
@@ -383,7 +383,7 @@ bool CPKCS11Lib::Unload()
 	CK_RV CPKCS11Lib::C_SetAttributeValue
 	(
 	CK_SESSION_HANDLE hSession,
-	long  hObject,
+	CK_OBJECT_HANDLE  hObject,
 	vector<CK_ATTRIBUTE_SMART> Template
 	)
 	{
@@ -420,7 +420,7 @@ bool CPKCS11Lib::Unload()
 	CK_RV CPKCS11Lib::C_FindObjects
 	(
 	CK_SESSION_HANDLE    hSession,
-	vector<long>& objectList
+	vector<CK_OBJECT_HANDLE>& objectList
 	)
 	{
 		CPKCS11LIB_PROLOGUE(C_FindObjects);
@@ -435,7 +435,7 @@ bool CPKCS11Lib::Unload()
 		if (CKR_OK == rv && ulObjects)
 		{
 			for (i=0; i < ulObjects; i++)
-				objectList.push_back(static_cast<long>(pList[i]));
+				objectList.push_back(static_cast<CK_OBJECT_HANDLE>(pList[i]));
 		}
 		if (pList) delete [] pList;
 		CPKCS11LIB_EPILOGUE;
@@ -462,7 +462,7 @@ bool CPKCS11Lib::Unload()
 	(
 	CK_SESSION_HANDLE hSession,
 	CK_MECHANISM*  pMechanism,
-	long  hKey
+	CK_OBJECT_HANDLE  hKey
 	)
 	{
 		CPKCS11LIB_PROLOGUE(C_EncryptInit);
@@ -554,7 +554,7 @@ bool CPKCS11Lib::Unload()
 	(
 	CK_SESSION_HANDLE hSession,
 	CK_MECHANISM*  pMechanism,
-	long  hKey
+	CK_OBJECT_HANDLE  hKey
 	)
 	{
 		CPKCS11LIB_PROLOGUE(C_DecryptInit);
@@ -704,7 +704,7 @@ bool CPKCS11Lib::Unload()
 	CK_RV CPKCS11Lib::   C_DigestKey
 	(
 	CK_SESSION_HANDLE hSession,
-	long  hKey
+	CK_OBJECT_HANDLE  hKey
 	)
 	{
 		CPKCS11LIB_PROLOGUE(C_DigestKey);
@@ -740,7 +740,7 @@ bool CPKCS11Lib::Unload()
 	(
 	CK_SESSION_HANDLE hSession,
 	CK_MECHANISM*  pMechanism,
-	long  hKey
+	CK_OBJECT_HANDLE  hKey
 	)
 	{
 		CPKCS11LIB_PROLOGUE(C_SignInit);
@@ -825,7 +825,7 @@ bool CPKCS11Lib::Unload()
 	(
 	CK_SESSION_HANDLE hSession,
 	CK_MECHANISM*  pMechanism,
-	long  hKey
+	CK_OBJECT_HANDLE  hKey
 	)
 	{
 		CPKCS11LIB_PROLOGUE(C_VerifyInit);
@@ -917,7 +917,7 @@ bool CPKCS11Lib::Unload()
 	CK_SESSION_HANDLE    hSession,
 	CK_MECHANISM*     pMechanism,
 	vector<CK_ATTRIBUTE_SMART> Template,
-	long& outhKey
+	CK_OBJECT_HANDLE& outhKey
 	)
 	{
 
@@ -929,7 +929,7 @@ bool CPKCS11Lib::Unload()
 		rv = m_pFunc->C_GenerateKey(hSession, pMechanism, pTemplate, ulCount, &hKey);
 		if (pTemplate)
 			DestroyTemplate(pTemplate, ulCount);
-		outhKey = static_cast<long>(hKey);
+		outhKey = static_cast<CK_OBJECT_HANDLE>(hKey);
 		CPKCS11LIB_EPILOGUE;
 		return rv;
 
@@ -942,8 +942,8 @@ bool CPKCS11Lib::Unload()
 	CK_MECHANISM*     pMechanism,
 	vector<CK_ATTRIBUTE_SMART> PublicKeyTemplate,
 	vector<CK_ATTRIBUTE_SMART> PrivateKeyTemplate,
-	long& outhPublicKey,
-	long& outhPrivateKey
+	CK_OBJECT_HANDLE& outhPublicKey,
+	CK_OBJECT_HANDLE& outhPrivateKey
 	)
 	{
 		CPKCS11LIB_PROLOGUE(C_GenerateKeyPair);
@@ -962,8 +962,8 @@ bool CPKCS11Lib::Unload()
 			DestroyTemplate(pPublicKeyTemplate, ulPublicKeyAttributeCount);
 		if (pPrivateKeyTemplate)
 			DestroyTemplate(pPrivateKeyTemplate, ulPrivateKeyAttributeCount);
-		outhPublicKey = static_cast<long>(hPublicKey);
-		outhPublicKey = static_cast<long>(hPrivateKey);
+		outhPublicKey = static_cast<CK_OBJECT_HANDLE>(hPublicKey);
+		outhPublicKey = static_cast<CK_OBJECT_HANDLE>(hPrivateKey);
 		CPKCS11LIB_EPILOGUE;
 		return rv;
 	}
@@ -972,8 +972,8 @@ bool CPKCS11Lib::Unload()
 	(
 	CK_SESSION_HANDLE hSession,
 	CK_MECHANISM*  pMechanism,
-	long  hWrappingKey,
-	long hKey,
+	CK_OBJECT_HANDLE  hWrappingKey,
+	CK_OBJECT_HANDLE hKey,
 	vector<unsigned char> &WrappedKey
 	)
 	{
@@ -997,10 +997,10 @@ bool CPKCS11Lib::Unload()
 	(
 	CK_SESSION_HANDLE    hSession,
 	CK_MECHANISM*     pMechanism,
-	long     hUnwrappingKey,
+	CK_OBJECT_HANDLE     hUnwrappingKey,
 	vector<unsigned char> WrappedKey,
 	vector<CK_ATTRIBUTE_SMART> Template,
-	long& outhKey
+	CK_OBJECT_HANDLE& outhKey
 	)
 	{
 		CPKCS11LIB_PROLOGUE(C_UnwrapKey);
@@ -1025,7 +1025,7 @@ bool CPKCS11Lib::Unload()
 		if (pInData) delete []pInData;
 		if (pTemplate)
 			DestroyTemplate(pTemplate, ulAttributeCount);
-		outhKey = static_cast<long>(hKey);
+		outhKey = static_cast<CK_OBJECT_HANDLE>(hKey);
 		CPKCS11LIB_EPILOGUE;
 		return rv;
 	}

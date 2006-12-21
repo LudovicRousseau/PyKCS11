@@ -50,8 +50,10 @@ using namespace std;
 %template(ckintlist) vector<long>;
 %template(ckbytelist) vector<unsigned char>;
 %template(ckattrlist) vector<CK_ATTRIBUTE_SMART>;
+%template(ckobjlist) vector<CK_OBJECT_HANDLE>;
 
 %pointer_class(CK_SESSION_HANDLE, CK_SESSION_HANDLE);
+%pointer_class(CK_OBJECT_HANDLE, CK_OBJECT_HANDLE);
 %array_class(char,byteArray);
 
 #if SWIGPYTHON
