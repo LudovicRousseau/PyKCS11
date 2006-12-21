@@ -19,7 +19,7 @@
 
 #ifdef SWIG
 
-	#define CK_OBJECT_HANDLE unsigned long
+	//#define CK_OBJECT_HANDLE unsigned long
 //	#define CK_SESSION_HANDLE unsigned long
 
 #else
@@ -114,11 +114,11 @@ public:
 
 	CK_RV C_CreateObject(CK_SESSION_HANDLE hSession,
 		vector<CK_ATTRIBUTE_SMART> Template,
-		long& outhObject
+		CK_OBJECT_HANDLE& outhObject
 	);
 
 	CK_RV   C_DestroyObject
-	(CK_SESSION_HANDLE hSession, long  hObject
+	(CK_SESSION_HANDLE hSession, CK_OBJECT_HANDLE  hObject
 	);
 
 
@@ -126,7 +126,7 @@ public:
 
 	(
 	CK_SESSION_HANDLE hSession,
-	long  hObject,
+	CK_OBJECT_HANDLE  hObject,
 	unsigned long*      pulSize
 	);
 
@@ -134,14 +134,14 @@ public:
 	CK_RV   C_GetAttributeValue
 	(
 	CK_SESSION_HANDLE hSession,
-	long  hObject,
+	CK_OBJECT_HANDLE  hObject,
 	vector<CK_ATTRIBUTE_SMART> &Template);
 
 
 	CK_RV   C_SetAttributeValue
 	(
 	CK_SESSION_HANDLE hSession,
-	long  hObject,
+	CK_OBJECT_HANDLE  hObject,
 	vector<CK_ATTRIBUTE_SMART> Template
 	);
 
@@ -158,7 +158,7 @@ public:
 
 	(
 	CK_SESSION_HANDLE    hSession,
-	vector<long> &objectsList );
+	vector<CK_OBJECT_HANDLE> &objectsList );
 
 
 	CK_RV   C_FindObjectsFinal
@@ -169,7 +169,7 @@ public:
 	(
 	CK_SESSION_HANDLE hSession,
 	CK_MECHANISM*  pMechanism,
-	long  hKey
+	CK_OBJECT_HANDLE  hKey
 	);
 
 
@@ -203,7 +203,7 @@ public:
 	(
 	CK_SESSION_HANDLE hSession,
 	CK_MECHANISM*  pMechanism,
-	long  hKey
+	CK_OBJECT_HANDLE  hKey
 	);
 
 
@@ -261,7 +261,7 @@ public:
 
 	(
 	CK_SESSION_HANDLE hSession,
-	long  hKey
+	CK_OBJECT_HANDLE  hKey
 	);
 
 
@@ -278,7 +278,7 @@ public:
 	(
 	CK_SESSION_HANDLE hSession,
 	CK_MECHANISM*  pMechanism,
-	long  hKey
+	CK_OBJECT_HANDLE  hKey
 	);
 
 
@@ -312,7 +312,7 @@ public:
 	(
 	CK_SESSION_HANDLE hSession,
 	CK_MECHANISM*  pMechanism,
-	long  hKey
+	CK_OBJECT_HANDLE  hKey
 	);
 
 
@@ -346,7 +346,7 @@ public:
 	CK_SESSION_HANDLE    hSession,
 	CK_MECHANISM*     pMechanism,
 	vector<CK_ATTRIBUTE_SMART> Template,
-	long & outhKey
+	CK_OBJECT_HANDLE & outhKey
 	);
 
 
@@ -359,8 +359,8 @@ public:
 	CK_MECHANISM*     pMechanism,
 	vector<CK_ATTRIBUTE_SMART> PublicKeyTemplate,
 	vector<CK_ATTRIBUTE_SMART> PrivateKeyTemplate,
-	long& outhPublicKey,
-	long& outhPrivateKey
+	CK_OBJECT_HANDLE& outhPublicKey,
+	CK_OBJECT_HANDLE& outhPrivateKey
 
 
 	);
@@ -370,8 +370,8 @@ public:
 	(
 	CK_SESSION_HANDLE hSession,
 	CK_MECHANISM*  pMechanism,
-	long  hWrappingKey,
-	long  hKey,
+	CK_OBJECT_HANDLE  hWrappingKey,
+	CK_OBJECT_HANDLE  hKey,
 	vector<unsigned char> &WrappedKey
 	);
 
@@ -380,10 +380,10 @@ public:
 	(
 	CK_SESSION_HANDLE    hSession,
 	CK_MECHANISM*     pMechanism,
-	long     hUnwrappingKey,
+	CK_OBJECT_HANDLE     hUnwrappingKey,
 	vector<unsigned char> WrappedKey,
 	vector<CK_ATTRIBUTE_SMART> Template,
-	long & outhKey
+	CK_OBJECT_HANDLE & outhKey
 	);
 
 
