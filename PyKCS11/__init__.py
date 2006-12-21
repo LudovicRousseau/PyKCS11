@@ -1467,7 +1467,7 @@ class Session:
                 raise PyKCS11Error(-2)
 
         # we search for 10 objects by default. speed/memory tradeoff
-        result = PyKCS11.LowLevel.ckintlist(10)
+        result = PyKCS11.LowLevel.ckobjlist(10)
 
         self.lib.C_FindObjectsInit(self.session, t)
 
