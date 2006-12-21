@@ -56,7 +56,7 @@ for x in range(len(slotList)):
 print "C_OpenSession(): " + hex(a.C_OpenSession(slotList[0], CKF_SERIAL_SESSION, session))
 print "C_Login(): " + hex(a.C_Login(session, CKU_USER, pin))
 
-SearchResult = ckintlist(10)
+SearchResult = ckobjlist(10)
 SearchTemplate = ckattrlist(0)
 #SearchTemplate[0].SetNum(CKA_CLASS, CKO_CERTIFICATE)
 #SearchTemplate[1].SetBool(CKA_TOKEN, True)
@@ -114,7 +114,7 @@ attributes = [
 	]
 
 for x in SearchResult:
-	print "object: " + hex(x)
+	print "object: " + hex(x.value())
 	valTemplate = ckattrlist(1)
 	for attr in attributes:
 		valTemplate[0].Reset()

@@ -65,8 +65,8 @@ LANGUAGE LANG_ITALIAN, SUBLANG_ITALIAN
 //
 
 VS_VERSION_INFO VERSIONINFO
- FILEVERSION 1,1,0,0
- PRODUCTVERSION 1,1,0,0
+ FILEVERSION 1,1,1,0
+ PRODUCTVERSION 1,1,1,0
  FILEFLAGSMASK 0x17L
 #ifdef _DEBUG
  FILEFLAGS 0x1L
@@ -83,12 +83,12 @@ BEGIN
         BEGIN
             VALUE "Comments", "_LowLevel module"
             VALUE "FileDescription", "PKCS#11 wrapper for Python (_LowLevel)"
-            VALUE "FileVersion", "1, 1, 0, 0"
+            VALUE "FileVersion", "1, 1, 1, 0"
             VALUE "InternalName", "pykcs11"
             VALUE "LegalCopyright", "Copyright (C) 2004-2006 Giuseppe Amato (paipai -at- tiscali dot it)"
             VALUE "OriginalFilename", "pykcs11.dll"
             VALUE "ProductName", " pykcs11 Dynamic Link Library"
-            VALUE "ProductVersion", "1, 1, 0, 0"
+            VALUE "ProductVersion", "1, 1, 1, 0"
         END
     END
     BLOCK "VarFileInfo"

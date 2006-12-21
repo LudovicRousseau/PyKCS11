@@ -55,7 +55,7 @@ for x in range(len(slotList)):
 print "C_OpenSession(): " + hex(a.C_OpenSession(slotList[0], PyKCS11.LowLevel.CKF_RW_SESSION|PyKCS11.LowLevel.CKF_SERIAL_SESSION, session))
 print "C_Login(): " + hex(a.C_Login(session, PyKCS11.LowLevel.CKU_USER, pin))
 
-SearchResult = PyKCS11.LowLevel.ckintlist(10)
+SearchResult = PyKCS11.LowLevel.ckobjlist(10)
 SearchTemplate = PyKCS11.LowLevel.ckattrlist(2)
 SearchTemplate[0].SetNum(PyKCS11.LowLevel.CKA_CLASS, PyKCS11.LowLevel.CKO_CERTIFICATE)
 SearchTemplate[1].SetBool(PyKCS11.LowLevel.CKA_TOKEN, True)
@@ -65,7 +65,7 @@ print "C_FindObjects: " +  hex(a.C_FindObjects(session, SearchResult))
 print "C_FindObjectsFinal: " +  hex(a.C_FindObjectsFinal(session))
 
 for x in SearchResult:
-    print "object " + hex(x)
+    print "object " + hex(x.value())
     valTemplate = PyKCS11.LowLevel.ckattrlist(1)
     valTemplate[0].SetType(PyKCS11.LowLevel.CKA_ISSUER)
     #valTemplate[0].Reserve(128)

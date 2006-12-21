@@ -109,6 +109,7 @@ for s in slots:
     print format_normal % ("model", t.model.strip())
 
     session = pkcs11.openSession(s)
+    print "Opened session 0x%08X" % session.session.value()
     if pin_available:
         try:
             session.login(pin = pin)
@@ -131,7 +132,7 @@ for s in slots:
 
     for o in objects:
         print
-        print (red + "==================== Object: %d ====================" + normal) % o
+        print (red + "==================== Object: 0x%08X ====================" + normal) % o.value()
         attributes = session.getAttributeValue(o, all_attributes)
         attrDict = dict(zip(all_attributes, attributes))
         if attrDict[PyKCS11.CKA_CLASS] == PyKCS11.CKO_PRIVATE_KEY \
@@ -144,7 +145,7 @@ for s in slots:
             if sign:
                 try:
                     toSign="12345678901234567890" # 20 bytes, SHA1 digest
-                    print "* Signing with object %d following data: %s" % (o, toSign)
+                    print "* Signing with object 0x%08X following data: %s" % (o.value(), toSign)
                     signature = session.sign(o, toSign) 
                     s = ''.join(chr(c) for c in signature).encode('hex')
                     sx = eval('0x%s' % s)
@@ -173,7 +174,7 @@ for s in slots:
                         # note: PKCS1 BT2 padding should be random data,
                         # but this is just a test and we use 0xFF...
                         padded = "\x02%s\x00%s" % ("\xFF" * (128 - (len(toEncrypt)) -2), toEncrypt)
-                        print "* Decrypting with %d following data: %s" % (o, toEncrypt)
+                        print "* Decrypting with 0x%08X following data: %s" % (o.value(), toEncrypt)
                         print "padded:\n",  dump(padded, 16)
                         encrypted = pow(eval('0x%sL' % padded.encode('hex')), ex, mx) # RSA
                         encrypted1 = hexx(encrypted).decode('hex')
@@ -188,7 +189,7 @@ for s in slots:
                     except:
                         print "Decrypt failed, exception:", str(sys.exc_info()[1])
                 else:
-                    print "ERROR: Private key %d don't have MODULUS/PUBLIC_EXP"
+                    print "ERROR: Private key don't have MODULUS/PUBLIC_EXP"
                 
         print "Dumping attributes:"
         for q, a in zip(all_attributes, attributes):

@@ -52,8 +52,8 @@ using namespace std;
 %template(ckattrlist) vector<CK_ATTRIBUTE_SMART>;
 %template(ckobjlist) vector<CK_OBJECT_HANDLE>;
 
-%pointer_class(CK_SESSION_HANDLE, CK_SESSION_HANDLE);
-%pointer_class(CK_OBJECT_HANDLE, CK_OBJECT_HANDLE);
+%pointer_class(unsigned long, CK_SESSION_HANDLE);
+%pointer_class(unsigned long, CK_OBJECT_HANDLE);
 %array_class(char,byteArray);
 
 #if SWIGPYTHON
