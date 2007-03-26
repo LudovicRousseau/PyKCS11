@@ -73,6 +73,9 @@ try:
     slots = pkcs11.getSlotList()
     print "Available Slots:", len(slots)
 
+    if len(slots) == 0:
+        sys.exit(2)
+
     i = pkcs11.getSlotInfo(slots[slot])
     print "Slot n.:", slot
     colorize("  slotDescription:", i.slotDescription.strip())
