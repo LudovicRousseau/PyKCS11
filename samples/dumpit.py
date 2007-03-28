@@ -49,12 +49,12 @@ def usage():
     print "Usage:", sys.argv[0],
     print "[-p pin][--pin=pin]",
     print "[-c lib][--lib=lib]",
-    print "[-s][--sign]",
+    print "[-S][--sign]",
     print "[-d][--decrypt]",
     print "[-h][--help]",
 
 try:
-    opts, args = getopt.getopt(sys.argv[1:], "p:c:sd:h", ["pin=", "lib=", "sign", "decrypt", "help"])
+    opts, args = getopt.getopt(sys.argv[1:], "p:c:Sd:h", ["pin=", "lib=", "sign", "decrypt", "help"])
 except getopt.GetoptError:
     # print help information and exit:
     usage()
@@ -73,7 +73,7 @@ for o, a in opts:
     elif o in ("-c", "--lib"):
         lib = a
         print "using PKCS11 lib:", lib
-    elif o in ("-s", "--sign"):
+    elif o in ("-S", "--sign"):
         sign = True
     elif o in ("-d", "--decrypt"):
         decrypt = True
