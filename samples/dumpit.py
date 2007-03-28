@@ -50,6 +50,7 @@ def usage():
     print "[-p pin][--pin=pin]",
     print "[-c lib][--lib=lib]",
     print "[-s][--sign]",
+    print "[-d][--decrypt]",
     print "[-h][--help]",
 
 try:
