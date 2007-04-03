@@ -68,7 +68,11 @@ pkcs11 = PyKCS11.PyKCS11Lib()
 try:
     pkcs11.load(lib)
     info = pkcs11.getInfo()
-    colorize("Library manufacturerID: ", info.manufacturerID)
+    colorize("Library Cryptoki Version:", "%d.%d" % info.cryptokiVersion)
+    colorize("Library manufacturerID:", info.manufacturerID)
+    colorize("Library flags:", info.flags)
+    colorize("Library Description:", info.libraryDescription)
+    colorize("Library Version:", "%d.%d" % info.libraryVersion)
 
     slots = pkcs11.getSlotList()
     print "Available Slots:", len(slots)
