@@ -39,14 +39,14 @@
 
 class CPKCS11Lib
 {
+	bool m_bFinalizeOnClose;
+	bool m_bAutoInitialized;
 #ifdef WIN32
 	HMODULE m_hLib;
 #else
 	void *m_hLib;
 #endif
 	CK_FUNCTION_LIST* m_pFunc;
-	bool m_bFinalizeOnClose;
-	bool m_bAutoInitialized;
 
 public:
 	CPKCS11Lib(void);
