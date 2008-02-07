@@ -1,7 +1,7 @@
 Source: pykcs11
 Priority: optional
 Maintainer: Ludovic Rousseau <rousseau@debian.org>
-Build-Depends: debhelper (>= 5.0.37.2), swig, python-support, python-dev
+Build-Depends: debhelper (>= 5.0.37.2), swig, python-support (>= 0.3), python-all-dev (>= 2.3.5-11)
 Standards-Version: 3.7.2
 Section: libs
 XS-Python-Version: all
