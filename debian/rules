@@ -17,27 +17,27 @@ else
 	CFLAGS += -O2
 endif
 
-configure: configure-stamp
-configure-stamp:
-	dh_testdir
-	# Add here commands to configure the package.
-
-	touch configure-stamp
+PYDEF=$(shell pyversions -d)
+PYVERS=$(shell pyversions -r)
 
 
 build: build-stamp
-build-stamp: configure-stamp 
+build-stamp:
 	dh_testdir
-
-	# Add here commands to compile the package.
-	$(MAKE)
-
+	set -e; \
+	for python in $(PYVERS); do \
+		python=$$(echo $$python | sed "s/$(PYDEF)/python/"); \
+		make build PYTHON=$$python; \
+	done
 	touch build-stamp
 
 clean:
 	dh_testdir
-	dh_testroot
-	rm -f build-stamp configure-stamp
+	for python in $(PYVERS); do \
+		python=$$(echo $$python | sed "s/$(PYDEF)/python/"); \
+		$$python setup.py clean; \
+	done
+	rm -rf build-stamp build
 
 	# Add here commands to clean up after the build process.
 	-$(MAKE) clean
@@ -47,12 +47,14 @@ clean:
 install: build
 	dh_testdir
 	dh_testroot
-	dh_clean -k 
+	dh_clean -k
 	dh_installdirs
 
-	# Add here commands to install the package into debian/tmp
-	#$(MAKE) install DESTDIR=$(CURDIR)/debian/tmp
-	python setup.py install --root=debian/python-pykcs11
+	set -e; \
+	for python in $(PYVERS); do \
+		python=$$(echo $$python | sed "s/$(PYDEF)/python/"); \
+		$$python setup.py install --root=debian/python-pykcs11; \
+	done
 
 # Build architecture-independent files here.
 binary-indep: build install
@@ -71,8 +73,7 @@ binary-arch: build install
 	dh_strip
 	dh_compress
 	dh_fixperms
-	#dh_pysupport
-	dh_python
+	dh_pycentral
 #	dh_makeshlibs
 	dh_installdeb
 	dh_shlibdeps
@@ -81,4 +82,4 @@ binary-arch: build install
 	dh_builddeb
 
 binary: binary-indep binary-arch
-.PHONY: build clean binary-indep binary-arch binary install configure
+.PHONY: build clean binary-indep binary-arch binary install
