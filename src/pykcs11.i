@@ -37,7 +37,6 @@ using namespace std;
 
 %inline
 %{
-
 	using namespace std;
 %}
 
@@ -102,7 +101,7 @@ typedef struct CK_INFO {
 		char szVal[10];
 		sprintf(szVal, "%d.%d", self->libraryVersion.major, self->libraryVersion.minor);
 		return PyKCS11String(szVal);
-	}	
+	}
 };
 
 typedef struct CK_SLOT_INFO {
@@ -136,7 +135,7 @@ typedef struct CK_SLOT_INFO {
 		char szVal[10];
 		sprintf(szVal, "%d.%02d", self->firmwareVersion.major, self->firmwareVersion.minor);
 		return PyKCS11String(szVal);
-	}		
+	}
 };
 
 typedef struct CK_TOKEN_INFO {
@@ -185,7 +184,7 @@ typedef struct CK_TOKEN_INFO {
 		char szVal[10];
 		sprintf(szVal, "%d.%02d", self->firmwareVersion.major, self->firmwareVersion.minor);
 		return PyKCS11String(szVal);
-	}		
+	}
 	PyKCS11String GetUtcTime()
 	{
 		return PyKCS11String(self->utcTime, sizeof(self->utcTime));
@@ -221,7 +220,7 @@ typedef struct CK_DATE{
 		char szVal[10];
 		memcpy(szVal, self->month, sizeof(self->month) );
 		return PyKCS11String(szVal);
-	}		
+	}
 	PyKCS11String GetDay()
 	{
 		char szVal[10];
@@ -647,12 +646,12 @@ typedef unsigned long CK_RV;
 #define CKF_WRAP               0x00020000
 #define CKF_UNWRAP             0x00040000
 #define CKF_DERIVE             0x00080000
-#define CKF_EC_F_P	           0x00100000
-#define CKF_EC_F_2M	           0x00200000
-#define CKF_EC_ECPARAMETERS	   0x00400000
-#define CKF_EC_NAMEDCURVE	   0x00800000
-#define CKF_EC_UNCOMPRESS	   0x01000000
-#define CKF_EC_COMPRESS	       0x02000000
+#define CKF_EC_F_P             0x00100000
+#define CKF_EC_F_2M            0x00200000
+#define CKF_EC_ECPARAMETERS    0x00400000
+#define CKF_EC_NAMEDCURVE      0x00800000
+#define CKF_EC_UNCOMPRESS      0x01000000
+#define CKF_EC_COMPRESS        0x02000000
 #define CKF_EXTENSION          0x80000000  
 
 #define CKR_OK                                0x00000000
@@ -783,7 +782,7 @@ class CK_ATTRIBUTE_SMART
 
 	long GetNum() const;
 	void SetNum(unsigned long attrType, unsigned long ulValue);
-	
+
 	bool GetBool() const;
 	void SetBool(unsigned long attrType, bool bValue);
 
