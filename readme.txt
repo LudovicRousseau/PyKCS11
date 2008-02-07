@@ -6,7 +6,7 @@ Authors
 """""""
 
 - Copyright (C) 2004 Midori (midori -- a-t -- paipai dot net)
-- Copyright (C) 2006 Ludovic Rousseau (ludovic.rousseau@free.fr)
+- Copyright (C) 2006-2008 Ludovic Rousseau (ludovic.rousseau@free.fr)
 
 
 Licence
