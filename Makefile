@@ -1,10 +1,12 @@
 # give some default values
 PREFIX ?= /usr
 DESTDIR ?= /
+ifeq (, $(PYTHON))
 ifeq (, $(PYTHONVER))
 	PYTHONVER=2.4
 endif
 PYTHON=python$(PYTHONVER)
+endif
 
 build: src/unix_pykcs11_wrap.cpp
 	$(PYTHON) setup.py build
