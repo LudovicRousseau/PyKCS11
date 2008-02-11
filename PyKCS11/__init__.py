@@ -48,6 +48,7 @@ for x in PyKCS11.LowLevel.__dict__.keys():
         exec(a)
         if x[3:] != "_VENDOR_DEFINED":
             eval(x[:3])[eval(x)] = x # => CKM[CKM_RSA_PKCS] = 'CKM_RSA_PKCS'
+            eval(x[:3])[x] = eval(x) # => CKM['CKM_RSA_PKCS'] = CKM_RSA_PKCS
 
 class CK_SLOT_INFO:
     """
@@ -176,6 +177,49 @@ class CK_TOKEN_INFO:
         for v in CK_TOKEN_INFO.flags_dict.keys():
             if self.flags & v:
                 r.append(CK_TOKEN_INFO.flags_dict[v])
+        return r
+
+class CK_MECHANISM_INFO:
+    """
+    matches the PKCS#11 CK_MECHANISM_INFO structure
+
+    @ivar ulMinKeySize: minimum size of the key
+    @type ulMinKeySize: integer
+    @ivar ulMaxKeySize: maximum size of the key
+    @type ulMaxKeySize: integer
+    @ivar flags: bit flags specifying mechanism capabilities
+    @type flags: integer
+    """
+
+    flags_dict = {
+        CKF_HW: "CKF_HW",
+        CKF_ENCRYPT: "CKF_ENCRYPT",
+        CKF_DECRYPT: "CKF_DECRYPT",
+        CKF_DIGEST: "CKF_DIGEST",
+        CKF_SIGN: "CKF_SIGN",
+        CKF_SIGN_RECOVER: "CKF_SIGN_RECOVER",
+        CKF_VERIFY: "CKF_VERIFY",
+        CKF_VERIFY_RECOVER: "CKF_VERIFY_RECOVER",
+        CKF_GENERATE: "CKF_GENERATE",
+        CKF_GENERATE_KEY_PAIR: "CKF_GENERATE_KEY_PAIR",
+        CKF_WRAP: "CKF_WRAP",
+        CKF_UNWRAP: "CKF_UNWRAP",
+        CKF_DERIVE: "CKF_DERIVE",
+        CKF_EXTENSION: "CKF_EXTENSION",
+    }
+
+    def flags2text(self):
+        """
+        parse the L{self.flags} field and create a list of "CKF_*" strings
+        corresponding to bits set in flags
+
+        @return: a list of strings
+        @rtype: list
+        """
+        r = []
+        for v in CK_MECHANISM_INFO.flags_dict.keys():
+            if self.flags & v:
+                r.append(CK_MECHANISM_INFO.flags_dict[v])
         return r
 
 class PyKCS11Error:
@@ -460,6 +504,25 @@ class PyKCS11Lib:
         for x in xrange(len(mechanismList)):
             m.append(CKM[mechanismList[x]])
         return m
+
+    def getMechanismInfo(self, slot, type):
+        """
+        C_GetMechanismInfo
+
+        @return: information about a mechanism
+        @rtype: a L{CK_MECHANISM_INFO} object
+        """
+        info = PyKCS11.LowLevel.CK_MECHANISM_INFO()
+        rv = self.lib.C_GetMechanismInfo(slot, CKM[type], info)
+        if rv != CKR_OK:
+            raise PyKCS11Error(rv)
+
+        i = CK_MECHANISM_INFO()
+        i.ulMinKeySize = info.ulMinKeySize
+        i.ulMaxKeySize = info.ulMaxKeySize
+        i.flags = info.flags
+
+        return i
 
 class Mechanism:
     """Wraps CK_MECHANISM"""
