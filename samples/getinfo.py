@@ -119,6 +119,10 @@ try:
     print "  Mechanism list: "
     for x in m:
         print "   " + blue + x + normal
+        i = pkcs11.getMechanismInfo(slots[slot], x)
+        colorize("    ulMinKeySize:", i.ulMinKeySize)
+        colorize("    ulMaxKeySize:", i.ulMaxKeySize)
+        colorize("    flags:", i.flags2text())
 
     if pin_available:
         session.logout()

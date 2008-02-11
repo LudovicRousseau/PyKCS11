@@ -970,5 +970,18 @@ CK_RV CPKCS11Lib::C_GetMechanismList(
 	return rv;
 }
 
+CK_RV CPKCS11Lib::C_GetMechanismInfo(
+	unsigned long slotID,
+	unsigned long type,
+	CK_MECHANISM_INFO* pInfo)
+{
+	CPKCS11LIB_PROLOGUE(C_GetMechanismInfo);
+
+	rv = m_pFunc->C_GetMechanismInfo(slotID, type, pInfo);
+
+	CPKCS11LIB_EPILOGUE;
+	return rv;
+}
+
 ///////////////////////////////////////////////////////////////////////////////
 

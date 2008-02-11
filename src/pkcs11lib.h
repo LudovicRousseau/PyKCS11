@@ -286,5 +286,10 @@ public:
 		unsigned long slotID,
 		vector<long> &mechanismList);
 
+	CK_RV C_GetMechanismInfo(
+		unsigned long slotID,
+		unsigned long type,
+		CK_MECHANISM_INFO* pInfo);
+
 };
 
