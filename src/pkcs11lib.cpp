@@ -951,5 +951,24 @@ CK_RV CPKCS11Lib::C_WaitForSlotEvent(
 	return rv;
 }
 
+CK_RV CPKCS11Lib::C_GetMechanismList(
+	unsigned long slotID,
+	vector<long> &mechanismList)
+{
+	CPKCS11LIB_PROLOGUE(C_GetMechanismList);
+
+	CK_ULONG i;
+	mechanismList.clear();
+	CK_MECHANISM_TYPE ck_mechanismList[1024];
+	CK_ULONG ulCount = sizeof(ck_mechanismList)/sizeof(ck_mechanismList[0]);
+	rv = m_pFunc->C_GetMechanismList(slotID, ck_mechanismList, &ulCount);
+	if (CKR_OK == rv)
+		for(i=0; i<ulCount; i++)
+			mechanismList.push_back(ck_mechanismList[i]);
+
+	CPKCS11LIB_EPILOGUE;
+	return rv;
+}
+
 ///////////////////////////////////////////////////////////////////////////////
 

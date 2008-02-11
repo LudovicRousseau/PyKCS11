@@ -444,6 +444,23 @@ class PyKCS11Lib:
         s.session = se
         return s
 
+    def getMechanismList(self, slot):
+        """
+        C_GetMechanismList
+
+        @return: the list of available mechanisms for a slot
+        @rtype: list
+        """
+        mechanismList = PyKCS11.LowLevel.ckintlist()
+        rv = self.lib.C_GetMechanismList(slot, mechanismList)
+        if rv != CKR_OK:
+            raise PyKCS11Error(rv)
+
+        m = []
+        for x in xrange(len(mechanismList)):
+            m.append(CKM[mechanismList[x]])
+        return m
+
 class Mechanism:
     """Wraps CK_MECHANISM"""
     def __init__(self, mechanism, param):

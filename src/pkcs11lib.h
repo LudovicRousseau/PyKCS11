@@ -282,5 +282,9 @@ public:
 		unsigned long flags,
 		unsigned long* pSlot);
 
+	CK_RV C_GetMechanismList(
+		unsigned long slotID,
+		vector<long> &mechanismList);
+
 };
 
