@@ -115,6 +115,11 @@ try:
     colorize("  firmwareVersion:", "%d.%d" % t.firmwareVersion)
     colorize("  utcTime:", t.utcTime)
 
+    m = pkcs11.getMechanismList(slots[slot])
+    print "  Mechanism list: "
+    for x in m:
+        print "   " + blue + x + normal
+
     if pin_available:
         session.logout()
 
