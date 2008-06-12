@@ -812,13 +812,12 @@ class Session:
         @type attr: list
         @param allAsBinary: return all values as binary data; default is False.
         @type allAsBinary: Boolean
-        @return: a list of values corresponding to the list of
-        attributes
+        @return: a list of values corresponding to the list of attributes
         @rtype: list
         
         @see: L{getAttributeValue_fragmented}
         
-        @note: if allAsBinary is True the function don't converts results to
+        @note: if allAsBinary is True the function do not convert results to
         Python types (i.e.: CKA_TOKEN to Bool, CKA_CLASS to int, ...).
         Binary data is returned as L{LowLevel.ckbytelist} type, usable
         as a list containing only bytes.
