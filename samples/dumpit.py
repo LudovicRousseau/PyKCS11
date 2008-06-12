@@ -131,6 +131,8 @@ for s in slots:
         all_attributes.remove(PyKCS11.CKA_EXPONENT_1)
         all_attributes.remove(PyKCS11.CKA_EXPONENT_2)
         all_attributes.remove(PyKCS11.CKA_COEFFICIENT)
+        # only use the integer values and not the strings like 'CKM_RSA_PKCS'
+        all_attributes = [e for e in all_attributes if isinstance(e, int)]
 
         for o in objects:
             print
