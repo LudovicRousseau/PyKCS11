@@ -120,7 +120,7 @@ for s in slots:
 
         objects = session.findObjects()
         print
-        print "Found %d objects: %s" % (len(objects), objects)
+        print "Found %d objects: %s" % (len(objects), map(lambda x:x.value(), objects))
 
         all_attributes = PyKCS11.CKA.keys()
         # remove the CKR_ATTRIBUTE_SENSITIVE attributes since we can't get
