@@ -32,6 +32,7 @@ CKU = {};
 CKK = {};
 CKC = {};
 CKF = {};
+CKS = {};
 
 # redefine PKCS#11 constants using well known prefixes
 for x in PyKCS11.LowLevel.__dict__.keys():
@@ -43,6 +44,7 @@ for x in PyKCS11.LowLevel.__dict__.keys():
       or x[:4] == 'CKK_' \
       or x[:4] == 'CKC_' \
       or x[:4] == 'CKF_' \
+      or x[:4] == 'CKS_' \
       :
         a = "%s=PyKCS11.LowLevel.%s" % (x, x) 
         exec(a)
@@ -101,6 +103,49 @@ class CK_INFO(object):
     @ivar libraryVersion: 2 elements list
     @type libraryVersion: list
     """
+
+class CK_SESSION_INFO(object):
+    """
+    matches the PKCS#11 CK_SESSION_INFO structure
+
+    @ivar slotID
+    @type integer
+    @ivar state
+    @type integer
+    @ivar flags
+    @type integer
+    @ivar ulDeviceError
+    @type integer
+    """
+
+    flags_dict = {
+        CKF_RW_SESSION: "CKF_RW_SESSION",
+        CKF_SERIAL_SESSION: "CKF_SERIAL_SESSION",
+    }
+
+    def flags2text(self):
+        """
+        parse the L{flags} field and create a list of "CKF_*" strings
+        corresponding to bits set in flags
+
+        @return: a list of strings
+        @rtype: list
+        """
+        r = []
+        for v in CK_SESSION_INFO.flags_dict.keys():
+            if self.flags & v:
+                r.append(CK_SESSION_INFO.flags_dict[v])
+        return r
+
+    def state2text(self):
+        """
+        parse the L{state} field and return a "CKS_*" string
+        corresponding to the state
+
+        @return: a string
+        @rtype: string
+        """
+        return CKS[self.state]
 
 class CK_TOKEN_INFO(object):
     """
@@ -560,6 +605,24 @@ class Session(object):
         if rv != CKR_OK:
             raise PyKCS11Error(rv)
 
+    def getSessionInfo(self):
+        """
+        C_GetSessionInfo
+
+        @return: a L{CK_SESSION_INFO} object
+        """
+        sessioninfo = PyKCS11.LowLevel.CK_SESSION_INFO()
+        rv = self.lib.C_GetSessionInfo(self.session, sessioninfo)
+        if rv != CKR_OK:
+            raise PyKCS11Error(rv)
+
+        s = CK_SESSION_INFO()
+        s.slotID = sessioninfo.slotID
+        s.state = sessioninfo.state
+        s.flags = sessioninfo.flags
+        s.ulDeviceError = sessioninfo.ulDeviceError
+        return s
+
     def login(self, pin, user_type = CKU_USER):
         """
         C_Login
@@ -960,8 +1023,28 @@ if __name__ == "__main__":
     se = p.openSession(s[0])
 
     print
+    print "sessionInfo"
+    si = se.getSessionInfo()
+    print "slotID:", si.slotID
+    print "state:", si.state
+    print "state:", si.state2text()
+    print "flags:", si.flags
+    print "flags:", si.flags2text()
+    print "ulDeviceError:", si.ulDeviceError
+
+    print
     print "login"
     se.login(pin = "1234")
+
+    print
+    print "sessionInfo"
+    si = se.getSessionInfo()
+    print "slotID:", si.slotID
+    print "state:", si.state
+    print "state:", si.state2text()
+    print "flags:", si.flags
+    print "flags:", si.flags2text()
+    print "ulDeviceError:", si.ulDeviceError
 
     print
     print "findObjects"
