@@ -267,7 +267,7 @@ class CK_MECHANISM_INFO(object):
                 r.append(CK_MECHANISM_INFO.flags_dict[v])
         return r
 
-class PyKCS11Error:
+class PyKCS11Error(Exception):
     """ define the possible PKCS#11 error codes """
 
     errors = {
