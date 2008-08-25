@@ -50,7 +50,7 @@ for x in PyKCS11.LowLevel.__dict__.keys():
             eval(x[:3])[eval(x)] = x # => CKM[CKM_RSA_PKCS] = 'CKM_RSA_PKCS'
             eval(x[:3])[x] = eval(x) # => CKM['CKM_RSA_PKCS'] = CKM_RSA_PKCS
 
-class CK_SLOT_INFO:
+class CK_SLOT_INFO(object):
     """
     matches the PKCS#11 CK_SLOT_INFO structure
 
@@ -86,7 +86,7 @@ class CK_SLOT_INFO:
                 r.append(CK_SLOT_INFO.flags_dict[v])
         return r
 
-class CK_INFO:
+class CK_INFO(object):
     """
     matches the PKCS#11 CK_INFO structure
 
@@ -102,7 +102,7 @@ class CK_INFO:
     @type libraryVersion: list
     """
 
-class CK_TOKEN_INFO:
+class CK_TOKEN_INFO(object):
     """
     matches the PKCS#11 CK_TOKEN_INFO structure
 
@@ -179,7 +179,7 @@ class CK_TOKEN_INFO:
                 r.append(CK_TOKEN_INFO.flags_dict[v])
         return r
 
-class CK_MECHANISM_INFO:
+class CK_MECHANISM_INFO(object):
     """
     matches the PKCS#11 CK_MECHANISM_INFO structure
 
@@ -329,7 +329,7 @@ class PyKCS11Error:
         else:
             return PyKCS11Error.errors[self.value] + " (0x%08X)" % self.value
 
-class PyKCS11Lib:
+class PyKCS11Lib(object):
     """ high level PKCS#11 binding """
 
     def __init__(self):
@@ -524,7 +524,7 @@ class PyKCS11Lib:
 
         return i
 
-class Mechanism:
+class Mechanism(object):
     """Wraps CK_MECHANISM"""
     def __init__(self, mechanism, param):
         """
@@ -541,7 +541,7 @@ class Mechanism:
 
 MechanismRSAPKCS1 = Mechanism(CKM_RSA_PKCS, None)
 
-class Session:
+class Session(object):
     """ Manage L{PyKCS11Lib.openSession} objects """
 
     def closeSession(self):
