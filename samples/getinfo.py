@@ -124,6 +124,14 @@ try:
         colorize("    ulMaxKeySize:", i.ulMaxKeySize)
         colorize("    flags:", i.flags2text())
 
+    if open_session:
+        s = session.getSessionInfo()
+        print " SessionInfo"
+        colorize("  slotID:", s.slotID)
+        colorize("  state:", s.state2text())
+        colorize("  flags:", s.flags2text())
+        colorize("  ulDeviceError:", s.ulDeviceError)
+
     if pin_available:
         session.logout()
 
