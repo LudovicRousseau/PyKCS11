@@ -715,7 +715,7 @@ class Session(object):
 
     def isBool(self, type):
         if type in (CKA_ALWAYS_SENSITIVE,
-        CKA_DECRYPT,
+            CKA_DECRYPT,
             CKA_ENCRYPT,
             CKA_HAS_RESET,
             CKA_LOCAL,
