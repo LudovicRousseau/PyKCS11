@@ -112,14 +112,14 @@ class CK_SESSION_INFO(object):
     """
     matches the PKCS#11 CK_SESSION_INFO structure
 
-    @ivar slotID
-    @type integer
-    @ivar state
-    @type integer
-    @ivar flags
-    @type integer
-    @ivar ulDeviceError
-    @type integer
+    @ivar slotID: ID of the slot that interfaces with the token
+    @type slotID: integer
+    @ivar state: state of the session
+    @type state: integer
+    @ivar flags: bit flags that define the type of session
+    @type flags: integer
+    @ivar ulDeviceError: an error code defined by the cryptographic token
+    @type ulDeviceError: integer
     """
 
     flags_dict = {
@@ -129,7 +129,7 @@ class CK_SESSION_INFO(object):
 
     def flags2text(self):
         """
-        parse the L{flags} field and create a list of "CKF_*" strings
+        parse the L{self.flags} field and create a list of "CKF_*" strings
         corresponding to bits set in flags
 
         @return: a list of strings
@@ -143,7 +143,7 @@ class CK_SESSION_INFO(object):
 
     def state2text(self):
         """
-        parse the L{state} field and return a "CKS_*" string
+        parse the L{self.state} field and return a "CKS_*" string
         corresponding to the state
 
         @return: a string
