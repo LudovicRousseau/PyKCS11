@@ -3,11 +3,11 @@ Priority: optional
 Maintainer: Ludovic Rousseau <rousseau@debian.org>
 Build-Depends: debhelper (>= 5.0.38), swig, python-central (>= 0.5.6), python-all-dev (>= 2.3.5-11)
 Standards-Version: 3.7.2
-Section: libs
+Section: python
 XS-Python-Version: all
 
 Package: python-pykcs11
-Section: libs
+Section: python
 Architecture: any
 Depends: ${shlibs:Depends}, ${misc:Depends}, ${python:Depends}
 Provides: ${python:Provides}
