@@ -8,8 +8,11 @@ endif
 PYTHON=python$(PYTHONVER)
 endif
 
-build: src/unix_pykcs11_wrap.cpp
+build: build-stamp
+
+build-stamp: src/unix_pykcs11_wrap.cpp
 	$(PYTHON) setup.py build
+	touch build-stamp
 
 install: build
 	$(PYTHON) setup.py install --prefix=$(PREFIX) --root=$(DESTDIR)
@@ -20,6 +23,7 @@ clean:
 	rm -rf build
 	rm -f *.pyc PyKCS11/*.pyc
 	rm -f PyKCS11/LowLevel.py
+	rm -f build-stamp
 
 rebuild: clean build
 
