@@ -20,6 +20,7 @@
 #include "pkcs11lib.h"
 #include "utility.h"
 #include <stdio.h>
+#include <string.h>
 
 	CK_ATTRIBUTE_SMART::CK_ATTRIBUTE_SMART(CK_ULONG type, const CK_BYTE* pValue, CK_ULONG len)
 	{
