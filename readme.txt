@@ -73,6 +73,11 @@ that doesn't come with the standard distribution.
 History
 """""""
 
+1.2.0 - August 2008, Ludovic Rousseau
+	add getMechanismList() and getMechanismInfo()
+	add Session().getSessionInfo()
+	bug fixes
+
 1.1.1 - December 2006, Giuseppe Amato (Midori)
 	bug fixes
 
