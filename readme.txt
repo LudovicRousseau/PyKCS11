@@ -73,6 +73,12 @@ that doesn't come with the standard distribution.
 History
 """""""
 
+1.1.1 - December 2006, Giuseppe Amato (Midori)
+	bug fixes
+
+1.1.0 - August 2006, Ludovic Rousseau
+	Introduce high level API
+
 1.0.2 - July 2006, Ludovic Rousseau
 	port to Unix (tested on GNU/Linux only)
 	explicit call to SWIG to generate the wrapper
