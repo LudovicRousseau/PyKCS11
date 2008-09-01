@@ -52,7 +52,7 @@ for o, a in opts:
         open_session = True
     if o in ("-s", "--slot"):
         slot = int(a)
-    if o in ("-d", "--lib"):
+    if o in ("-c", "--lib"):
         lib = a
     if o in ("-o", "--opensession"):
         open_session = True
