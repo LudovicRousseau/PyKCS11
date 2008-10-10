@@ -19,6 +19,7 @@
 import PyKCS11
 import getopt, sys
 import platform
+import time
 
 def usage():
     print "Usage:", sys.argv[0],
@@ -38,7 +39,7 @@ except getopt.GetoptError:
     usage()
     sys.exit(2)
 
-slot = 0
+slot = None
 lib = None
 open_session = False
 pin_available = False
@@ -75,56 +76,60 @@ try:
     colorize("Library Version:", "%d.%d" % info.libraryVersion)
 
     slots = pkcs11.getSlotList()
-    print "Available Slots:", len(slots)
+    print "Available Slots:", len(slots), slots
 
     if len(slots) == 0:
         sys.exit(2)
 
-    i = pkcs11.getSlotInfo(slots[slot])
-    print "Slot n.:", slot
-    colorize("  slotDescription:", i.slotDescription.strip())
-    colorize("  manufacturerID:", i.manufacturerID.strip())
-    colorize("  flags:", i.flags2text())
-    colorize("  hardwareVersion:", i.hardwareVersion)
-    colorize("  firmwareVersion:", i.firmwareVersion)
+    if (None != slot):
+        slots = [ slots[slot] ]
 
-    if open_session:
-        session = pkcs11.openSession(slots[slot])
+    for slot in slots:
+        i = pkcs11.getSlotInfo(slot)
+        print "Slot n.:", slot
+        colorize("  slotDescription:", i.slotDescription.strip())
+        colorize("  manufacturerID:", i.manufacturerID.strip())
+        colorize("  flags:", i.flags2text())
+        colorize("  hardwareVersion:", i.hardwareVersion)
+        colorize("  firmwareVersion:", i.firmwareVersion)
 
-    if pin_available:
-        session.login(pin = pin)
+        if open_session:
+            session = pkcs11.openSession(slot)
 
-    t = pkcs11.getTokenInfo(slots[slot])
-    print " TokenInfo"
-    colorize("  label:", t.label.strip())
-    colorize("  manufacturerID:", t.manufacturerID.strip())
-    colorize("  model:", t.model.strip())
-    colorize("  serialNumber:", t.serialNumber)
-    colorize("  flags:", t.flags2text())
-    colorize("  ulMaxSessionCount:", t.ulMaxSessionCount)
-    colorize("  ulSessionCount:", t.ulSessionCount)
-    colorize("  ulMaxRwSessionCount:", t.ulMaxRwSessionCount)
-    colorize("  ulRwSessionCount:", t.ulRwSessionCount)
-    colorize("  ulMaxPinLen:", t.ulMaxPinLen)
-    colorize("  ulMinPinLen:", t.ulMinPinLen)
-    colorize("  ulTotalPublicMemory:", t.ulTotalPublicMemory)
-    colorize("  ulFreePublicMemory:", t.ulFreePublicMemory)
-    colorize("  ulTotalPrivateMemory:", t.ulTotalPrivateMemory)
-    colorize("  ulFreePrivateMemory:", t.ulFreePrivateMemory)
-    colorize("  hardwareVersion:", "%d.%d" % t.hardwareVersion)
-    colorize("  firmwareVersion:", "%d.%d" % t.firmwareVersion)
-    colorize("  utcTime:", t.utcTime)
+        if pin_available:
+            session.login(pin = pin)
 
-    m = pkcs11.getMechanismList(slots[slot])
-    print "  Mechanism list: "
-    for x in m:
-        print "   " + blue + x + normal
-        i = pkcs11.getMechanismInfo(slots[slot], x)
-        if i.ulMinKeySize != PyKCS11.CK_UNAVAILABLE_INFORMATION:
-            colorize("    ulMinKeySize:", i.ulMinKeySize)
-        if i.ulMaxKeySize != PyKCS11.CK_UNAVAILABLE_INFORMATION:
-            colorize("    ulMaxKeySize:", i.ulMaxKeySize)
-        colorize("    flags:", i.flags2text())
+        t = pkcs11.getTokenInfo(slot)
+        print " TokenInfo"
+        colorize("  label:", t.label.strip())
+        colorize("  manufacturerID:", t.manufacturerID.strip())
+        colorize("  model:", t.model.strip())
+        colorize("  serialNumber:", t.serialNumber)
+        colorize("  flags:", t.flags2text())
+        colorize("  ulMaxSessionCount:", t.ulMaxSessionCount)
+        colorize("  ulSessionCount:", t.ulSessionCount)
+        colorize("  ulMaxRwSessionCount:", t.ulMaxRwSessionCount)
+        colorize("  ulRwSessionCount:", t.ulRwSessionCount)
+        colorize("  ulMaxPinLen:", t.ulMaxPinLen)
+        colorize("  ulMinPinLen:", t.ulMinPinLen)
+        colorize("  ulTotalPublicMemory:", t.ulTotalPublicMemory)
+        colorize("  ulFreePublicMemory:", t.ulFreePublicMemory)
+        colorize("  ulTotalPrivateMemory:", t.ulTotalPrivateMemory)
+        colorize("  ulFreePrivateMemory:", t.ulFreePrivateMemory)
+        colorize("  hardwareVersion:", "%d.%d" % t.hardwareVersion)
+        colorize("  firmwareVersion:", "%d.%d" % t.firmwareVersion)
+        colorize("  utcTime:", t.utcTime)
+
+        m = pkcs11.getMechanismList(slot)
+        print "  Mechanism list: "
+        for x in m:
+            print "   " + blue + x + normal
+            i = pkcs11.getMechanismInfo(slot, x)
+            if i.ulMinKeySize != PyKCS11.CK_UNAVAILABLE_INFORMATION:
+                colorize("    ulMinKeySize:", i.ulMinKeySize)
+            if i.ulMaxKeySize != PyKCS11.CK_UNAVAILABLE_INFORMATION:
+                colorize("    ulMaxKeySize:", i.ulMaxKeySize)
+            colorize("    flags:", i.flags2text())
 
     if open_session:
         s = session.getSessionInfo()
