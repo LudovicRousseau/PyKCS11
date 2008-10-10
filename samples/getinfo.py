@@ -125,10 +125,11 @@ try:
         for x in m:
             print "   " + blue + x + normal
             i = pkcs11.getMechanismInfo(slot, x)
-            if i.ulMinKeySize != PyKCS11.CK_UNAVAILABLE_INFORMATION:
-                colorize("    ulMinKeySize:", i.ulMinKeySize)
-            if i.ulMaxKeySize != PyKCS11.CK_UNAVAILABLE_INFORMATION:
-                colorize("    ulMaxKeySize:", i.ulMaxKeySize)
+            if (not i.flags & PyKCS11.CKF_DIGEST):
+                if i.ulMinKeySize != PyKCS11.CK_UNAVAILABLE_INFORMATION:
+                    colorize("    ulMinKeySize:", i.ulMinKeySize)
+                if i.ulMaxKeySize != PyKCS11.CK_UNAVAILABLE_INFORMATION:
+                    colorize("    ulMaxKeySize:", i.ulMaxKeySize)
             colorize("    flags:", i.flags2text())
 
     if open_session:
