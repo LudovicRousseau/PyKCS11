@@ -93,44 +93,48 @@ try:
         colorize("  hardwareVersion:", i.hardwareVersion)
         colorize("  firmwareVersion:", i.firmwareVersion)
 
-        if open_session:
-            session = pkcs11.openSession(slot)
+        try:
+            if open_session:
+                session = pkcs11.openSession(slot)
 
-        if pin_available:
-            session.login(pin = pin)
+            if pin_available:
+                session.login(pin = pin)
 
-        t = pkcs11.getTokenInfo(slot)
-        print " TokenInfo"
-        colorize("  label:", t.label.strip())
-        colorize("  manufacturerID:", t.manufacturerID.strip())
-        colorize("  model:", t.model.strip())
-        colorize("  serialNumber:", t.serialNumber)
-        colorize("  flags:", t.flags2text())
-        colorize("  ulMaxSessionCount:", t.ulMaxSessionCount)
-        colorize("  ulSessionCount:", t.ulSessionCount)
-        colorize("  ulMaxRwSessionCount:", t.ulMaxRwSessionCount)
-        colorize("  ulRwSessionCount:", t.ulRwSessionCount)
-        colorize("  ulMaxPinLen:", t.ulMaxPinLen)
-        colorize("  ulMinPinLen:", t.ulMinPinLen)
-        colorize("  ulTotalPublicMemory:", t.ulTotalPublicMemory)
-        colorize("  ulFreePublicMemory:", t.ulFreePublicMemory)
-        colorize("  ulTotalPrivateMemory:", t.ulTotalPrivateMemory)
-        colorize("  ulFreePrivateMemory:", t.ulFreePrivateMemory)
-        colorize("  hardwareVersion:", "%d.%d" % t.hardwareVersion)
-        colorize("  firmwareVersion:", "%d.%d" % t.firmwareVersion)
-        colorize("  utcTime:", t.utcTime)
+            t = pkcs11.getTokenInfo(slot)
+            print " TokenInfo"
+            colorize("  label:", t.label.strip())
+            colorize("  manufacturerID:", t.manufacturerID.strip())
+            colorize("  model:", t.model.strip())
+            colorize("  serialNumber:", t.serialNumber)
+            colorize("  flags:", t.flags2text())
+            colorize("  ulMaxSessionCount:", t.ulMaxSessionCount)
+            colorize("  ulSessionCount:", t.ulSessionCount)
+            colorize("  ulMaxRwSessionCount:", t.ulMaxRwSessionCount)
+            colorize("  ulRwSessionCount:", t.ulRwSessionCount)
+            colorize("  ulMaxPinLen:", t.ulMaxPinLen)
+            colorize("  ulMinPinLen:", t.ulMinPinLen)
+            colorize("  ulTotalPublicMemory:", t.ulTotalPublicMemory)
+            colorize("  ulFreePublicMemory:", t.ulFreePublicMemory)
+            colorize("  ulTotalPrivateMemory:", t.ulTotalPrivateMemory)
+            colorize("  ulFreePrivateMemory:", t.ulFreePrivateMemory)
+            colorize("  hardwareVersion:", "%d.%d" % t.hardwareVersion)
+            colorize("  firmwareVersion:", "%d.%d" % t.firmwareVersion)
+            colorize("  utcTime:", t.utcTime)
 
-        m = pkcs11.getMechanismList(slot)
-        print "  Mechanism list: "
-        for x in m:
-            print "   " + blue + x + normal
-            i = pkcs11.getMechanismInfo(slot, x)
-            if (not i.flags & PyKCS11.CKF_DIGEST):
-                if i.ulMinKeySize != PyKCS11.CK_UNAVAILABLE_INFORMATION:
-                    colorize("    ulMinKeySize:", i.ulMinKeySize)
-                if i.ulMaxKeySize != PyKCS11.CK_UNAVAILABLE_INFORMATION:
-                    colorize("    ulMaxKeySize:", i.ulMaxKeySize)
-            colorize("    flags:", i.flags2text())
+            m = pkcs11.getMechanismList(slot)
+            print "  Mechanism list: "
+            for x in m:
+                print "   " + blue + x + normal
+                i = pkcs11.getMechanismInfo(slot, x)
+                if (not i.flags & PyKCS11.CKF_DIGEST):
+                    if i.ulMinKeySize != PyKCS11.CK_UNAVAILABLE_INFORMATION:
+                        colorize("    ulMinKeySize:", i.ulMinKeySize)
+                    if i.ulMaxKeySize != PyKCS11.CK_UNAVAILABLE_INFORMATION:
+                        colorize("    ulMaxKeySize:", i.ulMaxKeySize)
+                colorize("    flags:", i.flags2text())
+
+        except PyKCS11.PyKCS11Error, e:
+            print "Error:", e
 
     if open_session:
         s = session.getSessionInfo()
