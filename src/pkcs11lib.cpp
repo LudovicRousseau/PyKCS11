@@ -39,10 +39,10 @@ Retry: \
 								}
 
 CPKCS11Lib::CPKCS11Lib(void):
-m_bFinalizeOnClose(false),
-m_bAutoInitialized(false),
 m_hLib(0),
-m_pFunc(NULL)
+m_pFunc(NULL),
+m_bFinalizeOnClose(false),
+m_bAutoInitialized(false)
 {
 }
 
