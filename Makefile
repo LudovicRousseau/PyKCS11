@@ -17,7 +17,7 @@ build-stamp: src/unix_pykcs11_wrap.cpp
 install: build
 	$(PYTHON) setup.py install --prefix=$(PREFIX) --root=$(DESTDIR)
 
-clean:
+clean distclean:
 	$(PYTHON) setup.py clean
 	rm -f src/unix_pykcs11_wrap.cpp
 	rm -rf build
