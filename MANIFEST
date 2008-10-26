@@ -34,10 +34,7 @@ src/stdafx.cpp
 src/stdafx.h
 src/utility.cpp
 src/utility.h
-src/rsaref/cryptoki.h
-src/rsaref/pkcs11.h
-src/rsaref/pkcs11f.h
-src/rsaref/pkcs11t.h
+src/opensc/pkcs11.h
 src/win32_pykcs11_wrap.cpp
 src/unix_pykcs11_wrap.cpp
 src/LowLevel.py
