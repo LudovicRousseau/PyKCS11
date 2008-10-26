@@ -33,7 +33,7 @@ using namespace std;
 // Windows Header Files:
 #include <windows.h>
 #endif
-#include "rsaref/cryptoki.h"
+#include "opensc/pkcs11.h"
 
 
 

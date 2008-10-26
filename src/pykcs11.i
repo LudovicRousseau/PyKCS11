@@ -20,7 +20,7 @@
 #include <stdlib.h>
 #include <memory.h>
 #include <string.h>
-#include "rsaref/cryptoki.h"
+#include "opensc/pkcs11.h"
 
 #ifdef WIN32
 #pragma warning(disable: 4800 4244)
