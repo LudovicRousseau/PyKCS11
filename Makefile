@@ -40,3 +40,4 @@ doc: build
 	rm -rf html
 	PYTHONPATH=`find build -name PyKCS11` epydoc PyKCS11
 
+.PHONY: build install clean rebuild dist doc
