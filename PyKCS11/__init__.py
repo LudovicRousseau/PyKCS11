@@ -544,7 +544,7 @@ class Session(object):
         @param pin: the user's PIN
         @type pin: string
         @param user_type: the user type. The default value is
-        L{CKU_USER}. You may also use L{CKU_SO}
+        CKU_USER. You may also use CKU_SO
         @type user_type: integer
         """
         rv = self.lib.C_Login(self.session, user_type, pin)
@@ -595,7 +595,7 @@ class Session(object):
         @type data:  (binary) sring or list/tuple of bytes
         @param mecha: the signing mechanism to be used
         @type mecha: L{Mechanism} instance or L{MechanismRSAPKCS1} 
-        for L{CKM_RSA_PKCS}
+        for CKM_RSA_PKCS
         @return: the computed signature
         @rtype: list of bytes
         
@@ -651,7 +651,7 @@ class Session(object):
         @type data:  (binary) sring or list/tuple of bytes
         @param mecha: the decrypt mechanism to be used
         @type mecha: L{Mechanism} instance or L{MechanismRSAPKCS1}
-        for L{CKM_RSA_PKCS}
+        for CKM_RSA_PKCS
         @return: the decrypted data
         @rtype: list of bytes
         
