@@ -38,6 +38,6 @@ dist:
 	
 doc: build
 	rm -rf html
-	epydoc PyKCS11
+	epydoc --verbose PyKCS11
 
 .PHONY: build install clean rebuild dist doc
