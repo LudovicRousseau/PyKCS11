@@ -772,7 +772,10 @@ class Session(object):
         while True:
             self.lib.C_FindObjects(self.session, result)
             for x in result:
-                res.append(x)
+                # make a copy of the handle: the original value get corrupted (!!)
+                a = PyKCS11.LowLevel.CK_OBJECT_HANDLE()
+                a.assign(x.value())
+                res.append(a)
             if len(result) == 0:
                 break
 
@@ -948,7 +951,7 @@ if __name__ == "__main__":
 
     print
     print "login"
-    se.login(pin = "1234")
+    se.login(pin = "12345678")
 
     print
     print "sessionInfo"
