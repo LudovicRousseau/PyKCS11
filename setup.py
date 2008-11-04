@@ -54,8 +54,8 @@ else:
     libraries_val = ["python%d.%d" % pyver[:2]]
     
 setup(name="PyKCS11",
-    version="1.2.0",
-    description="A Full PKCS#11 wrapper for Pyton",
+    version="1.2.1",
+    description="A Full PKCS#11 wrapper for Python",
     keywords="crypto,pki,pkcs11,c++",
     classifiers=classifiers,
     platforms="Win32 Unix",
