@@ -210,19 +210,10 @@
 				RelativePath=".\src\utility.h">
 			</File>
 			<Filter
-				Name="rsaref"
+				Name="pkcs11"
 				Filter="">
 				<File
-					RelativePath=".\src\rsaref\cryptoki.h">
-				</File>
-				<File
-					RelativePath=".\src\rsaref\pkcs11.h">
-				</File>
-				<File
-					RelativePath=".\src\rsaref\pkcs11f.h">
-				</File>
-				<File
-					RelativePath=".\src\rsaref\pkcs11t.h">
+					RelativePath=".\src\opensc\pkcs11.h">
 				</File>
 			</Filter>
 		</Filter>
