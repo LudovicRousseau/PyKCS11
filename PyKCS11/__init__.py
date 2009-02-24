@@ -702,6 +702,7 @@ class Session(object):
             CKA_CLASS,
             CKA_KEY_GEN_MECHANISM,
             CKA_KEY_TYPE,
+            CKA_MODULUS_BITS,
             CKA_VALUE_BITS,
             CKA_VALUE_LEN):
             return True
