@@ -127,6 +127,7 @@
 		case CKA_CLASS:
 		case CKA_KEY_GEN_MECHANISM:
 		case CKA_KEY_TYPE:
+		case CKA_MODULUS_BITS:
 		case CKA_VALUE_BITS:
 		case CKA_VALUE_LEN:
 			return true;
