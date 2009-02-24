@@ -54,7 +54,7 @@ int SYS_dyn_CloseLibrary(void **handle)
 	return 0;
 } /* SYS_dyn_CloseLibrary */
 
-int SYS_dyn_GetAddress(void *handle, function_ptr *function_ptr,
+int SYS_dyn_GetAddress(void *handle, function_ptr *func_ptr,
 	const char *function_name)
 {
 	char new_function_name[256];
@@ -64,14 +64,14 @@ int SYS_dyn_GetAddress(void *handle, function_ptr *function_ptr,
 	snprintf(new_function_name, sizeof(new_function_name), "_%s",
 		function_name);
 
-	*function_ptr = NULL;
-	*function_ptr = dlsym(handle, new_function_name);
+	*func_ptr = NULL;
+	*func_ptr = dlsym(handle, new_function_name);
 
 	/* Failed? Try again without the leading underscore */
-	if (*function_ptr == NULL)
-		*function_ptr = dlsym(handle, function_name);
+	if (*func_ptr == NULL)
+		*func_ptr = dlsym(handle, function_name);
 
-	if (*function_ptr == NULL)
+	if (*func_ptr == NULL)
 	{
 		Log3("%s: %s", function_name, dlerror());
 		rv = -1;
