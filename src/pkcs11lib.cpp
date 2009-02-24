@@ -751,7 +751,7 @@ CK_RV CPKCS11Lib::C_Verify(
 	CK_ULONG ulInDataLen = 0;
 	CK_BYTE* pInData = Vector2Buffer(inData, ulInDataLen);
 	CK_ULONG ulInSignatureLen = 0;
-	CK_BYTE* pInSignature = Vector2Buffer(inData, ulInDataLen);
+	CK_BYTE* pInSignature = Vector2Buffer(inSignature, ulInSignatureLen);
 
 	rv = m_pFunc->C_Verify(hSession, pInData, ulInDataLen, pInSignature,
 		ulInSignatureLen);
