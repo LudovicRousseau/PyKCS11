@@ -849,7 +849,7 @@ CK_RV CPKCS11Lib::C_GenerateKeyPair(
 	if (pPrivateKeyTemplate)
 		DestroyTemplate(pPrivateKeyTemplate, ulPrivateKeyAttributeCount);
 	outhPublicKey = static_cast<CK_OBJECT_HANDLE>(hPublicKey);
-	outhPublicKey = static_cast<CK_OBJECT_HANDLE>(hPrivateKey);
+	outhPrivateKey = static_cast<CK_OBJECT_HANDLE>(hPrivateKey);
 	CPKCS11LIB_EPILOGUE;
 	return rv;
 }
