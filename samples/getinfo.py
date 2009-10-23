@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 
-#   Copyright (C) 2006 Ludovic Rousseau (ludovic.rousseau@free.fr)
+#   Copyright (C) 2006-2009 Ludovic Rousseau (ludovic.rousseau@free.fr)
 #
 # This file is free software; you can redistribute it and/or modify it
 # under the terms of the GNU General Public License as published by
@@ -29,44 +29,18 @@ def usage():
     print "[-h][--help]",
     print "[-o][--opensession]"
 
-def colorize(text, arg):
-    print magenta + text + blue, arg, normal
+def getinfo(lib, pin = None, open_session = False, slot = None):
+    def colorize(text, arg):
+        print magenta + text + blue, arg, normal
 
-try:
-    opts, args = getopt.getopt(sys.argv[1:], "p:s:c:ho", ["pin=", "slot=", "lib=", "help", "opensession"])
-except getopt.GetoptError:
-    # print help information and exit:
-    usage()
-    sys.exit(2)
+    red = blue = magenta = normal = ""
+    if sys.stdout.isatty() and platform.system().lower() != 'windows':
+        red = "\x1b[01;31m"
+        blue = "\x1b[34m"
+        magenta = "\x1b[35m"
+        normal = "\x1b[0m"
 
-slot = None
-lib = None
-open_session = False
-pin_available = False
-for o, a in opts:
-    if o in ("-h", "--help"):
-        usage()
-        sys.exit()
-    if o in ("-p", "--pin"):
-        pin = a
-        pin_available = True
-        open_session = True
-    if o in ("-s", "--slot"):
-        slot = int(a)
-    if o in ("-c", "--lib"):
-        lib = a
-    if o in ("-o", "--opensession"):
-        open_session = True
-
-red = blue = magenta = normal = ""
-if sys.stdout.isatty() and platform.system().lower() != 'windows':
-    red = "\x1b[01;31m"
-    blue = "\x1b[34m"
-    magenta = "\x1b[35m"
-    normal = "\x1b[0m"
-
-pkcs11 = PyKCS11.PyKCS11Lib()
-try:
+    pkcs11 = PyKCS11.PyKCS11Lib()
     pkcs11.load(lib)
     info = pkcs11.getInfo()
     colorize("Library Cryptoki Version:", "%d.%d" % info.cryptokiVersion)
@@ -98,6 +72,7 @@ try:
                 session = pkcs11.openSession(slot)
 
             if pin_available:
+                print " Using pin:", pin
                 session.login(pin = pin)
 
             t = pkcs11.getTokenInfo(slot)
@@ -150,6 +125,37 @@ try:
     if open_session:
         session.closeSession()
 
-except PyKCS11.PyKCS11Error, e:
-    print "Error:", e
+if __name__ == '__main__':
+    try:
+        opts, args = getopt.getopt(sys.argv[1:], "p:s:c:ho", ["pin=", "slot=", "lib=", "help", "opensession"])
+    except getopt.GetoptError:
+        # print help information and exit:
+        usage()
+        sys.exit(2)
+
+    slot = None
+    lib = None
+    pin = None
+    open_session = False
+    pin_available = False
+    for o, a in opts:
+        if o in ("-h", "--help"):
+            usage()
+            sys.exit()
+        if o in ("-p", "--pin"):
+            pin = a
+            pin_available = True
+            open_session = True
+        if o in ("-s", "--slot"):
+            slot = int(a)
+        if o in ("-c", "--lib"):
+            lib = a
+        if o in ("-o", "--opensession"):
+            open_session = True
+
+    try:
+        getinfo(lib, pin = pin, open_session = open_session, slot = slot)
+    except PyKCS11.PyKCS11Error, e:
+        print "Error:", e
+
 
