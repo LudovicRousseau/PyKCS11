@@ -17,7 +17,6 @@
 # Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301 USA
 
 import PyKCS11
-import getopt, sys
 import platform
 
 def usage():
@@ -125,6 +124,8 @@ def getinfo(lib, pin = None, open_session = False, slot = None):
         session.closeSession()
 
 if __name__ == '__main__':
+    import getopt, sys
+
     try:
         opts, args = getopt.getopt(sys.argv[1:], "p:s:c:ho", ["pin=", "slot=", "lib=", "help", "opensession"])
     except getopt.GetoptError:
