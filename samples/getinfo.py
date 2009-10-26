@@ -19,7 +19,6 @@
 import PyKCS11
 import getopt, sys
 import platform
-import time
 
 def usage():
     print "Usage:", sys.argv[0],
