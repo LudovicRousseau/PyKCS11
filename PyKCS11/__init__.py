@@ -483,6 +483,22 @@ class PyKCS11Lib(object):
 
         return i
 
+    def waitForSlotEvent(self, flags = 0):
+        """
+        C_WaitForSlotEvent
+
+        @param flags: 0 (default) or CKF_DONT_BLOCK
+        @type flags: integer
+        @return: slot
+        @rtype: integer
+        """
+        tmp = 0
+        (rv, slot) = self.lib.C_WaitForSlotEvent(flags, tmp)
+        if rv != CKR_OK:
+            raise PyKCS11Error(rv)
+
+        return slot
+
 class Mechanism(object):
     """Wraps CK_MECHANISM"""
     def __init__(self, mechanism, param):

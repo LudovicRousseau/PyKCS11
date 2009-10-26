@@ -280,7 +280,7 @@ public:
 
 	CK_RV C_WaitForSlotEvent(
 		unsigned long flags,
-		unsigned long* pSlot);
+		unsigned long * INOUT);
 
 	CK_RV C_GetMechanismList(
 		unsigned long slotID,
