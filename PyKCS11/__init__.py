@@ -433,6 +433,8 @@ class PyKCS11Lib(object):
 
         @param slot: slot number returned by L{getSlotList}
         @type slot: integer
+        @param flags: 0 (default), CKF_RW_SESSION for RW session
+        @type flags: integer
         @return: a L{Session} object
         """
         se = PyKCS11.LowLevel.CK_SESSION_HANDLE()
