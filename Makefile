@@ -2,10 +2,7 @@
 PREFIX ?= /usr
 DESTDIR ?= /
 ifeq (, $(PYTHON))
-ifeq (, $(PYTHONVER))
-	PYTHONVER=2.4
-endif
-PYTHON=python$(PYTHONVER)
+PYTHON=python
 endif
 
 build: build-stamp
