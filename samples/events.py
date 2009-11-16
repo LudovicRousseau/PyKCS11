@@ -23,6 +23,13 @@ if __name__ == '__main__':
     import getopt
     import sys
 
+    def usage():
+        print "Usage:", sys.argv[0],
+        print "[-p pin][--pin=pin]",
+        print "[-c lib][--lib=lib]",
+        print "[-h][--help]",
+        print "[-o][--opensession]"
+
     try:
         opts, args = getopt.getopt(sys.argv[1:], "p:c:ho",
             ["pin=", "lib=", "help", "opensession"])
