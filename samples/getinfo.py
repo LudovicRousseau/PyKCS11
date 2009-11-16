@@ -26,7 +26,7 @@ class getInfo(object):
     def colorize(self, text, arg):
         print self.magenta + text + self.blue, arg, self.normal
 
-    def __init__(self, lib = None):
+    def __init__(self, lib=None):
         if sys.stdout.isatty() and platform.system().lower() != 'windows':
             self.red = "\x1b[01;31m"
             self.blue = "\x1b[34m"
@@ -82,13 +82,14 @@ class getInfo(object):
 
     def getInfo(self):
         info = self.pkcs11.getInfo()
-        self.colorize("Library Cryptoki Version:", "%d.%d" % info.cryptokiVersion)
+        self.colorize("Library Cryptoki Version:",
+            "%d.%d" % info.cryptokiVersion)
         self.colorize("Library manufacturerID:", info.manufacturerID)
         self.colorize("Library flags:", info.flags)
         self.colorize("Library Description:", info.libraryDescription)
         self.colorize("Library Version:", "%d.%d" % info.libraryVersion)
 
-    def getSessionInfo(self, slot, pin = None):
+    def getSessionInfo(self, slot, pin=None):
         session = self.pkcs11.openSession(slot)
         s = session.getSessionInfo()
 
@@ -117,7 +118,8 @@ if __name__ == '__main__':
     import getopt
 
     try:
-        opts, args = getopt.getopt(sys.argv[1:], "p:s:c:ho", ["pin=", "slot=", "lib=", "help", "opensession"])
+        opts, args = getopt.getopt(sys.argv[1:], "p:s:c:ho",
+            ["pin=", "slot=", "lib=", "help", "opensession"])
     except getopt.GetoptError:
         # print help information and exit:
         usage()
@@ -153,7 +155,7 @@ if __name__ == '__main__':
         sys.exit(2)
 
     if slot:
-        slots = [ slots[slot] ]
+        slots = [slots[slot]]
 
     for slot in slots:
         try:
@@ -163,4 +165,3 @@ if __name__ == '__main__':
             gi.getMechanismInfo(slot)
         except PyKCS11.PyKCS11Error, e:
             print "Error:", e
-
