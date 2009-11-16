@@ -20,10 +20,12 @@ import PyKCS11
 import getinfo
 
 if __name__ == '__main__':
-    import getopt, sys
+    import getopt
+    import sys
 
     try:
-        opts, args = getopt.getopt(sys.argv[1:], "p:c:ho", ["pin=", "lib=", "help", "opensession"])
+        opts, args = getopt.getopt(sys.argv[1:], "p:c:ho",
+            ["pin=", "lib=", "help", "opensession"])
     except getopt.GetoptError:
         # print help information and exit:
         usage()
@@ -65,4 +67,3 @@ if __name__ == '__main__':
             gi.getMechanismInfo(slot)
         except PyKCS11.PyKCS11Error, e:
             print "Error:", e
-
