@@ -27,7 +27,6 @@ import platform
 # Last Updated: 2002/08/05
 # Version no: 1.0
 
-FILTER=''.join([(len(repr(chr(x)))==3) and chr(x) or '.' for x in range(256)])
 def hexx(intval):
     x = hex(intval)[2:]
     if (x[-1:].upper() == 'L'):
@@ -36,13 +35,15 @@ def hexx(intval):
         return "0%s" % x
     return x
 
-def dump(src, length = 8):
-    N=0; result=''
+def dump(src, length=8):
+    FILTER = ''.join([(len(repr(chr(x))) == 3) and chr(x) or '.' for x in range(256)])
+    N = 0
+    result = ''
     while src:
-        s,src = src[:length],src[length:]
-        hexa = ' '.join(["%02X"%ord(x) for x in s])
+        s, src = src[:length], src[length:]
+        hexa = ' '.join(["%02X" % ord(x) for x in s])
         s = s.translate(FILTER)
-        result += "%04X   %-*s   %s\n" % (N, length*3, hexa, s)
+        result += "%04X   %-*s   %s\n" % (N, length * 3, hexa, s)
         N += length
     return result
 
@@ -86,7 +87,7 @@ if sys.stdout.isatty() and platform.system().lower() != 'windows':
     magenta = "\x1b[35m"
     normal = "\x1b[0m"
 
-format_long   = magenta + "  %s:" + blue + " %s (%s)" + normal
+format_long = magenta + "  %s:" + blue + " %s (%s)" + normal
 format_binary = magenta + "  %s:" + blue + " %d bytes" + normal
 format_normal = magenta + "  %s:" + blue + " %s" + normal
 
@@ -115,7 +116,7 @@ for s in slots:
         print "Opened session 0x%08X" % session.session.value()
         if pin_available:
             try:
-                session.login(pin = pin)
+                session.login(pin=pin)
             except:
                 print "login failed, exception:", str(sys.exc_info()[1])
 
@@ -149,7 +150,7 @@ for s in slots:
                     ex = eval('0x%s' % ''.join(chr(c) for c in e).encode('hex'))
                 if sign:
                     try:
-                        toSign="12345678901234567890" # 20 bytes, SHA1 digest
+                        toSign = "12345678901234567890" # 20 bytes, SHA1 digest
                         print "* Signing with object 0x%08X following data: %s" % (o.value(), toSign)
                         signature = session.sign(o, toSign)
                         s = ''.join(chr(c) for c in signature).encode('hex')
@@ -175,12 +176,12 @@ for s in slots:
                 if decrypt:
                     if m and e:
                         try:
-                            toEncrypt="12345678901234567890"
+                            toEncrypt = "12345678901234567890"
                             # note: PKCS1 BT2 padding should be random data,
                             # but this is just a test and we use 0xFF...
                             padded = "\x02%s\x00%s" % ("\xFF" * (128 - (len(toEncrypt)) -2), toEncrypt)
                             print "* Decrypting with 0x%08X following data: %s" % (o.value(), toEncrypt)
-                            print "padded:\n",  dump(padded, 16)
+                            print "padded:\n", dump(padded, 16)
                             encrypted = pow(eval('0x%sL' % padded.encode('hex')), ex, mx) # RSA
                             encrypted1 = hexx(encrypted).decode('hex')
                             print "encrypted:\n", dump(encrypted1, 16)
@@ -229,4 +230,3 @@ for s in slots:
 
     except PyKCS11.PyKCS11Error, e:
         print "Error:", e
-
