@@ -17,7 +17,8 @@
 # Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301 USA
 
 import PyKCS11
-import getopt, sys
+import getopt
+import sys
 import platform
 
 # from http://aspn.activestate.com/ASPN/Cookbook/Python/Recipe/142812
