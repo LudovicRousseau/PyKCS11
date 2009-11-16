@@ -24,15 +24,15 @@ CK_UNAVAILABLE_INFORMATION = PyKCS11.LowLevel.CK_UNAVAILABLE_INFORMATION
 CK_EFFECTIVELY_INFINITE = PyKCS11.LowLevel.CK_EFFECTIVELY_INFINITE
 CK_INVALID_HANDLE = PyKCS11.LowLevel.CK_INVALID_HANDLE
 
-CKM = {};
-CKR = {};
-CKA = {};
-CKO = {};
-CKU = {};
-CKK = {};
-CKC = {};
-CKF = {};
-CKS = {};
+CKM = {}
+CKR = {}
+CKA = {}
+CKO = {}
+CKU = {}
+CKK = {}
+CKC = {}
+CKF = {}
+CKS = {}
 
 # redefine PKCS#11 constants using well known prefixes
 for x in PyKCS11.LowLevel.__dict__.keys():
@@ -44,9 +44,8 @@ for x in PyKCS11.LowLevel.__dict__.keys():
       or x[:4] == 'CKK_' \
       or x[:4] == 'CKC_' \
       or x[:4] == 'CKF_' \
-      or x[:4] == 'CKS_' \
-      :
-        a = "%s=PyKCS11.LowLevel.%s" % (x, x) 
+      or x[:4] == 'CKS_':
+        a = "%s=PyKCS11.LowLevel.%s" % (x, x)
         exec(a)
         if x[3:] != "_VENDOR_DEFINED":
             eval(x[:3])[eval(x)] = x # => CKM[CKM_RSA_PKCS] = 'CKM_RSA_PKCS'
@@ -55,6 +54,7 @@ for x in PyKCS11.LowLevel.__dict__.keys():
 # special CKR[] values
 CKR[-2] = "Unkown PKCS#11 type"
 CKR[-1] = "Load"
+
 
 class CK_SLOT_INFO(object):
     """
@@ -75,8 +75,7 @@ class CK_SLOT_INFO(object):
     flags_dict = {
         CKF_TOKEN_PRESENT: "CKF_TOKEN_PRESENT",
         CKF_REMOVABLE_DEVICE: "CKF_REMOVABLE_DEVICE",
-        CKF_HW_SLOT: "CKF_HW_SLOT"
-    }
+        CKF_HW_SLOT: "CKF_HW_SLOT"}
 
     def flags2text(self):
         """
@@ -91,6 +90,7 @@ class CK_SLOT_INFO(object):
             if self.flags & v:
                 r.append(CK_SLOT_INFO.flags_dict[v])
         return r
+
 
 class CK_INFO(object):
     """
@@ -107,6 +107,7 @@ class CK_INFO(object):
     @ivar libraryVersion: 2 elements list
     @type libraryVersion: list
     """
+
 
 class CK_SESSION_INFO(object):
     """
@@ -150,6 +151,7 @@ class CK_SESSION_INFO(object):
         @rtype: string
         """
         return CKS[self.state]
+
 
 class CK_TOKEN_INFO(object):
     """
@@ -228,6 +230,7 @@ class CK_TOKEN_INFO(object):
                 r.append(CK_TOKEN_INFO.flags_dict[v])
         return r
 
+
 class CK_MECHANISM_INFO(object):
     """
     matches the PKCS#11 CK_MECHANISM_INFO structure
@@ -271,10 +274,11 @@ class CK_MECHANISM_INFO(object):
                 r.append(CK_MECHANISM_INFO.flags_dict[v])
         return r
 
+
 class PyKCS11Error(Exception):
     """ define the possible PKCS#11 error codes """
 
-    def __init__(self, value, text = ""):
+    def __init__(self, value, text=""):
         self.value = value
         self.text = text
 
@@ -288,6 +292,7 @@ class PyKCS11Error(Exception):
         else:
             return CKR[self.value] + " (0x%08X)" % self.value
 
+
 class PyKCS11Lib(object):
     """ high level PKCS#11 binding """
 
@@ -297,7 +302,7 @@ class PyKCS11Lib(object):
     def __del__(self):
         self.lib.Unload()
 
-    def load(self, pkcs11dll_filename = None, *init_string):
+    def load(self, pkcs11dll_filename=None, *init_string):
         """
         load a PKCS#11 library
 
@@ -381,7 +386,7 @@ class PyKCS11Lib(object):
         @type slot: integer
         @return: a L{CK_TOKEN_INFO} object
         """
-        tokeninfo =  PyKCS11.LowLevel.CK_TOKEN_INFO()
+        tokeninfo = PyKCS11.LowLevel.CK_TOKEN_INFO()
         rv = self.lib.C_GetTokenInfo(slot, tokeninfo)
         if rv != CKR_OK:
             raise PyKCS11Error(rv)
@@ -427,7 +432,7 @@ class PyKCS11Lib(object):
 
         return t
 
-    def openSession(self, slot, flags = 0):
+    def openSession(self, slot, flags=0):
         """
         C_OpenSession
 
@@ -485,7 +490,7 @@ class PyKCS11Lib(object):
 
         return i
 
-    def waitForSlotEvent(self, flags = 0):
+    def waitForSlotEvent(self, flags=0):
         """
         C_WaitForSlotEvent
 
@@ -501,8 +506,10 @@ class PyKCS11Lib(object):
 
         return slot
 
+
 class Mechanism(object):
     """Wraps CK_MECHANISM"""
+
     def __init__(self, mechanism, param):
         """
         @param mechanism: the mechanism to be used
@@ -510,13 +517,14 @@ class Mechanism(object):
         @param param: data to be used as crypto operation parameter
         (i.e. the IV for some agorithms)
         @type param: string or list/tuple of bytes
-        
+
         @see: L{Session.decrypt}, L{Session.sign}
         """
         self.mechanism = mechanism
         self.param = param
 
 MechanismRSAPKCS1 = Mechanism(CKM_RSA_PKCS, None)
+
 
 class Session(object):
     """ Manage L{PyKCS11Lib.openSession} objects """
@@ -555,7 +563,7 @@ class Session(object):
         s.ulDeviceError = sessioninfo.ulDeviceError
         return s
 
-    def login(self, pin, user_type = CKU_USER):
+    def login(self, pin, user_type=CKU_USER):
         """
         C_Login
 
@@ -602,25 +610,25 @@ class Session(object):
         rv = self.lib.C_SetPIN(self.session, old_pin, new_pin)
         if rv != CKR_OK:
             raise PyKCS11Error(rv)
-            
+
     def sign(self, key, data, mecha=MechanismRSAPKCS1):
         """
         C_SignInit/C_Sign
-        
+
         @param key: a key handle, obtained calling L{findObjects}.
         @type key: integer
         @param data: the data to be signed
         @type data:  (binary) sring or list/tuple of bytes
         @param mecha: the signing mechanism to be used
-        @type mecha: L{Mechanism} instance or L{MechanismRSAPKCS1} 
+        @type mecha: L{Mechanism} instance or L{MechanismRSAPKCS1}
         for CKM_RSA_PKCS
         @return: the computed signature
         @rtype: list of bytes
-        
+
         @note: the returned value is an istance of L{LowLevel.ckbytelist}.
         You can easly convert it to a binary string with::
             ''.join(chr(i) for i in ckbytelistSignature)
-        
+
         """
         m = PyKCS11.LowLevel.CK_MECHANISM()
         signature = PyKCS11.LowLevel.ckbytelist()
@@ -650,19 +658,19 @@ class Session(object):
         if (rv != 0):
             raise PyKCS11Error(rv)
         #first call get signature size
-        rv = self.lib.C_Sign(self.session, data1, signature);
+        rv = self.lib.C_Sign(self.session, data1, signature)
         if (rv != 0):
             raise PyKCS11Error(rv)
         #second call get actual signature data
-        rv = self.lib.C_Sign(self.session, data1, signature);
+        rv = self.lib.C_Sign(self.session, data1, signature)
         if (rv != 0):
             raise PyKCS11Error(rv)
         return signature
-        
+
     def decrypt(self, key, data, mecha=MechanismRSAPKCS1):
         """
         C_DecryptInit/C_Decrypt
-        
+
         @param key: a key handle, obtained calling L{findObjects}.
         @type key: integer
         @param data: the data to be decrypted
@@ -672,11 +680,11 @@ class Session(object):
         for CKM_RSA_PKCS
         @return: the decrypted data
         @rtype: list of bytes
-        
+
         @note: the returned value is an istance of L{LowLevel.ckbytelist}.
         You can easly convert it to a binary string with::
             ''.join(chr(i) for i in ckbytelistData)
-        
+
         """
         m = PyKCS11.LowLevel.CK_MECHANISM()
         decrypted = PyKCS11.LowLevel.ckbytelist()
@@ -706,15 +714,15 @@ class Session(object):
         if (rv != 0):
             raise PyKCS11Error(rv)
         #first call get decrypted size
-        rv = self.lib.C_Decrypt(self.session, data1, decrypted);
+        rv = self.lib.C_Decrypt(self.session, data1, decrypted)
         if (rv != 0):
             raise PyKCS11Error(rv)
         #second call get actual decrypted data
-        rv = self.lib.C_Decrypt(self.session, data1, decrypted);
+        rv = self.lib.C_Decrypt(self.session, data1, decrypted)
         if (rv != 0):
             raise PyKCS11Error(rv)
         return decrypted
-        
+
     def isNum(self, type):
         if type in (CKA_CERTIFICATE_TYPE,
             CKA_CLASS,
@@ -758,7 +766,7 @@ class Session(object):
     def isBin(self, type):
         return (not self.isBool(type)) and (not self.isString(type)) and (not self.isNum(type))
 
-    def findObjects(self, template = ()):
+    def findObjects(self, template=()):
         """
         find the objects matching the template pattern
 
@@ -801,7 +809,7 @@ class Session(object):
         self.lib.C_FindObjectsFinal(self.session)
         return res
 
-    def getAttributeValue(self, obj_id, attr, allAsBinary = False):
+    def getAttributeValue(self, obj_id, attr, allAsBinary=False):
         """
         C_GetAttributeValue
 
@@ -813,16 +821,16 @@ class Session(object):
         @type allAsBinary: Boolean
         @return: a list of values corresponding to the list of attributes
         @rtype: list
-        
+
         @see: L{getAttributeValue_fragmented}
-        
+
         @note: if allAsBinary is True the function do not convert results to
         Python types (i.e.: CKA_TOKEN to Bool, CKA_CLASS to int, ...).
         Binary data is returned as L{LowLevel.ckbytelist} type, usable
         as a list containing only bytes.
         You can easly convert it to a binary string with::
             ''.join(chr(i) for i in ckbytelistVariable)
-        
+
         """
         valTemplate = PyKCS11.LowLevel.ckattrlist(len(attr))
         for x in xrange(len(attr)):
@@ -857,13 +865,13 @@ class Session(object):
 
         return res
 
-    def getAttributeValue_fragmented(self, obj_id, attr, allAsBinary = False):
+    def getAttributeValue_fragmented(self, obj_id, attr, allAsBinary=False):
         """
         Same as L{getAttributeValue} except that when some attribute
         is sensitive or unknown an empty value (None) is retruned.
-        
+
         Note: this is achived getting attributes one by one.
-        
+
         @see: L{getAttributeValue}
         """
         # some attributes does not exists or is sensitive
@@ -887,7 +895,7 @@ class Session(object):
             rv = self.lib.C_GetAttributeValue(self.session, obj_id, valTemplate)
             if rv != CKR_OK:
                 raise PyKCS11Error(rv)
-            
+
             if (allAsBinary):
                 res.append(valTemplate[0].GetBin())
             elif valTemplate[0].IsNum():
@@ -970,7 +978,7 @@ if __name__ == "__main__":
 
     print
     print "login"
-    se.login(pin = "12345678")
+    se.login(pin="12345678")
 
     print
     print "sessionInfo"
@@ -1000,4 +1008,3 @@ if __name__ == "__main__":
     print
     print "closeSession"
     se.closeSession()
-
