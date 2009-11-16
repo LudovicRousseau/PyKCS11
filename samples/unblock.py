@@ -18,8 +18,8 @@
 
 import PyKCS11
 
-pin="1234"
-puk="1234"
+pin = "1234"
+puk = "1234"
 
 pkcs11 = PyKCS11.PyKCS11Lib()
 pkcs11.load()
