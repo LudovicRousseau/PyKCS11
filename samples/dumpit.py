@@ -25,7 +25,7 @@ import platform
 # Title: Hex dumper
 # Submitter: Sebastien Keim (other recipes)
 # Last Updated: 2002/08/05
-# Version no: 1.0 
+# Version no: 1.0
 
 FILTER=''.join([(len(repr(chr(x)))==3) and chr(x) or '.' for x in range(256)])
 def hexx(intval):
@@ -78,7 +78,7 @@ for o, a in opts:
         sign = True
     elif o in ("-d", "--decrypt"):
         decrypt = True
-        
+
 red = blue = magenta = normal = ""
 if sys.stdout.isatty() and platform.system().lower() != 'windows':
     red = "\x1b[01;31m"
@@ -151,7 +151,7 @@ for s in slots:
                     try:
                         toSign="12345678901234567890" # 20 bytes, SHA1 digest
                         print "* Signing with object 0x%08X following data: %s" % (o.value(), toSign)
-                        signature = session.sign(o, toSign) 
+                        signature = session.sign(o, toSign)
                         s = ''.join(chr(c) for c in signature).encode('hex')
                         sx = eval('0x%s' % s)
                         print "Signature:"
@@ -195,7 +195,7 @@ for s in slots:
                             print "Decrypt failed, exception:", str(sys.exc_info()[1])
                     else:
                         print "ERROR: Private key don't have MODULUS/PUBLIC_EXP"
-                    
+
             print "Dumping attributes:"
             for q, a in zip(all_attributes, attributes):
                 if a == None:
