@@ -37,8 +37,8 @@ class getInfo(object):
         self.pkcs11.load(lib)
 
     def getSlotInfo(self, slot):
-        i = self.pkcs11.getSlotInfo(slot)
         print "Slot n.:", slot
+        i = self.pkcs11.getSlotInfo(slot)
         self.colorize("  slotDescription:", i.slotDescription.strip())
         self.colorize("  manufacturerID:", i.manufacturerID.strip())
         self.colorize("  flags:", i.flags2text())
@@ -46,8 +46,8 @@ class getInfo(object):
         self.colorize("  firmwareVersion:", i.firmwareVersion)
 
     def getTokenInfo(self, slot):
-        t = self.pkcs11.getTokenInfo(slot)
         print " TokenInfo"
+        t = self.pkcs11.getTokenInfo(slot)
         self.colorize("  label:", t.label.strip())
         self.colorize("  manufacturerID:", t.manufacturerID.strip())
         self.colorize("  model:", t.model.strip())
@@ -68,8 +68,8 @@ class getInfo(object):
         self.colorize("  utcTime:", t.utcTime)
 
     def getMechanismInfo(self, slot):
-        m = self.pkcs11.getMechanismList(slot)
         print "  Mechanism list: "
+        m = self.pkcs11.getMechanismList(slot)
         for x in m:
             self.colorize("  ", x)
             i = self.pkcs11.getMechanismInfo(slot, x)
@@ -90,6 +90,7 @@ class getInfo(object):
         self.colorize("Library Version:", "%d.%d" % info.libraryVersion)
 
     def getSessionInfo(self, slot, pin=None):
+        print " SessionInfo"
         session = self.pkcs11.openSession(slot)
         s = session.getSessionInfo()
 
@@ -97,7 +98,6 @@ class getInfo(object):
             print " Using pin:", pin
             session.login(pin)
 
-        print " SessionInfo"
         self.colorize("  slotID:", s.slotID)
         self.colorize("  state:", s.state2text())
         self.colorize("  flags:", s.flags2text())
