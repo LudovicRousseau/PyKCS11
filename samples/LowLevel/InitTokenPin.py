@@ -50,7 +50,7 @@ if len(slotList) != 0:
     print "\t\tTokenInfo: Label=" + tokenInfo.GetLabel() + ", ManufacturerID=" + tokenInfo.GetManufacturerID()
     print "\t\tTokenInfo: flags=" + hex(tokenInfo.flags) + ", Model=" + tokenInfo.GetModel()
 
-    print "\tC_OpenSession(): " + hex(a.C_OpenSession(slotList[0], PyKCS11.LowLevel.CKF_SERIAL_SESSION|PyKCS11.LowLevel.CKF_RW_SESSION, session))
+    print "\tC_OpenSession(): " + hex(a.C_OpenSession(slotList[0], PyKCS11.LowLevel.CKF_SERIAL_SESSION | PyKCS11.LowLevel.CKF_RW_SESSION, session))
     print "\t\tSession:" + str(session)
     print "\tC_GetSessionInfo(): " + hex(a.C_GetSessionInfo(session, sessionInfo))
     print "\t\tSessionInfo: state=" + hex(sessionInfo.state) + ", flags=" + hex(sessionInfo.flags)
@@ -69,4 +69,3 @@ if len(slotList) != 0:
 
 print "C_Finalize(): " + hex(a.C_Finalize())
 print a.Unload()
-
