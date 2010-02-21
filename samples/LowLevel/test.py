@@ -39,7 +39,7 @@ print "\tAvailable Slots: " + str(len(slotList))
 for x in range(len(slotList)):
     print "\tC_SlotInfo(): " + hex(a.C_GetSlotInfo(slotList[x], slotInfo))
     print "\t\tSlot N." + str(x) + ": ID=" + str(slotList[x]) + ", name='" + slotInfo.GetSlotDescription() + "'"
-    print "\tC_OpenSession(): " + hex(a.C_OpenSession(slotList[x], PyKCS11.LowLevel.CKF_SERIAL_SESSION|PyKCS11.LowLevel.CKF_RW_SESSION, session))
+    print "\tC_OpenSession(): " + hex(a.C_OpenSession(slotList[x], PyKCS11.LowLevel.CKF_SERIAL_SESSION | PyKCS11.LowLevel.CKF_RW_SESSION, session))
     print "\t\tSession:" + str(session)
     print "\tC_GetSessionInfo(): " + hex(a.C_GetSessionInfo(session, sessionInfo))
     print "\t\tSessionInfo: state=" + hex(sessionInfo.state) + ", flags=" + hex(sessionInfo.flags)
@@ -47,7 +47,7 @@ for x in range(len(slotList)):
     print "\tC_GetTokenInfo(): " + hex(a.C_GetTokenInfo(slotList[x], tokenInfo))
     print "\t\tTokenInfo: Label=" + tokenInfo.GetLabel() + ", ManufacturerID=" + tokenInfo.GetManufacturerID()
     print "\t\tTokenInfo: flags=" + hex(tokenInfo.flags) + ", Model=" + tokenInfo.GetModel()
-    
+
     print "\tC_Login(): " + hex(a.C_Login(session, PyKCS11.LowLevel.CKU_USER, pin))
     print "\tC_Logout(): " + hex(a.C_Logout(session))
     print "\tC_CloseSession(): " + hex(a.C_CloseSession(session))
@@ -60,9 +60,9 @@ SearchTemplate = PyKCS11.ckattrlist(2)
 SearchTemplate[0].SetNum(PyKCS11.LowLevel.CKA_CLASS, PyKCS11.LowLevel.CKO_CERTIFICATE)
 SearchTemplate[1].SetBool(PyKCS11.LowLevel.CKA_TOKEN, True)
 
-print "C_FindObjectsInit: " +  hex(a.C_FindObjectsInit(session, SearchTemplate))
-print "C_FindObjects: " +  hex(a.C_FindObjects(session, SearchResult))
-print "C_FindObjectsFinal: " +  hex(a.C_FindObjectsFinal(session))
+print "C_FindObjectsInit: " + hex(a.C_FindObjectsInit(session, SearchTemplate))
+print "C_FindObjects: " + hex(a.C_FindObjects(session, SearchResult))
+print "C_FindObjectsFinal: " + hex(a.C_FindObjectsFinal(session))
 
 for x in SearchResult:
     print "object: " + hex(x.value())
@@ -72,13 +72,12 @@ for x in SearchResult:
     valTemplate[1].SetType(PyKCS11.LowLevel.CKA_CLASS)
     #valTemplate[1].Reserve(4)
     print "C_GetAttributeValue(): " + hex(a.C_GetAttributeValue(session, x, valTemplate))
-    print "CKA_LABEL Len: ", valTemplate[0].GetLen(), " CKA_CLASS Len: ",valTemplate[1].GetLen()
-    print "C_GetAttributeValue(): " + hex(a.C_GetAttributeValue(session, x, valTemplate))   
+    print "CKA_LABEL Len: ", valTemplate[0].GetLen(), " CKA_CLASS Len: ", valTemplate[1].GetLen()
+    print "C_GetAttributeValue(): " + hex(a.C_GetAttributeValue(session, x, valTemplate))
     print "\tCKO_CERTIFICATE: " + valTemplate[0].GetString()
     print "\tCKA_TOKEN: " + str(valTemplate[1].GetNum())
-    
+
 print "C_Logout(): " + hex(a.C_Logout(session))
 print "C_CloseSession(): " + hex(a.C_CloseSession(session))
 print "C_Finalize(): " + hex(a.C_Finalize())
 print a.Unload()
-
