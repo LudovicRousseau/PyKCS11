@@ -1,7 +1,7 @@
 #! /usr/bin/env python
 
 # python setup.py install --root=/tmp/p
-# PYTHONPATH=/tmp/p/usr/lib/python2.4/site-packages python test.py 
+# PYTHONPATH=/tmp/p/usr/lib/python2.4/site-packages python test.py
 
 from distutils.core import setup, Extension
 from sys import version_info as pyver
@@ -39,7 +39,7 @@ source_files = ["src/ck_attribute_smart.cpp",
                 "src/utility.cpp",
                 "src/pykcs11.cpp"]
 define_macros = []
-extra_compile_args =[]
+extra_compile_args = []
 extra_link_args = []
 if (platform.system().lower() == 'windows'):
     source_files.append("src/dyn_win32.c")
@@ -52,7 +52,7 @@ else:
     source_files.append("src/dyn_unix.c")
     source_files.append("src/unix_pykcs11_wrap.cpp")
     libraries_val = ["python%d.%d" % pyver[:2]]
-    
+
 setup(name="PyKCS11",
     version="1.2.1",
     description="A Full PKCS#11 wrapper for Python",
@@ -79,4 +79,3 @@ setup(name="PyKCS11",
     ],
     py_modules=["PyKCS11.__init__", "PyKCS11.LowLevel"],
 )
-
