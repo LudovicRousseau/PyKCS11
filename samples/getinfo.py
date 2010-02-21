@@ -20,6 +20,7 @@ import PyKCS11
 import platform
 import sys
 
+
 class getInfo(object):
     red = blue = magenta = normal = ""
 
@@ -105,6 +106,7 @@ class getInfo(object):
 
         if pin:
             session.logout()
+
 
 def usage():
     print "Usage:", sys.argv[0],

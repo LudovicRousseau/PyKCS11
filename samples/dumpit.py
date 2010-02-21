@@ -35,6 +35,7 @@ def hexx(intval):
         return "0%s" % x
     return x
 
+
 def dump(src, length=8):
     FILTER = ''.join([(len(repr(chr(x))) == 3) and chr(x) or '.' for x in range(256)])
     N = 0
@@ -46,6 +47,7 @@ def dump(src, length=8):
         result += "%04X   %-*s   %s\n" % (N, length * 3, hexa, s)
         N += length
     return result
+
 
 def usage():
     print "Usage:", sys.argv[0],
