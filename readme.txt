@@ -73,6 +73,10 @@ that doesn't come with the standard distribution.
 History
 """""""
 
+1.2.2 - June 2010, Ludovic Rousseau
+	Debug low level C_GenerateRandom
+	Add seedRandom() and generateRandom() in the high level API
+
 1.2.1 - November 2008, Ludovic Rousseau
 	Use src/opensc/pkcs11.h instead of src/rsaref/* files since the
 	 files from RSA are not free enough (no right to distribute modified
