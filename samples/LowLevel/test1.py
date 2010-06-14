@@ -76,7 +76,7 @@ for x in SearchResult:
     print "binval=", binval
     binval[0] = 0
     valTemplate[0].SetBin(PyKCS11.LowLevel.CKA_ISSUER, binval)
-    binval = valTemplate[0].GetBin() # list(valTemplate[0].GetBin())
+    binval = valTemplate[0].GetBin()  # list(valTemplate[0].GetBin())
     print "binval[0]=", binval[0]
     binval[0] = 0
 
