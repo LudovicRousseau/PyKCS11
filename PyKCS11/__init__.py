@@ -48,8 +48,8 @@ for x in PyKCS11.LowLevel.__dict__.keys():
         a = "%s=PyKCS11.LowLevel.%s" % (x, x)
         exec(a)
         if x[3:] != "_VENDOR_DEFINED":
-            eval(x[:3])[eval(x)] = x # => CKM[CKM_RSA_PKCS] = 'CKM_RSA_PKCS'
-            eval(x[:3])[x] = eval(x) # => CKM['CKM_RSA_PKCS'] = CKM_RSA_PKCS
+            eval(x[:3])[eval(x)] = x  # => CKM[CKM_RSA_PKCS] = 'CKM_RSA_PKCS'
+            eval(x[:3])[x] = eval(x)  # => CKM['CKM_RSA_PKCS'] = CKM_RSA_PKCS
 
 # special CKR[] values
 CKR[-2] = "Unkown PKCS#11 type"
@@ -632,7 +632,7 @@ class Session(object):
         """
         m = PyKCS11.LowLevel.CK_MECHANISM()
         signature = PyKCS11.LowLevel.ckbytelist()
-        ba = None # must be declared here or may be deallocated too early
+        ba = None  # must be declared here or may be deallocated too early
         m.mechanism = mecha.mechanism
         if (mecha.param):
             ba = PyKCS11.LowLevel.byteArray(len(mecha.param))
@@ -642,7 +642,8 @@ class Session(object):
             else:
                 for c in xrange(len(mecha.param)):
                     ba[c] = mecha.param[c]
-            # with cast() the ba object continue to own internal pointer (avoids a leak).
+            # with cast() the ba object continue to own internal pointer
+            # (avoids a leak).
             # pParameter is an opaque pointer, never garbage collected.
             m.pParameter = ba.cast()
             m.ulParameterLen = len(mecha.param)
@@ -688,7 +689,7 @@ class Session(object):
         """
         m = PyKCS11.LowLevel.CK_MECHANISM()
         decrypted = PyKCS11.LowLevel.ckbytelist()
-        ba = None # must be declared here or may be deallocated too early
+        ba = None  # must be declared here or may be deallocated too early
         m.mechanism = mecha.mechanism
         if (mecha.param):
             ba = PyKCS11.LowLevel.byteArray(len(mecha.param))
@@ -698,7 +699,8 @@ class Session(object):
             else:
                 for c in xrange(len(mecha.param)):
                     ba[c] = mecha.param[c]
-            # with cast() the ba object continue to own internal pointer (avoids a leak).
+            # with cast() the ba object continue to own internal pointer
+            # (avoids a leak).
             # pParameter is an opaque pointer, never garbage collected.
             m.pParameter = ba.cast()
             m.ulParameterLen = len(mecha.param)
@@ -799,7 +801,8 @@ class Session(object):
         while True:
             self.lib.C_FindObjects(self.session, result)
             for x in result:
-                # make a copy of the handle: the original value get corrupted (!!)
+                # make a copy of the handle: the original value get
+                # corrupted (!!)
                 a = PyKCS11.LowLevel.CK_OBJECT_HANDLE()
                 a.assign(x.value())
                 res.append(a)
