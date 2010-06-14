@@ -166,7 +166,10 @@ for s in slots:
                             print "Exponent:"
                             print dump(''.join(map(chr, e)), 16)
                             decrypted = pow(sx, ex, mx) # RSA
-                            if toSign == hexx(decrypted).decode('hex')[-20:]:
+                            print "Decrypted:"
+                            d = hexx(decrypted).decode('hex')
+                            print dump(d, 16)
+                            if toSign == d[-20:]:
                                 print "*** signature VERIFIED!\n"
                             else:
                                 print "*** signature NOT VERIFIED; decrypted value:"
