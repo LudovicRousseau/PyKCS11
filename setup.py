@@ -69,13 +69,11 @@ setup(name="PyKCS11",
         Extension(
             "PyKCS11._LowLevel",
             sources=source_files,
-            include_dirs = inc_dirs,
-            library_dirs = lib_dirs,
-            libraries = libraries_val,
-            define_macros = define_macros,
-            extra_compile_args = extra_compile_args,
-            extra_link_args = extra_link_args
-        )
-    ],
+            include_dirs=inc_dirs,
+            library_dirs=lib_dirs,
+            libraries=libraries_val,
+            define_macros=define_macros,
+            extra_compile_args=extra_compile_args,
+            extra_link_args=extra_link_args)],
     py_modules=["PyKCS11.__init__", "PyKCS11.LowLevel"],
 )
