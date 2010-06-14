@@ -276,7 +276,7 @@ public:
 
 	CK_RV C_GenerateRandom(
 		CK_SESSION_HANDLE hSession,
-		vector<unsigned char> RandomData);
+		vector<unsigned char> &RandomData);
 
 	CK_RV C_WaitForSlotEvent(
 		unsigned long flags,
