@@ -27,6 +27,7 @@ import platform
 # Last Updated: 2002/08/05
 # Version no: 1.0
 
+
 def hexx(intval):
     x = hex(intval)[2:]
     if (x[-1:].upper() == 'L'):
@@ -152,7 +153,7 @@ for s in slots:
                     ex = eval('0x%s' % ''.join(chr(c) for c in e).encode('hex'))
                 if sign:
                     try:
-                        toSign = "12345678901234567890" # 20 bytes, SHA1 digest
+                        toSign = "12345678901234567890"  # 20 bytes, SHA1 digest
                         print "* Signing with object 0x%08X following data: %s" % (o.value(), toSign)
                         signature = session.sign(o, toSign)
                         s = ''.join(chr(c) for c in signature).encode('hex')
@@ -165,7 +166,7 @@ for s in slots:
                             print dump(''.join(map(chr, m)), 16)
                             print "Exponent:"
                             print dump(''.join(map(chr, e)), 16)
-                            decrypted = pow(sx, ex, mx) # RSA
+                            decrypted = pow(sx, ex, mx)  # RSA
                             print "Decrypted:"
                             d = hexx(decrypted).decode('hex')
                             print dump(d, 16)
@@ -184,10 +185,10 @@ for s in slots:
                             toEncrypt = "12345678901234567890"
                             # note: PKCS1 BT2 padding should be random data,
                             # but this is just a test and we use 0xFF...
-                            padded = "\x00\x02%s\x00%s" % ("\xFF" * (128 - (len(toEncrypt)) -3), toEncrypt)
+                            padded = "\x00\x02%s\x00%s" % ("\xFF" * (128 - (len(toEncrypt)) - 3), toEncrypt)
                             print "* Decrypting with 0x%08X following data: %s" % (o.value(), toEncrypt)
                             print "padded:\n", dump(padded, 16)
-                            encrypted = pow(eval('0x%sL' % padded.encode('hex')), ex, mx) # RSA
+                            encrypted = pow(eval('0x%sL' % padded.encode('hex')), ex, mx)  # RSA
                             encrypted1 = hexx(encrypted).decode('hex')
                             print "encrypted:\n", dump(encrypted1, 16)
                             decrypted = session.decrypt(o, encrypted1)
