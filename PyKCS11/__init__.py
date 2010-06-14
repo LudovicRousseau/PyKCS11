@@ -911,6 +911,37 @@ class Session(object):
 
         return res
 
+    def seedRandom(self, seed):
+        """
+        C_SeedRandom
+
+        @param seed: seed material
+        @type seed: iterable
+        """
+        low_seed = PyKCS11.LowLevel.ckbytelist(len(seed))
+        for c in xrange(len(seed)):
+            low_seed.append(seed[c])
+        rv = self.lib.C_SeedRandom(self.session, low_seed)
+        if rv != CKR_OK:
+            raise PyKCS11Error(rv)
+
+    def generateRandom(self, size=16):
+        """
+        C_GenerateRandom
+
+        @param size: number of random bytes to get
+        @type size: integer
+
+        @note: the returned value is an istance of L{LowLevel.ckbytelist}.
+        You can easly convert it to a binary string with::
+            ''.join(chr(i) for i in ckbytelistSignature)
+        """
+        low_rand = PyKCS11.LowLevel.ckbytelist(size)
+        rv = self.lib.C_GenerateRandom(self.session, low_rand)
+        if rv != CKR_OK:
+            raise PyKCS11Error(rv)
+        return low_rand
+
 if __name__ == "__main__":
     # sample test/debug code
     p = PyKCS11Lib()
@@ -928,10 +959,12 @@ if __name__ == "__main__":
     print "getSlotList"
     s = p.getSlotList()
     print "slots:", s
+    slot = s[1]
+    print "using slot:", slot
 
     print
     print "getSlotInfo"
-    i = p.getSlotInfo(s[0])
+    i = p.getSlotInfo(slot)
     print "slotDescription:", i.slotDescription.strip()
     print "manufacturerID:", i.manufacturerID
     print "flags:", i.flags
@@ -941,7 +974,7 @@ if __name__ == "__main__":
 
     print
     print "getTokenInfo"
-    t = p.getTokenInfo(s[0])
+    t = p.getTokenInfo(slot)
     print "label:", t.label
     print "manufacturerID:", t.manufacturerID
     print "model:", t.model
@@ -964,7 +997,7 @@ if __name__ == "__main__":
 
     print
     print "openSession"
-    se = p.openSession(s[0])
+    se = p.openSession(slot)
 
     print
     print "sessionInfo"
@@ -975,6 +1008,16 @@ if __name__ == "__main__":
     print "flags:", si.flags
     print "flags:", si.flags2text()
     print "ulDeviceError:", si.ulDeviceError
+
+    print
+    print "seedRandom"
+    try:
+        se.seedRandom([1, 2, 3, 4])
+    except PyKCS11Error, e:
+        print e
+    print "generateRandom"
+    rand = se.generateRandom()
+    print " ".join("%02X" % i for i in rand)
 
     print
     print "login"
