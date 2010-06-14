@@ -929,12 +929,14 @@ CK_RV CPKCS11Lib::C_SeedRandom(
 
 CK_RV CPKCS11Lib::C_GenerateRandom(
 	CK_SESSION_HANDLE hSession,
-	vector<unsigned char> RandomData)
+	vector<unsigned char> &RandomData)
 {
 	CPKCS11LIB_PROLOGUE(C_GenerateRandom);
 	CK_ULONG ulOutDataLen = 0;
 	CK_BYTE* pOutData = Vector2Buffer(RandomData, ulOutDataLen);
 	rv = m_pFunc->C_GenerateRandom(hSession, pOutData, ulOutDataLen);
+    if (CKR_OK == rv)
+		Buffer2Vector(pOutData, ulOutDataLen, RandomData, true);
 	if (pOutData)
 		delete []pOutData;
 	CPKCS11LIB_EPILOGUE;
