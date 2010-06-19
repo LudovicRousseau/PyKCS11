@@ -937,7 +937,7 @@ class Session(object):
 
         @note: the returned value is an istance of L{LowLevel.ckbytelist}.
         You can easly convert it to a binary string with::
-            ''.join(chr(i) for i in ckbytelistSignature)
+            ''.join(chr(i) for i in random)
         """
         low_rand = PyKCS11.LowLevel.ckbytelist(size)
         rv = self.lib.C_GenerateRandom(self.session, low_rand)
