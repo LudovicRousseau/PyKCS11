@@ -104,7 +104,7 @@ class CK_SLOT_INFO(object):
     def __str__(self):
         dico = self.toDict()
         lines = list()
-        for key in dico.keys():
+        for key in sorted(dico.keys()):
             lines.append("%s: %s" % (key, dico[key]))
         return "\n".join(lines)
 
@@ -138,7 +138,7 @@ class CK_INFO(object):
     def __str__(self):
         dico = self.toDict()
         lines = list()
-        for key in dico.keys():
+        for key in sorted(dico.keys()):
             lines.append("%s: %s" % (key, dico[key]))
         return "\n".join(lines)
 
@@ -198,7 +198,7 @@ class CK_SESSION_INFO(object):
     def __str__(self):
         dico = self.toDict()
         lines = list()
-        for key in dico.keys():
+        for key in sorted(dico.keys()):
             lines.append("%s: %s" % (key, dico[key]))
         return "\n".join(lines)
 
@@ -306,7 +306,7 @@ class CK_TOKEN_INFO(object):
     def __str__(self):
         dico = self.toDict()
         lines = list()
-        for key in dico.keys():
+        for key in sorted(dico.keys()):
             lines.append("%s: %s" % (key, dico[key]))
         return "\n".join(lines)
 
