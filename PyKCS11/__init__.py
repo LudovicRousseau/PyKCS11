@@ -91,6 +91,23 @@ class CK_SLOT_INFO(object):
                 r.append(CK_SLOT_INFO.flags_dict[v])
         return r
 
+    def toDict(self):
+        """
+        return a dictionnary with all the fields of the class
+        """
+        return {"slotDescription": self.slotDescription.strip(),
+                "manufacturerID": self.manufacturerID.strip(),
+                "flags": ", ".join(self.flags2text()),
+                "hardwareVersion": self.hardwareVersion,
+                "firmwareVersion": self.firmwareVersion}
+
+    def __str__(self):
+        dico = self.toDict()
+        lines = list()
+        for key in dico.keys():
+            lines.append("%s: %s" % (key, dico[key]))
+        return "\n".join(lines)
+
 
 class CK_INFO(object):
     """
@@ -107,6 +124,23 @@ class CK_INFO(object):
     @ivar libraryVersion: 2 elements list
     @type libraryVersion: list
     """
+
+    def toDict(self):
+        """
+        return a dictionnary with all the fields of the class
+        """
+        return {"cryptokiVersion": "%d.%d" % self.cryptokiVersion,
+                "manufacturerID": self.manufacturerID.strip(),
+                "flags": self.flags,
+                "libraryDescription": self.libraryDescription.strip(),
+                "libraryVersion": "%d.%d" % self.libraryVersion}
+
+    def __str__(self):
+        dico = self.toDict()
+        lines = list()
+        for key in dico.keys():
+            lines.append("%s: %s" % (key, dico[key]))
+        return "\n".join(lines)
 
 
 class CK_SESSION_INFO(object):
@@ -151,6 +185,22 @@ class CK_SESSION_INFO(object):
         @rtype: string
         """
         return CKS[self.state]
+
+    def toDict(self):
+        """
+        return a dictionnary with all the fields of the class
+        """
+        return {"slotID": self.slotID,
+                "state": self.state2text(),
+                "flags": ", ".join(self.flags2text()),
+                "ulDeviceError": self.ulDeviceError}
+
+    def __str__(self):
+        dico = self.toDict()
+        lines = list()
+        for key in dico.keys():
+            lines.append("%s: %s" % (key, dico[key]))
+        return "\n".join(lines)
 
 
 class CK_TOKEN_INFO(object):
@@ -229,6 +279,36 @@ class CK_TOKEN_INFO(object):
             if self.flags & v:
                 r.append(CK_TOKEN_INFO.flags_dict[v])
         return r
+
+    def toDict(self):
+        """
+        return a dictionnary with all the fields of the class
+        """
+        return {"label": self.label,
+                "manufacturerID": self.manufacturerID,
+                "model": self.model,
+                "serialNumber": self.serialNumber,
+                "flags": ", ".join(self.flags2text()),
+                "ulMaxSessionCount": self.ulMaxSessionCount,
+                "ulSessionCount": self.ulSessionCount,
+                "ulMaxRwSessionCount": self.ulMaxRwSessionCount,
+                "ulRwSessionCount": self.ulRwSessionCount,
+                "ulMaxPinLen": self.ulMaxPinLen,
+                "ulMinPinLen": self.ulMinPinLen,
+                "ulTotalPublicMemory": self.ulTotalPublicMemory,
+                "ulFreePublicMemory": self.ulFreePublicMemory,
+                "ulTotalPrivateMemory": self.ulTotalPrivateMemory,
+                "ulFreePrivateMemory": self.ulFreePrivateMemory,
+                "hardwareVersion": "%d.%d" % self.hardwareVersion,
+                "firmwareVersion": "%d.%d" % self.firmwareVersion,
+                "utcTime": self.utcTime}
+
+    def __str__(self):
+        dico = self.toDict()
+        lines = list()
+        for key in dico.keys():
+            lines.append("%s: %s" % (key, dico[key]))
+        return "\n".join(lines)
 
 
 class CK_MECHANISM_INFO(object):
@@ -951,12 +1031,7 @@ if __name__ == "__main__":
     p.load()
 
     print "getInfo"
-    i = p.getInfo()
-    print "cryptokiVersion: %d.%d" % i.cryptokiVersion
-    print "manufacturerID:", i.manufacturerID
-    print "flags:", i.flags
-    print "libraryDescription:", i.libraryDescription
-    print "libraryVersion: %d.%d" % i.libraryVersion
+    print p.getInfo()
 
     print
     print "getSlotList"
@@ -967,36 +1042,11 @@ if __name__ == "__main__":
 
     print
     print "getSlotInfo"
-    i = p.getSlotInfo(slot)
-    print "slotDescription:", i.slotDescription.strip()
-    print "manufacturerID:", i.manufacturerID
-    print "flags:", i.flags
-    print "flags:", i.flags2text()
-    print "hardwareVersion:", i.hardwareVersion
-    print "firmwareVersion:", i.firmwareVersion
+    print p.getSlotInfo(slot)
 
     print
     print "getTokenInfo"
-    t = p.getTokenInfo(slot)
-    print "label:", t.label
-    print "manufacturerID:", t.manufacturerID
-    print "model:", t.model
-    print "serialNumber:", t.serialNumber
-    print "flags:", t.flags
-    print "flags:", t.flags2text()
-    print "ulMaxSessionCount:", t.ulMaxSessionCount
-    print "ulSessionCount:", t.ulSessionCount
-    print "ulMaxRwSessionCount:", t.ulMaxRwSessionCount
-    print "ulRwSessionCount:", t.ulRwSessionCount
-    print "ulMaxPinLen:", t.ulMaxPinLen
-    print "ulMinPinLen:", t.ulMinPinLen
-    print "ulTotalPublicMemory:", t.ulTotalPublicMemory
-    print "ulFreePublicMemory:", t.ulFreePublicMemory
-    print "ulTotalPrivateMemory:", t.ulTotalPrivateMemory
-    print "ulFreePrivateMemory:", t.ulFreePrivateMemory
-    print "hardwareVersion: %d.%d" % t.hardwareVersion
-    print "firmwareVersion: %d.%d" % t.firmwareVersion
-    print "utcTime:", t.utcTime
+    print p.getTokenInfo(slot)
 
     print
     print "openSession"
@@ -1004,13 +1054,7 @@ if __name__ == "__main__":
 
     print
     print "sessionInfo"
-    si = se.getSessionInfo()
-    print "slotID:", si.slotID
-    print "state:", si.state
-    print "state:", si.state2text()
-    print "flags:", si.flags
-    print "flags:", si.flags2text()
-    print "ulDeviceError:", si.ulDeviceError
+    print se.getSessionInfo()
 
     print
     print "seedRandom"
@@ -1024,17 +1068,11 @@ if __name__ == "__main__":
 
     print
     print "login"
-    se.login(pin="12345678")
+    se.login(pin="0000")
 
     print
     print "sessionInfo"
-    si = se.getSessionInfo()
-    print "slotID:", si.slotID
-    print "state:", si.state
-    print "state:", si.state2text()
-    print "flags:", si.flags
-    print "flags:", si.flags2text()
-    print "ulDeviceError:", si.ulDeviceError
+    print se.getSessionInfo()
 
     print
     print "findObjects"
