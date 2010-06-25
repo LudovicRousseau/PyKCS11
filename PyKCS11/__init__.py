@@ -951,7 +951,7 @@ class Session(object):
     def getAttributeValue_fragmented(self, obj_id, attr, allAsBinary=False):
         """
         Same as L{getAttributeValue} except that when some attribute
-        is sensitive or unknown an empty value (None) is retruned.
+        is sensitive or unknown an empty value (None) is returned.
 
         Note: this is achived getting attributes one by one.
 
