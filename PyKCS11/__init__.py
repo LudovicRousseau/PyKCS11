@@ -311,6 +311,9 @@ class CK_MECHANISM_INFO(CkClass):
         CKF_EXTENSION: "CKF_EXTENSION",
     }
 
+    fields = {"ulMinKeySize": "text",
+        "ulMaxKeySize": "text",
+        "flags": "flags"}
 
 class PyKCS11Error(Exception):
     """ define the possible PKCS#11 error codes """
