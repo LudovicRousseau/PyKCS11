@@ -68,7 +68,7 @@ class getInfo(object):
                     self.colorize("    ulMinKeySize:", i.ulMinKeySize)
                 if i.ulMaxKeySize != PyKCS11.CK_UNAVAILABLE_INFORMATION:
                     self.colorize("    ulMaxKeySize:", i.ulMaxKeySize)
-            self.colorize("    flags:", i.flags2text())
+            self.colorize("    flags:", ", ".join(i.flags2text()))
 
     def getInfo(self):
         self.display(self.pkcs11.getInfo())
