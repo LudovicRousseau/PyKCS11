@@ -57,11 +57,19 @@ CKR[-1] = "Load"
 
 
 class ckbytelist(PyKCS11.LowLevel.ckbytelist):
+    """
+    add a __str__() method to the LowLevel equivalent
+    """
+
     def __str__(self):
         return "".join("%02X" % i for i in self)
 
 
 class byteArray(PyKCS11.LowLevel.byteArray):
+    """
+    add a __str__() method to the LowLevel equivalent
+    """
+
     def __str__(self):
         return "".join("%02X" % i for i in self)
 
@@ -324,6 +332,7 @@ class CK_MECHANISM_INFO(CkClass):
     fields = {"ulMinKeySize": "text",
         "ulMaxKeySize": "text",
         "flags": "flags"}
+
 
 class PyKCS11Error(Exception):
     """ define the possible PKCS#11 error codes """
