@@ -27,6 +27,18 @@ class getInfo(object):
     def colorize(self, text, arg):
         print self.magenta + text + self.blue, arg, self.normal
 
+    def display(self, obj, indent=""):
+        dico = obj.to_dict()
+        for key in sorted(dico.keys()):
+            type = obj.fields[key]
+            left = indent + key + ":"
+            if type == "flags":
+                self.colorize(left, ", ".join(dico[key]))
+            elif type == "pair":
+                self.colorize(left, "%d.%d" % dico[key])
+            else:
+                self.colorize(left, dico[key])
+
     def __init__(self, lib=None):
         if sys.stdout.isatty() and platform.system().lower() != 'windows':
             self.red = "\x1b[01;31m"
@@ -39,34 +51,11 @@ class getInfo(object):
 
     def getSlotInfo(self, slot):
         print "Slot n.:", slot
-        i = self.pkcs11.getSlotInfo(slot)
-        self.colorize("  slotDescription:", i.slotDescription.strip())
-        self.colorize("  manufacturerID:", i.manufacturerID.strip())
-        self.colorize("  flags:", i.flags2text())
-        self.colorize("  hardwareVersion:", i.hardwareVersion)
-        self.colorize("  firmwareVersion:", i.firmwareVersion)
+        self.display(self.pkcs11.getSlotInfo(slot), " ")
 
     def getTokenInfo(self, slot):
         print " TokenInfo"
-        t = self.pkcs11.getTokenInfo(slot)
-        self.colorize("  label:", t.label.strip())
-        self.colorize("  manufacturerID:", t.manufacturerID.strip())
-        self.colorize("  model:", t.model.strip())
-        self.colorize("  serialNumber:", t.serialNumber)
-        self.colorize("  flags:", t.flags2text())
-        self.colorize("  ulMaxSessionCount:", t.ulMaxSessionCount)
-        self.colorize("  ulSessionCount:", t.ulSessionCount)
-        self.colorize("  ulMaxRwSessionCount:", t.ulMaxRwSessionCount)
-        self.colorize("  ulRwSessionCount:", t.ulRwSessionCount)
-        self.colorize("  ulMaxPinLen:", t.ulMaxPinLen)
-        self.colorize("  ulMinPinLen:", t.ulMinPinLen)
-        self.colorize("  ulTotalPublicMemory:", t.ulTotalPublicMemory)
-        self.colorize("  ulFreePublicMemory:", t.ulFreePublicMemory)
-        self.colorize("  ulTotalPrivateMemory:", t.ulTotalPrivateMemory)
-        self.colorize("  ulFreePrivateMemory:", t.ulFreePrivateMemory)
-        self.colorize("  hardwareVersion:", "%d.%d" % t.hardwareVersion)
-        self.colorize("  firmwareVersion:", "%d.%d" % t.firmwareVersion)
-        self.colorize("  utcTime:", t.utcTime)
+        self.display(self.pkcs11.getTokenInfo(slot), "  ")
 
     def getMechanismInfo(self, slot):
         print "  Mechanism list: "
@@ -82,13 +71,7 @@ class getInfo(object):
             self.colorize("    flags:", i.flags2text())
 
     def getInfo(self):
-        info = self.pkcs11.getInfo()
-        self.colorize("Library Cryptoki Version:",
-            "%d.%d" % info.cryptokiVersion)
-        self.colorize("Library manufacturerID:", info.manufacturerID)
-        self.colorize("Library flags:", info.flags)
-        self.colorize("Library Description:", info.libraryDescription)
-        self.colorize("Library Version:", "%d.%d" % info.libraryVersion)
+        self.display(self.pkcs11.getInfo())
 
     def getSessionInfo(self, slot, pin=None):
         print " SessionInfo"
@@ -99,10 +82,7 @@ class getInfo(object):
             print " Using pin:", pin
             session.login(pin)
 
-        self.colorize("  slotID:", s.slotID)
-        self.colorize("  state:", s.state2text())
-        self.colorize("  flags:", s.flags2text())
-        self.colorize("  ulDeviceError:", s.ulDeviceError)
+        self.display(s, "  ")
 
         if pin:
             session.logout()
