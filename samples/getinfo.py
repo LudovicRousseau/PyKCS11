@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 
-#   Copyright (C) 2006-2009 Ludovic Rousseau (ludovic.rousseau@free.fr)
+#   Copyright (C) 2006-2010 Ludovic Rousseau (ludovic.rousseau@free.fr)
 #
 # This file is free software; you can redistribute it and/or modify it
 # under the terms of the GNU General Public License as published by
