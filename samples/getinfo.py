@@ -63,7 +63,7 @@ class getInfo(object):
         for x in m:
             self.colorize("  ", x)
             i = self.pkcs11.getMechanismInfo(slot, x)
-            if (not i.flags & PyKCS11.CKF_DIGEST):
+            if not i.flags & PyKCS11.CKF_DIGEST:
                 if i.ulMinKeySize != PyKCS11.CK_UNAVAILABLE_INFORMATION:
                     self.colorize("    ulMinKeySize:", i.ulMinKeySize)
                 if i.ulMaxKeySize != PyKCS11.CK_UNAVAILABLE_INFORMATION:
