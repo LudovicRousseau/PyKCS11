@@ -74,15 +74,16 @@ class getInfo(object):
         self.display(self.pkcs11.getInfo())
 
     def getSessionInfo(self, slot, pin=None):
-        print " SessionInfo"
+        print " SessionInfo",
         session = self.pkcs11.openSession(slot)
-        s = session.getSessionInfo()
 
         if pin:
-            print " Using pin:", pin
+            print "(using pin: %s)" % pin
             session.login(pin)
+        else:
+            print
 
-        self.display(s, "  ")
+        self.display(session.getSessionInfo(), "  ")
 
         if pin:
             session.logout()
