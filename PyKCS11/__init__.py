@@ -56,7 +56,64 @@ CKR[-2] = "Unkown PKCS#11 type"
 CKR[-1] = "Load"
 
 
-class CK_SLOT_INFO(object):
+class CkClass(object):
+    """
+    Base class for CK_* classes
+    """
+
+    # dictionnary of integer_value: text_value for the flags bits
+    flags_dict = dict()
+
+    # dictionnary of fields names and types
+    # type can be "pair", "flags" or "text"
+    fields = dict()
+
+    flags = 0
+
+    def flags2text(self):
+        """
+        parse the L{self.flags} field and create a list of "CKF_*" strings
+        corresponding to bits set in flags
+
+        @return: a list of strings
+        @rtype: list
+        """
+        r = []
+        for v in CK_SLOT_INFO.flags_dict.keys():
+            if self.flags & v:
+                r.append(self.flags_dict[v])
+        return r
+
+    def to_dict(self):
+        """
+        convert the fields of the object into a dictionnary
+        """
+        dico = dict()
+        for field in self.fields.keys():
+            if field == "flags":
+                dico[field] = self.flags2text()
+            else:
+                dico[field] = eval("self." + field)
+        return dico
+
+    def __str__(self):
+        """
+        text representation of the object
+        """
+        dico = self.to_dict()
+        lines = list()
+        for key in sorted(dico.keys()):
+            type = self.fields[key]
+            if type == "flags":
+                lines.append("%s: %s" % (key, ", ".join(dico[key])))
+            elif type == "pair":
+                lines.append("%s: " % key + "%d.%d" % dico[key])
+            else:
+                lines.append("%s: %s" % (key, dico[key]))
+        return "\n".join(lines)
+
+
+class CK_SLOT_INFO(CkClass):
     """
     matches the PKCS#11 CK_SLOT_INFO structure
 
@@ -77,39 +134,14 @@ class CK_SLOT_INFO(object):
         CKF_REMOVABLE_DEVICE: "CKF_REMOVABLE_DEVICE",
         CKF_HW_SLOT: "CKF_HW_SLOT"}
 
-    def flags2text(self):
-        """
-        parse the L{self.flags} field and create a list of "CKF_*" strings
-        corresponding to bits set in flags
-
-        @return: a list of strings
-        @rtype: list
-        """
-        r = []
-        for v in CK_SLOT_INFO.flags_dict.keys():
-            if self.flags & v:
-                r.append(CK_SLOT_INFO.flags_dict[v])
-        return r
-
-    def toDict(self):
-        """
-        return a dictionnary with all the fields of the class
-        """
-        return {"slotDescription": self.slotDescription.strip(),
-                "manufacturerID": self.manufacturerID.strip(),
-                "flags": ", ".join(self.flags2text()),
-                "hardwareVersion": self.hardwareVersion,
-                "firmwareVersion": self.firmwareVersion}
-
-    def __str__(self):
-        dico = self.toDict()
-        lines = list()
-        for key in sorted(dico.keys()):
-            lines.append("%s: %s" % (key, dico[key]))
-        return "\n".join(lines)
+    fields = {"slotDescription": "text",
+        "manufacturerID": "text",
+        "flags": "flags",
+        "hardwareVersion": "text",
+        "firmwareVersion": "text"}
 
 
-class CK_INFO(object):
+class CK_INFO(CkClass):
     """
     matches the PKCS#11 CK_INFO structure
 
@@ -125,25 +157,14 @@ class CK_INFO(object):
     @type libraryVersion: list
     """
 
-    def toDict(self):
-        """
-        return a dictionnary with all the fields of the class
-        """
-        return {"cryptokiVersion": "%d.%d" % self.cryptokiVersion,
-                "manufacturerID": self.manufacturerID.strip(),
-                "flags": self.flags,
-                "libraryDescription": self.libraryDescription.strip(),
-                "libraryVersion": "%d.%d" % self.libraryVersion}
-
-    def __str__(self):
-        dico = self.toDict()
-        lines = list()
-        for key in sorted(dico.keys()):
-            lines.append("%s: %s" % (key, dico[key]))
-        return "\n".join(lines)
+    fields = {"cryptokiVersion": "pair",
+        "manufacturerID": "text",
+        "flags": "flags",
+        "libraryDescription": "text",
+        "libraryVersion": "pair"}
 
 
-class CK_SESSION_INFO(object):
+class CK_SESSION_INFO(CkClass):
     """
     matches the PKCS#11 CK_SESSION_INFO structure
 
@@ -162,20 +183,6 @@ class CK_SESSION_INFO(object):
         CKF_SERIAL_SESSION: "CKF_SERIAL_SESSION",
     }
 
-    def flags2text(self):
-        """
-        parse the L{self.flags} field and create a list of "CKF_*" strings
-        corresponding to bits set in flags
-
-        @return: a list of strings
-        @rtype: list
-        """
-        r = []
-        for v in CK_SESSION_INFO.flags_dict.keys():
-            if self.flags & v:
-                r.append(CK_SESSION_INFO.flags_dict[v])
-        return r
-
     def state2text(self):
         """
         parse the L{self.state} field and return a "CKS_*" string
@@ -186,24 +193,13 @@ class CK_SESSION_INFO(object):
         """
         return CKS[self.state]
 
-    def toDict(self):
-        """
-        return a dictionnary with all the fields of the class
-        """
-        return {"slotID": self.slotID,
-                "state": self.state2text(),
-                "flags": ", ".join(self.flags2text()),
-                "ulDeviceError": self.ulDeviceError}
-
-    def __str__(self):
-        dico = self.toDict()
-        lines = list()
-        for key in sorted(dico.keys()):
-            lines.append("%s: %s" % (key, dico[key]))
-        return "\n".join(lines)
+    fields = {"slotID": "text",
+        "state": "text",
+        "flags": "flags",
+        "ulDeviceError": "text"}
 
 
-class CK_TOKEN_INFO(object):
+class CK_TOKEN_INFO(CkClass):
     """
     matches the PKCS#11 CK_TOKEN_INFO structure
 
@@ -266,52 +262,27 @@ class CK_TOKEN_INFO(object):
         CKF_SO_PIN_TO_BE_CHANGED: "CKF_SO_PIN_TO_BE_CHANGED",
     }
 
-    def flags2text(self):
-        """
-        parse the L{flags} field and create a list of "CKF_*" strings
-        corresponding to bits set in flags
-
-        @return: a list of strings
-        @rtype: list
-        """
-        r = []
-        for v in CK_TOKEN_INFO.flags_dict.keys():
-            if self.flags & v:
-                r.append(CK_TOKEN_INFO.flags_dict[v])
-        return r
-
-    def toDict(self):
-        """
-        return a dictionnary with all the fields of the class
-        """
-        return {"label": self.label,
-                "manufacturerID": self.manufacturerID,
-                "model": self.model,
-                "serialNumber": self.serialNumber,
-                "flags": ", ".join(self.flags2text()),
-                "ulMaxSessionCount": self.ulMaxSessionCount,
-                "ulSessionCount": self.ulSessionCount,
-                "ulMaxRwSessionCount": self.ulMaxRwSessionCount,
-                "ulRwSessionCount": self.ulRwSessionCount,
-                "ulMaxPinLen": self.ulMaxPinLen,
-                "ulMinPinLen": self.ulMinPinLen,
-                "ulTotalPublicMemory": self.ulTotalPublicMemory,
-                "ulFreePublicMemory": self.ulFreePublicMemory,
-                "ulTotalPrivateMemory": self.ulTotalPrivateMemory,
-                "ulFreePrivateMemory": self.ulFreePrivateMemory,
-                "hardwareVersion": "%d.%d" % self.hardwareVersion,
-                "firmwareVersion": "%d.%d" % self.firmwareVersion,
-                "utcTime": self.utcTime}
-
-    def __str__(self):
-        dico = self.toDict()
-        lines = list()
-        for key in sorted(dico.keys()):
-            lines.append("%s: %s" % (key, dico[key]))
-        return "\n".join(lines)
+    fields = {"label": "text",
+        "manufacturerID": "text",
+        "model": "text",
+        "serialNumber": "text",
+        "flags": "flags",
+        "ulMaxSessionCount": "text",
+        "ulSessionCount": "text",
+        "ulMaxRwSessionCount": "text",
+        "ulRwSessionCount": "text",
+        "ulMaxPinLen": "text",
+        "ulMinPinLen": "text",
+        "ulTotalPublicMemory": "text",
+        "ulFreePublicMemory": "text",
+        "ulTotalPrivateMemory": "text",
+        "ulFreePrivateMemory": "text",
+        "hardwareVersion": "pair",
+        "firmwareVersion": "pair",
+        "utcTime": "text"}
 
 
-class CK_MECHANISM_INFO(object):
+class CK_MECHANISM_INFO(CkClass):
     """
     matches the PKCS#11 CK_MECHANISM_INFO structure
 
@@ -339,20 +310,6 @@ class CK_MECHANISM_INFO(object):
         CKF_DERIVE: "CKF_DERIVE",
         CKF_EXTENSION: "CKF_EXTENSION",
     }
-
-    def flags2text(self):
-        """
-        parse the L{self.flags} field and create a list of "CKF_*" strings
-        corresponding to bits set in flags
-
-        @return: a list of strings
-        @rtype: list
-        """
-        r = []
-        for v in CK_MECHANISM_INFO.flags_dict.keys():
-            if self.flags & v:
-                r.append(CK_MECHANISM_INFO.flags_dict[v])
-        return r
 
 
 class PyKCS11Error(Exception):
