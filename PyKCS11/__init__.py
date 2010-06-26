@@ -79,7 +79,7 @@ class CkClass(object):
         @rtype: list
         """
         r = []
-        for v in CK_SLOT_INFO.flags_dict.keys():
+        for v in self.flags_dict.keys():
             if self.flags & v:
                 r.append(self.flags_dict[v])
         return r
