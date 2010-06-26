@@ -56,6 +56,16 @@ CKR[-2] = "Unkown PKCS#11 type"
 CKR[-1] = "Load"
 
 
+class ckbytelist(PyKCS11.LowLevel.ckbytelist):
+    def __str__(self):
+        return "".join("%02X" % i for i in self)
+
+
+class byteArray(PyKCS11.LowLevel.byteArray):
+    def __str__(self):
+        return "".join("%02X" % i for i in self)
+
+
 class CkClass(object):
     """
     Base class for CK_* classes
@@ -665,13 +675,13 @@ class Session(object):
         @return: the computed signature
         @rtype: list of bytes
 
-        @note: the returned value is an istance of L{LowLevel.ckbytelist}.
+        @note: the returned value is an istance of L{ckbytelist}.
         You can easly convert it to a binary string with::
             ''.join(chr(i) for i in ckbytelistSignature)
 
         """
         m = PyKCS11.LowLevel.CK_MECHANISM()
-        signature = PyKCS11.LowLevel.ckbytelist()
+        signature = ckbytelist()
         ba = None  # must be declared here or may be deallocated too early
         m.mechanism = mecha.mechanism
         if (mecha.param):
@@ -687,7 +697,7 @@ class Session(object):
             # pParameter is an opaque pointer, never garbage collected.
             m.pParameter = ba.cast()
             m.ulParameterLen = len(mecha.param)
-        data1 = PyKCS11.LowLevel.ckbytelist()
+        data1 = ckbytelist()
         data1.reserve(len(data))
         if type(data) is type(''):
             for x in data:
@@ -722,13 +732,13 @@ class Session(object):
         @return: the decrypted data
         @rtype: list of bytes
 
-        @note: the returned value is an istance of L{LowLevel.ckbytelist}.
+        @note: the returned value is an istance of L{ckbytelist}.
         You can easly convert it to a binary string with::
             ''.join(chr(i) for i in ckbytelistData)
 
         """
         m = PyKCS11.LowLevel.CK_MECHANISM()
-        decrypted = PyKCS11.LowLevel.ckbytelist()
+        decrypted = ckbytelist()
         ba = None  # must be declared here or may be deallocated too early
         m.mechanism = mecha.mechanism
         if (mecha.param):
@@ -744,7 +754,7 @@ class Session(object):
             # pParameter is an opaque pointer, never garbage collected.
             m.pParameter = ba.cast()
             m.ulParameterLen = len(mecha.param)
-        data1 = PyKCS11.LowLevel.ckbytelist()
+        data1 = ckbytelist()
         data1.reserve(len(data))
         if type(data) is type(''):
             for x in data:
@@ -869,7 +879,7 @@ class Session(object):
 
         @note: if allAsBinary is True the function do not convert results to
         Python types (i.e.: CKA_TOKEN to Bool, CKA_CLASS to int, ...).
-        Binary data is returned as L{LowLevel.ckbytelist} type, usable
+        Binary data is returned as L{ckbytelist} type, usable
         as a list containing only bytes.
         You can easly convert it to a binary string with::
             ''.join(chr(i) for i in ckbytelistVariable)
@@ -961,7 +971,7 @@ class Session(object):
         @param seed: seed material
         @type seed: iterable
         """
-        low_seed = PyKCS11.LowLevel.ckbytelist(len(seed))
+        low_seed = ckbytelist(len(seed))
         for c in xrange(len(seed)):
             low_seed.append(seed[c])
         rv = self.lib.C_SeedRandom(self.session, low_seed)
@@ -975,11 +985,11 @@ class Session(object):
         @param size: number of random bytes to get
         @type size: integer
 
-        @note: the returned value is an istance of L{LowLevel.ckbytelist}.
+        @note: the returned value is an istance of L{ckbytelist}.
         You can easly convert it to a binary string with::
             ''.join(chr(i) for i in random)
         """
-        low_rand = PyKCS11.LowLevel.ckbytelist(size)
+        low_rand = ckbytelist(size)
         rv = self.lib.C_GenerateRandom(self.session, low_rand)
         if rv != CKR_OK:
             raise PyKCS11Error(rv)
