@@ -58,20 +58,30 @@ CKR[-1] = "Load"
 
 class ckbytelist(PyKCS11.LowLevel.ckbytelist):
     """
-    add a __str__() method to the LowLevel equivalent
+    add a __repr__() method to the LowLevel equivalent
     """
 
-    def __str__(self):
-        return "".join("%02X" % i for i in self)
+    def __repr__(self):
+        """
+        return the representation of a tuple
+        the __str__ method will use it also
+        """
+        rep = [elt for elt in self]
+        return repr(rep)
 
 
 class byteArray(PyKCS11.LowLevel.byteArray):
     """
-    add a __str__() method to the LowLevel equivalent
+    add a __repr__() method to the LowLevel equivalent
     """
 
-    def __str__(self):
-        return "".join("%02X" % i for i in self)
+    def __repr__(self):
+        """
+        return the representation of a tuple
+        the __str__ method will use it also
+        """
+        rep = [elt for elt in self]
+        return repr(rep)
 
 
 class CkClass(object):
@@ -1042,8 +1052,7 @@ if __name__ == "__main__":
     except PyKCS11Error, e:
         print e
     print "generateRandom"
-    rand = se.generateRandom()
-    print " ".join("%02X" % i for i in rand)
+    print se.generateRandom()
 
     print
     print "login"
