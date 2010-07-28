@@ -942,7 +942,7 @@ class Session(object):
         Same as L{getAttributeValue} except that when some attribute
         is sensitive or unknown an empty value (None) is returned.
 
-        Note: this is achived getting attributes one by one.
+        Note: this is achived by getting attributes one by one.
 
         @see: L{getAttributeValue}
         """
