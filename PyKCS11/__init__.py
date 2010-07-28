@@ -391,6 +391,15 @@ class PyKCS11Lib(object):
         if rv == 0:
             raise PyKCS11Error(-1, pkcs11dll_filename)
 
+    def initToken(self, slot, pin, label):
+        """
+        C_InitToken
+        """
+        rv = self.lib.C_InitToken(slot, pin, label)
+        if rv != CKR_OK:
+            raise PyKCS11Error(rv)
+
+
     def getInfo(self):
         """
         C_GetInfo
@@ -657,14 +666,6 @@ class Session(object):
             raise PyKCS11Error(rv)
 
         del self
-
-    def initToken(self, pin, label):
-        """
-        C_InitToken
-        """
-        rv = self.lib.C_InitToken(self.session, pin, label)
-        if rv != CKR_OK:
-            raise PyKCS11Error(rv)
 
     def initPin(self, new_pin):
         """
