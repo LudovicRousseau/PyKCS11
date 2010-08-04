@@ -492,8 +492,6 @@ class PyKCS11Lib(object):
         t.ulMaxPinLen = tokeninfo.ulMaxPinLen
         t.ulMinPinLen = tokeninfo.ulMinPinLen
         t.ulTotalPublicMemory = tokeninfo.ulTotalPublicMemory
-        CKU_SO = PyKCS11.LowLevel.CKU_SO
-        CKU_USER = PyKCS11.LowLevel.CKU_USER
 
         if t.ulTotalPublicMemory == CK_UNAVAILABLE_INFORMATION:
             t.ulTotalPublicMemory = -1
