@@ -125,7 +125,7 @@ for s in slots:
 
         objects = session.findObjects()
         print
-        print "Found %d objects: %s" % (len(objects), map(lambda x: "0x%08X" % x.value(), objects))
+        print "Found %d objects: %s" % (len(objects), [x.value() for x in objects])
 
         all_attributes = PyKCS11.CKA.keys()
         # remove the CKR_ATTRIBUTE_SENSITIVE attributes since we can't get
@@ -141,7 +141,7 @@ for s in slots:
 
         for o in objects:
             print
-            print (red + "==================== Object: 0x%08X ====================" + normal) % o.value()
+            print (red + "==================== Object: %d ====================" + normal) % o.value()
             attributes = session.getAttributeValue(o, all_attributes)
             attrDict = dict(zip(all_attributes, attributes))
             if attrDict[PyKCS11.CKA_CLASS] == PyKCS11.CKO_PRIVATE_KEY \
