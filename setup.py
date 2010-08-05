@@ -9,10 +9,10 @@ from os import path
 import platform
 
 description = '''A complete PKCS#11 wrapper for Python.
-You can use any PKCS#11 (aka CryptoKi) module such as the PSM which comes
-as part of mozilla or the various modules supplied by vendors of hardware
-crypto tokens, and almost all PKCS#11 functions and data types. The wrapper
-has been generated with the help of the SWIG compiler.'''
+You can use any PKCS#11 (aka CryptoKi) module such as the PSM which
+comes as part of mozilla or the various modules supplied by vendors of
+hardware crypto tokens, and almost all PKCS#11 functions and data types.
+The wrapper has been generated with the help of the SWIG compiler.'''
 
 classifiers = ["Development Status :: 5 - Production/Stable",
 "Intended Audience :: Developers",
