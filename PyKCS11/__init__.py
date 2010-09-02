@@ -1,4 +1,5 @@
 #   Copyright (C) 2006-2010 Ludovic Rousseau (ludovic.rousseau@free.fr)
+#   Copyright (C) 2010 Giuseppe Amato (additions to original interface)
 #
 # This file is free software; you can redistribute it and/or modify it
 # under the terms of the GNU General Public License as published by
@@ -602,7 +603,7 @@ class Mechanism(object):
         self.param = param
 
 MechanismRSAPKCS1 = Mechanism(CKM_RSA_PKCS, None)
-
+MechanismRSAGENERATEKEYPAIR = Mechanism(CKM_RSA_PKCS_KEY_PAIR_GEN, None)
 
 class Session(object):
     """ Manage L{PyKCS11Lib.openSession} objects """
@@ -679,6 +680,11 @@ class Session(object):
         """
         rv = self.lib.C_SetPIN(self.session, old_pin, new_pin)
         if rv != CKR_OK:
+            raise PyKCS11Error(rv)
+
+    def destroyObject(self, obj):
+        rv = self.lib.C_DestroyObject(self.session, obj)
+        if (rv != 0):
             raise PyKCS11Error(rv)
 
     def sign(self, key, data, mecha=MechanismRSAPKCS1):
@@ -838,6 +844,62 @@ class Session(object):
     def isBin(self, type):
         return (not self.isBool(type)) and (not self.isString(type)) and (not self.isNum(type))
 
+    def _template2ckattrlist(self, template):
+        t = PyKCS11.LowLevel.ckattrlist(len(template))
+        for x in xrange(len(template)):
+            attr = template[x]
+            if self.isNum(attr[0]):
+                t[x].SetNum(attr[0], int(attr[1]))
+            elif self.isString(attr[0]):
+                t[x].SetString(attr[0], str(attr[1]))
+            elif self.isBool(attr[0]):
+                t[x].SetBool(attr[0], attr[1])
+            elif self.isBin(attr[0]):
+                attrBin = attr[1]
+                attrStr = attr[1]
+                if isinstance(attr[1], int):
+                    attrStr = str(attr[1])
+                if isinstance(attr[1], str):
+                    attrBin = ckbytelist(len(attrStr))
+                    for c in xrange(len(attrStr)):
+                       attrBin.append(ord(attrStr[c]))
+                t[x].SetBin(attr[0], attrBin)
+            else:
+                raise PyKCS11Error(-2)
+        return t
+    
+    def generateKeyPair(self, templatePub, templatePriv, mecha=MechanismRSAGENERATEKEYPAIR):
+        tPub = self._template2ckattrlist(templatePub)
+        tPriv = self._template2ckattrlist(templatePriv)
+        ck_pub_handle = PyKCS11.LowLevel.CK_OBJECT_HANDLE()
+        ck_prv_handle = PyKCS11.LowLevel.CK_OBJECT_HANDLE()
+        m = PyKCS11.LowLevel.CK_MECHANISM()
+        ba = None # must be declared here or may be deallocated too early
+        m.mechanism = mecha.mechanism
+        if (mecha.param):
+            ba = PyKCS11.LowLevel.byteArray(len(mecha.param))
+            if type(mecha.param) is type(''):
+                for c in xrange(len(mecha.param)):
+                    ba[c] = ord(mecha.param[c])
+            else:
+                for c in xrange(len(mecha.param)):
+                    ba[c] = mecha.param[c]
+            # with cast() the ba object continue to own internal pointer
+            # (avoids a leak).
+            # pParameter is an opaque pointer, never garbage collected.
+            m.pParameter = ba.cast()
+            m.ulParameterLen = len(mecha.param)
+        rv = self.lib.C_GenerateKeyPair(
+                            self.session,
+                            m,
+                            tPub, tPriv,
+                            ck_pub_handle, ck_prv_handle)
+
+        
+        if rv != CKR_OK:
+            raise PyKCS11Error(rv)
+        return ck_pub_handle, ck_prv_handle
+        
     def findObjects(self, template=()):
         """
         find the objects matching the template pattern
@@ -848,19 +910,7 @@ class Session(object):
         @return: a list of object ids
         @rtype: list
         """
-        t = PyKCS11.LowLevel.ckattrlist(len(template))
-        for x in xrange(len(template)):
-            attr = template[x]
-            if self.isNum(attr[0]):
-                t[x].SetNum(attr[0], attr[1])
-            elif self.isString(attr[0]):
-                t[x].SetString(attr[0], attr[1])
-            elif self.isBool(attr[0]):
-                t[x].SetBool(attr[0], attr[1])
-            elif self.isBin(attr[0]):
-                t[x].SetBin(attr[0], attr[1])
-            else:
-                raise PyKCS11Error(-2)
+        t = self._template2ckattrlist(template)
 
         # we search for 10 objects by default. speed/memory tradeoff
         result = PyKCS11.LowLevel.ckobjlist(10)
