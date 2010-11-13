@@ -1077,7 +1077,7 @@ if __name__ == "__main__":
     print "getSlotList"
     s = p.getSlotList()
     print "slots:", s
-    slot = s[1]
+    slot = s[0]
     print "using slot:", slot
 
     print
