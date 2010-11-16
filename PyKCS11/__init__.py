@@ -400,7 +400,6 @@ class PyKCS11Lib(object):
         if rv != CKR_OK:
             raise PyKCS11Error(rv)
 
-
     def getInfo(self):
         """
         C_GetInfo
@@ -604,6 +603,7 @@ class Mechanism(object):
 
 MechanismRSAPKCS1 = Mechanism(CKM_RSA_PKCS, None)
 MechanismRSAGENERATEKEYPAIR = Mechanism(CKM_RSA_PKCS_KEY_PAIR_GEN, None)
+
 
 class Session(object):
     """ Manage L{PyKCS11Lib.openSession} objects """
@@ -862,12 +862,12 @@ class Session(object):
                 if isinstance(attr[1], str):
                     attrBin = ckbytelist(len(attrStr))
                     for c in xrange(len(attrStr)):
-                       attrBin.append(ord(attrStr[c]))
+                        attrBin.append(ord(attrStr[c]))
                 t[x].SetBin(attr[0], attrBin)
             else:
                 raise PyKCS11Error(-2)
         return t
-    
+
     def generateKeyPair(self, templatePub, templatePriv, mecha=MechanismRSAGENERATEKEYPAIR):
         tPub = self._template2ckattrlist(templatePub)
         tPriv = self._template2ckattrlist(templatePriv)
@@ -895,11 +895,11 @@ class Session(object):
                             tPub, tPriv,
                             ck_pub_handle, ck_prv_handle)
 
-        
+
         if rv != CKR_OK:
             raise PyKCS11Error(rv)
         return ck_pub_handle, ck_prv_handle
-        
+
     def findObjects(self, template=()):
         """
         find the objects matching the template pattern
