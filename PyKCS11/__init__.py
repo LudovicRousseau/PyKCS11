@@ -87,6 +87,55 @@ class byteArray(PyKCS11.LowLevel.byteArray):
         return repr(rep)
 
 
+class CK_OBJECT_HANDLE(PyKCS11.LowLevel.CK_OBJECT_HANDLE):
+    """
+    add a __repr__() method to the LowLevel equivalent
+    """
+
+    def __init__(self, session):
+        PyKCS11.LowLevel.CK_OBJECT_HANDLE.__init__(self)
+        self.session = session
+        pass
+
+    def to_dict(self):
+        """
+        convert the fields of the object into a dictionnary
+        """
+        # all the attibutes defined by PKCS#11
+        all_attributes = PyKCS11.CKA.keys()
+
+        # only use the integer values and not the strings like 'CKM_RSA_PKCS'
+        all_attributes = [attr for attr in all_attributes if
+            isinstance(attr, int)]
+
+        # all the attributes of the object
+        attributes = self.session.getAttributeValue(self, all_attributes)
+
+        dico = dict()
+        for key, attr in zip(all_attributes, attributes):
+            if attr == None:
+                continue
+            if key == CKA_CLASS:
+                dico[PyKCS11.CKA[key]] = PyKCS11.CKO[attr]
+            elif key == CKA_CERTIFICATE_TYPE:
+                dico[PyKCS11.CKA[key]] = PyKCS11.CKC[attr]
+            elif key == CKA_KEY_TYPE:
+                dico[PyKCS11.CKA[key]] = PyKCS11.CKK[attr]
+            else:
+                dico[PyKCS11.CKA[key]] = attr
+        return dico
+
+    def __repr__(self):
+        """
+        text representation of the object
+        """
+        dico = self.to_dict()
+        lines = list()
+        for key in sorted(dico.keys()):
+            lines.append("%s: %s" % (key, dico[key]))
+        return "\n".join(lines)
+
+
 class CkClass(object):
     """
     Base class for CK_* classes
@@ -923,7 +972,7 @@ class Session(object):
             for x in result:
                 # make a copy of the handle: the original value get
                 # corrupted (!!)
-                a = PyKCS11.LowLevel.CK_OBJECT_HANDLE()
+                a = CK_OBJECT_HANDLE(self)
                 a.assign(x.value())
                 res.append(a)
             if len(result) == 0:
