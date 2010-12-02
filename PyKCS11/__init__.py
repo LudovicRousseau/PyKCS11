@@ -1116,6 +1116,7 @@ if __name__ == "__main__":
     print
     print "findObjects"
     objs = se.findObjects([(CKA_CLASS, CKO_CERTIFICATE)])
+    print "Nb objetcs:", len(objs)
     print objs
 
     print
