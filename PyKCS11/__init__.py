@@ -938,12 +938,8 @@ class Session(object):
             # pParameter is an opaque pointer, never garbage collected.
             m.pParameter = ba.cast()
             m.ulParameterLen = len(mecha.param)
-        rv = self.lib.C_GenerateKeyPair(
-                            self.session,
-                            m,
-                            tPub, tPriv,
-                            ck_pub_handle, ck_prv_handle)
-
+        rv = self.lib.C_GenerateKeyPair(self.session, m, tPub, tPriv,
+            ck_pub_handle, ck_prv_handle)
 
         if rv != CKR_OK:
             raise PyKCS11Error(rv)
