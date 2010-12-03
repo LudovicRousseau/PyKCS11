@@ -733,7 +733,7 @@ class Session(object):
 
     def destroyObject(self, obj):
         rv = self.lib.C_DestroyObject(self.session, obj)
-        if (rv != 0):
+        if rv != CKR_OK:
             raise PyKCS11Error(rv)
 
     def sign(self, key, data, mecha=MechanismRSAPKCS1):
@@ -781,15 +781,15 @@ class Session(object):
             for c in xrange(len(data)):
                 data1.append(data[c])
         rv = self.lib.C_SignInit(self.session, m, key)
-        if (rv != 0):
+        if rv != CKR_OK:
             raise PyKCS11Error(rv)
         #first call get signature size
         rv = self.lib.C_Sign(self.session, data1, signature)
-        if (rv != 0):
+        if rv != CKR_OK:
             raise PyKCS11Error(rv)
         #second call get actual signature data
         rv = self.lib.C_Sign(self.session, data1, signature)
-        if (rv != 0):
+        if rv != CKR_OK:
             raise PyKCS11Error(rv)
         return signature
 
@@ -838,15 +838,15 @@ class Session(object):
             for c in xrange(len(data)):
                 data1.append(data[c])
         rv = self.lib.C_DecryptInit(self.session, m, key)
-        if (rv != 0):
+        if rv != CKR_OK:
             raise PyKCS11Error(rv)
         #first call get decrypted size
         rv = self.lib.C_Decrypt(self.session, data1, decrypted)
-        if (rv != 0):
+        if rv != CKR_OK:
             raise PyKCS11Error(rv)
         #second call get actual decrypted data
         rv = self.lib.C_Decrypt(self.session, data1, decrypted)
-        if (rv != 0):
+        if rv != CKR_OK:
             raise PyKCS11Error(rv)
         return decrypted
 
