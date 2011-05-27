@@ -732,6 +732,9 @@ class Session(object):
             raise PyKCS11Error(rv)
 
     def destroyObject(self, obj):
+        """
+        C_DestroyObject
+        """
         rv = self.lib.C_DestroyObject(self.session, obj)
         if rv != CKR_OK:
             raise PyKCS11Error(rv)
