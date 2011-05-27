@@ -918,6 +918,15 @@ class Session(object):
         return t
 
     def generateKeyPair(self, templatePub, templatePriv, mecha=MechanismRSAGENERATEKEYPAIR):
+        """
+        generate a key pair
+
+        @param templatePub: template for the public key
+        @param templatePriv:  template for the private key
+        @param mecha: mechanism to use
+        @return: a tuple of handles (pub, priv)
+        @rtype: tuple
+        """
         tPub = self._template2ckattrlist(templatePub)
         tPriv = self._template2ckattrlist(templatePriv)
         ck_pub_handle = PyKCS11.LowLevel.CK_OBJECT_HANDLE()
