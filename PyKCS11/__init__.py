@@ -851,6 +851,12 @@ class Session(object):
         return decrypted
 
     def isNum(self, type):
+        """
+        is the type a numerical value?
+
+        @param type: PKCS#11 type like CKA_CERTIFICATE_TYPE
+        @rtype: bool
+        """
         if type in (CKA_CERTIFICATE_TYPE,
             CKA_CLASS,
             CKA_KEY_GEN_MECHANISM,
@@ -862,12 +868,24 @@ class Session(object):
         return False
 
     def isString(self, type):
+        """
+        is the type a string value?
+
+        @param type: PKCS#11 type like CKA_LABEL
+        @rtype: bool
+        """
         if type in (CKA_LABEL,
             CKA_APPLICATION):
             return True
         return False
 
     def isBool(self, type):
+        """
+        is the type a boolean value?
+
+        @param type: PKCS#11 type like CKA_ALWAYS_SENSITIVE
+        @rtype: bool
+        """
         if type in (CKA_ALWAYS_SENSITIVE,
             CKA_DECRYPT,
             CKA_ENCRYPT,
@@ -891,6 +909,12 @@ class Session(object):
         return False
 
     def isBin(self, type):
+        """
+        is the type a byte array value?
+
+        @param type: PKCS#11 type like CKA_MODULUS
+        @rtype: bool
+        """
         return (not self.isBool(type)) and (not self.isString(type)) and (not self.isNum(type))
 
     def _template2ckattrlist(self, template):
