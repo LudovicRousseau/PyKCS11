@@ -73,12 +73,15 @@ class getInfo(object):
     def getInfo(self):
         self.display(self.pkcs11.getInfo())
 
-    def getSessionInfo(self, slot, pin=None):
+    def getSessionInfo(self, slot, pin=""):
         print " SessionInfo",
         session = self.pkcs11.openSession(slot)
 
-        if pin:
-            print "(using pin: %s)" % pin
+        if pin != "":
+            if pin == None:
+                print "(using pinpad)"
+            else:
+                print "(using pin: %s)" % pin
             session.login(pin)
         else:
             print
@@ -91,7 +94,7 @@ class getInfo(object):
 
 def usage():
     print "Usage:", sys.argv[0],
-    print "[-p pin][--pin=pin]",
+    print "[-p pin][--pin=pin] (use 'NULL' for pinpad)",
     print "[-s slot][--slot=slot]",
     print "[-c lib][--lib=lib]",
     print "[-h][--help]"
@@ -109,15 +112,15 @@ if __name__ == '__main__':
 
     slot = None
     lib = None
-    pin = None
-    pin_available = False
+    pin = ""
     for o, a in opts:
         if o in ("-h", "--help"):
             usage()
             sys.exit()
         if o in ("-p", "--pin"):
             pin = a
-            pin_available = True
+            if pin == "NULL":
+                pin = None
         if o in ("-s", "--slot"):
             slot = int(a)
         if o in ("-c", "--lib"):
