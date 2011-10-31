@@ -695,7 +695,7 @@ class Session(object):
         """
         C_Login
 
-        @param pin: the user's PIN
+        @param pin: the user's PIN or None for CKF_PROTECTED_AUTHENTICATION_PATH
         @type pin: string
         @param user_type: the user type. The default value is
         CKU_USER. You may also use CKU_SO
