@@ -94,8 +94,7 @@ def usage():
     print "[-p pin][--pin=pin]",
     print "[-s slot][--slot=slot]",
     print "[-c lib][--lib=lib]",
-    print "[-h][--help]",
-    print "[-o][--opensession]"
+    print "[-h][--help]"
 
 if __name__ == '__main__':
     import getopt
@@ -111,7 +110,6 @@ if __name__ == '__main__':
     slot = None
     lib = None
     pin = None
-    open_session = False
     pin_available = False
     for o, a in opts:
         if o in ("-h", "--help"):
@@ -120,13 +118,10 @@ if __name__ == '__main__':
         if o in ("-p", "--pin"):
             pin = a
             pin_available = True
-            open_session = True
         if o in ("-s", "--slot"):
             slot = int(a)
         if o in ("-c", "--lib"):
             lib = a
-        if o in ("-o", "--opensession"):
-            open_session = True
 
     gi = getInfo(lib)
     gi.getInfo()
