@@ -52,7 +52,7 @@ def dump(src, length=8):
 
 def usage():
     print "Usage:", sys.argv[0],
-    print "[-p pin][--pin=pin]",
+    print "[-p pin][--pin=pin] (use --pin=NULL for pinpad)",
     print "[-c lib][--lib=lib]",
     print "[-S][--sign]",
     print "[-d][--decrypt]",
@@ -74,6 +74,8 @@ for o, a in opts:
         sys.exit()
     elif o in ("-p", "--pin"):
         pin = a
+        if pin == "NULL":
+            pin = None
         pin_available = True
     elif o in ("-c", "--lib"):
         lib = a
