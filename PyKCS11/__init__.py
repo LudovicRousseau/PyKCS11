@@ -947,7 +947,8 @@ class Session(object):
                 if isinstance(attr[1], int):
                     attrStr = str(attr[1])
                 if isinstance(attr[1], str):
-                    attrBin = ckbytelist(len(attrStr))
+                    attrBin = ckbytelist()
+                    attrBin.reserve(len(attrStr))
                     for c in xrange(len(attrStr)):
                         attrBin.append(ord(attrStr[c]))
                 t[x].SetBin(attr[0], attrBin)
