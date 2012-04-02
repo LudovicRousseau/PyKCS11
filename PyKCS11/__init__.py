@@ -731,6 +731,17 @@ class Session(object):
         if rv != CKR_OK:
             raise PyKCS11Error(rv)
 
+    def createObject(self, template):
+        """
+        C_CreateObject
+        """
+        attrs = self._template2ckattrlist(template)
+        handle = PyKCS11.LowLevel.CK_OBJECT_HANDLE()
+        rv = self.lib.C_CreateObject(self.session, attrs, handle)
+        if rv != PyKCS11.CKR_OK:
+            raise PyKCS11.PyKCS11Error(rv)
+        return handle
+
     def destroyObject(self, obj):
         """
         C_DestroyObject
