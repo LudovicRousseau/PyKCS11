@@ -903,6 +903,7 @@ class Session(object):
         if type in (CKA_ALWAYS_SENSITIVE,
             CKA_DECRYPT,
             CKA_ENCRYPT,
+            CKA_EXTRACTABLE,
             CKA_HAS_RESET,
             CKA_LOCAL,
             CKA_MODIFIABLE,
