@@ -73,6 +73,12 @@ that doesn't come with the standard distribution.
 History
 """""""
 
+1.2.4 - April 2012, Ludovic Rousseau
+	- improve epydoc documentation
+	- add pinpad support in C_Login() using pin=None
+	- add pinpad support in samples getinfo.py and dumpit.py
+	- add createObject()
+
 1.2.3 - December 2010, Ludovic Rousseau
 	- Add new classes CK_SLOT_INFO, CK_INFO, CK_SESSION_INFO,
 	  CK_MECHANISM_INFO and CK_TOKEN_INFO instead of the low level ones
