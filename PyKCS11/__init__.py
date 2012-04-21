@@ -1,4 +1,4 @@
-#   Copyright (C) 2006-2010 Ludovic Rousseau (ludovic.rousseau@free.fr)
+#   Copyright (C) 2006-2012 Ludovic Rousseau (ludovic.rousseau@free.fr)
 #   Copyright (C) 2010 Giuseppe Amato (additions to original interface)
 #
 # This file is free software; you can redistribute it and/or modify it
