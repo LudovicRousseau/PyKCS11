@@ -73,6 +73,9 @@ that doesn't come with the standard distribution.
 History
 """""""
 
+1.3.0 - July 2014, Ludovic Rousseau
+	- add Python3 support
+
 1.2.4 - April 2012, Ludovic Rousseau
 	- improve epydoc documentation
 	- add pinpad support in C_Login() using pin=None
