@@ -100,7 +100,7 @@ format_normal = magenta + "  %s:" + blue + " %s" + normal
 pkcs11 = PyKCS11.PyKCS11Lib()
 pkcs11.load(lib)
 info = pkcs11.getInfo()
-print("Library manufacturerID: " + info.manufacturerID)
+print("Library manufacturerID:", info.manufacturerID)
 
 slots = pkcs11.getSlotList()
 print("Available Slots:", len(slots))
