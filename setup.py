@@ -51,7 +51,7 @@ if (platform.system().lower() == 'windows'):
 else:
     source_files.append("src/dyn_unix.c")
     source_files.append("src/unix_pykcs11_wrap.cpp")
-    libraries_val = ["python%d.%d" % pyver[:2]]
+    libraries_val = []
 
 setup(name="PyKCS11",
     version="1.2.4",
