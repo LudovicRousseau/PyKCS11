@@ -64,8 +64,8 @@ setup(name="PyKCS11",
     author_email="paipai at tiscali.it",
     maintainer="Ludovic Rousseau",
     maintainer_email="ludovic.rousseau@free.fr",
-    url="http://www.bit4id.org/trac/pykcs11",
-    download_url="http://www.bit4id.org/trac/pykcs11/wiki/Download",
+    url="http://sourceforge.net/projects/pkcs11wrap/",
+    download_url="http://sourceforge.net/projects/pkcs11wrap/files/pykcs11/",
     license="GPL",
     ext_modules=[
         Extension(
