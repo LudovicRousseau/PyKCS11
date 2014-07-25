@@ -31,8 +31,8 @@ slotList = ckintlist()
 pin = "12345678"
 
 print("Load of " + lib + ": " + str(a.Load(lib, 1)))
-print("C_GetInfo: " + hex(a.C_GetInfo(info)))
-print("Library manufacturerID: " + info.GetManufacturerID())
+print("C_GetInfo:", hex(a.C_GetInfo(info)))
+print("Library manufacturerID:", info.GetManufacturerID())
 del info
 
 print("C_GetSlotList(NULL): " + hex(a.C_GetSlotList(0, slotList)))
@@ -124,15 +124,15 @@ for x in SearchResult:
         a.C_GetAttributeValue(session, x, valTemplate)
         # second call to get the attribute value
         rv = a.C_GetAttributeValue(session, x, valTemplate)
-        if (rv == CKR_OK):
+        if rv == CKR_OK:
             print("\t" + attr[0] + ": ", end=' ')
-            if (valTemplate[0].IsNum()):
+            if valTemplate[0].IsNum():
                 print(valTemplate[0].GetNum())
-            if (valTemplate[0].IsBool()):
+            if valTemplate[0].IsBool():
                 print(valTemplate[0].GetBool())
-            if (valTemplate[0].IsString()):
+            if valTemplate[0].IsString():
                 print(valTemplate[0].GetString())
-            if (valTemplate[0].IsBin()):
+            if valTemplate[0].IsBin():
                 print("(" + str(valTemplate[0].GetLen()) + " bytes)", end=' ')
                 print(list(map(hex, valTemplate[0].GetBin())))
 
