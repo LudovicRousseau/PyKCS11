@@ -15,6 +15,7 @@
 # You should have received a copy of the GNU General Public License
 # along with this program; if not, write to the Free Software
 # Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301 USA
+from __future__ import print_function
 
 import PyKCS11
 import platform
@@ -25,7 +26,7 @@ class getInfo(object):
     red = blue = magenta = normal = ""
 
     def colorize(self, text, arg):
-        print self.magenta + text + self.blue, arg, self.normal
+        print(self.magenta + text + self.blue, arg, self.normal)
 
     def display(self, obj, indent=""):
         dico = obj.to_dict()
@@ -50,15 +51,15 @@ class getInfo(object):
         self.pkcs11.load(lib)
 
     def getSlotInfo(self, slot):
-        print "Slot n.:", slot
+        print("Slot n.:", slot)
         self.display(self.pkcs11.getSlotInfo(slot), " ")
 
     def getTokenInfo(self, slot):
-        print " TokenInfo"
+        print(" TokenInfo")
         self.display(self.pkcs11.getTokenInfo(slot), "  ")
 
     def getMechanismInfo(self, slot):
-        print "  Mechanism list: "
+        print("  Mechanism list: ")
         m = self.pkcs11.getMechanismList(slot)
         for x in m:
             self.colorize("  ", x)
@@ -74,17 +75,17 @@ class getInfo(object):
         self.display(self.pkcs11.getInfo())
 
     def getSessionInfo(self, slot, pin=""):
-        print " SessionInfo",
+        print(" SessionInfo", end=' ')
         session = self.pkcs11.openSession(slot)
 
         if pin != "":
-            if pin == None:
-                print "(using pinpad)"
+            if pin is None:
+                print("(using pinpad)")
             else:
-                print "(using pin: %s)" % pin
+                print("(using pin: %s)" % pin)
             session.login(pin)
         else:
-            print
+            print()
 
         self.display(session.getSessionInfo(), "  ")
 
@@ -93,11 +94,11 @@ class getInfo(object):
 
 
 def usage():
-    print "Usage:", sys.argv[0],
-    print "[-p pin][--pin=pin] (use 'NULL' for pinpad)",
-    print "[-s slot][--slot=slot]",
-    print "[-c lib][--lib=lib]",
-    print "[-h][--help]"
+    print("Usage:", sys.argv[0], end=' ')
+    print("[-p pin][--pin=pin] (use 'NULL' for pinpad)", end=' ')
+    print("[-s slot][--slot=slot]", end=' ')
+    print("[-c lib][--lib=lib]", end=' ')
+    print("[-h][--help]")
 
 if __name__ == '__main__':
     import getopt
@@ -130,7 +131,7 @@ if __name__ == '__main__':
     gi.getInfo()
 
     slots = gi.pkcs11.getSlotList()
-    print "Available Slots:", len(slots), slots
+    print("Available Slots:", len(slots), slots)
 
     if len(slots) == 0:
         sys.exit(2)
@@ -144,5 +145,5 @@ if __name__ == '__main__':
             gi.getSessionInfo(slot, pin)
             gi.getTokenInfo(slot)
             gi.getMechanismInfo(slot)
-        except PyKCS11.PyKCS11Error, e:
-            print "Error:", e
+        except PyKCS11.PyKCS11Error as e:
+            print("Error:", e)

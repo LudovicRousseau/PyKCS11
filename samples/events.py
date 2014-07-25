@@ -15,6 +15,7 @@
 # You should have received a copy of the GNU General Public License
 # along with this program; if not, write to the Free Software
 # Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301 USA
+from __future__ import print_function
 
 import PyKCS11
 import getinfo
@@ -24,11 +25,11 @@ if __name__ == '__main__':
     import sys
 
     def usage():
-        print "Usage:", sys.argv[0],
-        print "[-p pin][--pin=pin]",
-        print "[-c lib][--lib=lib]",
-        print "[-h][--help]",
-        print "[-o][--opensession]"
+        print("Usage:", sys.argv[0], end=' ')
+        print("[-p pin][--pin=pin]", end=' ')
+        print("[-c lib][--lib=lib]", end=' ')
+        print("[-h][--help]", end=' ')
+        print("[-o][--opensession]")
 
     try:
         opts, args = getopt.getopt(sys.argv[1:], "p:c:ho",
@@ -59,7 +60,7 @@ if __name__ == '__main__':
     gi.getInfo()
 
     slots = gi.pkcs11.getSlotList()
-    print "Available Slots:", len(slots), slots
+    print("Available Slots:", len(slots), slots)
 
     if len(slots) == 0:
         sys.exit(2)
@@ -72,5 +73,5 @@ if __name__ == '__main__':
             gi.getSessionInfo(slot, pin)
             gi.getTokenInfo(slot)
             gi.getMechanismInfo(slot)
-        except PyKCS11.PyKCS11Error, e:
-            print "Error:", e
+        except PyKCS11.PyKCS11Error as e:
+            print("Error:", e)

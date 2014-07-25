@@ -15,6 +15,7 @@
 # You should have received a copy of the GNU General Public License
 # along with this program; if not, write to the Free Software
 # Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301 USA
+from __future__ import print_function
 
 import PyKCS11.LowLevel
 
@@ -27,22 +28,22 @@ slotList = PyKCS11.LowLevel.ckintlist()
 rand = PyKCS11.LowLevel.ckbytelist(20)
 seed = PyKCS11.LowLevel.ckbytelist(5)
 
-print "Load of " + lib + ": " + str(a.Load(lib, 1))
-print "C_GetInfo: " + hex(a.C_GetInfo(info))
-print "Library manufacturerID: " + info.GetManufacturerID()
+print("Load of " + lib + ": " + str(a.Load(lib, 1)))
+print("C_GetInfo: " + hex(a.C_GetInfo(info)))
+print("Library manufacturerID: " + info.GetManufacturerID())
 del info
 
-print "C_GetSlotList(NULL): " + hex(a.C_GetSlotList(0, slotList))
-print "\tAvailable Slots: " + str(len(slotList))
+print("C_GetSlotList(NULL): " + hex(a.C_GetSlotList(0, slotList)))
+print("\tAvailable Slots: " + str(len(slotList)))
 
-print "C_OpenSession(): " + hex(a.C_OpenSession(slotList[1], PyKCS11.LowLevel.CKF_RW_SESSION | PyKCS11.LowLevel.CKF_SERIAL_SESSION, session))
+print("C_OpenSession(): " + hex(a.C_OpenSession(slotList[1], PyKCS11.LowLevel.CKF_RW_SESSION | PyKCS11.LowLevel.CKF_SERIAL_SESSION, session)))
 
-print ' '.join("%02X" % i for i in seed)
-print "C_SeedRandom(): " + hex(a.C_SeedRandom(session, seed))
+print(' '.join("%02X" % i for i in seed))
+print("C_SeedRandom(): " + hex(a.C_SeedRandom(session, seed)))
 
-print "C_GenerateRandom(): " + hex(a.C_GenerateRandom(session, rand))
-print ' '.join("%02X" % i for i in rand)
+print("C_GenerateRandom(): " + hex(a.C_GenerateRandom(session, rand)))
+print(' '.join("%02X" % i for i in rand))
 
-print "C_CloseSession(): " + hex(a.C_CloseSession(session))
-print "C_Finalize(): " + hex(a.C_Finalize())
-print a.Unload()
+print("C_CloseSession(): " + hex(a.C_CloseSession(session)))
+print("C_Finalize(): " + hex(a.C_Finalize()))
+print(a.Unload())
