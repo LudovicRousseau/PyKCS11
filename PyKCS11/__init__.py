@@ -17,8 +17,21 @@
 
 # $Id$
 
+from __future__ import print_function
+
 import PyKCS11.LowLevel
 import os
+import sys
+
+PY3 = sys.version_info[0] >= 3
+if PY3:
+    def byte_to_int(byte):
+        return byte
+else:
+    def byte_to_int(byte):
+        return ord(byte)
+
+    range = xrange
 
 # redefine PKCS#11 constants
 CK_TRUE = PyKCS11.LowLevel.CK_TRUE
@@ -481,7 +494,7 @@ class PyKCS11Lib(object):
             raise PyKCS11Error(rv)
 
         s = []
-        for x in xrange(len(slotList)):
+        for x in range(len(slotList)):
             s.append(slotList[x])
         return s
 
@@ -594,7 +607,7 @@ class PyKCS11Lib(object):
             raise PyKCS11Error(rv)
 
         m = []
-        for x in xrange(len(mechanismList)):
+        for x in range(len(mechanismList)):
             m.append(CKM[mechanismList[x]])
         return m
 
@@ -775,11 +788,11 @@ class Session(object):
         m.mechanism = mecha.mechanism
         if (mecha.param):
             ba = PyKCS11.LowLevel.byteArray(len(mecha.param))
-            if type(mecha.param) is type(''):
-                for c in xrange(len(mecha.param)):
-                    ba[c] = ord(mecha.param[c])
+            if isinstance(mecha.param, bytes):
+                for c in range(len(mecha.param)):
+                    ba[c] = byte_to_int(mecha.param[c])
             else:
-                for c in xrange(len(mecha.param)):
+                for c in range(len(mecha.param)):
                     ba[c] = mecha.param[c]
             # with cast() the ba object continue to own internal pointer
             # (avoids a leak).
@@ -788,11 +801,11 @@ class Session(object):
             m.ulParameterLen = len(mecha.param)
         data1 = ckbytelist()
         data1.reserve(len(data))
-        if type(data) is type(''):
+        if isinstance(data, bytes):
             for x in data:
-                data1.append(ord(x))
+                data1.append(byte_to_int(x))
         else:
-            for c in xrange(len(data)):
+            for c in range(len(data)):
                 data1.append(data[c])
         rv = self.lib.C_SignInit(self.session, m, key)
         if rv != CKR_OK:
@@ -832,11 +845,11 @@ class Session(object):
         m.mechanism = mecha.mechanism
         if (mecha.param):
             ba = PyKCS11.LowLevel.byteArray(len(mecha.param))
-            if type(mecha.param) is type(''):
-                for c in xrange(len(mecha.param)):
-                    ba[c] = ord(mecha.param[c])
+            if isinstance(mecha.param, bytes):
+                for c in range(len(mecha.param)):
+                    ba[c] = byte_to_int(mecha.param[c])
             else:
-                for c in xrange(len(mecha.param)):
+                for c in range(len(mecha.param)):
                     ba[c] = mecha.param[c]
             # with cast() the ba object continue to own internal pointer
             # (avoids a leak).
@@ -845,11 +858,11 @@ class Session(object):
             m.ulParameterLen = len(mecha.param)
         data1 = ckbytelist()
         data1.reserve(len(data))
-        if type(data) is type(''):
+        if isinstance(data, bytes):
             for x in data:
-                data1.append(ord(x))
+                data1.append(byte_to_int(x))
         else:
-            for c in xrange(len(data)):
+            for c in range(len(data)):
                 data1.append(data[c])
         rv = self.lib.C_DecryptInit(self.session, m, key)
         if rv != CKR_OK:
@@ -934,7 +947,7 @@ class Session(object):
 
     def _template2ckattrlist(self, template):
         t = PyKCS11.LowLevel.ckattrlist(len(template))
-        for x in xrange(len(template)):
+        for x in range(len(template)):
             attr = template[x]
             if self.isNum(attr[0]):
                 t[x].SetNum(attr[0], int(attr[1]))
@@ -947,11 +960,11 @@ class Session(object):
                 attrStr = attr[1]
                 if isinstance(attr[1], int):
                     attrStr = str(attr[1])
-                if isinstance(attr[1], str):
+                if isinstance(attr[1], bytes):
                     attrBin = ckbytelist()
                     attrBin.reserve(len(attrStr))
-                    for c in xrange(len(attrStr)):
-                        attrBin.append(ord(attrStr[c]))
+                    for c in range(len(attrStr)):
+                        attrBin.append(byte_to_int(attrStr[c]))
                 t[x].SetBin(attr[0], attrBin)
             else:
                 raise PyKCS11Error(-2)
@@ -976,11 +989,11 @@ class Session(object):
         m.mechanism = mecha.mechanism
         if (mecha.param):
             ba = PyKCS11.LowLevel.byteArray(len(mecha.param))
-            if type(mecha.param) is type(''):
-                for c in xrange(len(mecha.param)):
-                    ba[c] = ord(mecha.param[c])
+            if isinstance(mecha.param, bytes):
+                for c in range(len(mecha.param)):
+                    ba[c] = byte_to_int(mecha.param[c])
             else:
-                for c in xrange(len(mecha.param)):
+                for c in range(len(mecha.param)):
                     ba[c] = mecha.param[c]
             # with cast() the ba object continue to own internal pointer
             # (avoids a leak).
@@ -1050,7 +1063,7 @@ class Session(object):
 
         """
         valTemplate = PyKCS11.LowLevel.ckattrlist(len(attr))
-        for x in xrange(len(attr)):
+        for x in range(len(attr)):
             valTemplate[x].SetType(attr[x])
         # first call to get the attribute size and reserve the memory
         rv = self.lib.C_GetAttributeValue(self.session, obj_id, valTemplate)
@@ -1066,7 +1079,7 @@ class Session(object):
             raise PyKCS11Error(rv)
 
         res = []
-        for x in xrange(len(attr)):
+        for x in range(len(attr)):
             if (allAsBinary):
                 res.append(valTemplate[x].GetBin())
             elif valTemplate[x].IsNum():
@@ -1095,7 +1108,7 @@ class Session(object):
         # but we don't know which ones. So try one by one
         valTemplate = PyKCS11.LowLevel.ckattrlist(1)
         res = []
-        for x in xrange(len(attr)):
+        for x in range(len(attr)):
             valTemplate[0].Reset()
             valTemplate[0].SetType(attr[x])
             # first call to get the attribute size and reserve the memory
@@ -1136,7 +1149,7 @@ class Session(object):
         @type seed: iterable
         """
         low_seed = ckbytelist(len(seed))
-        for c in xrange(len(seed)):
+        for c in range(len(seed)):
             low_seed.append(seed[c])
         rv = self.lib.C_SeedRandom(self.session, low_seed)
         if rv != CKR_OK:
@@ -1164,65 +1177,65 @@ if __name__ == "__main__":
     p = PyKCS11Lib()
     p.load()
 
-    print "getInfo"
-    print p.getInfo()
+    print("getInfo")
+    print(p.getInfo())
 
-    print
-    print "getSlotList"
+    print()
+    print("getSlotList")
     s = p.getSlotList()
-    print "slots:", s
+    print("slots:", s)
     slot = s[0]
-    print "using slot:", slot
+    print("using slot:", slot)
 
-    print
-    print "getSlotInfo"
-    print p.getSlotInfo(slot)
+    print()
+    print("getSlotInfo")
+    print(p.getSlotInfo(slot))
 
-    print
-    print "getTokenInfo"
-    print p.getTokenInfo(slot)
+    print()
+    print("getTokenInfo")
+    print(p.getTokenInfo(slot))
 
-    print
-    print "openSession"
+    print()
+    print("openSession")
     se = p.openSession(slot)
 
-    print
-    print "sessionInfo"
-    print se.getSessionInfo()
+    print()
+    print("sessionInfo")
+    print(se.getSessionInfo())
 
-    print
-    print "seedRandom"
+    print()
+    print("seedRandom")
     try:
         se.seedRandom([1, 2, 3, 4])
-    except PyKCS11Error, e:
-        print e
-    print "generateRandom"
-    print se.generateRandom()
+    except PyKCS11Error as e:
+        print(e)
+    print("generateRandom")
+    print(se.generateRandom())
 
-    print
-    print "login"
+    print()
+    print("login")
     se.login(pin="0000")
 
-    print
-    print "sessionInfo"
-    print se.getSessionInfo()
+    print()
+    print("sessionInfo")
+    print(se.getSessionInfo())
 
-    print
-    print "findObjects"
+    print()
+    print("findObjects")
     objs = se.findObjects([(CKA_CLASS, CKO_CERTIFICATE)])
-    print "Nb objetcs:", len(objs)
-    print objs
+    print("Nb objetcs:", len(objs))
+    print(objs)
 
-    print
-    print "getAttributeValue"
+    print()
+    print("getAttributeValue")
     for o in objs:
         attr = se.getAttributeValue(o, [CKA_LABEL, CKA_CLASS])
-        print attr
+        print(attr)
 
-    print
-    print "logout"
+    print()
+    print("logout")
     se.logout()
 
-    print
-    print "closeSession"
+    print()
+    print("closeSession")
     se.closeSession()
