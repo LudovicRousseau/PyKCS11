@@ -57,7 +57,7 @@ using namespace std;
 
 #if SWIGPYTHON
 %typemap(out) PyKCS11String {
-   $result = PyString_FromStringAndSize((const char*)($1.m_str.c_str()),(int)($1.m_str.size()));
+   $result = PyBytes_FromStringAndSize((const char*)($1.m_str.c_str()),(int)($1.m_str.size()));
 }
 
 %typemap(out) CK_RV {
