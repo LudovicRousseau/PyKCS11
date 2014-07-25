@@ -18,6 +18,7 @@
 from __future__ import print_function
 
 import PyKCS11
+import binascii
 import getopt
 import sys
 import platform
@@ -152,15 +153,15 @@ for s in slots:
                 m = attrDict[PyKCS11.CKA_MODULUS]
                 e = attrDict[PyKCS11.CKA_PUBLIC_EXPONENT]
                 if m and e:
-                    mx = eval('0x%s' % ''.join(chr(c) for c in m).encode('hex'))
-                    ex = eval('0x%s' % ''.join(chr(c) for c in e).encode('hex'))
+                    mx = eval(b'0x' + binascii.hexlify(''.join(chr(c) for c in m).encode('ascii')))
+                    ex = eval(b'0x' + binascii.hexlify(''.join(chr(c) for c in e).encode('ascii')))
                 if sign:
                     try:
-                        toSign = "12345678901234567890"  # 20 bytes, SHA1 digest
+                        toSign = b"12345678901234567890"  # 20 bytes, SHA1 digest
                         print("* Signing with object 0x%08X following data: %s" % (o.value(), toSign))
                         signature = session.sign(o, toSign)
-                        s = ''.join(chr(c) for c in signature).encode('hex')
-                        sx = eval('0x%s' % s)
+                        s = binascii.hexlify(''.join(chr(c) for c in signature).encode('ascii'))
+                        sx = eval(b'0x' + s)
                         print("Signature:")
                         print(dump(''.join(map(chr, signature)), 16))
                         if m and e:
@@ -171,7 +172,7 @@ for s in slots:
                             print(dump(''.join(map(chr, e)), 16))
                             decrypted = pow(sx, ex, mx)  # RSA
                             print("Decrypted:")
-                            d = hexx(decrypted).decode('hex')
+                            d = binascii.unhexlify(hexx(decrypted))
                             print(dump(d, 16))
                             if toSign == d[-20:]:
                                 print("*** signature VERIFIED!\n")
@@ -189,10 +190,11 @@ for s in slots:
                             # note: PKCS1 BT2 padding should be random data,
                             # but this is just a test and we use 0xFF...
                             padded = "\x00\x02%s\x00%s" % ("\xFF" * (128 - (len(toEncrypt)) - 3), toEncrypt)
+                            padded = padded.encode('latin-1')
                             print("* Decrypting with 0x%08X following data: %s" % (o.value(), toEncrypt))
                             print("padded:\n", dump(padded, 16))
-                            encrypted = pow(eval('0x%sL' % padded.encode('hex')), ex, mx)  # RSA
-                            encrypted1 = hexx(encrypted).decode('hex')
+                            encrypted = pow(eval('0x%sL' % binascii.hexlify(padded)), ex, mx)  # RSA
+                            encrypted1 = binascii.unhexlify(hexx(encrypted))
                             print("encrypted:\n", dump(encrypted1, 16))
                             decrypted = session.decrypt(o, encrypted1)
                             decrypted1 = ''.join(chr(i) for i in decrypted)
