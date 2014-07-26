@@ -14,7 +14,8 @@
 #
 # You should have received a copy of the GNU General Public License
 # along with this program; if not, write to the Free Software
-# Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301 USA
+# Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301 USA.
+
 from __future__ import print_function
 
 import PyKCS11.LowLevel
@@ -69,7 +70,7 @@ for x in SearchResult:
     print("object " + hex(x.value()))
     valTemplate = PyKCS11.LowLevel.ckattrlist(1)
     valTemplate[0].SetType(PyKCS11.LowLevel.CKA_ISSUER)
-    #valTemplate[0].Reserve(128)
+    # valTemplate[0].Reserve(128)
     print("C_GetAttributeValue(): " + hex(a.C_GetAttributeValue(session, x, valTemplate)))
     print("CKA_ISSUER Len: ", valTemplate[0].GetLen())
     print("C_GetAttributeValue(): " + hex(a.C_GetAttributeValue(session, x, valTemplate)))

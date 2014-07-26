@@ -15,7 +15,8 @@
 #
 # You should have received a copy of the GNU General Public License
 # along with this program; if not, write to the Free Software
-# Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301 USA
+# Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301 USA.
+
 from __future__ import print_function
 
 from PyKCS11.LowLevel import *
@@ -59,8 +60,8 @@ print("C_Login(): " + hex(a.C_Login(session, CKU_USER, pin)))
 
 SearchResult = ckobjlist(10)
 SearchTemplate = ckattrlist(0)
-#SearchTemplate[0].SetNum(CKA_CLASS, CKO_CERTIFICATE)
-#SearchTemplate[1].SetBool(CKA_TOKEN, True)
+# SearchTemplate[0].SetNum(CKA_CLASS, CKO_CERTIFICATE)
+# SearchTemplate[1].SetBool(CKA_TOKEN, True)
 
 print("C_FindObjectsInit: " + hex(a.C_FindObjectsInit(session, SearchTemplate)))
 print("C_FindObjects: " + hex(a.C_FindObjects(session, SearchResult)))
