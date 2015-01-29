@@ -41,4 +41,8 @@ doc: build
 	rm -rf html
 	epydoc --verbose PyKCS11
 
+doc-upload: doc
+	mv html api
+	scp -r api ludov@web.sourceforge.net:/home/project-web/pkcs11wrap/htdocs
+
 .PHONY: build install clean rebuild dist doc
