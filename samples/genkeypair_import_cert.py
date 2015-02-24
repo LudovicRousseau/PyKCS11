@@ -17,7 +17,6 @@
 # Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301 USA.
 
 from PyKCS11 import *
-import binascii
 
 pkcs11 = PyKCS11Lib()
 pkcs11.load('libacospkcs11.so')  # tested with ACS ACOS5-64 smart card and token
