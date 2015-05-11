@@ -768,14 +768,14 @@ class Session(object):
         @param key: a key handle, obtained calling L{findObjects}.
         @type key: integer
         @param data: the data to be signed
-        @type data:  (binary) sring or list/tuple of bytes
+        @type data:  (binary) string or list/tuple of bytes
         @param mecha: the signing mechanism to be used
         @type mecha: L{Mechanism} instance or L{MechanismRSAPKCS1}
         for CKM_RSA_PKCS
         @return: the computed signature
         @rtype: list of bytes
 
-        @note: the returned value is an istance of L{ckbytelist}.
+        @note: the returned value is an instance of L{ckbytelist}.
         You can easly convert it to a binary string with::
             ''.join(chr(i) for i in ckbytelistSignature)
 
@@ -825,14 +825,14 @@ class Session(object):
         @param key: a key handle, obtained calling L{findObjects}.
         @type key: integer
         @param data: the data to be encrypted
-        @type data:  (binary) sting or list/tuple of bytes
+        @type data:  (binary) string or list/tuple of bytes
         @param mecha: the encryption mechanism to be used
         @type mecha: L{Mechanism} instance or L{MechanismRSAPKCS1}
         for CKM_RSA_PKCS
         @return: the encrypted data
         @rtype: list of bytes
 
-        @note: the returned value is an istance of L{ckbytelist}.
+        @note: the returned value is an instance of L{ckbytelist}.
         You can easly convert it to a binary string with::
             ''.join(chr(i) for i in ckbytelistEncrypted)
 
@@ -882,14 +882,14 @@ class Session(object):
         @param key: a key handle, obtained calling L{findObjects}.
         @type key: integer
         @param data: the data to be decrypted
-        @type data:  (binary) sring or list/tuple of bytes
+        @type data:  (binary) string or list/tuple of bytes
         @param mecha: the decrypt mechanism to be used
         @type mecha: L{Mechanism} instance or L{MechanismRSAPKCS1}
         for CKM_RSA_PKCS
         @return: the decrypted data
         @rtype: list of bytes
 
-        @note: the returned value is an istance of L{ckbytelist}.
+        @note: the returned value is an instance of L{ckbytelist}.
         You can easly convert it to a binary string with::
             ''.join(chr(i) for i in ckbytelistData)
 
@@ -1217,7 +1217,7 @@ class Session(object):
         @param size: number of random bytes to get
         @type size: integer
 
-        @note: the returned value is an istance of L{ckbytelist}.
+        @note: the returned value is an instance of L{ckbytelist}.
         You can easly convert it to a binary string with::
             ''.join(chr(i) for i in random)
         """
