@@ -818,6 +818,63 @@ class Session(object):
             raise PyKCS11Error(rv)
         return signature
 
+    def encrypt(self, key, data, mecha=MechanismRSAPKCS1):
+        """
+        C_EncryptInit/C_Encrypt
+
+        @param key: a key handle, obtained calling L{findObjects}.
+        @type key: integer
+        @param data: the data to be encrypted
+        @type data:  (binary) sting or list/tuple of bytes
+        @param mecha: the encryption mechanism to be used
+        @type mecha: L{Mechanism} instance or L{MechanismRSAPKCS1}
+        for CKM_RSA_PKCS
+        @return: the encrypted data
+        @rtype: list of bytes
+
+        @note: the returned value is an istance of L{ckbytelist}.
+        You can easly convert it to a binary string with::
+            ''.join(chr(i) for i in ckbytelistEncrypted)
+
+        """
+        m = PyKCS11.LowLevel.CK_MECHANISM()
+        encrypted = ckbytelist()
+        ba = None  # must be declared here or may be deallocated too early
+        m.mechanism = mecha.mechanism
+        if (mecha.param):
+            ba = PyKCS11.LowLevel.byteArray(len(mecha.param))
+            if isinstance(mecha.param, bytes):
+                for c in range(len(mecha.param)):
+                    ba[c] = byte_to_int(mecha.param[c])
+            else:
+                for c in range(len(mecha.param)):
+                    ba[c] = mecha.param[c]
+            # with cast() the ba object continue to own internal pointer
+            # (avoids a leak).
+            # pParameter is an opaque pointer, never garbage collected.
+            m.pParameter = ba.cast()
+            m.ulParameterLen = len(mecha.param)
+        data1 = ckbytelist()
+        data1.reserve(len(data))
+        if isinstance(data, bytes):
+            for x in data:
+                data1.append(byte_to_int(x))
+        else:
+            for c in range(len(data)):
+                data1.append(data[c])
+        rv = self.lib.C_EncryptInit(self.session, m, key)
+        if rv != CKR_OK:
+            raise PyKCS11Error(rv)
+        #first call get encrypted size
+        rv = self.lib.C_Encrypt(self.session, data1, encrypted)
+        if rv != CKR_OK:
+            raise PyKCS11Error(rv)
+        #second call get actual encrypted data
+        rv = self.lib.C_Encrypt(self.session, data1, encrypted)
+        if rv != CKR_OK:
+            raise PyKCS11Error(rv)
+        return encrypted
+
     def decrypt(self, key, data, mecha=MechanismRSAPKCS1):
         """
         C_DecryptInit/C_Decrypt
