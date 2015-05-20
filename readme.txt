@@ -41,7 +41,21 @@ To install::
 Windows Howto
 """""""""""""
 
-Please use the VS.NET 2003 project to build the library.
+Prerequisites
+
+* Install python3 (and add "C:\Python34;C:\Python34\Scripts" to PATH
+  environment variable)
+* Install swig (and add swig install folder to PATH environment variable)
+* Install Visual studio 2010 SDK
+
+To install:
+
+Open "Visual Studio command prompt (2010)"
+
+cd to PyKCS11 folder and run::
+
+    > nmake -f Makefile.win32 build
+    > nmake -f Makefile.win32 install
 
 
 Known Bugs
