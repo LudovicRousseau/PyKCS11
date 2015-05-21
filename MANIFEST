@@ -40,5 +40,4 @@ src/stdafx.h
 src/utility.cpp
 src/utility.h
 src/opensc/pkcs11.h
-src/win32_pykcs11_wrap.cpp
-src/unix_pykcs11_wrap.cpp
+src/pykcs11_wrap.cpp
