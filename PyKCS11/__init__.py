@@ -661,6 +661,7 @@ class Mechanism(object):
         self.mechanism = mechanism
         self.param = param
 
+MechanismSHA1 = Mechanism(CKM_SHA_1, None)
 MechanismRSAPKCS1 = Mechanism(CKM_RSA_PKCS, None)
 MechanismRSAGENERATEKEYPAIR = Mechanism(CKM_RSA_PKCS_KEY_PAIR_GEN, None)
 
@@ -760,6 +761,61 @@ class Session(object):
         rv = self.lib.C_DestroyObject(self.session, obj)
         if rv != CKR_OK:
             raise PyKCS11Error(rv)
+
+    def digest(self, data, mecha=MechanismSHA1):
+        """
+        C_DigestInit/C_Digest
+
+        @param data: the data to be digested
+        @type data:  (binary) sring or list/tuple of bytes
+        @param mecha: the digesting mechanism to be used
+        @type mecha: L{Mechanism} instance or L{MechanismSHA1}
+        for CKM_SHA_1
+        @return: the computed digest
+        @rtype: list of bytes
+
+        @note: the returned value is an istance of L{ckbytelist}.
+        You can easly convert it to a binary string with::
+            ''.join(chr(i) for i in ckbytelistDigest)
+
+        """
+        m = PyKCS11.LowLevel.CK_MECHANISM()
+        digest = ckbytelist()
+        ba = None  # must be declared here or may be deallocated too early
+        m.mechanism = mecha.mechanism
+        if (mecha.param):
+            ba = PyKCS11.LowLevel.byteArray(len(mecha.param))
+            if isinstance(mecha.param, bytes):
+                for c in range(len(mecha.param)):
+                    ba[c] = byte_to_int(mecha.param[c])
+            else:
+                for c in range(len(mecha.param)):
+                    ba[c] = mecha.param[c]
+            # with cast() the ba object continue to own internal pointer
+            # (avoids a leak).
+            # pParameter is an opaque pointer, never garbage collected.
+            m.pParameter = ba.cast()
+            m.ulParameterLen = len(mecha.param)
+        data1 = ckbytelist()
+        data1.reserve(len(data))
+        if isinstance(data, bytes):
+            for x in data:
+                data1.append(byte_to_int(x))
+        else:
+            for c in range(len(data)):
+                data1.append(data[c])
+        rv = self.lib.C_DigestInit(self.session, m)
+        if rv != CKR_OK:
+            raise PyKCS11Error(rv)
+        #first call get digest size
+        rv = self.lib.C_Digest(self.session, data1, digest)
+        if rv != CKR_OK:
+            raise PyKCS11Error(rv)
+        #second call get actual digest data
+        rv = self.lib.C_Digest(self.session, data1, digest)
+        if rv != CKR_OK:
+            raise PyKCS11Error(rv)
+        return digest
 
     def sign(self, key, data, mecha=MechanismRSAPKCS1):
         """
