@@ -229,6 +229,10 @@ typedef struct CK_DATE{
 	}
 };
 
+%typemap(in) void* pParameter %{
+    $1 = reinterpret_cast<void*>($input);
+%}
+
 typedef struct CK_MECHANISM {
   unsigned long mechanism;
   void*       pParameter;
