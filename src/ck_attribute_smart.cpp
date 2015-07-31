@@ -95,6 +95,7 @@
 		{
 		case CKA_ALWAYS_SENSITIVE:
 		case CKA_DECRYPT:
+		case CKA_DERIVE:
 		case CKA_ENCRYPT:
 		case CKA_HAS_RESET:
 		case CKA_LOCAL:
