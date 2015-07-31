@@ -1026,6 +1026,7 @@ class Session(object):
         """
         if type in (CKA_ALWAYS_SENSITIVE,
             CKA_DECRYPT,
+            CKA_DERIVE,
             CKA_ENCRYPT,
             CKA_EXTRACTABLE,
             CKA_HAS_RESET,
