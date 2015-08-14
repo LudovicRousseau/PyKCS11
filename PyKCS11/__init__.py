@@ -25,9 +25,21 @@ PY3 = sys.version_info[0] >= 3
 if PY3:
     def byte_to_int(byte):
         return byte
+
+    def to_param_string(param):
+        if isinstance(param, str):
+            return bytes(param, 'ascii')
+        else:
+            return bytes(param)
 else:
     def byte_to_int(byte):
         return ord(byte)
+
+    def to_param_string(param):
+        if isinstance(param, str):
+            return param
+        else:
+            return str(bytearray(param))
 
     range = xrange
 
@@ -71,20 +83,6 @@ CKR[-1] = "Load"
 
 
 class ckbytelist(PyKCS11.LowLevel.ckbytelist):
-    """
-    add a __repr__() method to the LowLevel equivalent
-    """
-
-    def __repr__(self):
-        """
-        return the representation of a tuple
-        the __str__ method will use it also
-        """
-        rep = [elt for elt in self]
-        return repr(rep)
-
-
-class byteArray(PyKCS11.LowLevel.byteArray):
     """
     add a __repr__() method to the LowLevel equivalent
     """
@@ -781,20 +779,12 @@ class Session(object):
         """
         m = PyKCS11.LowLevel.CK_MECHANISM()
         digest = ckbytelist()
-        ba = None  # must be declared here or may be deallocated too early
+        ps = None  # must be declared here or may be deallocated too early
         m.mechanism = mecha.mechanism
         if (mecha.param):
-            ba = PyKCS11.LowLevel.byteArray(len(mecha.param))
-            if isinstance(mecha.param, bytes):
-                for c in range(len(mecha.param)):
-                    ba[c] = byte_to_int(mecha.param[c])
-            else:
-                for c in range(len(mecha.param)):
-                    ba[c] = mecha.param[c]
-            # with cast() the ba object continue to own internal pointer
-            # (avoids a leak).
-            # pParameter is an opaque pointer, never garbage collected.
-            m.pParameter = ba.cast()
+            # Convert the parameter to a string representation so SWIG gets a char*
+            ps = to_param_string(mecha.param)
+            m.pParameter = ps
             m.ulParameterLen = len(mecha.param)
         data1 = ckbytelist()
         data1.reserve(len(data))
@@ -838,20 +828,12 @@ class Session(object):
         """
         m = PyKCS11.LowLevel.CK_MECHANISM()
         signature = ckbytelist()
-        ba = None  # must be declared here or may be deallocated too early
+        ps = None  # must be declared here or may be deallocated too early
         m.mechanism = mecha.mechanism
         if (mecha.param):
-            ba = PyKCS11.LowLevel.byteArray(len(mecha.param))
-            if isinstance(mecha.param, bytes):
-                for c in range(len(mecha.param)):
-                    ba[c] = byte_to_int(mecha.param[c])
-            else:
-                for c in range(len(mecha.param)):
-                    ba[c] = mecha.param[c]
-            # with cast() the ba object continue to own internal pointer
-            # (avoids a leak).
-            # pParameter is an opaque pointer, never garbage collected.
-            m.pParameter = ba.cast()
+            # Convert the parameter to a string representation so SWIG gets a char*
+            ps = to_param_string(mecha.param)
+            m.pParameter = ps
             m.ulParameterLen = len(mecha.param)
         data1 = ckbytelist()
         data1.reserve(len(data))
@@ -895,20 +877,12 @@ class Session(object):
         """
         m = PyKCS11.LowLevel.CK_MECHANISM()
         encrypted = ckbytelist()
-        ba = None  # must be declared here or may be deallocated too early
+        ps = None  # must be declared here or may be deallocated too early
         m.mechanism = mecha.mechanism
         if (mecha.param):
-            ba = PyKCS11.LowLevel.byteArray(len(mecha.param))
-            if isinstance(mecha.param, bytes):
-                for c in range(len(mecha.param)):
-                    ba[c] = byte_to_int(mecha.param[c])
-            else:
-                for c in range(len(mecha.param)):
-                    ba[c] = mecha.param[c]
-            # with cast() the ba object continue to own internal pointer
-            # (avoids a leak).
-            # pParameter is an opaque pointer, never garbage collected.
-            m.pParameter = ba.cast()
+            # Convert the parameter to a string representation so SWIG gets a char*
+            ps = to_param_string(mecha.param)
+            m.pParameter = ps
             m.ulParameterLen = len(mecha.param)
         data1 = ckbytelist()
         data1.reserve(len(data))
@@ -952,20 +926,12 @@ class Session(object):
         """
         m = PyKCS11.LowLevel.CK_MECHANISM()
         decrypted = ckbytelist()
-        ba = None  # must be declared here or may be deallocated too early
+        ps = None  # must be declared here or may be deallocated too early
         m.mechanism = mecha.mechanism
         if (mecha.param):
-            ba = PyKCS11.LowLevel.byteArray(len(mecha.param))
-            if isinstance(mecha.param, bytes):
-                for c in range(len(mecha.param)):
-                    ba[c] = byte_to_int(mecha.param[c])
-            else:
-                for c in range(len(mecha.param)):
-                    ba[c] = mecha.param[c]
-            # with cast() the ba object continue to own internal pointer
-            # (avoids a leak).
-            # pParameter is an opaque pointer, never garbage collected.
-            m.pParameter = ba.cast()
+            # Convert the parameter to a string representation so SWIG gets a char*
+            ps = to_param_string(mecha.param)
+            m.pParameter = ps
             m.ulParameterLen = len(mecha.param)
         data1 = ckbytelist()
         data1.reserve(len(data))
@@ -1097,20 +1063,12 @@ class Session(object):
         ck_pub_handle = PyKCS11.LowLevel.CK_OBJECT_HANDLE()
         ck_prv_handle = PyKCS11.LowLevel.CK_OBJECT_HANDLE()
         m = PyKCS11.LowLevel.CK_MECHANISM()
-        ba = None # must be declared here or may be deallocated too early
+        ps = None # must be declared here or may be deallocated too early
         m.mechanism = mecha.mechanism
         if (mecha.param):
-            ba = PyKCS11.LowLevel.byteArray(len(mecha.param))
-            if isinstance(mecha.param, bytes):
-                for c in range(len(mecha.param)):
-                    ba[c] = byte_to_int(mecha.param[c])
-            else:
-                for c in range(len(mecha.param)):
-                    ba[c] = mecha.param[c]
-            # with cast() the ba object continue to own internal pointer
-            # (avoids a leak).
-            # pParameter is an opaque pointer, never garbage collected.
-            m.pParameter = ba.cast()
+            # Convert the parameter to a string representation so SWIG gets a char*
+            ps = to_param_string(mecha.param)
+            m.pParameter = ps
             m.ulParameterLen = len(mecha.param)
         rv = self.lib.C_GenerateKeyPair(self.session, m, tPub, tPriv,
             ck_pub_handle, ck_prv_handle)

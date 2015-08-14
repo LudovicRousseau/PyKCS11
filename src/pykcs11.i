@@ -42,7 +42,6 @@ using namespace std;
 
 %include cdata.i
 %include cpointer.i
-%include carrays.i
 %include typemaps.i
 %include std_vector.i
 
@@ -53,7 +52,6 @@ using namespace std;
 
 %pointer_class(unsigned long, CK_SESSION_HANDLE);
 %pointer_class(unsigned long, CK_OBJECT_HANDLE);
-%array_class(char,byteArray);
 
 #if SWIGPYTHON
 %typemap(out) PyKCS11String {
@@ -229,9 +227,7 @@ typedef struct CK_DATE{
 	}
 };
 
-%typemap(in) void* pParameter %{
-    $1 = reinterpret_cast<void*>($input);
-%}
+%typemap(in) void* = char*;
 
 typedef struct CK_MECHANISM {
   unsigned long mechanism;
