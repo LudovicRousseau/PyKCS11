@@ -287,8 +287,9 @@ typedef unsigned long CK_RV;
 #define CKF_SO_PIN_LOCKED            0x00400000
 #define CKF_SO_PIN_TO_BE_CHANGED     0x00800000
 
-#define CKU_SO    0
-#define CKU_USER  1
+#define CKU_SO                0
+#define CKU_USER              1
+#define CKU_CONTEXT_SPECIFIC  2
 
 #define CKS_RO_PUBLIC_SESSION  0
 #define CKS_RO_USER_FUNCTIONS  1
