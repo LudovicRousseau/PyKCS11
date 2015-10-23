@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 
 #   Copyright (C) 2004 Midori (midori -- a-t -- paipai dot net)
-#   Copyright (C) 2006 Ludovic Rousseau (ludovic.rousseau@free.fr)
+#   Copyright (C) 2006-2014 Ludovic Rousseau (ludovic.rousseau@free.fr)
 #
 # This file is free software; you can redistribute it and/or modify it
 # under the terms of the GNU General Public License as published by

@@ -5,7 +5,7 @@
  *
  * Copyright (C) 1999
  *  David Corcoran <corcoran@linuxnet.com>
- * Copyright (C) 2004
+ * Copyright (C) 2004-2009
  *  Ludovic Rousseau <ludovic.rousseau@free.fr>
  *
  * $Id: dyn_unix.c,v 1.13 2005/02/22 14:40:26 rousseau Exp $
