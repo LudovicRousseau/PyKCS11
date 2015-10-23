@@ -84,6 +84,19 @@ that doesn't come with the standard distribution.
 History
 """""""
 
+1.3.1 - October 2015, Ludovic Rousseau
+	- PKCS#11 definitions: sync with Cryptoki version 2.30
+	- Add user type CK_CONTEXT_SPECIFIC
+	- Fixes #9, incorrect assignment of pParameter for CK_MECHANISMs.
+	- CKA_DERIVE is a CK_BBOOL and not byte array
+	- Add digest() and encrypt method to Session class
+	- Add samples:
+	  . key-pair genearation
+	  . key-pair generation + certificate import
+	  . printing public key modulus
+	  . computing signatur
+	- small bugs fixed
+
 1.3.0 - July 2014, Ludovic Rousseau
 	- add Python3 support
 
