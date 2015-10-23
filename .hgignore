@@ -1,0 +1,5 @@
+.DS_Store
+PyKCS11/LowLevel.py
+build/
+dist/
+src/pykcs11_wrap.cpp
