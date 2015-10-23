@@ -37,6 +37,9 @@ src/pykcs11.i: src/opensc/pkcs11.h src/pkcs11lib.h src/pykcs11string.h src/ck_at
 dist: clean
 	$(PYTHON) setup.py sdist
 
+pypi: clean
+	$(PYTHON) setup.py sdist upload
+
 doc: build
 	rm -rf html
 	epydoc --verbose PyKCS11
