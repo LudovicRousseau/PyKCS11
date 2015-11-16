@@ -5,7 +5,7 @@
 
 from distutils.core import setup, Extension
 from sys import version_info as pyver
-from os import path
+from os import path, system
 import platform
 
 description = '''A complete PKCS#11 wrapper for Python.
@@ -50,7 +50,8 @@ if (platform.system().lower() == 'windows'):
     extra_link_args = ["/DEBUG", "/PDB:_LowLevel.pdb", "/SUBSYSTEM:WINDOWS", "/OPT:REF", "/OPT:ICF"]
 else:
     source_files.append("src/dyn_unix.c")
-    
+    if not path.exists("src/pykcs11_wrap.cpp"): 
+    	system("make src/pykcs11_wrap.cpp") 
     libraries_val = []
 
 setup(name="PyKCS11",
