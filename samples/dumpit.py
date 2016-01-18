@@ -234,11 +234,11 @@ for s in slots:
                 elif session.isBin(q):
                     print(format_binary % (PyKCS11.CKA[q], len(a)))
                     if a:
-                        print(dump(''.join(map(chr, a)), 16), end=' ')
+                        print(dump(''.join(map(chr, a)), 16), end='')
                 elif q == PyKCS11.CKA_SERIAL_NUMBER:
                     print(format_binary % (PyKCS11.CKA[q], len(a)))
                     if a:
-                        print(dump(a, 16), end=' ')
+                        print(dump(a, 16), end='')
                 else:
                     print(format_normal % (PyKCS11.CKA[q], a))
         print()
