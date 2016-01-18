@@ -40,7 +40,7 @@ def hexx(intval):
     return x
 
 
-def dump(src, length=8):
+def dump(src, length=16):
     FILTER = ''.join([(len(repr(chr(x))) == 3) and chr(x) or '.' for x in range(256)])
     N = 0
     result = ''
@@ -170,17 +170,17 @@ for s in slots:
                         signature = session.sign(o, toSign)
                         sx = eval(b'0x' + ''.join("%02X" % c for c in signature))
                         print("Signature:")
-                        print(dump(''.join(map(chr, signature)), 16))
+                        print(dump(''.join(map(chr, signature))))
                         if m and e:
                             print("Verifying using following public key:")
                             print("Modulus:")
-                            print(dump(''.join(map(chr, m)), 16))
+                            print(dump(''.join(map(chr, m))))
                             print("Exponent:")
-                            print(dump(''.join(map(chr, e)), 16))
+                            print(dump(''.join(map(chr, e))))
                             decrypted = pow(sx, ex, mx)  # RSA
                             print("Decrypted:")
                             d = binascii.unhexlify(hexx(decrypted))
-                            print(dump(d, 16))
+                            print(dump(d))
                             if toSign == d[-20:]:
                                 print("*** signature VERIFIED!\n")
                             else:
@@ -201,15 +201,15 @@ for s in slots:
                             padded = binascii.unhexlify(padded)
                             print("* Decrypting with 0x%08X following data: %s" % (o.value(), toEncrypt))
                             print("padded:")
-                            print(dump(padded, 16))
+                            print(dump(padded))
                             encrypted = pow(eval('0x%sL' % binascii.hexlify(padded)), ex, mx)  # RSA
                             encrypted1 = binascii.unhexlify(hexx(encrypted))
                             print("encrypted:")
-                            print(dump(encrypted1, 16))
+                            print(dump(encrypted1))
                             decrypted = session.decrypt(o, encrypted1)
                             decrypted1 = ''.join(chr(i) for i in decrypted)
                             print("decrypted:")
-                            print(dump(decrypted1, 16))
+                            print(dump(decrypted1))
                             if decrypted1 == toEncrypt:
                                 print("decryption SUCCESSFULL!\n")
                             else:
@@ -234,11 +234,11 @@ for s in slots:
                 elif session.isBin(q):
                     print(format_binary % (PyKCS11.CKA[q], len(a)))
                     if a:
-                        print(dump(''.join(map(chr, a)), 16), end='')
+                        print(dump(''.join(map(chr, a))), end='')
                 elif q == PyKCS11.CKA_SERIAL_NUMBER:
                     print(format_binary % (PyKCS11.CKA[q], len(a)))
                     if a:
-                        print(dump(a, 16), end='')
+                        print(dump(a), end='')
                 else:
                     print(format_normal % (PyKCS11.CKA[q], a))
         print()
