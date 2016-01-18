@@ -833,7 +833,6 @@ typedef unsigned long CK_RV;
 
 #define CKD_NULL                 0x00000001
 #define CKD_SHA1_KDF             0x00000002
-#define CKD_NULL                 0x00000001
 #define CKD_SHA1_KDF_ASN1        0x00000003
 #define CKD_SHA1_KDF_CONCATENATE 0x00000004
 
