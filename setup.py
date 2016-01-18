@@ -50,8 +50,8 @@ if (platform.system().lower() == 'windows'):
     extra_link_args = ["/DEBUG", "/PDB:_LowLevel.pdb", "/SUBSYSTEM:WINDOWS", "/OPT:REF", "/OPT:ICF"]
 else:
     source_files.append("src/dyn_unix.c")
-    if not path.exists("src/pykcs11_wrap.cpp"): 
-    	system("make src/pykcs11_wrap.cpp") 
+    if not path.exists("src/pykcs11_wrap.cpp"):
+    	system("make src/pykcs11_wrap.cpp")
     libraries_val = []
 
 setup(name="PyKCS11",

@@ -64,7 +64,7 @@ public:
 
 #ifdef SWIG
 %apply (char *STRING, int LENGTH) { (char* pPin, unsigned long ulPinLen),
-									(char* pOldPin, unsigned long ulOldLen), 
+									(char* pOldPin, unsigned long ulOldLen),
 									(char* pNewPin, unsigned long ulNewLen) };
 %apply (char *STRING) { (char* pLabel) };
 
@@ -134,11 +134,11 @@ public:
 	CK_RV C_SetAttributeValue(
 		CK_SESSION_HANDLE hSession,
 		CK_OBJECT_HANDLE hObject,
-		vector<CK_ATTRIBUTE_SMART> Template); 
+		vector<CK_ATTRIBUTE_SMART> Template);
 
 	CK_RV C_FindObjectsInit(
 		CK_SESSION_HANDLE hSession,
-		vector<CK_ATTRIBUTE_SMART> &Template); 
+		vector<CK_ATTRIBUTE_SMART> &Template);
 
 	CK_RV C_FindObjects(
 		CK_SESSION_HANDLE hSession,
@@ -149,7 +149,7 @@ public:
 	CK_RV C_EncryptInit(
 		CK_SESSION_HANDLE hSession,
 		CK_MECHANISM* pMechanism,
-		CK_OBJECT_HANDLE hKey); 
+		CK_OBJECT_HANDLE hKey);
 
 	CK_RV C_Encrypt(
 		CK_SESSION_HANDLE hSession,
@@ -159,21 +159,21 @@ public:
 	CK_RV C_EncryptUpdate(
 		CK_SESSION_HANDLE hSession,
 		vector<unsigned char> inData,
-		vector<unsigned char> &outEncryptedData); 
+		vector<unsigned char> &outEncryptedData);
 
 	CK_RV C_EncryptFinal(
 		CK_SESSION_HANDLE hSession,
-		vector<unsigned char> &outEncryptedData); 
+		vector<unsigned char> &outEncryptedData);
 
 	CK_RV C_DecryptInit(
 		CK_SESSION_HANDLE hSession,
 		CK_MECHANISM* pMechanism,
-		CK_OBJECT_HANDLE hKey); 
+		CK_OBJECT_HANDLE hKey);
 
 	CK_RV C_Decrypt(
 		CK_SESSION_HANDLE hSession,
 		vector<unsigned char> inEncryptedData,
-		vector<unsigned char> &outData); 
+		vector<unsigned char> &outData);
 
 	CK_RV C_DecryptUpdate(
 		CK_SESSION_HANDLE hSession,
@@ -186,56 +186,56 @@ public:
 
 	CK_RV C_DigestInit(
 		CK_SESSION_HANDLE hSession,
-		CK_MECHANISM* pMechanism); 
+		CK_MECHANISM* pMechanism);
 
 	CK_RV C_Digest(
 		CK_SESSION_HANDLE hSession,
 		vector<unsigned char> inData,
-		vector<unsigned char> &outDigest); 
+		vector<unsigned char> &outDigest);
 
 	CK_RV C_DigestUpdate(
 		CK_SESSION_HANDLE hSession,
-		vector<unsigned char> inData); 
+		vector<unsigned char> inData);
 
 	CK_RV C_DigestKey(
 		CK_SESSION_HANDLE hSession,
-		CK_OBJECT_HANDLE hKey); 
+		CK_OBJECT_HANDLE hKey);
 
 	CK_RV C_DigestFinal(
 		CK_SESSION_HANDLE hSession,
-		vector<unsigned char> &outDigest); 
+		vector<unsigned char> &outDigest);
 
 	CK_RV C_SignInit(
 		CK_SESSION_HANDLE hSession,
 		CK_MECHANISM* pMechanism,
-		CK_OBJECT_HANDLE hKey); 
+		CK_OBJECT_HANDLE hKey);
 
 	CK_RV C_Sign(
 		CK_SESSION_HANDLE hSession,
 		vector<unsigned char> inData,
-		vector<unsigned char> &outSignature); 
+		vector<unsigned char> &outSignature);
 
 	CK_RV C_SignUpdate(
 		CK_SESSION_HANDLE hSession,
-		vector<unsigned char> inData); 
+		vector<unsigned char> inData);
 
 	CK_RV C_SignFinal(
 		CK_SESSION_HANDLE hSession,
-		vector<unsigned char> &outSignature); 
+		vector<unsigned char> &outSignature);
 
 	CK_RV C_VerifyInit(
 		CK_SESSION_HANDLE hSession,
 		CK_MECHANISM* pMechanism,
-		CK_OBJECT_HANDLE hKey); 
+		CK_OBJECT_HANDLE hKey);
 
 	CK_RV C_Verify(
 		CK_SESSION_HANDLE hSession,
 		vector<unsigned char> inData,
-		vector<unsigned char> inSignature); 
+		vector<unsigned char> inSignature);
 
 	CK_RV C_VerifyUpdate(
 		CK_SESSION_HANDLE hSession,
-		vector<unsigned char> inData); 
+		vector<unsigned char> inData);
 
 	CK_RV C_VerifyFinal(
 		CK_SESSION_HANDLE hSession,
@@ -245,7 +245,7 @@ public:
 		CK_SESSION_HANDLE hSession,
 		CK_MECHANISM* pMechanism,
 		vector<CK_ATTRIBUTE_SMART> Template,
-		CK_OBJECT_HANDLE & outhKey); 
+		CK_OBJECT_HANDLE & outhKey);
 
 	CK_RV C_GenerateKeyPair(
 		CK_SESSION_HANDLE hSession,
@@ -268,11 +268,11 @@ public:
 		CK_OBJECT_HANDLE hUnwrappingKey,
 		vector<unsigned char> WrappedKey,
 		vector<CK_ATTRIBUTE_SMART> Template,
-		CK_OBJECT_HANDLE & outhKey); 
+		CK_OBJECT_HANDLE & outhKey);
 
 	CK_RV C_SeedRandom(
 		CK_SESSION_HANDLE hSession,
-		vector<unsigned char> Seed); 
+		vector<unsigned char> Seed);
 
 	CK_RV C_GenerateRandom(
 		CK_SESSION_HANDLE hSession,
