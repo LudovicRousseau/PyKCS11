@@ -125,8 +125,9 @@ for s in slots:
         if pin_available:
             try:
                 session.login(pin=pin)
-            except:
-                print("login failed, exception:", str(sys.exc_info()[1]))
+            except PyKCS11.PyKCS11Error as e:
+                print("login failed, exception:", e)
+                break
 
         objects = session.findObjects()
         print()
@@ -182,8 +183,9 @@ for s in slots:
                                 print(hex(decrypted), "\n")
                         else:
                             print("Unable to verify signature: MODULUS/PUBLIC_EXP not found")
-                    except:
-                        print("Sign failed, exception:", str(sys.exc_info()[1]))
+                    except PyKCS11.PyKCS11Error as e:
+                        print("Sign failed, exception:", e)
+                        break
                 if decrypt:
                     if m and e:
                         try:
@@ -204,8 +206,9 @@ for s in slots:
                                 print("decryption SUCCESSFULL!\n")
                             else:
                                 print("decryption FAILED!\n")
-                        except:
-                            print("Decrypt failed, exception:", str(sys.exc_info()[1]))
+                        except PyKCS11.PyKCS11Error as e:
+                            print("Decrypt failed, exception:", e)
+                            break
                     else:
                         print("ERROR: Private key don't have MODULUS/PUBLIC_EXP")
 
@@ -235,8 +238,9 @@ for s in slots:
         if pin_available:
             try:
                 session.logout()
-            except:
-                print("logout failed, exception:", str(sys.exc_info()[1]))
+            except PyKCS11.PyKCS11Error as e:
+                print("logout failed, exception:", e)
+                break
 
         session.closeSession()
 
