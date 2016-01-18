@@ -60,6 +60,7 @@ def usage():
     print("[-S][--sign]", end=' ')
     print("[-d][--decrypt]", end=' ')
     print("[-h][--help]", end=' ')
+    print()
 
 try:
     opts, args = getopt.getopt(sys.argv[1:], "p:c:Sdh", ["pin=", "lib=", "sign", "decrypt", "help"])
