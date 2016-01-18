@@ -192,8 +192,8 @@ for s in slots:
                             toEncrypt = "12345678901234567890"
                             # note: PKCS1 BT2 padding should be random data,
                             # but this is just a test and we use 0xFF...
-                            padded = "\x00\x02%s\x00%s" % ("\xFF" * (128 - (len(toEncrypt)) - 3), toEncrypt)
-                            padded = padded.encode('latin-1')
+                            padded = "0002%s00%s" % ("FF" * (128 - (len(toEncrypt)) - 3), toEncrypt)
+                            padded = binascii.unhexlify(padded)
                             print("* Decrypting with 0x%08X following data: %s" % (o.value(), toEncrypt))
                             print("padded:")
                             print(dump(padded, 16))
