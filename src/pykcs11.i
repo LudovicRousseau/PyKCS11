@@ -250,7 +250,7 @@ typedef struct CK_MECHANISM_INFO {
     unsigned long    ulMinKeySize;
     unsigned long    ulMaxKeySize;
     unsigned long    flags;
-%mutable;    
+%mutable;
 } CK_MECHANISM_INFO;
 typedef unsigned long CK_RV;
 
@@ -265,13 +265,13 @@ typedef unsigned long CK_RV;
 
 #define CKN_SURRENDER       0
 
-#define CKF_TOKEN_PRESENT     0x00000001  
-#define CKF_REMOVABLE_DEVICE  0x00000002  
-#define CKF_HW_SLOT           0x00000004  
-#define CKF_RNG                     0x00000001  
-#define CKF_WRITE_PROTECTED         0x00000002 
-#define CKF_LOGIN_REQUIRED          0x00000004  
-#define CKF_USER_PIN_INITIALIZED    0x00000008  
+#define CKF_TOKEN_PRESENT     0x00000001
+#define CKF_REMOVABLE_DEVICE  0x00000002
+#define CKF_HW_SLOT           0x00000004
+#define CKF_RNG                     0x00000001
+#define CKF_WRITE_PROTECTED         0x00000002
+#define CKF_LOGIN_REQUIRED          0x00000004
+#define CKF_USER_PIN_INITIALIZED    0x00000008
 #define CKF_RESTORE_KEY_NOT_NEEDED  0x00000020
 #define CKF_CLOCK_ON_TOKEN          0x00000040
 #define CKF_PROTECTED_AUTHENTICATION_PATH 0x00000100
@@ -297,8 +297,8 @@ typedef unsigned long CK_RV;
 #define CKS_RW_USER_FUNCTIONS  3
 #define CKS_RW_SO_FUNCTIONS    4
 
-#define CKF_RW_SESSION          0x00000002  
-#define CKF_SERIAL_SESSION      0x00000004 
+#define CKF_RW_SESSION          0x00000002
+#define CKF_SERIAL_SESSION      0x00000004
 
 #define CKO_DATA              0x00000000
 #define CKO_CERTIFICATE       0x00000001
@@ -413,8 +413,8 @@ typedef unsigned long CK_RV;
 #define CKA_SUBPRIME           0x00000131
 #define CKA_BASE               0x00000132
 #define CKA_PRIME_BITS         0x00000133
-#define CKA_SUBPRIME_BITS      0x00000134 
-#define CKA_SUB_PRIME_BITS     CKA_SUBPRIME_BITS 
+#define CKA_SUBPRIME_BITS      0x00000134
+#define CKA_SUB_PRIME_BITS     CKA_SUBPRIME_BITS
 #define CKA_VALUE_BITS         0x00000160
 #define CKA_VALUE_LEN          0x00000161
 #define CKA_EXTRACTABLE        0x00000162
@@ -761,7 +761,7 @@ typedef unsigned long CK_RV;
 #define CKM_RSA_PKCS_OAEP_TPM_1_1      0x00004002
 #define CKM_VENDOR_DEFINED             0x80000000L
 
-#define CKF_HW                 0x00000001  
+#define CKF_HW                 0x00000001
 #define CKF_ENCRYPT            0x00000100
 #define CKF_DECRYPT            0x00000200
 #define CKF_DIGEST             0x00000400
