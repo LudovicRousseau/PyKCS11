@@ -309,12 +309,12 @@ typedef unsigned long CK_RV;
 #define CKO_DOMAIN_PARAMETERS 0x00000006
 #define CKO_MECHANISM         0x00000007
 #define CKO_OTP_KEY           0x00000008
-#define CKO_VENDOR_DEFINED    0x80000000
+#define CKO_VENDOR_DEFINED    0x80000000L
 
 #define CKH_MONOTONIC_COUNTER  0x00000001
 #define CKH_CLOCK           0x00000002
 #define CKH_USER_INTERFACE  0x00000003
-#define CKH_VENDOR_DEFINED  0x80000000
+#define CKH_VENDOR_DEFINED  0x80000000L
 
 #define CKK_RSA             0x00000000
 #define CKK_DSA             0x00000001
@@ -358,12 +358,12 @@ typedef unsigned long CK_RV;
 #define CKK_GOSTR3410       0x00000030
 #define CKK_GOSTR3411       0x00000031
 #define CKK_GOST28147       0x00000032
-#define CKK_VENDOR_DEFINED  0x80000000
+#define CKK_VENDOR_DEFINED  0x80000000L
 
 #define CKC_X_509           0x00000000
 #define CKC_X_509_ATTR_CERT 0x00000001
 #define CKC_WTLS            0x00000002
-#define CKC_VENDOR_DEFINED  0x80000000
+#define CKC_VENDOR_DEFINED  0x80000000L
 
 #define CKA_CLASS              0x00000000
 #define CKA_TOKEN              0x00000001
@@ -467,7 +467,7 @@ typedef unsigned long CK_RV;
 #define CKA_DEFAULT_CMS_ATTRIBUTES      0x00000502
 #define CKA_SUPPORTED_CMS_ATTRIBUTES    0x00000503
 #define CKA_ALLOWED_MECHANISMS          (CKF_ARRAY_ATTRIBUTE|0x00000600)
-#define CKA_VENDOR_DEFINED     0x80000000
+#define CKA_VENDOR_DEFINED     0x80000000L
 
 #define CKM_RSA_PKCS_KEY_PAIR_GEN      0x00000000
 #define CKM_RSA_PKCS                   0x00000001
@@ -759,7 +759,7 @@ typedef unsigned long CK_RV;
 #define CKM_AES_CFB128                 0x00002107
 #define CKM_RSA_PKCS_TPM_1_1           0x00004001
 #define CKM_RSA_PKCS_OAEP_TPM_1_1      0x00004002
-#define CKM_VENDOR_DEFINED             0x80000000
+#define CKM_VENDOR_DEFINED             0x80000000L
 
 #define CKF_HW                 0x00000001  
 #define CKF_ENCRYPT            0x00000100
@@ -780,7 +780,7 @@ typedef unsigned long CK_RV;
 #define CKF_EC_NAMEDCURVE      0x00800000
 #define CKF_EC_UNCOMPRESS      0x01000000
 #define CKF_EC_COMPRESS        0x02000000
-#define CKF_EXTENSION          0x80000000  
+#define CKF_EXTENSION          0x80000000L
 
 #define CKR_OK                                0x00000000
 #define CKR_CANCEL                            0x00000001
@@ -869,7 +869,7 @@ typedef unsigned long CK_RV;
 #define CKR_NEW_PIN_MODE                      0x000001B0
 #define CKR_NEXT_OTP                          0x000001B1
 #define CKR_FUNCTION_REJECTED                 0x00000200
-#define CKR_VENDOR_DEFINED                    0x80000000
+#define CKR_VENDOR_DEFINED                    0x80000000L
 
 #define CKF_LIBRARY_CANT_CREATE_OS_THREADS 0x00000001
 #define CKF_OS_LOCKING_OK                  0x00000002
