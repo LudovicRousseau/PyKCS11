@@ -146,9 +146,11 @@ for s in slots:
         # only use the integer values and not the strings like 'CKM_RSA_PKCS'
         all_attributes = [e for e in all_attributes if isinstance(e, int)]
 
+        n_obj = 1
         for o in objects:
             print()
-            print((red + "==================== Object: %d ====================" + normal) % o.value())
+            print((red + "==================== Object: %d/%d (%d) ====================" + normal) % (n_obj, len(objects), o.value()))
+            n_obj += 1
             attributes = session.getAttributeValue(o, all_attributes)
             attrDict = dict(list(zip(all_attributes, attributes)))
             if attrDict[PyKCS11.CKA_CLASS] == PyKCS11.CKO_PRIVATE_KEY \
