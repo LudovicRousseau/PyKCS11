@@ -151,7 +151,10 @@ for s in slots:
             print()
             print((red + "==================== Object: %d/%d (%d) ====================" + normal) % (n_obj, len(objects), o.value()))
             n_obj += 1
-            attributes = session.getAttributeValue(o, all_attributes)
+            try:
+                attributes = session.getAttributeValue(o, all_attributes)
+            except PyKCS11.PyKCS11Error as e:
+                continue
             attrDict = dict(list(zip(all_attributes, attributes)))
             if attrDict[PyKCS11.CKA_CLASS] == PyKCS11.CKO_PRIVATE_KEY \
                and attrDict[PyKCS11.CKA_KEY_TYPE] == PyKCS11.CKK_RSA:
