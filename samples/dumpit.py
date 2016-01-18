@@ -155,15 +155,14 @@ for s in slots:
                 m = attrDict[PyKCS11.CKA_MODULUS]
                 e = attrDict[PyKCS11.CKA_PUBLIC_EXPONENT]
                 if m and e:
-                    mx = eval(b'0x' + binascii.hexlify(''.join(chr(c) for c in m).encode('ascii')))
-                    ex = eval(b'0x' + binascii.hexlify(''.join(chr(c) for c in e).encode('ascii')))
+                    mx = eval(b'0x' + ''.join("%02X" %c for c in m))
+                    ex = eval(b'0x' + ''.join("%02X" %c for c in e))
                 if sign:
                     try:
                         toSign = b"12345678901234567890"  # 20 bytes, SHA1 digest
                         print("* Signing with object 0x%08X following data: %s" % (o.value(), toSign))
                         signature = session.sign(o, toSign)
-                        s = binascii.hexlify(''.join(chr(c) for c in signature).encode('ascii'))
-                        sx = eval(b'0x' + s)
+                        sx = eval(b'0x' + ''.join("%02X" % c for c in signature))
                         print("Signature:")
                         print(dump(''.join(map(chr, signature)), 16))
                         if m and e:
