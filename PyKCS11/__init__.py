@@ -604,7 +604,12 @@ class PyKCS11Lib(object):
 
         m = []
         for x in range(len(mechanismList)):
-            m.append(CKM[mechanismList[x]])
+            mechanism = mechanismList[x]
+            if mechanism >= CKM_VENDOR_DEFINED:
+                k = 'CKR_VENDOR_DEFINED_%X' % (mechanism - CKM_VENDOR_DEFINED)
+                CKM[k] = mechanism
+                CKM[mechanism] = k
+            m.append(CKM[mechanism])
         return m
 
     def getMechanismInfo(self, slot, type):
