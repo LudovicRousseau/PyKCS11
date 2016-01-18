@@ -194,13 +194,16 @@ for s in slots:
                             padded = "\x00\x02%s\x00%s" % ("\xFF" * (128 - (len(toEncrypt)) - 3), toEncrypt)
                             padded = padded.encode('latin-1')
                             print("* Decrypting with 0x%08X following data: %s" % (o.value(), toEncrypt))
-                            print("padded:\n", dump(padded, 16))
+                            print("padded:")
+                            print(dump(padded, 16))
                             encrypted = pow(eval('0x%sL' % binascii.hexlify(padded)), ex, mx)  # RSA
                             encrypted1 = binascii.unhexlify(hexx(encrypted))
-                            print("encrypted:\n", dump(encrypted1, 16))
+                            print("encrypted:")
+                            print(dump(encrypted1, 16))
                             decrypted = session.decrypt(o, encrypted1)
                             decrypted1 = ''.join(chr(i) for i in decrypted)
-                            print("decrypted:\n", dump(decrypted1, 16))
+                            print("decrypted:")
+                            print(dump(decrypted1, 16))
                             if decrypted1 == toEncrypt:
                                 print("decryption SUCCESSFULL!\n")
                             else:
