@@ -1097,11 +1097,15 @@ class Session(object):
         # we search for 10 objects by default. speed/memory tradeoff
         result = PyKCS11.LowLevel.ckobjlist(10)
 
-        self.lib.C_FindObjectsInit(self.session, t)
+        rv = self.lib.C_FindObjectsInit(self.session, t)
+        if rv != CKR_OK:
+            raise PyKCS11Error(rv)
 
         res = []
         while True:
-            self.lib.C_FindObjects(self.session, result)
+            rv = self.lib.C_FindObjects(self.session, result)
+            if rv != CKR_OK:
+                raise PyKCS11Error(rv)
             for x in result:
                 # make a copy of the handle: the original value get
                 # corrupted (!!)
@@ -1111,7 +1115,9 @@ class Session(object):
             if len(result) == 0:
                 break
 
-        self.lib.C_FindObjectsFinal(self.session)
+        rv = self.lib.C_FindObjectsFinal(self.session)
+        if rv != CKR_OK:
+            raise PyKCS11Error(rv)
         return res
 
     def getAttributeValue(self, obj_id, attr, allAsBinary=False):
