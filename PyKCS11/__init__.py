@@ -861,6 +861,50 @@ class Session(object):
             raise PyKCS11Error(rv)
         return signature
 
+    def verify(self, key, data, signature, mecha=MechanismRSAPKCS1):
+        """
+        C_VerifyInit/C_Verify
+
+        @param key: a key handle, obtained calling L{findObjects}.
+        @type key: integer
+        @param data: the data that was signed
+        @type data:  (binary) string or list/tuple of bytes
+        @param signature: the signature to be verified
+        @type signature:  (binary) string or list/tuple of bytes
+        @param mecha: the signing mechanism to be used
+        @type mecha: L{Mechanism} instance or L{MechanismRSAPKCS1}
+        for CKM_RSA_PKCS
+        @return: True if signature is valid, False otherwise
+        @rtype: bool
+
+        """
+        m = PyKCS11.LowLevel.CK_MECHANISM()
+        ps = None  # must be declared here or may be deallocated too early
+        m.mechanism = mecha.mechanism
+        if (mecha.param):
+            # Convert the parameter to a string representation so SWIG gets a char*
+            ps = to_param_string(mecha.param)
+            m.pParameter = ps
+            m.ulParameterLen = len(mecha.param)
+        data1 = ckbytelist()
+        data1.reserve(len(data))
+        if isinstance(data, bytes):
+            for x in data:
+                data1.append(byte_to_int(x))
+        else:
+            for c in range(len(data)):
+                data1.append(data[c])
+        rv = self.lib.C_VerifyInit(self.session, m, key)
+        if rv != CKR_OK:
+            raise PyKCS11Error(rv)
+        rv = self.lib.C_Verify(self.session, data1, signature)
+        if rv == CKR_OK:
+            return True
+        elif rv == CKR_SIGNATURE_INVALID:
+            return False
+        else:
+            raise PyKCS11Error(rv)
+
     def encrypt(self, key, data, mecha=MechanismRSAPKCS1):
         """
         C_EncryptInit/C_Encrypt
@@ -958,6 +1002,84 @@ class Session(object):
         if rv != CKR_OK:
             raise PyKCS11Error(rv)
         return decrypted
+
+    def wrapKey(self, wrappingKey, key, mecha=MechanismRSAPKCS1):
+        """
+        C_WrapKey
+
+        @param wrappingKey: a wrapping key handle
+        @type wrappingKey: integer
+        @param key: a handle of the key to be wrapped
+        @type key: integer
+        @param mecha: the encrypt mechanism to be used
+        @type mecha: L{Mechanism} instance or L{MechanismRSAPKCS1}
+        for CKM_RSA_PKCS
+        @return: the wrapped key bytes
+        @rtype: list of bytes
+
+        @note: the returned value is an instance of L{ckbytelist}.
+        You can easily convert it to a binary string with::
+            ''.join(chr(i) for i in ckbytelistData)
+
+        """
+        m = PyKCS11.LowLevel.CK_MECHANISM()
+        wrapped = ckbytelist()
+        ps = None  # must be declared here or may be deallocated too early
+        m.mechanism = mecha.mechanism
+        if (mecha.param):
+            # Convert the parameter to a string representation so SWIG gets a char*
+            ps = to_param_string(mecha.param)
+            m.pParameter = ps
+            m.ulParameterLen = len(mecha.param)
+        #first call get wrapped size
+        rv = self.lib.C_WrapKey(self.session, m, wrappingKey, key, wrapped)
+        if rv != CKR_OK:
+            raise PyKCS11Error(rv)
+        #second call get actual wrapped key data
+        rv = self.lib.C_WrapKey(self.session, m, wrappingKey, key, wrapped)
+        if rv != CKR_OK:
+            raise PyKCS11Error(rv)
+        return wrapped
+
+    def unwrapKey(self, unwrappingKey, wrappedKey, template, mecha=MechanismRSAPKCS1):
+        """
+        C_UnwrapKey
+
+        @param unwrappingKey: the unwrapping key handle
+        @type unwrappingKey: integer
+        @param wrappedKey: the bytes of the wrapped key
+        @type wrappedKey:  (binary) string or list/tuple of bytes
+        @param template: template for the unwrapped key
+        @param mecha: the decrypt mechanism to be used
+        @type mecha: L{Mechanism} instance or L{MechanismRSAPKCS1}
+        for CKM_RSA_PKCS
+        @return: the unwrapped key object
+        @rtype: integer
+
+        """
+        m = PyKCS11.LowLevel.CK_MECHANISM()
+        wrapped = ckbytelist()
+        ps = None  # must be declared here or may be deallocated too early
+        m.mechanism = mecha.mechanism
+        if (mecha.param):
+            # Convert the parameter to a string representation so SWIG gets a char*
+            ps = to_param_string(mecha.param)
+            m.pParameter = ps
+            m.ulParameterLen = len(mecha.param)
+        data1 = ckbytelist()
+        data1.reserve(len(wrappedKey))
+        if isinstance(wrappedKey, bytes):
+            for x in wrappedKey:
+                data1.append(byte_to_int(x))
+        else:
+            for c in range(len(wrappedKey)):
+                data1.append(wrappedKey[c])
+        handle = PyKCS11.LowLevel.CK_OBJECT_HANDLE()
+        attrs = self._template2ckattrlist(template)
+        rv = self.lib.C_UnwrapKey(self.session, m, unwrappingKey, data1, attrs, handle)
+        if rv != CKR_OK:
+            raise PyKCS11Error(rv)
+        return handle
 
     def isNum(self, type):
         """
