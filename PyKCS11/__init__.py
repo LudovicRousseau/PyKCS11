@@ -579,7 +579,7 @@ class PyKCS11Lib(object):
 
         @param slot: slot number returned by L{getSlotList}
         @type slot: integer
-        @param flags: 0 (default), CKF_RW_SESSION for RW session
+        @param flags: 0 (default), L{CKF_RW_SESSION} for RW session
         @type flags: integer
         @return: a L{Session} object
         """
@@ -599,6 +599,8 @@ class PyKCS11Lib(object):
         """
         C_GetMechanismList
 
+        @param slot: slot number returned by L{getSlotList}
+        @type slot: integer
         @return: the list of available mechanisms for a slot
         @rtype: list
         """
@@ -621,6 +623,10 @@ class PyKCS11Lib(object):
         """
         C_GetMechanismInfo
 
+        @param slot: slot number returned by L{getSlotList}
+        @type slot: integer
+        @param type: a CKM_* type
+        @type type: integer
         @return: information about a mechanism
         @rtype: a L{CK_MECHANISM_INFO} object
         """
@@ -738,6 +744,8 @@ class Session(object):
     def initPin(self, new_pin):
         """
         C_InitPIN
+
+        @param new_pin: new PIN
         """
         rv = self.lib.C_InitPIN(self.session, new_pin)
         if rv != CKR_OK:
@@ -746,6 +754,9 @@ class Session(object):
     def setPin(self, old_pin, new_pin):
         """
         C_SetPIN
+
+        @param old_pin: old PIN
+        @param new_pin: new PIN
         """
         rv = self.lib.C_SetPIN(self.session, old_pin, new_pin)
         if rv != CKR_OK:
@@ -754,6 +765,8 @@ class Session(object):
     def createObject(self, template):
         """
         C_CreateObject
+
+        @param template: object template
         """
         attrs = self._template2ckattrlist(template)
         handle = PyKCS11.LowLevel.CK_OBJECT_HANDLE()
@@ -765,6 +778,8 @@ class Session(object):
     def destroyObject(self, obj):
         """
         C_DestroyObject
+
+        @param obj: object ID
         """
         rv = self.lib.C_DestroyObject(self.session, obj)
         if rv != CKR_OK:
