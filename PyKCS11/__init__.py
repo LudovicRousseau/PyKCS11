@@ -453,6 +453,11 @@ class PyKCS11Lib(object):
     def initToken(self, slot, pin, label):
         """
         C_InitToken
+
+        @param slot: slot number returned by L{getSlotList}
+        @type slot: integer
+        @param pin: SO's initial PIN
+        @param label: new label of the token
         """
         rv = self.lib.C_InitToken(slot, pin, label)
         if rv != CKR_OK:
