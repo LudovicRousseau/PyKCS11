@@ -202,6 +202,10 @@ CK_RV CPKCS11Lib::C_SetPIN(
 	CK_ULONG ulNewLen)
 {
 	CPKCS11LIB_PROLOGUE(C_SetPIN);
+	if (NULL == pOldPin)
+		ulOldLen = 0;
+	if (NULL == pNewPin)
+		ulNewLen = 0;
 	rv = m_pFunc->C_SetPIN(hSession,
 		(CK_UTF8CHAR_PTR)pOldPin, ulOldLen,
 		(CK_UTF8CHAR_PTR)pNewPin, ulNewLen);
@@ -255,6 +259,8 @@ CK_RV CPKCS11Lib::C_Login(
 	CK_ULONG ulPinLen)
 {
 	CPKCS11LIB_PROLOGUE(C_Login);
+	if (NULL == pPin)
+		ulPinLen = 0;
 	rv = m_pFunc->C_Login(hSession, userType, (CK_UTF8CHAR_PTR)pPin, ulPinLen);
 	CPKCS11LIB_EPILOGUE;
 	return rv;
