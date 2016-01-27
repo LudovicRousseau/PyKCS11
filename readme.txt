@@ -85,65 +85,65 @@ History
 """""""
 
 1.3.1 - October 2015, Ludovic Rousseau
-	- PKCS#11 definitions: sync with Cryptoki version 2.30
-	- Add user type CK_CONTEXT_SPECIFIC
-	- Fixes #9, incorrect assignment of pParameter for CK_MECHANISMs.
-	- CKA_DERIVE is a CK_BBOOL and not byte array
-	- Add digest() and encrypt method to Session class
-	- Add samples:
-	  . key-pair genearation
-	  . key-pair generation + certificate import
-	  . printing public key modulus
-	  . computing signatur
-	- small bugs fixed
+    - PKCS#11 definitions: sync with Cryptoki version 2.30
+    - Add user type CK_CONTEXT_SPECIFIC
+    - Fixes #9, incorrect assignment of pParameter for CK_MECHANISMs.
+    - CKA_DERIVE is a CK_BBOOL and not byte array
+    - Add digest() and encrypt method to Session class
+    - Add samples:
+      . key-pair genearation
+      . key-pair generation + certificate import
+      . printing public key modulus
+      . computing signatur
+    - small bugs fixed
 
 1.3.0 - July 2014, Ludovic Rousseau
-	- add Python3 support
+    - add Python3 support
 
 1.2.4 - April 2012, Ludovic Rousseau
-	- improve epydoc documentation
-	- add pinpad support in C_Login() using pin=None
-	- add pinpad support in samples getinfo.py and dumpit.py
-	- add createObject()
+    - improve epydoc documentation
+    - add pinpad support in C_Login() using pin=None
+    - add pinpad support in samples getinfo.py and dumpit.py
+    - add createObject()
 
 1.2.3 - December 2010, Ludovic Rousseau
-	- Add new classes CK_SLOT_INFO, CK_INFO, CK_SESSION_INFO,
-	  CK_MECHANISM_INFO and CK_TOKEN_INFO instead of the low level ones
-	  to have a __repr__() method.  It is now possible to just print an
-	  object of these classes and have a human readable version.
-	- Add a new class CK_OBJECT_HANDLE() to replace the low level one
-	  and have a __repr__() method for objects returned by findObjects()
-	- Move initToken() from class Session to class PyKCS11Lib and add a
-	  slot parameter.
-	- Add generateKeyPair and destoryObject support in high level
-	  interface
+    - Add new classes CK_SLOT_INFO, CK_INFO, CK_SESSION_INFO,
+      CK_MECHANISM_INFO and CK_TOKEN_INFO instead of the low level ones
+      to have a __repr__() method.  It is now possible to just print an
+      object of these classes and have a human readable version.
+    - Add a new class CK_OBJECT_HANDLE() to replace the low level one
+      and have a __repr__() method for objects returned by findObjects()
+    - Move initToken() from class Session to class PyKCS11Lib and add a
+      slot parameter.
+    - Add generateKeyPair and destoryObject support in high level
+      interface
 
 1.2.2 - June 2010, Ludovic Rousseau
-	Debug low level C_GenerateRandom
-	Add seedRandom() and generateRandom() in the high level API
+    Debug low level C_GenerateRandom
+    Add seedRandom() and generateRandom() in the high level API
 
 1.2.1 - November 2008, Ludovic Rousseau
-	Use src/opensc/pkcs11.h instead of src/rsaref/* files since the
-	 files from RSA are not free enough (no right to distribute modified
-	 versions for example)
-	improve samples/getinfo.py script
-	bug fixes
+    Use src/opensc/pkcs11.h instead of src/rsaref/* files since the
+     files from RSA are not free enough (no right to distribute modified
+     versions for example)
+    improve samples/getinfo.py script
+    bug fixes
 
 1.2.0 - August 2008, Ludovic Rousseau
-	add getMechanismList() and getMechanismInfo()
-	add Session().getSessionInfo()
-	bug fixes
+    add getMechanismList() and getMechanismInfo()
+    add Session().getSessionInfo()
+    bug fixes
 
 1.1.1 - December 2006, Giuseppe Amato (Midori)
-	bug fixes
+    bug fixes
 
 1.1.0 - August 2006, Ludovic Rousseau
-	Introduce high level API
+    Introduce high level API
 
 1.0.2 - July 2006, Ludovic Rousseau
-	port to Unix (tested on GNU/Linux only)
-	explicit call to SWIG to generate the wrapper
+    port to Unix (tested on GNU/Linux only)
+    explicit call to SWIG to generate the wrapper
 
 1.0.1 - 2004 Giuseppe Amato (Midori)
-	first version
-	Windows only
+    first version
+    Windows only
