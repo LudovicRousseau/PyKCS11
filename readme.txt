@@ -101,10 +101,10 @@ History
     - CKA_DERIVE is a CK_BBOOL and not byte array
     - Add digest() and encrypt method to Session class
     - Add samples:
-      . key-pair genearation
+      . key-pair generation
       . key-pair generation + certificate import
       . printing public key modulus
-      . computing signatur
+      . computing signature
     - small bugs fixed
 
 1.3.0 - July 2014, Ludovic Rousseau
