@@ -84,6 +84,16 @@ that doesn't come with the standard distribution.
 History
 """""""
 
+1.3.2 - January 2016, Ludovic Rousseau
+    - Add wrappers for C_Verify, C_WrapKey, C_UnwrapKey
+    - PKCS#11 definitions: sync with Cryptoki version 2.30
+    - Generate CKM[CKM_VENDOR_DEFINED+x] values on the fly
+    - Fix use of a pinpad reader CKF_PROTECTED_AUTHENTICATION_PATH
+    - dumpit.py: lots of small fixes
+    - Setup call make to build pykcs11_wrap.cpp using SWIG
+    - Fix build on Windows
+    - Small bugs fixed
+
 1.3.1 - October 2015, Ludovic Rousseau
     - PKCS#11 definitions: sync with Cryptoki version 2.30
     - Add user type CK_CONTEXT_SPECIFIC
