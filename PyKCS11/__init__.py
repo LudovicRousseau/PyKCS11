@@ -589,11 +589,7 @@ class PyKCS11Lib(object):
         if rv != CKR_OK:
             raise PyKCS11Error(rv)
 
-        s = Session()
-        s.lib = self.lib
-        s.slot = slot
-        s.session = se
-        return s
+        return Session(self, slot, se)
 
     def getMechanismList(self, slot):
         """
@@ -682,6 +678,32 @@ MechanismRSAGENERATEKEYPAIR = Mechanism(CKM_RSA_PKCS_KEY_PAIR_GEN, None)
 
 class Session(object):
     """ Manage L{PyKCS11Lib.openSession} objects """
+
+    def __init__(self, lib, slot, session):
+        """
+        @param lib: PyKCS11 library object
+        @type lib: PyKCS11Lib
+        @param slot: slot number
+        @type slot: integer
+        @param session: session handle
+        @type session: instance of CK_SESSION_HANDLE
+        """
+        if not isinstance(lib, PyKCS11Lib):
+            raise TypeError("lib must be a PyKCS11Lib")
+        if not isinstance(session, LowLevel.CK_SESSION_HANDLE):
+            raise TypeError("session must be a CK_SESSION_HANDLE")
+
+        # hold the PyKCS11Lib reference, so that it's not GC'd
+        self._lib = lib
+        self.slot = slot
+        self.session = session
+
+    @property
+    def lib(self):
+        """
+        Get the low level lib of the owning PyKCS11Lib
+        """
+        return self._lib.lib
 
     def closeSession(self):
         """
