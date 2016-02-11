@@ -693,7 +693,7 @@ class Session(object):
         if not isinstance(session, LowLevel.CK_SESSION_HANDLE):
             raise TypeError("session must be a CK_SESSION_HANDLE")
 
-        # hold the PyKCS11Lib reference, so that it's not GC'd
+        # hold the PyKCS11Lib reference, so that it's not Garbage Collection'd
         self.pykcs11 = pykcs11
         self.slot = slot
         self.session = session
