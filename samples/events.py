@@ -34,7 +34,7 @@ if __name__ == '__main__':
 
     try:
         opts, args = getopt.getopt(sys.argv[1:], "p:c:ho",
-            ["pin=", "lib=", "help", "opensession"])
+                                   ["pin=", "lib=", "help", "opensession"])
     except getopt.GetoptError:
         # print help information and exit:
         usage()
