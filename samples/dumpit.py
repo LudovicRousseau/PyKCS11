@@ -125,6 +125,9 @@ for s in slots:
         print("Opened session 0x%08X" % session.session.value())
         if pin_available:
             try:
+                if (pin is None) and \
+                        (PyKCS11.CKF_PROTECTED_AUTHENTICATION_PATH & t.flags):
+                    print("\nEnter your PIN for %s on the pinpad" % t.label.strip())
                 session.login(pin=pin)
             except PyKCS11.PyKCS11Error as e:
                 print("login failed, exception:", e)
