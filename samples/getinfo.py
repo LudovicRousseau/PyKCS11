@@ -137,8 +137,9 @@ if __name__ == '__main__':
     if len(slots) == 0:
         sys.exit(2)
 
-    if slot:
+    if slot is not None:
         slots = [slots[slot]]
+        print("Using slot:", slots[0])
 
     for slot in slots:
         try:
