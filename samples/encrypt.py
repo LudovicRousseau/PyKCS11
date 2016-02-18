@@ -32,8 +32,8 @@ session.login("1234")
 message = "48656c6c6f20776f726c640d0a"
 
 # get first public and private keys
-pubKey = session.findObjects([(CKA_CLASS, CKO_PUBLIC_KEY)])[0];
-privKey = session.findObjects([(CKA_CLASS, CKO_PRIVATE_KEY)])[0];
+pubKey = session.findObjects([(CKA_CLASS, CKO_PUBLIC_KEY)])[0]
+privKey = session.findObjects([(CKA_CLASS, CKO_PRIVATE_KEY)])[0]
 enc = session.encrypt(pubKey, binascii.unhexlify(message))
 dec = session.decrypt(privKey, enc)
 
