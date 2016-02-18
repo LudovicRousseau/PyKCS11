@@ -225,7 +225,7 @@ for s in slots:
 
             print("Dumping attributes:")
             for q, a in zip(all_attributes, attributes):
-                if a == None:
+                if a is None:
                     # undefined (CKR_ATTRIBUTE_TYPE_INVALID) attribute
                     continue
                 if q == PyKCS11.CKA_CLASS:
