@@ -28,7 +28,7 @@ pin = '1111'
 session.login(pin, PyKCS11.CKU_USER)
 
 
-#############   key-pair generation    ##########################
+# ############   key-pair generation    ##########################
 # The first step in the process is to create the key-templates. See PKCS#11
 # `10.8 Public key objects` to learn which attributes are available. Section
 # 10.9 covers private keys.
@@ -68,7 +68,7 @@ private_template = [
     ]
 
 session.generateKeyPair(public_template, private_template)
-############## the keys were generated and stored on the card ###############
+# ############# the keys were generated and stored on the card ###############
 
 
 # At this point your keys are in the card, the private key is marked as
@@ -105,17 +105,16 @@ cert_template = [
     (PyKCS11.CKA_ENCRYPT, PyKCS11.CK_TRUE),
     (PyKCS11.CKA_VERIFY, PyKCS11.CK_TRUE),
     (PyKCS11.CKA_MODIFIABLE, PyKCS11.CK_TRUE),
-    (PyKCS11.CKA_VALUE, cert), # must be BER-encoded
+    (PyKCS11.CKA_VALUE, cert),  # must be BER-encoded
 
-    (PyKCS11.CKA_SUBJECT, subject), # must be set and DER, see Table 24, X.509 Certificate Object Attributes
-    (PyKCS11.CKA_ID, key_id) # must be set, and DER see Table 24, X.509 Certificate Object Attributes
+    (PyKCS11.CKA_SUBJECT, subject),  # must be set and DER, see Table 24, X.509 Certificate Object Attributes
+    (PyKCS11.CKA_ID, key_id)  # must be set, and DER see Table 24, X.509 Certificate Object Attributes
     ]
 
 
 # logout
 session.logout()
 session.closeSession()
-
 
 
 # At this point the certificate is on the card too. Some GUI tools
