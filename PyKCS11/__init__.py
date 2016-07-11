@@ -1179,7 +1179,8 @@ class Session(object):
             CKA_UNWRAP,
             CKA_VERIFY,
             CKA_VERIFY_RECOVER,
-            CKA_WRAP):
+            CKA_WRAP,
+            CKA_WRAP_WITH_TRUSTED):
             return True
         return False
 
