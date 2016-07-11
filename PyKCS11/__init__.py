@@ -674,6 +674,7 @@ class Mechanism(object):
 MechanismSHA1 = Mechanism(CKM_SHA_1, None)
 MechanismRSAPKCS1 = Mechanism(CKM_RSA_PKCS, None)
 MechanismRSAGENERATEKEYPAIR = Mechanism(CKM_RSA_PKCS_KEY_PAIR_GEN, None)
+MechanismAESGENERATEKEY = Mechanism(CKM_AES_KEY_GEN, None)
 
 
 class Session(object):
@@ -1217,6 +1218,30 @@ class Session(object):
             else:
                 raise PyKCS11Error(-2)
         return t
+
+    def generateKey(self, template, mecha=MechanismAESGENERATEKEY):
+        """
+        generate a secret key
+
+        @param template: template for the secret key
+        @param mecha: mechanism to use
+        @return: handle of the generated key
+        @rtype: PyKCS11.LowLevel.CK_OBJECT_HANDLE
+        """
+        t = self._template2ckattrlist(template)
+        ck_handle = PyKCS11.LowLevel.CK_OBJECT_HANDLE()
+        m = PyKCS11.LowLevel.CK_MECHANISM()
+        ps = None # must be declared here or may be deallocated too early
+        m.mechanism = mecha.mechanism
+        if (mecha.param):
+            # Convert the parameter to a string representation so SWIG gets a char*
+            ps = to_param_string(mecha.param)
+            m.pParameter = ps
+            m.ulParameterLen = len(mecha.param)
+        rv = self.lib.C_GenerateKey(self.session, m, t, ck_handle)
+        if rv != CKR_OK:
+            raise PyKCS11Error(rv)
+        return ck_handle
 
     def generateKeyPair(self, templatePub, templatePriv, mecha=MechanismRSAGENERATEKEYPAIR):
         """
