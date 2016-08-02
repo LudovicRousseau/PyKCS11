@@ -122,7 +122,7 @@ class CK_OBJECT_HANDLE(PyKCS11.LowLevel.CK_OBJECT_HANDLE):
 
         dico = dict()
         for key, attr in zip(all_attributes, attributes):
-            if attr == None:
+            if attr is None:
                 continue
             if key == CKA_CLASS:
                 dico[PyKCS11.CKA[key]] = PyKCS11.CKO[attr]
@@ -442,9 +442,9 @@ class PyKCS11Lib(object):
         @return: a L{PyKCS11Lib} object
         @raise PyKCS11Error(-1): when the load fails
         """
-        if pkcs11dll_filename == None:
+        if pkcs11dll_filename is None:
             pkcs11dll_filename = os.getenv("PYKCS11LIB")
-            if pkcs11dll_filename == None:
+            if pkcs11dll_filename is None:
                 raise PyKCS11Error(-1, "No PKCS11 library specified (set PYKCS11LIB env variable)")
         rv = self.lib.Load(pkcs11dll_filename, True)
         if rv == 0:
