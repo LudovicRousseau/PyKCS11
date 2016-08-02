@@ -845,11 +845,11 @@ class Session(object):
         rv = self.lib.C_DigestInit(self.session, m)
         if rv != CKR_OK:
             raise PyKCS11Error(rv)
-        #first call get digest size
+        # first call get digest size
         rv = self.lib.C_Digest(self.session, data1, digest)
         if rv != CKR_OK:
             raise PyKCS11Error(rv)
-        #second call get actual digest data
+        # second call get actual digest data
         rv = self.lib.C_Digest(self.session, data1, digest)
         if rv != CKR_OK:
             raise PyKCS11Error(rv)
@@ -894,11 +894,11 @@ class Session(object):
         rv = self.lib.C_SignInit(self.session, m, key)
         if rv != CKR_OK:
             raise PyKCS11Error(rv)
-        #first call get signature size
+        # first call get signature size
         rv = self.lib.C_Sign(self.session, data1, signature)
         if rv != CKR_OK:
             raise PyKCS11Error(rv)
-        #second call get actual signature data
+        # second call get actual signature data
         rv = self.lib.C_Sign(self.session, data1, signature)
         if rv != CKR_OK:
             raise PyKCS11Error(rv)
@@ -987,11 +987,11 @@ class Session(object):
         rv = self.lib.C_EncryptInit(self.session, m, key)
         if rv != CKR_OK:
             raise PyKCS11Error(rv)
-        #first call get encrypted size
+        # first call get encrypted size
         rv = self.lib.C_Encrypt(self.session, data1, encrypted)
         if rv != CKR_OK:
             raise PyKCS11Error(rv)
-        #second call get actual encrypted data
+        # second call get actual encrypted data
         rv = self.lib.C_Encrypt(self.session, data1, encrypted)
         if rv != CKR_OK:
             raise PyKCS11Error(rv)
@@ -1036,11 +1036,11 @@ class Session(object):
         rv = self.lib.C_DecryptInit(self.session, m, key)
         if rv != CKR_OK:
             raise PyKCS11Error(rv)
-        #first call get decrypted size
+        # first call get decrypted size
         rv = self.lib.C_Decrypt(self.session, data1, decrypted)
         if rv != CKR_OK:
             raise PyKCS11Error(rv)
-        #second call get actual decrypted data
+        # second call get actual decrypted data
         rv = self.lib.C_Decrypt(self.session, data1, decrypted)
         if rv != CKR_OK:
             raise PyKCS11Error(rv)
@@ -1074,11 +1074,11 @@ class Session(object):
             ps = to_param_string(mecha.param)
             m.pParameter = ps
             m.ulParameterLen = len(mecha.param)
-        #first call get wrapped size
+        # first call get wrapped size
         rv = self.lib.C_WrapKey(self.session, m, wrappingKey, key, wrapped)
         if rv != CKR_OK:
             raise PyKCS11Error(rv)
-        #second call get actual wrapped key data
+        # second call get actual wrapped key data
         rv = self.lib.C_WrapKey(self.session, m, wrappingKey, key, wrapped)
         if rv != CKR_OK:
             raise PyKCS11Error(rv)
