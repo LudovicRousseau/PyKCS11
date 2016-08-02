@@ -1231,7 +1231,7 @@ class Session(object):
         t = self._template2ckattrlist(template)
         ck_handle = PyKCS11.LowLevel.CK_OBJECT_HANDLE()
         m = PyKCS11.LowLevel.CK_MECHANISM()
-        ps = None # must be declared here or may be deallocated too early
+        ps = None  # must be declared here or may be deallocated too early
         m.mechanism = mecha.mechanism
         if (mecha.param):
             # Convert the parameter to a string representation so SWIG gets a char*
@@ -1258,7 +1258,7 @@ class Session(object):
         ck_pub_handle = PyKCS11.LowLevel.CK_OBJECT_HANDLE()
         ck_prv_handle = PyKCS11.LowLevel.CK_OBJECT_HANDLE()
         m = PyKCS11.LowLevel.CK_MECHANISM()
-        ps = None # must be declared here or may be deallocated too early
+        ps = None  # must be declared here or may be deallocated too early
         m.mechanism = mecha.mechanism
         if (mecha.param):
             # Convert the parameter to a string representation so SWIG gets a char*
