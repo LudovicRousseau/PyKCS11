@@ -6,6 +6,7 @@
 import unittest
 import PyKCS11
 
+
 class TestUtil(unittest.TestCase):
 
     def test_CKM(self):
