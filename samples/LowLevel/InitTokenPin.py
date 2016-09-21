@@ -32,7 +32,7 @@ pin = "123456"
 puk = "12345678"
 Label = "PyKCS#11 Initialized Token      "
 
-print("Load of " + lib + ": " + str(a.Load(lib, 1)))
+print("Load of " + lib + ": " + str(a.Load(lib, True)))
 print("C_GetInfo: " + hex(a.C_GetInfo(info)))
 print("Library manufacturerID: " + info.GetManufacturerID())
 del info

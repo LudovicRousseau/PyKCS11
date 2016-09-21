@@ -29,7 +29,7 @@ slotList = PyKCS11.LowLevel.ckintlist()
 rand = PyKCS11.LowLevel.ckbytelist(20)
 seed = PyKCS11.LowLevel.ckbytelist(5)
 
-print("Load of " + lib + ": " + str(a.Load(lib, 1)))
+print("Load of " + lib + ": " + str(a.Load(lib, True)))
 print("C_GetInfo: " + hex(a.C_GetInfo(info)))
 print("Library manufacturerID: " + info.GetManufacturerID())
 del info
