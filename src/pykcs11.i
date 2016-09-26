@@ -487,6 +487,10 @@ typedef unsigned long CK_RV;
 #define CKM_DSA_KEY_PAIR_GEN           0x00000010
 #define CKM_DSA                        0x00000011
 #define CKM_DSA_SHA1                   0x00000012
+#define CKM_DSA_SHA224                 0x00000013
+#define CKM_DSA_SHA256                 0x00000014
+#define CKM_DSA_SHA384                 0x00000015
+#define CKM_DSA_SHA512                 0x00000016
 #define CKM_DH_PKCS_KEY_PAIR_GEN       0x00000020
 #define CKM_DH_PKCS_DERIVE             0x00000021
 #define CKM_X9_42_DH_KEY_PAIR_GEN      0x00000030
@@ -501,6 +505,18 @@ typedef unsigned long CK_RV;
 #define CKM_SHA512_RSA_PKCS_PSS        0x00000045
 #define CKM_SHA224_RSA_PKCS            0x00000046
 #define CKM_SHA224_RSA_PKCS_PSS        0x00000047
+#define CKM_SHA512_224                 0x00000048
+#define CKM_SHA512_224_HMAC            0x00000049
+#define CKM_SHA512_224_HMAC_GENERAL    0x0000004A
+#define CKM_SHA512_224_KEY_DERIVATION  0x0000004B
+#define CKM_SHA512_256                 0x0000004C
+#define CKM_SHA512_256_HMAC            0x0000004D
+#define CKM_SHA512_256_HMAC_GENERAL    0x0000004E
+#define CKM_SHA512_256_KEY_DERIVATION  0x0000004F
+#define CKM_SHA512_T                   0x00000050
+#define CKM_SHA512_T_HMAC              0x00000051
+#define CKM_SHA512_T_HMAC_GENERAL      0x00000052
+#define CKM_SHA512_T_KEY_DERIVATION    0x00000053
 #define CKM_RC2_KEY_GEN                0x00000100
 #define CKM_RC2_ECB                    0x00000101
 #define CKM_RC2_CBC                    0x00000102
@@ -649,6 +665,16 @@ typedef unsigned long CK_RV;
 #define CKM_WTLS_PRF                        0x000003D3
 #define CKM_WTLS_SERVER_KEY_AND_MAC_DERIVE  0x000003D4
 #define CKM_WTLS_CLIENT_KEY_AND_MAC_DERIVE  0x000003D5
+#define CKM_TLS10_MAC_SERVER                0x000003D6
+#define CKM_TLS10_MAC_CLIENT                0x000003D7
+#define CKM_TLS12_MAC                       0x000003D8
+#define CKM_TLS12_KDF                       0x000003D9
+#define CKM_TLS12_MASTER_KEY_DERIVE         0x000003E0
+#define CKM_TLS12_KEY_AND_MAC_DERIVE        0x000003E1
+#define CKM_TLS12_MASTER_KEY_DERIVE_DH      0x000003E2
+#define CKM_TLS12_KEY_SAFE_DERIVE           0x000003E3
+#define CKM_TLS_MAC                         0x000003E4
+#define CKM_TLS_KDF                         0x000003E5
 #define CKM_KEY_WRAP_LYNKS             0x00000400
 #define CKM_KEY_WRAP_SET_OAEP          0x00000401
 #define CKM_CMS_SIG                    0x00000500
@@ -693,6 +719,7 @@ typedef unsigned long CK_RV;
 #define CKM_SKIPJACK_RELAYX            0x0000100a
 #define CKM_KEA_KEY_PAIR_GEN           0x00001010
 #define CKM_KEA_KEY_DERIVE             0x00001011
+#define CKM_KEA_DERIVE                 0x00001012
 #define CKM_FORTEZZA_TIMESTAMP         0x00001020
 #define CKM_BATON_KEY_GEN              0x00001030
 #define CKM_BATON_ECB128               0x00001031
@@ -705,9 +732,15 @@ typedef unsigned long CK_RV;
 #define CKM_EC_KEY_PAIR_GEN            0x00001040
 #define CKM_ECDSA                      0x00001041
 #define CKM_ECDSA_SHA1                 0x00001042
+#define CKM_ECDSA_SHA224               0x00001043
+#define CKM_ECDSA_SHA256               0x00001044
+#define CKM_ECDSA_SHA384               0x00001045
+#define CKM_ECDSA_SHA512               0x00001046
 #define CKM_ECDH1_DERIVE               0x00001050
 #define CKM_ECDH1_COFACTOR_DERIVE      0x00001051
 #define CKM_ECMQV_DERIVE               0x00001052
+#define CKM_ECDH_AES_KEY_WRAP          0x00001053
+#define CKM_RSA_AES_KEY_WRAP           0x00001054
 #define CKM_JUNIPER_KEY_GEN            0x00001060
 #define CKM_JUNIPER_ECB128             0x00001061
 #define CKM_JUNIPER_CBC128             0x00001062
@@ -726,6 +759,10 @@ typedef unsigned long CK_RV;
 #define CKM_AES_CCM                    0x00001088
 #define CKM_AES_CTS                    0x00001089
 #define CKM_AES_CMAC                   0x0000108A
+#define CKM_AES_CMAC_GENERAL           0x0000108B
+#define CKM_AES_XCBC_MAC               0x0000108C
+#define CKM_AES_XCBC_MAC_96            0x0000108D
+#define CKM_AES_GMAC                   0x0000108E
 #define CKM_BLOWFISH_KEY_GEN           0x00001090
 #define CKM_BLOWFISH_CBC               0x00001091
 #define CKM_TWOFISH_KEY_GEN            0x00001092
@@ -753,10 +790,15 @@ typedef unsigned long CK_RV;
 #define CKM_DSA_PARAMETER_GEN          0x00002000
 #define CKM_DH_PKCS_PARAMETER_GEN      0x00002001
 #define CKM_X9_42_DH_PARAMETER_GEN     0x00002002
+#define CKM_DSA_PROBABLISTIC_PARAMETER_GEN    0x00002003
+#define CKM_DSA_SHAWE_TAYLOR_PARAMETER_GEN    0x00002004
 #define CKM_AES_OFB                    0x00002104
 #define CKM_AES_CFB64                  0x00002105
 #define CKM_AES_CFB8                   0x00002106
 #define CKM_AES_CFB128                 0x00002107
+#define CKM_AES_CFB1                   0x00002108
+#define CKM_AES_KEY_WRAP               0x00002109
+#define CKM_AES_KEY_WRAP_PAD           0x0000210A
 #define CKM_RSA_PKCS_TPM_1_1           0x00004001
 #define CKM_RSA_PKCS_OAEP_TPM_1_1      0x00004002
 #define CKM_VENDOR_DEFINED             0x80000000UL
@@ -894,6 +936,13 @@ typedef unsigned long CK_RV;
 #define CKD_CPDIVERSIFY_KDF      0x00000009
 
 #define CKP_PKCS5_PBKD2_HMAC_SHA1 0x00000001
+#define CKP_PKCS5_PBKD2_HMAC_GOSTR3411     0x00000002
+#define CKP_PKCS5_PBKD2_HMAC_SHA224        0x00000003
+#define CKP_PKCS5_PBKD2_HMAC_SHA256        0x00000004
+#define CKP_PKCS5_PBKD2_HMAC_SHA384        0x00000005
+#define CKP_PKCS5_PBKD2_HMAC_SHA512        0x00000006
+#define CKP_PKCS5_PBKD2_HMAC_SHA512_224    0x00000007
+#define CKP_PKCS5_PBKD2_HMAC_SHA512_256    0x00000008
 
 #define CKZ_SALT_SPECIFIED        0x00000001
 
