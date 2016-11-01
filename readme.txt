@@ -84,6 +84,18 @@ that doesn't come with the standard distribution.
 History
 """""""
 
+1.3.3 - November 2016, Ludovic Rousseau
+    - PKCS#11 definitions: sync with Cryptoki version 2.40
+      . add missing CKM_* and CKP_* defines
+    - Add generateKey() with default mechanism CKM_AES_KEY_GEN
+    - Make sure the PyKCS11Lib is referenced as long as Session object is live
+    - Fix OverflowError on Windows
+    - Attribute CKA_WRAP_WITH_TRUSTED is bool
+    - samples
+     . dumpit: ask to enter the PIN on the pinpad if needed
+     . getinfo & dumpit: add --slot= parameter
+    - some minor improvements
+
 1.3.2 - January 2016, Ludovic Rousseau
     - Add wrappers for C_Verify, C_WrapKey, C_UnwrapKey
     - PKCS#11 definitions: sync with Cryptoki version 2.30
