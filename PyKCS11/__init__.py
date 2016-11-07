@@ -1203,7 +1203,7 @@ class Session(object):
             elif self.isString(attr[0]):
                 t[x].SetString(attr[0], str(attr[1]))
             elif self.isBool(attr[0]):
-                t[x].SetBool(attr[0], attr[1])
+                t[x].SetBool(attr[0], attr[1] == CK_TRUE)
             elif self.isBin(attr[0]):
                 attrBin = attr[1]
                 attrStr = attr[1]
