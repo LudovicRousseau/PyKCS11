@@ -59,6 +59,8 @@ CKK = {}
 CKC = {}
 CKF = {}
 CKS = {}
+CKG = {}
+CKZ = {}
 
 # redefine PKCS#11 constants using well known prefixes
 for x in PyKCS11.LowLevel.__dict__.keys():
@@ -70,7 +72,9 @@ for x in PyKCS11.LowLevel.__dict__.keys():
       or x[:4] == 'CKK_' \
       or x[:4] == 'CKC_' \
       or x[:4] == 'CKF_' \
-      or x[:4] == 'CKS_':
+      or x[:4] == 'CKS_' \
+      or x[:4] == 'CKG_' \
+      or x[:4] == 'CKZ_':
         a = "%s=PyKCS11.LowLevel.%s" % (x, x)
         exec(a)
         if x[3:] != "_VENDOR_DEFINED":
@@ -658,24 +662,116 @@ class PyKCS11Lib(object):
 class Mechanism(object):
     """Wraps CK_MECHANISM"""
 
-    def __init__(self, mechanism, param):
+    def __init__(self, mechanism, param=None):
         """
         @param mechanism: the mechanism to be used
         @type mechanism: integer, any CKM_* value
         @param param: data to be used as crypto operation parameter
-        (i.e. the IV for some agorithms)
+        (i.e. the IV for some algorithms)
         @type param: string or list/tuple of bytes
 
         @see: L{Session.decrypt}, L{Session.sign}
         """
-        self.mechanism = mechanism
-        self.param = param
+        self._mech = PyKCS11.LowLevel.CK_MECHANISM()
+        self._mech.mechanism = mechanism
+        self._param = None 
+        if param:
+            self._param = to_param_string(param)
+            self._mech.pParameter = self._param 
+            self._mech.ulParameterLen = len(param)
+
+    def to_native(self):
+        return self._mech
 
 MechanismSHA1 = Mechanism(CKM_SHA_1, None)
 MechanismRSAPKCS1 = Mechanism(CKM_RSA_PKCS, None)
 MechanismRSAGENERATEKEYPAIR = Mechanism(CKM_RSA_PKCS_KEY_PAIR_GEN, None)
+MechanismECGENERATEKEYPAIR = Mechanism(CKM_EC_KEY_PAIR_GEN, None)
 MechanismAESGENERATEKEY = Mechanism(CKM_AES_KEY_GEN, None)
 
+class RSAOAEPMechanism(object):
+    """RSA OAEP Wrapping mechanism"""
+
+    def __init__(self, hash, mgf, label=None):
+        """
+        @param hash: the hash algorithm to use
+        @param mfg: the mask generation function to use
+        @param label: the (optional) label to use
+        """
+        self._param = PyKCS11.LowLevel.CK_RSA_PKCS_OAEP_PARAMS()
+        self._param.hashAlg = hash
+        self._param.mgf = mgf
+        self._source = None
+        if label:
+            self._param.src = CKZ_DATA_SPECIFIED
+            self._source = to_param_string(label)
+            self._param.pSourceData = self._source
+            self._param.ulSourceDataLen = len(label)
+        self._mech = PyKCS11.LowLevel.CK_MECHANISM()
+        self._mech.mechanism = CKM_RSA_PKCS_OAEP
+        self._mech.pParameter = self._param
+
+    def to_native(self):
+        return self._mech
+
+class DigestSession(object):
+    def __init__(self, lib, session, mecha):
+        self._lib = lib
+        self._session = session
+        self._mechanism = mecha.to_native()
+        rv = self._lib.C_DigestInit(self._session, self._mechanism)
+        if rv != CKR_OK:
+            raise PyKCS11Error(rv)
+
+    def update(self, data):
+        """
+        C_DigestUpdate
+
+        @param data: data to add to the digest
+        @type data: bytes or string
+        """
+        data1 = ckbytelist()
+        data1.reserve(len(data))
+        if isinstance(data, bytes):
+            for x in data:
+                data1.append(byte_to_int(x))
+        else:
+            for c in range(len(data)):
+                data1.append(data[c])
+        rv = self._lib.C_DigestUpdate(self._session, data1)
+        if rv != CKR_OK:
+            raise PyKCS11Error(rv)
+        return self
+
+    def digestKey(self, handle):
+        """
+        C_DigestKey
+
+        @param handle: key handle
+        @type data: Handle
+        """
+        rv = self._lib.C_DigestKey(self._session, handle)
+        if rv != CKR_OK:
+            raise PyKCS11Error(rv)
+        return self
+
+    def final(self):
+        """
+        C_DigestFinal
+
+        @return: the digest
+        @rtype: ckbytelist
+        """
+        digest = ckbytelist()
+        # Get the size of the digest
+        rv = self._lib.C_DigestFinal(self._session, digest)
+        if rv != CKR_OK:
+            raise PyKCS11Error(rv)
+        # Get the actual digest
+        rv = self._lib.C_DigestFinal(self._session, digest)
+        if rv != CKR_OK:
+            raise PyKCS11Error(rv)
+        return digest
 
 class Session(object):
     """ Manage L{PyKCS11Lib.openSession} objects """
@@ -808,6 +904,17 @@ class Session(object):
         if rv != CKR_OK:
             raise PyKCS11Error(rv)
 
+    def digestSession(self, mecha=MechanismSHA1):
+        """
+        C_DigestInit/C_DigestUpdate/C_DigestKey/C_DigestFinal
+        @param mecha: the digesting mechanism to be used
+        @type mecha: L{Mechanism} instance or L{MechanismSHA1}
+        for CKM_SHA_1
+        @return: A DigestSession object
+        @rtype: DigestSession
+        """
+        return DigestSession(self.lib, self.session, mecha)
+
     def digest(self, data, mecha=MechanismSHA1):
         """
         C_DigestInit/C_Digest
@@ -825,15 +932,9 @@ class Session(object):
             ''.join(chr(i) for i in ckbytelistDigest)
 
         """
-        m = PyKCS11.LowLevel.CK_MECHANISM()
         digest = ckbytelist()
         ps = None  # must be declared here or may be deallocated too early
-        m.mechanism = mecha.mechanism
-        if (mecha.param):
-            # Convert the parameter to a string representation so SWIG gets a char*
-            ps = to_param_string(mecha.param)
-            m.pParameter = ps
-            m.ulParameterLen = len(mecha.param)
+        m = mecha.to_native()
         data1 = ckbytelist()
         data1.reserve(len(data))
         if isinstance(data, bytes):
@@ -874,15 +975,8 @@ class Session(object):
             ''.join(chr(i) for i in ckbytelistSignature)
 
         """
-        m = PyKCS11.LowLevel.CK_MECHANISM()
+        m = mecha.to_native()
         signature = ckbytelist()
-        ps = None  # must be declared here or may be deallocated too early
-        m.mechanism = mecha.mechanism
-        if (mecha.param):
-            # Convert the parameter to a string representation so SWIG gets a char*
-            ps = to_param_string(mecha.param)
-            m.pParameter = ps
-            m.ulParameterLen = len(mecha.param)
         data1 = ckbytelist()
         data1.reserve(len(data))
         if isinstance(data, bytes):
@@ -921,14 +1015,7 @@ class Session(object):
         @rtype: bool
 
         """
-        m = PyKCS11.LowLevel.CK_MECHANISM()
-        ps = None  # must be declared here or may be deallocated too early
-        m.mechanism = mecha.mechanism
-        if (mecha.param):
-            # Convert the parameter to a string representation so SWIG gets a char*
-            ps = to_param_string(mecha.param)
-            m.pParameter = ps
-            m.ulParameterLen = len(mecha.param)
+        m = mecha.to_native()
         data1 = ckbytelist()
         data1.reserve(len(data))
         if isinstance(data, bytes):
@@ -967,15 +1054,9 @@ class Session(object):
             ''.join(chr(i) for i in ckbytelistEncrypted)
 
         """
-        m = PyKCS11.LowLevel.CK_MECHANISM()
         encrypted = ckbytelist()
         ps = None  # must be declared here or may be deallocated too early
-        m.mechanism = mecha.mechanism
-        if (mecha.param):
-            # Convert the parameter to a string representation so SWIG gets a char*
-            ps = to_param_string(mecha.param)
-            m.pParameter = ps
-            m.ulParameterLen = len(mecha.param)
+        m = mecha.to_native()
         data1 = ckbytelist()
         data1.reserve(len(data))
         if isinstance(data, bytes):
@@ -1016,15 +1097,8 @@ class Session(object):
             ''.join(chr(i) for i in ckbytelistData)
 
         """
-        m = PyKCS11.LowLevel.CK_MECHANISM()
+        m = mecha.to_native()
         decrypted = ckbytelist()
-        ps = None  # must be declared here or may be deallocated too early
-        m.mechanism = mecha.mechanism
-        if (mecha.param):
-            # Convert the parameter to a string representation so SWIG gets a char*
-            ps = to_param_string(mecha.param)
-            m.pParameter = ps
-            m.ulParameterLen = len(mecha.param)
         data1 = ckbytelist()
         data1.reserve(len(data))
         if isinstance(data, bytes):
@@ -1067,19 +1141,13 @@ class Session(object):
         """
         m = PyKCS11.LowLevel.CK_MECHANISM()
         wrapped = ckbytelist()
-        ps = None  # must be declared here or may be deallocated too early
-        m.mechanism = mecha.mechanism
-        if (mecha.param):
-            # Convert the parameter to a string representation so SWIG gets a char*
-            ps = to_param_string(mecha.param)
-            m.pParameter = ps
-            m.ulParameterLen = len(mecha.param)
+        native = mecha.to_native()
         # first call get wrapped size
-        rv = self.lib.C_WrapKey(self.session, m, wrappingKey, key, wrapped)
+        rv = self.lib.C_WrapKey(self.session, native, wrappingKey, key, wrapped)
         if rv != CKR_OK:
             raise PyKCS11Error(rv)
         # second call get actual wrapped key data
-        rv = self.lib.C_WrapKey(self.session, m, wrappingKey, key, wrapped)
+        rv = self.lib.C_WrapKey(self.session, native, wrappingKey, key, wrapped)
         if rv != CKR_OK:
             raise PyKCS11Error(rv)
         return wrapped
@@ -1100,15 +1168,8 @@ class Session(object):
         @rtype: integer
 
         """
-        m = PyKCS11.LowLevel.CK_MECHANISM()
+        m = mecha.to_native()
         wrapped = ckbytelist()
-        ps = None  # must be declared here or may be deallocated too early
-        m.mechanism = mecha.mechanism
-        if (mecha.param):
-            # Convert the parameter to a string representation so SWIG gets a char*
-            ps = to_param_string(mecha.param)
-            m.pParameter = ps
-            m.ulParameterLen = len(mecha.param)
         data1 = ckbytelist()
         data1.reserve(len(wrappedKey))
         if isinstance(wrappedKey, bytes):
@@ -1230,14 +1291,7 @@ class Session(object):
         """
         t = self._template2ckattrlist(template)
         ck_handle = PyKCS11.LowLevel.CK_OBJECT_HANDLE()
-        m = PyKCS11.LowLevel.CK_MECHANISM()
-        ps = None  # must be declared here or may be deallocated too early
-        m.mechanism = mecha.mechanism
-        if (mecha.param):
-            # Convert the parameter to a string representation so SWIG gets a char*
-            ps = to_param_string(mecha.param)
-            m.pParameter = ps
-            m.ulParameterLen = len(mecha.param)
+        m = mecha.to_native()
         rv = self.lib.C_GenerateKey(self.session, m, t, ck_handle)
         if rv != CKR_OK:
             raise PyKCS11Error(rv)
@@ -1257,14 +1311,7 @@ class Session(object):
         tPriv = self._template2ckattrlist(templatePriv)
         ck_pub_handle = PyKCS11.LowLevel.CK_OBJECT_HANDLE()
         ck_prv_handle = PyKCS11.LowLevel.CK_OBJECT_HANDLE()
-        m = PyKCS11.LowLevel.CK_MECHANISM()
-        ps = None  # must be declared here or may be deallocated too early
-        m.mechanism = mecha.mechanism
-        if (mecha.param):
-            # Convert the parameter to a string representation so SWIG gets a char*
-            ps = to_param_string(mecha.param)
-            m.pParameter = ps
-            m.ulParameterLen = len(mecha.param)
+        m = mecha.to_native()
         rv = self.lib.C_GenerateKeyPair(self.session, m, tPub, tPriv,
             ck_pub_handle, ck_prv_handle)
 
