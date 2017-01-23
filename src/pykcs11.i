@@ -42,7 +42,7 @@ using namespace std;
 
 %include cdata.i
 %include cpointer.i
-%include typemaps.i
+    %include typemaps.i
 %include std_vector.i
 
 %template(ckintlist) vector<long>;
@@ -227,7 +227,21 @@ typedef struct CK_DATE{
 	}
 };
 
-%typemap(in) void* = char*;
+%typemap(in) void* {
+    char *buf;
+    Py_ssize_t sz;
+    // If the value being set is of string type:
+    if (PyString_Check($input) && 
+        PyString_AsStringAndSize($input, &buf, &sz) == 0) {
+      arg2 = buf;
+    } else {
+      // If the value being set is of CK_RSA_PKCS_OAEP_PARAMS type:
+      int res2 = SWIG_ConvertPtr($input, &arg2, $descriptor(CK_RSA_PKCS_OAEP_PARAMS*), 0 |  0 );
+      if (!SWIG_IsOK(res2)) {
+        SWIG_exception_fail(SWIG_ArgError(res2), "unsupported CK_MECHANISM Parameter type.");
+      }
+    }
+}
 
 typedef struct CK_MECHANISM {
   unsigned long mechanism;
@@ -242,6 +256,31 @@ typedef struct CK_MECHANISM {
 		CK_MECHANISM* m = new CK_MECHANISM();
 		m->ulParameterLen = m->mechanism = 0; m->pParameter = NULL;
 		return m;
+	}
+};
+
+%typemap(in) void*;
+%typemap(in) void* = char*;
+
+typedef struct CK_RSA_PKCS_OAEP_PARAMS {
+  unsigned long hashAlg;
+  unsigned long mgf;
+  unsigned long src;
+  void* pSourceData;
+  unsigned long ulSourceDataLen;
+} CK_RSA_PKCS_OAEP_PARAMS;
+
+%extend CK_RSA_PKCS_OAEP_PARAMS
+{
+	CK_RSA_PKCS_OAEP_PARAMS()
+	{
+		CK_RSA_PKCS_OAEP_PARAMS* p = new CK_RSA_PKCS_OAEP_PARAMS();
+		p->hashAlg = 0;
+		p->mgf = 0;
+		p->src = 0;
+		p->source_data = NULL;
+		p->source_data_len = 0;
+        return p;
 	}
 };
 
@@ -802,6 +841,11 @@ typedef unsigned long CK_RV;
 #define CKM_RSA_PKCS_TPM_1_1           0x00004001
 #define CKM_RSA_PKCS_OAEP_TPM_1_1      0x00004002
 #define CKM_VENDOR_DEFINED             0x80000000UL
+
+#define CKG_MGF1_SHA1    0x00000001
+#define CKG_MGF1_SHA256  0x00000002
+#define CKG_MGF1_SHA384  0x00000003
+#define CKG_MGF1_SHA512  0x00000004
 
 #define CKF_HW                 0x00000001
 #define CKF_ENCRYPT            0x00000100
