@@ -172,8 +172,8 @@ for s in slots:
                 m = attrDict[PyKCS11.CKA_MODULUS]
                 e = attrDict[PyKCS11.CKA_PUBLIC_EXPONENT]
                 if m and e:
-                    mx = eval(b'0x' + ''.join("%02X" %c for c in m))
-                    ex = eval(b'0x' + ''.join("%02X" %c for c in e))
+                    mx = eval(b'0x' + str.encode(''.join("%02X" %c for c in m)))
+                    ex = eval(b'0x' + str.encode(''.join("%02X" %c for c in e)))
                 if sign:
                     try:
                         toSign = b"12345678901234567890"  # 20 bytes, SHA1 digest
