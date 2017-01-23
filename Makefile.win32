@@ -1,0 +1,22 @@
+
+build: src/pykcs11_wrap.cpp
+	python setup.py build
+
+install: build
+	python setup.py install
+
+clean:
+	python setup.py clean
+	DEL /F /Q src\pykcs11_wrap.cpp
+	DEL /S /F /Q build
+	DEL /F /Q *.pyc PyKCS11\*.pyc
+	DEL /F /Q PyKCS11\LowLevel.py
+
+rebuild: clean build
+
+src/pykcs11_wrap.cpp: src/pykcs11.i
+    swig.exe -c++ -Fmicrosoft -o src\pykcs11_wrap.cpp -python src\pykcs11.i
+    move src\LowLevel.py PyKCS11\
+
+src/pykcs11.i: src/opensc/pkcs11.h src/pkcs11lib.h src/pykcs11string.h src/ck_attribute_smart.h
+
