@@ -810,11 +810,11 @@ class Session(object):
         if rv != CKR_OK:
             raise PyKCS11Error(rv)
 
-    def closeAllSession(self):
+    def closeAllSessions(self):
         """
-        C_CloseAllSession
+        C_CloseAllSessions
         """
-        rv = self.lib.C_CloseAllSession(self.slot)
+        rv = self.lib.C_CloseAllSessions(self.slot)
         if rv != CKR_OK:
             raise PyKCS11Error(rv)
 
