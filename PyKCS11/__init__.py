@@ -593,7 +593,18 @@ class PyKCS11Lib(object):
         if rv != CKR_OK:
             raise PyKCS11Error(rv)
 
-        return Session(self, slot, se)
+        return Session(self, se)
+
+    def closeAllSessions(self, slot):
+        """
+        C_CloseAllSessions
+
+        @param slot: slot number
+        @type slot: integer
+        """
+        rv = self.lib.C_CloseAllSessions(slot)
+        if rv != CKR_OK:
+            raise PyKCS11Error(rv)
 
     def getMechanismList(self, slot):
         """
@@ -776,12 +787,10 @@ class DigestSession(object):
 class Session(object):
     """ Manage L{PyKCS11Lib.openSession} objects """
 
-    def __init__(self, pykcs11, slot, session):
+    def __init__(self, pykcs11, session):
         """
         @param pykcs11: PyKCS11 library object
         @type pykcs11: PyKCS11Lib
-        @param slot: slot number
-        @type slot: integer
         @param session: session handle
         @type session: instance of CK_SESSION_HANDLE
         """
@@ -792,7 +801,6 @@ class Session(object):
 
         # hold the PyKCS11Lib reference, so that it's not Garbage Collection'd
         self.pykcs11 = pykcs11
-        self.slot = slot
         self.session = session
 
     @property
@@ -807,14 +815,6 @@ class Session(object):
         C_CloseSession
         """
         rv = self.lib.C_CloseSession(self.session)
-        if rv != CKR_OK:
-            raise PyKCS11Error(rv)
-
-    def closeAllSessions(self):
-        """
-        C_CloseAllSessions
-        """
-        rv = self.lib.C_CloseAllSessions(self.slot)
         if rv != CKR_OK:
             raise PyKCS11Error(rv)
 
