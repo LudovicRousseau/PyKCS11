@@ -84,6 +84,16 @@ that doesn't come with the standard distribution.
 History
 """""""
 
+1.4.0 - February 2017, Ludovic Rousseau
+    - fix closeAllSessions() and move it Session to PKCS11Lib
+    - add RSAOAEPMechanism to support RSA Encryption
+    - add DigestSession which enables multi-part digesting
+    - add Elliptic curve keypair generating mechanism
+    - fix bug in Templates using booleans CK_TRUE/CK_FALSE
+      Templates are used by generateKey(), generateKeyPair(),
+      findObjects() createObject(), unwrapKey()
+    - fix dumpit.py sample for Python 3
+
 1.3.3 - November 2016, Ludovic Rousseau
     - PKCS#11 definitions: sync with Cryptoki version 2.40
       . add missing CKM_* and CKP_* defines
