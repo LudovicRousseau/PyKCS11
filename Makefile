@@ -4,7 +4,7 @@ DESTDIR ?= /
 ifeq (, $(PYTHON))
 PYTHON=python
 endif
-IS_PYTHON_3 = $(shell python -c 'import sys; print(sys.version_info[0] >= 3)')
+IS_PYTHON_3 = $(shell $(PYTHON) -c 'import sys; print(sys.version_info[0] >= 3)')
 ifeq ($(IS_PYTHON_3), True)
 SWIG_OPTS := -py3
 endif
