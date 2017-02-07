@@ -721,6 +721,7 @@ class RSAOAEPMechanism(object):
         self._mech = PyKCS11.LowLevel.CK_MECHANISM()
         self._mech.mechanism = CKM_RSA_PKCS_OAEP
         self._mech.pParameter = self._param
+        self._mech.ulParameterLen = PyKCS11.LowLevel.CK_RSA_PKCS_OAEP_PARAMS_LENGTH
 
     def to_native(self):
         return self._mech
@@ -1018,6 +1019,7 @@ class Session(object):
         m = mecha.to_native()
         data1 = ckbytelist()
         data1.reserve(len(data))
+
         if isinstance(data, bytes):
             for x in data:
                 data1.append(byte_to_int(x))

@@ -42,7 +42,7 @@ using namespace std;
 
 %include cdata.i
 %include cpointer.i
-    %include typemaps.i
+%include typemaps.i
 %include std_vector.i
 
 %template(ckintlist) vector<long>;
@@ -229,10 +229,11 @@ typedef struct CK_DATE{
 
 %typemap(in) void* {
     char *buf;
-    Py_ssize_t sz;
+    size_t sz;
+    int alloc2 = 0;
     // If the value being set is of string type:
     if (PyString_Check($input) && 
-        PyString_AsStringAndSize($input, &buf, &sz) == 0) {
+        SWIG_IsOK(SWIG_AsCharPtrAndSize($input, &buf, &sz, &alloc2))) {
       arg2 = buf;
     } else {
       // If the value being set is of CK_RSA_PKCS_OAEP_PARAMS type:
@@ -280,9 +281,11 @@ typedef struct CK_RSA_PKCS_OAEP_PARAMS {
 		p->src = 0;
 		p->source_data = NULL;
 		p->source_data_len = 0;
-        return p;
+    return p;
 	}
 };
+
+%constant int CK_RSA_PKCS_OAEP_PARAMS_LENGTH = sizeof(CK_RSA_PKCS_OAEP_PARAMS);
 
 typedef struct CK_MECHANISM_INFO {
 %immutable;
