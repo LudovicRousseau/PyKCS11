@@ -19,7 +19,7 @@
 from PyKCS11 import *
 
 pkcs11 = PyKCS11Lib()
-pkcs11.load("/home/nicks/perforce/nicks-vm/pkcs11.devel-jupiter/own/spec/devel/c/pkcs11/gcc/lib/libcknfast.so")
+pkcs11.load("libcknfast.so")
 
 # get 2nd slot
 slot = pkcs11.getSlotList()[1]
@@ -55,8 +55,9 @@ privTemplate = [
 (pubKey, privKey) = session.generateKeyPair(pubTemplate, privTemplate)
 
 PLAINTEXT = "A test string"
+pt = [ord(i) for i in PLAINTEXT]
 mech = RSAOAEPMechanism(CKM_SHA256, CKG_MGF1_SHA256)
-ciphertext = session.encrypt(pubKey, PLAINTEXT, mech)
+ciphertext = session.encrypt(pubKey, pt, mech)
 decrypted = "".join([chr(i) for i in session.decrypt(privKey, ciphertext, mech)])
 assert decrypted == PLAINTEXT
 
