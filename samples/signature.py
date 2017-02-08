@@ -16,6 +16,8 @@
 # along with this program; if not, write to the Free Software
 # Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301 USA.
 
+from __future__ import print_function
+
 from PyKCS11 import *
 import binascii
 
@@ -37,12 +39,12 @@ toSign = "48656c6c6f20776f726c640d0a"
 # find private key and compute signature
 privKey = session.findObjects([(CKA_CLASS, CKO_PRIVATE_KEY), (CKA_ID, keyID)])[0]
 signature = session.sign(privKey, binascii.unhexlify(toSign), Mechanism(CKM_SHA1_RSA_PKCS, None))
-print "\nsignature: " + binascii.hexlify(bytearray(signature))
+print("\nsignature: " + binascii.hexlify(bytearray(signature)))
 
 # find public key and verify signature
 pubKey = session.findObjects([(CKA_CLASS, CKO_PUBLIC_KEY), (CKA_ID, keyID)])[0]
 result = session.verify(pubKey, binascii.unhexlify(toSign), signature, Mechanism(CKM_SHA1_RSA_PKCS, None))
-print "\nVerified:", result
+print("\nVerified:", result)
 
 # logout
 session.logout()
