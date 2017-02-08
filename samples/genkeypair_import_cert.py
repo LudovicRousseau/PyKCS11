@@ -19,7 +19,7 @@
 from PyKCS11 import *
 
 pkcs11 = PyKCS11Lib()
-pkcs11.load() # define environment variable PYKCS11LIB=YourPKCS11Lib
+pkcs11.load()  # define environment variable PYKCS11LIB=YourPKCS11Lib
 
 slot = 0  # adjust this if you have more readers
 session = pkcs11.openSession(slot, PyKCS11.CKF_RW_SESSION)

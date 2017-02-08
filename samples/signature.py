@@ -22,7 +22,7 @@ from PyKCS11 import *
 import binascii
 
 pkcs11 = PyKCS11Lib()
-pkcs11.load() # define environment variable PYKCS11LIB=YourPKCS11Lib
+pkcs11.load()  # define environment variable PYKCS11LIB=YourPKCS11Lib
 
 # get 3rd slot
 slot = pkcs11.getSlotList()[2]
