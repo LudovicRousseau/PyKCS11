@@ -19,7 +19,7 @@
 from PyKCS11 import *
 
 pkcs11 = PyKCS11Lib()
-pkcs11.load("p11.framework/p11")
+pkcs11.load() # define environment variable PYKCS11LIB=YourPKCS11Lib
 
 # get 2nd slot
 slot = pkcs11.getSlotList()[1]
