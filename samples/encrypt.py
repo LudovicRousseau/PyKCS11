@@ -16,6 +16,8 @@
 # along with this program; if not, write to the Free Software
 # Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301 USA.
 
+from __future__ import print_function
+
 from PyKCS11 import *
 import binascii
 
@@ -37,9 +39,9 @@ privKey = session.findObjects([(CKA_CLASS, CKO_PRIVATE_KEY)])[0]
 enc = session.encrypt(pubKey, binascii.unhexlify(message))
 dec = session.decrypt(privKey, enc)
 
-print "\nmessage: " + message
-print "\nencrypted: " + binascii.hexlify(bytearray(enc))
-print "\ndecrypted: " + bytearray(dec)
+print("\nmessage: " + message)
+print("\nencrypted: " + binascii.hexlify(bytearray(enc)))
+print("\ndecrypted: " + bytearray(dec))
 
 # logout
 session.logout()
