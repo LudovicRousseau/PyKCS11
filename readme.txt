@@ -84,6 +84,10 @@ that doesn't come with the standard distribution.
 History
 """""""
 
+1.4.1 - February 2017, Ludovic Rousseau
+    - fix compilation under Python 3
+    - add rsa encryption sample program
+
 1.4.0 - February 2017, Ludovic Rousseau
     - fix closeAllSessions() and move it Session to PKCS11Lib
     - add RSAOAEPMechanism to support RSA Encryption
