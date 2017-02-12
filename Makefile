@@ -1,9 +1,9 @@
 # give some default values
-PREFIX ?= /usr
 DESTDIR ?= /
 ifeq (, $(PYTHON))
 PYTHON=python
 endif
+PREFIX ?= $(shell $(PYTHON) -c 'import sys; print(sys.prefix)')
 IS_PYTHON_3 = $(shell $(PYTHON) -c 'import sys; print(sys.version_info[0] >= 3)')
 ifeq ($(IS_PYTHON_3), True)
 SWIG_OPTS := -py3
