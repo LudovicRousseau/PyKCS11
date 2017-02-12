@@ -434,7 +434,11 @@ class PyKCS11Lib(object):
         self.lib = PyKCS11.LowLevel.CPKCS11Lib()
 
     def __del__(self):
-        self.lib.Unload()
+        if PyKCS11 and PyKCS11.__name__ and \
+                PyKCS11.LowLevel and PyKCS11.LowLevel.__name__ and \
+                PyKCS11.LowLevel._LowLevel and \
+                PyKCS11.LowLevel._LowLevel.__name__:
+            self.lib.Unload()
 
     def load(self, pkcs11dll_filename=None, *init_string):
         """
