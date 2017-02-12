@@ -4,14 +4,12 @@ ifeq (, $(PYTHON))
 PYTHON=python
 endif
 PREFIX ?= $(shell $(PYTHON) -c 'import sys; print(sys.prefix)')
-IS_PYTHON_3 = $(shell $(PYTHON) -c 'import sys; print(sys.version_info[0] >= 3)')
-ifeq ($(IS_PYTHON_3), True)
-SWIG_OPTS := -py3
-endif
 
 build: build-stamp
 
-build-stamp: src/pykcs11_wrap.cpp
+build-stamp: src/pykcs11_wrap.cpp-py2 src/pykcs11_wrap.cpp-py3
+	cp src/pykcs11_wrap.cpp-py"`$(PYTHON) -c 'import sys; print(sys.version[0])'`" src/pykcs11_wrap.cpp
+	cp PyKCS11/LowLevel.py"`$(PYTHON) -c 'import sys; print(sys.version[0])'`" PyKCS11/LowLevel.py
 	$(PYTHON) setup.py build
 	touch build-stamp
 
@@ -20,16 +18,19 @@ install: build
 
 clean distclean:
 	$(PYTHON) setup.py clean
-	rm -f src/pykcs11_wrap.cpp
+	rm -f src/pykcs11_wrap.cpp*
 	rm -rf build
 	rm -f *.pyc PyKCS11/*.pyc
-	rm -f PyKCS11/LowLevel.py
+	rm -f PyKCS11/LowLevel.py*
 	rm -f build-stamp
 
 rebuild: clean build
 
-src/pykcs11_wrap.cpp: src/pykcs11.i
-	cd src ; swig -c++ -python $(SWIG_OPTS) pykcs11.i ; mv pykcs11_wrap.cxx pykcs11_wrap.cpp ; mv LowLevel.py ../PyKCS11
+src/pykcs11_wrap.cpp-py2: src/pykcs11.i
+	cd src ; swig -c++ -python -o pykcs11_wrap.cpp-py2 -outdir ../PyKCS11 pykcs11.i ; cd ../PyKCS11 ; mv LowLevel.py LowLevel.py2
+
+src/pykcs11_wrap.cpp-py3: src/pykcs11.i
+	cd src ; swig -c++ -python -py3 -o pykcs11_wrap.cpp-py3 pykcs11.i ; mv LowLevel.py ../PyKCS11/LowLevel.py3
 
 src/pykcs11.i: src/opensc/pkcs11.h src/pkcs11lib.h src/pykcs11string.h src/ck_attribute_smart.h
 	touch $@
