@@ -22,6 +22,8 @@ samples/LowLevel/rand.py
 samples/LowLevel/test.py
 samples/LowLevel/test1.py
 PyKCS11/LowLevel.py
+PyKCS11/LowLevel.py2
+PyKCS11/LowLevel.py3
 PyKCS11/__init__.py
 src/ck_attribute_smart.cpp
 src/ck_attribute_smart.h
@@ -41,3 +43,5 @@ src/utility.cpp
 src/utility.h
 src/opensc/pkcs11.h
 src/pykcs11_wrap.cpp
+src/pykcs11_wrap.cpp-py2
+src/pykcs11_wrap.cpp-py3
