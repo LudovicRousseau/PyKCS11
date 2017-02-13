@@ -8,8 +8,6 @@ PREFIX ?= $(shell $(PYTHON) -c 'import sys; print(sys.prefix)')
 build: build-stamp
 
 build-stamp: src/pykcs11_wrap.cpp-py2 src/pykcs11_wrap.cpp-py3
-	cp src/pykcs11_wrap.cpp-py"`$(PYTHON) -c 'import sys; print(sys.version[0])'`" src/pykcs11_wrap.cpp
-	cp PyKCS11/LowLevel.py"`$(PYTHON) -c 'import sys; print(sys.version[0])'`" PyKCS11/LowLevel.py
 	$(PYTHON) setup.py build
 	touch build-stamp
 
