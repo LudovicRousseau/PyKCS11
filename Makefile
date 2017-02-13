@@ -37,10 +37,12 @@ src/pykcs11_wrap.cpp-py3: src/pykcs11.i
 src/pykcs11.i: src/opensc/pkcs11.h src/pkcs11lib.h src/pykcs11string.h src/ck_attribute_smart.h
 	touch $@
 
-dist: clean
+dist: src/pykcs11_wrap.cpp-py2 src/pykcs11_wrap.cpp-py3
+	$(MAKE) clean
 	$(PYTHON) setup.py sdist
 
-pypi: clean
+pypi: src/pykcs11_wrap.cpp-py2 src/pykcs11_wrap.cpp-py3
+	$(MAKE) clean
 	$(PYTHON) setup.py sdist upload
 
 doc: build
