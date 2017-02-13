@@ -3,10 +3,13 @@
 # python setup.py install --root=/tmp/p
 # PYTHONPATH=/tmp/p/usr/lib/python2.4/site-packages python test.py
 
+from distutils.command.build_py import build_py as _build_py
+from distutils.command.build_ext import build_ext as _build_ext
 from distutils.core import setup, Extension
-from sys import version_info as pyver
 from os import path, system
 import platform
+from shutil import copy2
+from sys import exit, version_info as pyver
 
 description = '''A complete PKCS#11 wrapper for Python.
 You can use any PKCS#11 (aka CryptoKi) module such as the PSM which
@@ -50,9 +53,20 @@ if (platform.system().lower() == 'windows'):
     extra_link_args = ["/DEBUG", "/PDB:_LowLevel.pdb", "/SUBSYSTEM:WINDOWS", "/OPT:REF", "/OPT:ICF"]
 else:
     source_files.append("src/dyn_unix.c")
-    if not path.exists("src/pykcs11_wrap.cpp"):
-    	system("make src/pykcs11_wrap.cpp")
+    if not path.exists("src/pykcs11_wrap.cpp-py%s" % pyver[0]):
+        if system("exec make src/pykcs11_wrap.cpp-py%s" % pyver[0]) != 0:
+            exit("Error running SWIG")
     libraries_val = []
+
+class build_py(_build_py):
+    def run(self):
+        copy2('PyKCS11/LowLevel.py%s' % pyver[0], 'PyKCS11/LowLevel.py')
+        _build_py.run(self)
+
+class build_ext(_build_ext):
+    def run(self):
+        copy2('src/pykcs11_wrap.cpp-py%s' % pyver[0], 'src/pykcs11_wrap.cpp')
+        _build_ext.run(self)
 
 setup(name="PyKCS11",
     version="1.4.1",
@@ -79,4 +93,8 @@ setup(name="PyKCS11",
             extra_compile_args=extra_compile_args,
             extra_link_args=extra_link_args)],
     py_modules=["PyKCS11.__init__", "PyKCS11.LowLevel"],
+    cmdclass={
+        'build_py': build_py,
+        'build_ext': build_ext,
+    },
 )
