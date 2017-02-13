@@ -16,13 +16,15 @@ build-stamp: src/pykcs11_wrap.cpp-py2 src/pykcs11_wrap.cpp-py3
 install: build
 	$(PYTHON) setup.py install --prefix=$(PREFIX) --root=$(DESTDIR)
 
-clean distclean:
+clean:
 	$(PYTHON) setup.py clean
-	rm -f src/pykcs11_wrap.cpp*
 	rm -rf build
-	rm -f *.pyc PyKCS11/*.pyc
-	rm -f PyKCS11/LowLevel.py*
+	find . -name '*.py[co]' -delete
 	rm -f build-stamp
+
+distclean: clean
+	rm -f PyKCS11/LowLevel.py*
+	rm -f src/pykcs11_wrap.cpp*
 
 rebuild: clean build
 
