@@ -4,10 +4,6 @@ ifeq (, $(PYTHON))
 PYTHON=python
 endif
 PREFIX ?= $(shell $(PYTHON) -c 'import sys; print(sys.prefix)')
-IS_PYTHON_3 = $(shell $(PYTHON) -c 'import sys; print(sys.version_info[0] >= 3)')
-ifeq ($(IS_PYTHON_3), True)
-SWIG_OPTS := -py3
-endif
 
 build: build-stamp
 
@@ -29,7 +25,7 @@ clean distclean:
 rebuild: clean build
 
 src/pykcs11_wrap.cpp: src/pykcs11.i
-	cd src ; swig -c++ -python $(SWIG_OPTS) pykcs11.i ; mv pykcs11_wrap.cxx pykcs11_wrap.cpp ; mv LowLevel.py ../PyKCS11
+	cd src ; swig -c++ -python pykcs11.i ; mv pykcs11_wrap.cxx pykcs11_wrap.cpp ; mv LowLevel.py ../PyKCS11
 
 src/pykcs11.i: src/opensc/pkcs11.h src/pkcs11lib.h src/pykcs11string.h src/ck_attribute_smart.h
 	touch $@
