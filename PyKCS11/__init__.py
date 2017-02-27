@@ -713,8 +713,9 @@ class RSAOAEPMechanism(object):
 
     def __init__(self, hash, mgf, label=None):
         """
-        @param hash: the hash algorithm to use
-        @param mfg: the mask generation function to use
+        @param hash: the hash algorithm to use (like L{CKM_SHA256})
+        @param mgf: the mask generation function to use (like
+        L{CKG_MGF1_SHA256})
         @param label: the (optional) label to use
         """
         self._param = PyKCS11.LowLevel.CK_RSA_PKCS_OAEP_PARAMS()
