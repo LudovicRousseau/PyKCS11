@@ -768,7 +768,7 @@ class DigestSession(object):
         C_DigestKey
 
         @param handle: key handle
-        @type data: Handle
+        @type handle: CK_OBJECT_HANDLE
         """
         rv = self._lib.C_DigestKey(self._session, handle)
         if rv != CKR_OK:
