@@ -490,15 +490,19 @@ class PyKCS11Lib(object):
         i.libraryVersion = (info.libraryVersion.major, info.libraryVersion.minor)
         return i
 
-    def getSlotList(self):
+    def getSlotList(self, tokenPresent=False):
         """
         C_GetSlotList
 
+        @param tokenPresent: L{False} (default) to list all slots,
+        L{True} to list only slots with present tokens
+        @type tokenPresent: bool
         @return: a list of available slots
         @rtype: list
         """
         slotList = PyKCS11.LowLevel.ckintlist()
-        rv = self.lib.C_GetSlotList(0, slotList)
+        rv = self.lib.C_GetSlotList(CK_TRUE if tokenPresent else CK_FALSE,
+                slotList)
         if rv != CKR_OK:
             raise PyKCS11Error(rv)
 
