@@ -51,7 +51,7 @@ CPKCS11Lib::~CPKCS11Lib(void)
 	Unload();
 }
 
-bool CPKCS11Lib::Load(const char* szLib, bool bAutoCallInitialize)
+bool CPKCS11Lib::Load(const char* szLib)
 {
 	CK_RV rv;
 	Unload();

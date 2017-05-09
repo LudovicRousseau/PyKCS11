@@ -30,7 +30,7 @@ tokenInfo = PyKCS11.LowLevel.CK_TOKEN_INFO()
 slotList = PyKCS11.LowLevel.ckintlist()
 pin = "1234"
 
-print("Load of " + lib + ": " + str(a.Load(lib, True)))
+print("Load of " + lib + ": " + str(a.Load(lib)))
 print("C_GetInfo: " + hex(a.C_GetInfo(info)))
 print("Library manufacturerID: " + info.GetManufacturerID())
 del info

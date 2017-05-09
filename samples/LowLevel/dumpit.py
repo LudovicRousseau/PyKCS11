@@ -31,7 +31,7 @@ tokenInfo = CK_TOKEN_INFO()
 slotList = ckintlist()
 pin = "12345678"
 
-print("Load of " + lib + ": " + str(a.Load(lib, True)))
+print("Load of " + lib + ": " + str(a.Load(lib)))
 print("C_GetInfo:", hex(a.C_GetInfo(info)))
 print("Library manufacturerID:", info.GetManufacturerID())
 del info
