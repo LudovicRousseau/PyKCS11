@@ -19,11 +19,14 @@
 from __future__ import print_function
 
 import PyKCS11.LowLevel
+import os
 
 a = PyKCS11.LowLevel.CPKCS11Lib()
 info = PyKCS11.LowLevel.CK_INFO()
 slotInfo = PyKCS11.LowLevel.CK_SLOT_INFO()
-lib = "pkcs11_lib.dll"
+lib = os.getenv("PYKCS11LIB")
+if lib == None:
+    raise(Exception("Define PYKCS11LIB"))
 session = PyKCS11.LowLevel.CK_SESSION_HANDLE()
 sessionInfo = PyKCS11.LowLevel.CK_SESSION_INFO()
 tokenInfo = PyKCS11.LowLevel.CK_TOKEN_INFO()
