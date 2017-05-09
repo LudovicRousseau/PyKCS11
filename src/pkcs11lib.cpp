@@ -73,16 +73,11 @@ bool CPKCS11Lib::Load(const char* szLib, bool bAutoCallInitialize)
 		return false;
 	}
 
-	if (bAutoCallInitialize)
-	{
-		CK_INFO infos;
-		if (m_pFunc->C_GetInfo(&infos) == CKR_CRYPTOKI_NOT_INITIALIZED)
-		{
-			m_bAutoInitialized = m_bFinalizeOnClose = CKR_OK == m_pFunc->C_Initialize(NULL);
-		}
-		else
-			m_bAutoInitialized = true;
-	}
+	rv = m_pFunc->C_Initialize(NULL);
+	if (CKR_OK != rv)
+		return false;
+
+	m_bFinalizeOnClose = true;
 	return true;
 }
 
