@@ -83,6 +83,18 @@ that doesn't come with the standard distribution.
 History
 =======
 
+1.4.2 - May 2017, Ludovic Rousseau
+   - Moved the project from https://bitbucket.org/PyKCS11/pykcs11 to
+     https://github.com/LudovicRousseau/PyKCS11
+   - Makefile: use a better default value for PREFIX
+   - Fix PyKCS11.__del__(): test that every module is accessible
+   - getSlotList(): add optional tokenPresent parameter
+     By default the method returns all the slots (like before the change).
+   - Always call C_Initialize() in ::Load() to work with some bogus
+     PKCS#11 library (like libCryptoki2 from Safenet Luna SA HSM)
+   - LowLevel samples: use PYKCS11LIB environment variable
+   - some minor improvements
+
 1.4.1 - February 2017, Ludovic Rousseau
    - fix compilation under Python 3
    - add rsa encryption sample program
