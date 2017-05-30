@@ -36,6 +36,10 @@ dist: clean
 pypi: clean
 	$(PYTHON) setup.py sdist upload
 
+test: build
+	cd PyKCS11 ; ln -sf ../build/*/PyKCS11/_LowLevel.so
+	$(PYTHON) -m unittest discover
+
 doc: build
 	rm -rf html
 	epydoc --verbose PyKCS11
