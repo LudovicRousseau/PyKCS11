@@ -39,7 +39,7 @@ pypi: clean
 	$(PYTHON) setup.py sdist upload
 
 test: build
-	cd PyKCS11 ; ln -sf ../build/*/PyKCS11/_LowLevel.so
+	cd PyKCS11 ; ln -sf ../build/lib.*/PyKCS11/_LowLevel*.so
 	$(PYTHON) -m unittest discover
 
 doc: build
