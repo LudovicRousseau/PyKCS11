@@ -40,7 +40,7 @@ pypi: clean
 
 test: build
 	cd PyKCS11 ; ln -sf ../build/lib.*/PyKCS11/_LowLevel*.so
-	$(PYTHON) -m unittest discover
+	$(PYTHON) -m unittest discover -v
 
 doc: build
 	rm -rf html
