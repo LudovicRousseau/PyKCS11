@@ -1,6 +1,7 @@
+*.py[co]
 .DS_Store
 .swp
-*.py[co]
+.tox
 PyKCS11/LowLevel.py
 build-stamp
 build/
