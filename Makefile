@@ -20,6 +20,7 @@ clean distclean:
 	rm -rf build
 	rm -f *.pyc PyKCS11/*.pyc
 	rm -f PyKCS11/LowLevel.py
+	rm -f PyKCS11/_LowLevel*
 	rm -f build-stamp
 	rm -f tests/*.pyc
 
