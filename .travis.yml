@@ -1,0 +1,22 @@
+language: python
+sudo: false
+
+python:
+    - "2.7"
+    - "3.6"
+
+addons:
+  apt:
+    packages:
+      - swig
+
+install:
+    - pip install -r dev-requirements.txt
+    - pip install .
+
+script:
+    - make prepare4test
+    - coverage run run_test.py
+
+after_success:
+    - coveralls
