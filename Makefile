@@ -38,9 +38,16 @@ dist: clean
 pypi: clean
 	$(PYTHON) setup.py sdist upload
 
-test: build
+prepare4test: build
 	cd PyKCS11 ; ln -sf ../build/lib.*/PyKCS11/_LowLevel*.so
+
+test: prepare4test
 	$(PYTHON) -m unittest discover -v
+
+coverage: prepare4test
+	coverage run run_test.py
+	coverage report
+	coverage html
 
 doc: build
 	rm -rf html
