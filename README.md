@@ -25,6 +25,13 @@ Licence
  along with this program; if not, write to the Free Software
  Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301 USA
 
+Status
+======
+
+[![Build Status](https://travis-ci.org/LudovicRousseau/PyKCS11-debug.svg?branch=master)](https://travis-ci.org/LudovicRousseau/PyKCS11-debug)
+
+[![Coverage Status](https://coveralls.io/repos/github/LudovicRousseau/PyKCS11-debug/badge.svg?branch=master)](https://coveralls.io/github/LudovicRousseau/PyKCS11-debug?branch=master)
+
 API
 ===
 The API documentation is available at http://pkcs11wrap.sourceforge.net/api/
