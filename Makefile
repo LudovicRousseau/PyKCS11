@@ -42,7 +42,7 @@ prepare4test: build
 	cd PyKCS11 ; ln -sf ../build/lib.*/PyKCS11/_LowLevel*.so
 
 test: prepare4test
-	$(PYTHON) -m unittest discover -v
+	./run_test.py
 
 coverage: prepare4test
 	coverage run run_test.py
