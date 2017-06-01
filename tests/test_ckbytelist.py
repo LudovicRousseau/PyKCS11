@@ -25,7 +25,7 @@ class Testutil(unittest.TestCase):
         ck = PyKCS11.ckbytelist(size)
         for index in range(size):
             ck[index] = index
-        self.assertEqual(str(ck), str(range(size)))
+        self.assertEqual(str(ck), str(list(range(size))))
 
 
 if __name__ == '__main__':
