@@ -74,7 +74,7 @@ bool CPKCS11Lib::Load(const char* szLib)
 	}
 
 	rv = m_pFunc->C_Initialize(NULL);
-	if (CKR_OK != rv)
+	if (CKR_OK != rv  && CKR_CRYPTOKI_ALREADY_INITIALIZED != rv)
 		return false;
 
 	m_bFinalizeOnClose = true;
