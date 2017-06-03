@@ -91,6 +91,31 @@ class ckbytelist(PyKCS11.LowLevel.ckbytelist):
     add a __repr__() method to the LowLevel equivalent
     """
 
+    def __init__(self, data=[]):
+        # default size of the vector
+        size = 0
+        if isinstance(data, int):
+            size = data
+
+        super(ckbytelist, self).__init__(size)
+
+        # b'abc'
+        if isinstance(data, bytes):
+            self.reserve(len(data))
+            for x in data:
+                self.append(byte_to_int(x))
+        # "abc"
+        elif isinstance(data, str):
+            tmp = bytes(data, "utf-8")
+            self.reserve(len(tmp))
+            for x in tmp:
+                self.append(byte_to_int(x))
+        # [141, 142, 143]
+        elif isinstance(data, list):
+            self.reserve(len(data))
+            for c in range(len(data)):
+                self.append(data[c])
+
     def __repr__(self):
         """
         return the representation of a tuple
