@@ -725,10 +725,10 @@ class Mechanism(object):
         """
         self._mech = PyKCS11.LowLevel.CK_MECHANISM()
         self._mech.mechanism = mechanism
-        self._param = None 
+        self._param = None
         if param:
             self._param = to_param_string(param)
-            self._mech.pParameter = self._param 
+            self._mech.pParameter = self._param
             self._mech.ulParameterLen = len(param)
 
     def to_native(self):
