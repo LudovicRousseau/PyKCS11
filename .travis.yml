@@ -24,6 +24,7 @@ install:
 
 script:
     - make prepare4test
+    - ./run_test.py
     - coverage run run_test.py
 
 after_success:
