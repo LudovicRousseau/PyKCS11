@@ -39,7 +39,14 @@ class TestUtil(unittest.TestCase):
                 (PyKCS11.CKA_ID, keyID)
                 ]
 
-        AESKey = self.session.generateKey(AESKeyTemplate)
+        try:
+            AESKey = self.session.generateKey(AESKeyTemplate)
+        except PyKCS11.PyKCS11Error as e:
+            # generateKey() is not support by SoftHSM1
+            if str(e) == "CKR_FUNCTION_NOT_SUPPORTED (0x00000054)":
+                return
+            else:
+                raise
         self.assertIsNotNone(AESKey)
 
         # buffer of 32 bytes 0x00
