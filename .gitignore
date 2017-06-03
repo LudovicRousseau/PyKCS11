@@ -1,11 +1,12 @@
 *.py[co]
+*.swp
 .DS_Store
+.coverage
 .swp
 .tox
-.coverage
-htmlcov
 PyKCS11/LowLevel.py
 build-stamp
 build/
 dist/
+htmlcov
 src/pykcs11_wrap.cpp
