@@ -1,9 +1,18 @@
 #!/usr/bin/env python
 
+# use:
+# ./run_test.py
+# ./run_test.py test_ckbytelist.py
+
 from __future__ import print_function
 
 import unittest
 import os
+import sys
+
+pattern = "test*.py"
+if len(sys.argv) > 1:
+    pattern = sys.argv[1]
 
 LIBS = ["/usr/local/lib/pkcs11/libsofthsm2.so",  # macOS or local build
         "/usr/lib/softhsm/libsofthsm2.so",  # Debian libsofthsm2
@@ -16,8 +25,7 @@ for lib in LIBS:
         break
 
 tl = unittest.TestLoader()
-suite = tl.discover("tests")
+suite = tl.discover("tests", pattern=pattern)
 result = unittest.TextTestRunner(verbosity=2).run(suite)
 if result.errors or result.failures:
-    import sys
     sys.exit(1)
