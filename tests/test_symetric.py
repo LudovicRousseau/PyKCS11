@@ -18,6 +18,11 @@ class TestUtil(unittest.TestCase):
         self.pkcs11.closeAllSessions(self.slot)
         del self.pkcs11
 
+    def test_mechanism(self):
+        # AES CBC with IV
+        mechanism = PyKCS11.Mechanism(PyKCS11.CKM_AES_CBC, '1234567812345678')
+        self.assertIsNotNone(mechanism)
+
     def test_sign(self):
         keyID = (0x01,)
         AESKeyTemplate = [
