@@ -1064,14 +1064,7 @@ class Session(object):
         encrypted = ckbytelist()
         ps = None  # must be declared here or may be deallocated too early
         m = mecha.to_native()
-        data1 = ckbytelist()
-        data1.reserve(len(data))
-        if isinstance(data, bytes):
-            for x in data:
-                data1.append(byte_to_int(x))
-        else:
-            for c in range(len(data)):
-                data1.append(data[c])
+        data1 = ckbytelist(data)
         rv = self.lib.C_EncryptInit(self.session, m, key)
         if rv != CKR_OK:
             raise PyKCS11Error(rv)
@@ -1106,14 +1099,7 @@ class Session(object):
         """
         m = mecha.to_native()
         decrypted = ckbytelist()
-        data1 = ckbytelist()
-        data1.reserve(len(data))
-        if isinstance(data, bytes):
-            for x in data:
-                data1.append(byte_to_int(x))
-        else:
-            for c in range(len(data)):
-                data1.append(data[c])
+        data1 = ckbytelist(data)
         rv = self.lib.C_DecryptInit(self.session, m, key)
         if rv != CKR_OK:
             raise PyKCS11Error(rv)
