@@ -115,6 +115,8 @@ class ckbytelist(PyKCS11.LowLevel.ckbytelist):
             self.reserve(len(data))
             for c in range(len(data)):
                 self.append(data[c])
+        else:
+            raise Exception("Unknown format")
 
     def __repr__(self):
         """
