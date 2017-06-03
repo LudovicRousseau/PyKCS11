@@ -60,6 +60,10 @@ class Testutil(unittest.TestCase):
         ck = PyKCS11.ckbytelist(b"ABC")
         self.assertSequenceEqual(ck, [65, 66, 67])
 
+    def test_init_ckbytelist(self):
+        ck1 = PyKCS11.ckbytelist(b"ABC")
+        ck2 = PyKCS11.ckbytelist(ck1)
+        self.assertSequenceEqual(ck2, [65, 66, 67])
 
 if __name__ == '__main__':
     unittest.main()
