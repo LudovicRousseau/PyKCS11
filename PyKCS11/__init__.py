@@ -111,7 +111,7 @@ class ckbytelist(PyKCS11.LowLevel.ckbytelist):
             for x in tmp:
                 self.append(byte_to_int(x))
         # [141, 142, 143]
-        elif isinstance(data, list):
+        elif isinstance(data, list) or isinstance(data, ckbytelist):
             self.reserve(len(data))
             for c in range(len(data)):
                 self.append(data[c])
