@@ -25,13 +25,13 @@ pkcs11 = PyKCS11Lib()
 pkcs11.load()  # define environment variable PYKCS11LIB=YourPKCS11Lib
 
 # get 3rd slot
-slot = pkcs11.getSlotList()[2]
+slot = pkcs11.getSlotList()[0]
 
 session = pkcs11.openSession(slot, CKF_SERIAL_SESSION | CKF_RW_SESSION)
-session.login("22222222")
+session.login("1234")
 
 # key ID in hex (has to be tuple, that's why trailing comma)
-keyID = (0x44,)
+keyID = (0x22,)
 
 # "Hello world" in hex
 toSign = "48656c6c6f20776f726c640d0a"

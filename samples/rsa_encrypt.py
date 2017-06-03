@@ -21,11 +21,11 @@ from PyKCS11 import *
 pkcs11 = PyKCS11Lib()
 pkcs11.load()  # define environment variable PYKCS11LIB=YourPKCS11Lib
 
-# get 2nd slot
-slot = pkcs11.getSlotList()[1]
+# get 1st slot
+slot = pkcs11.getSlotList()[0]
 
 session = pkcs11.openSession(slot, CKF_SERIAL_SESSION | CKF_RW_SESSION)
-session.login("password")
+session.login("1234")
 
 pubTemplate = [
     (CKA_CLASS, CKO_PUBLIC_KEY),
