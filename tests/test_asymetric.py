@@ -66,5 +66,14 @@ class TestUtil(unittest.TestCase):
 
         self.assertTrue(result)
 
+        dataIn = "Hello world"
+        encrypted = self.session.encrypt(pubKey, dataIn)
+        decrypted = self.session.decrypt(privKey, encrypted)
+
+        # convert in a string
+        text = "".join(map(chr, decrypted))
+
+        self.assertEqual(dataIn, text)
+
         self.session.destroyObject(pubKey)
         self.session.destroyObject(privKey)
