@@ -1,6 +1,7 @@
 import unittest
 from PyKCS11 import PyKCS11
 
+
 class TestUtil(unittest.TestCase):
 
     def setUp(self):
@@ -8,8 +9,8 @@ class TestUtil(unittest.TestCase):
         self.pkcs11.load()
         self.slot = self.pkcs11.getSlotList(tokenPresent=True)[0]
         self.session = self.pkcs11.openSession(self.slot,
-                                               PyKCS11.CKF_SERIAL_SESSION
-                                               | PyKCS11.CKF_RW_SESSION)
+                                               PyKCS11.CKF_SERIAL_SESSION |
+                                               PyKCS11.CKF_RW_SESSION)
         self.session.login("1234")
 
     def tearDown(self):
@@ -43,7 +44,8 @@ class TestUtil(unittest.TestCase):
             (PyKCS11.CKA_ID, (0x22,))
         ]
 
-        (pubKey, privKey) = self.session.generateKeyPair(pubTemplate, privTemplate)
+        (pubKey, privKey) = self.session.generateKeyPair(pubTemplate,
+                                                         privTemplate)
         self.assertIsNotNone(pubKey)
         self.assertIsNotNone(privKey)
 
