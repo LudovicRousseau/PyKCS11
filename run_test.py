@@ -17,4 +17,7 @@ for lib in LIBS:
 
 tl = unittest.TestLoader()
 suite = tl.discover("tests")
-unittest.TextTestRunner(verbosity=2).run(suite)
+result = unittest.TextTestRunner(verbosity=2).run(suite)
+if result.errors or result.failures:
+    import sys
+    sys.exit(1)
