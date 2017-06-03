@@ -2,6 +2,8 @@
 .DS_Store
 .swp
 .tox
+.coverage
+htmlcov
 PyKCS11/LowLevel.py
 build-stamp
 build/
