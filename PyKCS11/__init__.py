@@ -728,7 +728,7 @@ class Mechanism(object):
         self._mech.mechanism = mechanism
         self._param = None
         if param:
-            self._param = to_param_string(param)
+            self._param = ckbytelist(param)
             self._mech.pParameter = self._param
             self._mech.ulParameterLen = len(param)
 

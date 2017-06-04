@@ -228,14 +228,15 @@ typedef struct CK_DATE{
 };
 
 %typemap(in) void* {
-    char *buf;
-    size_t sz;
-    int alloc2 = 0;
-    // If the value being set is of string type:
-    if (PyString_Check($input) && 
-        SWIG_IsOK(SWIG_AsCharPtrAndSize($input, &buf, &sz, &alloc2))) {
-      arg2 = buf;
-    } else {
+    vector<unsigned char> *vect;
+    // If the value being set is of ckbytelist type:
+    if (SWIG_IsOK(SWIG_ConvertPtr($input, (void **)&vect, SWIGTYPE_p_std__vectorT_unsigned_char_std__allocatorT_unsigned_char_t_t, 0)))
+    {
+        // Get the data from the vector
+        arg2 = vect->data();
+    }
+    else
+    {
       // If the value being set is of CK_RSA_PKCS_OAEP_PARAMS type:
       int res2 = SWIG_ConvertPtr($input, &arg2, $descriptor(CK_RSA_PKCS_OAEP_PARAMS*), 0 |  0 );
       if (!SWIG_IsOK(res2)) {
