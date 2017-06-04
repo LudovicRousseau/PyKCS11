@@ -82,6 +82,7 @@ for x in PyKCS11.LowLevel.__dict__.keys():
             eval(x[:3])[x] = eval(x)  # => CKM['CKM_RSA_PKCS'] = CKM_RSA_PKCS
 
 # special CKR[] values
+CKR[-3] = "Unknown format"
 CKR[-2] = "Unkown PKCS#11 type"
 CKR[-1] = "Load"
 
@@ -121,7 +122,7 @@ class ckbytelist(PyKCS11.LowLevel.ckbytelist):
             for c in range(len(data)):
                 self.append(data[c])
         else:
-            raise Exception("Unknown format")
+            raise PyKCS11.PyKCS11Error(-3, text=type(data))
 
     def __repr__(self):
         """
