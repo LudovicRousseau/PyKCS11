@@ -969,7 +969,6 @@ class Session(object):
 
         """
         digest = ckbytelist()
-        ps = None  # must be declared here or may be deallocated too early
         m = mecha.to_native()
         data1 = ckbytelist(data)
         rv = self.lib.C_DigestInit(self.session, m)
@@ -1070,7 +1069,6 @@ class Session(object):
 
         """
         encrypted = ckbytelist()
-        ps = None  # must be declared here or may be deallocated too early
         m = mecha.to_native()
         data1 = ckbytelist(data)
         rv = self.lib.C_EncryptInit(self.session, m, key)
