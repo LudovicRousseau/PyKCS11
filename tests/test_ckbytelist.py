@@ -71,7 +71,14 @@ class Testutil(unittest.TestCase):
 
         the_exception = cm.exception
         self.assertEqual(the_exception.value, -3)
-        self.assertEqual(str(the_exception), "Unknown format (<type 'dict'>)")
+        import sys
+        if sys.version_info[0] >= 3:
+            # Python 3 and later
+            expected = "Unknown format (<class 'dict'>)"
+        else:
+            # Python 2
+            expected = "Unknown format (<type 'dict'>)"
+        self.assertEqual(str(the_exception), expected)
 
 if __name__ == '__main__':
     unittest.main()
