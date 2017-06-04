@@ -65,5 +65,13 @@ class Testutil(unittest.TestCase):
         ck2 = PyKCS11.ckbytelist(ck1)
         self.assertSequenceEqual(ck2, [65, 66, 67])
 
+    def test_unknown_format(self):
+        with self.assertRaises(PyKCS11.PyKCS11Error) as cm:
+            PyKCS11.ckbytelist(dict())
+
+        the_exception = cm.exception
+        self.assertEqual(the_exception.value, -3)
+        self.assertEqual(str(the_exception), "Unknown format (<type 'dict'>)")
+
 if __name__ == '__main__':
     unittest.main()
