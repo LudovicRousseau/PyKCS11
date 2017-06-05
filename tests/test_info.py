@@ -30,3 +30,13 @@ class TestUtil(unittest.TestCase):
         info = self.session.getSessionInfo()
         text = str(info)
         self.assertIsNotNone(text)
+
+    def test_getMechanismList(self):
+        mechanisms = self.pkcs11.getMechanismList(self.slot)
+        text = str(mechanisms)
+        self.assertIsNotNone(text)
+
+        # info for the first mechanism
+        info = self.pkcs11.getMechanismInfo(self.slot, mechanisms[0])
+        text = str(info)
+        self.assertIsNotNone(text)
