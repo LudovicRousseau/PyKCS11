@@ -1169,14 +1169,7 @@ class Session(object):
         """
         m = mecha.to_native()
         wrapped = ckbytelist()
-        data1 = ckbytelist()
-        data1.reserve(len(wrappedKey))
-        if isinstance(wrappedKey, bytes):
-            for x in wrappedKey:
-                data1.append(byte_to_int(x))
-        else:
-            for c in range(len(wrappedKey)):
-                data1.append(wrappedKey[c])
+        data1 = ckbytelist(wrappedKey)
         handle = PyKCS11.LowLevel.CK_OBJECT_HANDLE()
         attrs = self._template2ckattrlist(template)
         rv = self.lib.C_UnwrapKey(self.session, m, unwrappingKey, data1, attrs, handle)
