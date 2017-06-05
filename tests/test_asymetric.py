@@ -66,6 +66,7 @@ class TestUtil(unittest.TestCase):
 
         self.assertTrue(result)
 
+        # sign/verify
         dataIn = "Hello world"
         encrypted = self.session.encrypt(pubKey, dataIn)
         decrypted = self.session.decrypt(privKey, encrypted)
@@ -74,6 +75,17 @@ class TestUtil(unittest.TestCase):
         text = "".join(map(chr, decrypted))
 
         self.assertEqual(dataIn, text)
+
+        # RSA OAEP
+        plainText = "A test string"
+
+        mech = PyKCS11.RSAOAEPMechanism(PyKCS11.CKM_SHA_1, PyKCS11.CKG_MGF1_SHA1)
+        cipherText = self.session.encrypt(pubKey, plainText, mech)
+        decrypted = self.session.decrypt(privKey, cipherText, mech)
+
+        text = "".join(map(chr, decrypted))
+
+        self.assertEqual(text, plainText)
 
         self.session.destroyObject(pubKey)
         self.session.destroyObject(privKey)
