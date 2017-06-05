@@ -23,7 +23,7 @@ class TestUtil(unittest.TestCase):
         mechanism = PyKCS11.Mechanism(PyKCS11.CKM_AES_CBC, '1234567812345678')
         self.assertIsNotNone(mechanism)
 
-    def test_sign(self):
+    def test_encrypt(self):
         keyID = (0x01,)
         AESKeyTemplate = [
                 (PyKCS11.CKA_CLASS, PyKCS11.CKO_SECRET_KEY),
