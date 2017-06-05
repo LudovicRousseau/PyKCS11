@@ -757,11 +757,13 @@ class RSAOAEPMechanism(object):
         self._param.hashAlg = hash
         self._param.mgf = mgf
         self._source = None
+        self._param.src = CKZ_DATA_SPECIFIED
         if label:
-            self._param.src = CKZ_DATA_SPECIFIED
             self._source = to_param_string(label)
-            self._param.pSourceData = self._source
             self._param.ulSourceDataLen = len(label)
+        else:
+            self._param.ulSourceDataLen = 0
+        self._param.pSourceData = self._source
         self._mech = PyKCS11.LowLevel.CK_MECHANISM()
         self._mech.mechanism = CKM_RSA_PKCS_OAEP
         self._mech.pParameter = self._param
