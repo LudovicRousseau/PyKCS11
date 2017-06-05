@@ -92,5 +92,9 @@ class TestUtil(unittest.TestCase):
             if not e.value == PyKCS11.CKR_MECHANISM_INVALID:
                 raise
 
+        # test CK_OBJECT_HANDLE.__repr__()
+        text = str(pubKey)
+        self.assertIsNotNone(text)
+
         self.session.destroyObject(pubKey)
         self.session.destroyObject(privKey)
