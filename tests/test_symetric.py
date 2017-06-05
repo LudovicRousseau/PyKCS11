@@ -1,3 +1,4 @@
+from __future__ import print_function
 import unittest
 from PyKCS11 import PyKCS11
 
@@ -51,6 +52,7 @@ class TestUtil(unittest.TestCase):
 
         # buffer of 32 bytes 0x00
         DataIn = [0] * 32
+        # print("DataIn:", DataIn)
 
         # AES CBC with IV
         mechanism = PyKCS11.Mechanism(PyKCS11.CKM_AES_CBC, '1234567812345678')
@@ -60,9 +62,36 @@ class TestUtil(unittest.TestCase):
             PyKCS11.CKO_SECRET_KEY), (PyKCS11.CKA_ID, keyID)])[0]
 
         DataOut = self.session.encrypt(symKey, DataIn, mechanism)
+        # print("DataOut", DataOut)
 
         DataCheck = self.session.decrypt(symKey, DataOut, mechanism)
+        # print("DataCheck:", DataCheck)
 
         self.assertSequenceEqual(DataIn, DataCheck)
+
+        # AES ECB with previous IV as Data
+        mechanism = PyKCS11.Mechanism(PyKCS11.CKM_AES_ECB)
+
+        # same as '1234567812345678' (the IV) but as a list
+        DataECBIn = [49, 50, 51, 52, 53, 54, 55, 56, 49, 50, 51, 52, 53, 54, 55, 56]
+        # print("DataECBIn:", DataECBIn)
+        DataECBOut = self.session.encrypt(symKey, DataECBIn, mechanism)
+        # print("DataECBOut:", DataECBOut)
+
+        DataECBCheck = self.session.decrypt(symKey, DataECBOut, mechanism)
+        # print("DataECBCheck:", DataECBCheck)
+
+        self.assertSequenceEqual(DataECBIn, DataECBCheck)
+
+        # check the AES CBC computation is the same as the AES ECB
+        # 1st block
+        self.assertSequenceEqual(DataOut[:16], DataECBOut)
+
+        # since the input is full of 0 we just pass the previous output
+        DataECBOut2 = self.session.encrypt(symKey, DataECBOut, mechanism)
+        # print("DataECBOut2", DataECBOut2)
+
+        # 2nd block
+        self.assertSequenceEqual(DataOut[16:], DataECBOut2)
 
         self.session.destroyObject(AESKey)
