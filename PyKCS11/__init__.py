@@ -23,18 +23,12 @@ import sys
 
 PY3 = sys.version_info[0] >= 3
 if PY3:
-    def byte_to_int(byte):
-        return byte
-
     def to_param_string(param):
         if isinstance(param, str):
             return bytes(param, 'ascii')
         else:
             return bytes(param)
 else:
-    def byte_to_int(byte):
-        return ord(byte)
-
     def to_param_string(param):
         if isinstance(param, str):
             return param
