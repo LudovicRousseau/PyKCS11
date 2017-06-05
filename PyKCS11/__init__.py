@@ -1271,10 +1271,7 @@ class Session(object):
                 if isinstance(attr[1], int):
                     attrStr = str(attr[1])
                 if isinstance(attr[1], bytes):
-                    attrBin = ckbytelist()
-                    attrBin.reserve(len(attrStr))
-                    for c in range(len(attrStr)):
-                        attrBin.append(byte_to_int(attrStr[c]))
+                    attrBin = ckbytelist(attrStr)
                 t[x].SetBin(attr[0], attrBin)
             else:
                 raise PyKCS11Error(-2)
