@@ -109,13 +109,21 @@ class ckbytelist(PyKCS11.LowLevel.ckbytelist):
         if isinstance(data, bytes):
             self.reserve(len(data))
             for x in data:
-                self.append(byte_to_int(x))
+                if sys.version_info[0] <= 2:
+                    # Python 2
+                    v = ord(x)
+                else:
+                    # Python 3 and more
+                    v = x
+                self.append(v)
+
         # "abc"
         elif isinstance(data, str):
             tmp = bytes(data, "utf-8")
             self.reserve(len(tmp))
             for x in tmp:
-                self.append(byte_to_int(x))
+                self.append(x)
+
         # [141, 142, 143]
         elif isinstance(data, list) or isinstance(data, ckbytelist):
             self.reserve(len(data))
