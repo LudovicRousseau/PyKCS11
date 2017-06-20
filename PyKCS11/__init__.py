@@ -772,6 +772,22 @@ class RSAOAEPMechanism(object):
     def to_native(self):
         return self._mech
 
+class RSA_PSS_Mechanism(object):
+    """RSA PSS Wrapping mechanism"""
+
+    def __init__(self, hashAlg, mgf, sLen):
+        self._param = PyKCS11.LowLevel.CK_RSA_PKCS_PSS_PARAMS()
+        self._param.hashAlg = hashAlg
+        self._param.mgf = mgf
+        self._param.sLen = sLen
+        self._mech = PyKCS11.LowLevel.CK_MECHANISM()
+        self._mech.mechanism = CKM_RSA_PKCS_PSS
+        self._mech.pParameter = self._param
+        self._mech.ulParameterLen = PyKCS11.LowLevel.CK_RSA_PKCS_PSS_PARAMS_LENGTH
+
+    def to_native(self):
+        return self._mech
+
 class DigestSession(object):
     def __init__(self, lib, session, mecha):
         self._lib = lib

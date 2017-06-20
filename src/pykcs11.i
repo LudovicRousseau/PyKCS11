@@ -240,7 +240,10 @@ typedef struct CK_DATE{
       // If the value being set is of CK_RSA_PKCS_OAEP_PARAMS type:
       int res2 = SWIG_ConvertPtr($input, &arg2, $descriptor(CK_RSA_PKCS_OAEP_PARAMS*), 0 |  0 );
       if (!SWIG_IsOK(res2)) {
-        SWIG_exception_fail(SWIG_ArgError(res2), "unsupported CK_MECHANISM Parameter type.");
+          res2 = SWIG_ConvertPtr($input, &arg2, $descriptor(CK_RSA_PKCS_PSS_PARAMS*), 0);
+          if (!SWIG_IsOK(res2)) {
+              SWIG_exception_fail(SWIG_ArgError(res2), "unsupported CK_MECHANISM Parameter type.");
+          }
       }
     }
 }
@@ -287,6 +290,29 @@ typedef struct CK_RSA_PKCS_OAEP_PARAMS {
 };
 
 %constant int CK_RSA_PKCS_OAEP_PARAMS_LENGTH = sizeof(CK_RSA_PKCS_OAEP_PARAMS);
+
+//%typemap(in) void*;
+//%typemap(in) void* = char*;
+
+typedef struct CK_RSA_PKCS_PSS_PARAMS {
+    unsigned long hashAlg;
+    unsigned long mgf;
+    unsigned long sLen;
+} CK_RSA_PKCS_PSS_PARAMS;
+
+%extend CK_RSA_PKCS_PSS_PARAMS
+{
+    CK_RSA_PKCS_PSS_PARAMS()
+    {
+        CK_RSA_PKCS_PSS_PARAMS *p = new CK_RSA_PKCS_PSS_PARAMS();
+        p->hashAlg = 0;
+        p->mgf = 0;
+        p->sLen = 0;
+        return p;
+    }
+};
+
+%constant int CK_RSA_PKCS_PSS_PARAMS_LENGTH = sizeof(CK_RSA_PKCS_PSS_PARAMS);
 
 typedef struct CK_MECHANISM_INFO {
 %immutable;
