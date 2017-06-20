@@ -92,6 +92,19 @@ class TestUtil(unittest.TestCase):
             if not e.value == PyKCS11.CKR_MECHANISM_INVALID:
                 raise
 
+        # RSA PSS
+        mech = PyKCS11.RSA_PSS_Mechanism(PyKCS11.CKM_SHA384, PyKCS11.CKG_MGF1_SHA384, 48)
+        try:
+            cipherText = self.session.encrypt(pubKey, plainText, mech)
+            decrypted = self.session.decrypt(privKey, cipherText, mech)
+            text = "".join(map(chr, decrypted))
+
+            self.assertEqual(text, plainText)
+        except PyKCS11.PyKCS11Error as e:
+            # RSA PSS is not yet supported by SoftHSM2
+            if not e.value == PyKCS11.CKR_MECHANISM_INVALID:
+                raise
+
         # test CK_OBJECT_HANDLE.__repr__()
         text = str(pubKey)
         self.assertIsNotNone(text)
