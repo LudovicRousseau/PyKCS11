@@ -14,7 +14,7 @@ pattern = "test*.py"
 if len(sys.argv) > 1:
     pattern = sys.argv[1]
 
-LIBS = ["/usr/local/lib/pkcs11/libsofthsm2.so",  # macOS or local build
+LIBS = ["/usr/local/lib/softhsm/libsofthsm2.so",  # macOS or local build
         "/usr/lib/softhsm/libsofthsm2.so",  # Debian libsofthsm2
         "/usr/lib/softhsm/libsofthsm.so",  # Debian libsofthsm
         "/usr/lib/libsofthsm.so"]  # Ubuntu 12.04 libsofthsm
