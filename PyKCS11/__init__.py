@@ -21,21 +21,6 @@ import PyKCS11.LowLevel
 import os
 import sys
 
-PY3 = sys.version_info[0] >= 3
-if PY3:
-    def to_param_string(param):
-        if isinstance(param, str):
-            return bytes(param, 'ascii')
-        else:
-            return bytes(param)
-else:
-    def to_param_string(param):
-        if isinstance(param, str):
-            return param
-        else:
-            return str(bytearray(param))
-
-    range = xrange
 
 # redefine PKCS#11 constants
 CK_TRUE = PyKCS11.LowLevel.CK_TRUE
@@ -760,8 +745,8 @@ class RSAOAEPMechanism(object):
         self._source = None
         self._param.src = CKZ_DATA_SPECIFIED
         if label:
-            self._source = to_param_string(label)
-            self._param.ulSourceDataLen = len(label)
+            self._source = ckbytelist(label)
+            self._param.ulSourceDataLen = len(self._source)
         else:
             self._param.ulSourceDataLen = 0
         self._param.pSourceData = self._source
