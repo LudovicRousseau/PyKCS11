@@ -776,6 +776,13 @@ class RSA_PSS_Mechanism(object):
     """RSA PSS Wrapping mechanism"""
 
     def __init__(self, hashAlg, mgf, sLen):
+        """
+        @param hashAlg: the hash algorithm to use (like L{CKM_SHA384})
+        @param mgf: the mask generation function to use (like
+        L{CKG_MGF1_SHA384})
+        @param sLen: length, in bytes, of the salt value used in the PSS
+        encoding
+        """
         self._param = PyKCS11.LowLevel.CK_RSA_PKCS_PSS_PARAMS()
         self._param.hashAlg = hashAlg
         self._param.mgf = mgf
