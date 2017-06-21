@@ -743,6 +743,7 @@ MechanismRSAGENERATEKEYPAIR = Mechanism(CKM_RSA_PKCS_KEY_PAIR_GEN, None)
 MechanismECGENERATEKEYPAIR = Mechanism(CKM_EC_KEY_PAIR_GEN, None)
 MechanismAESGENERATEKEY = Mechanism(CKM_AES_KEY_GEN, None)
 
+
 class RSAOAEPMechanism(object):
     """RSA OAEP Wrapping mechanism"""
 
@@ -772,6 +773,7 @@ class RSAOAEPMechanism(object):
     def to_native(self):
         return self._mech
 
+
 class RSA_PSS_Mechanism(object):
     """RSA PSS Wrapping mechanism"""
 
@@ -794,6 +796,7 @@ class RSA_PSS_Mechanism(object):
 
     def to_native(self):
         return self._mech
+
 
 class DigestSession(object):
     def __init__(self, lib, session, mecha):
@@ -846,6 +849,7 @@ class DigestSession(object):
         if rv != CKR_OK:
             raise PyKCS11Error(rv)
         return digest
+
 
 class Session(object):
     """ Manage L{PyKCS11Lib.openSession} objects """
