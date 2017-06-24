@@ -1183,7 +1183,6 @@ class Session(object):
 
         """
         m = mecha.to_native()
-        wrapped = ckbytelist()
         data1 = ckbytelist(wrappedKey)
         handle = PyKCS11.LowLevel.CK_OBJECT_HANDLE()
         attrs = self._template2ckattrlist(template)
