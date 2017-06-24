@@ -611,7 +611,7 @@ class PyKCS11Lib(object):
 
         @param slot: slot number returned by L{getSlotList}
         @type slot: integer
-        @param flags: 0 (default), L{CKF_RW_SESSION} for RW session
+        @param flags: 0 (default), CKF_RW_SESSION for RW session
         @type flags: integer
         @return: a L{Session} object
         """
@@ -734,9 +734,9 @@ class RSAOAEPMechanism(object):
 
     def __init__(self, hashAlg, mgf, label=None):
         """
-        @param hashAlg: the hash algorithm to use (like L{CKM_SHA256})
+        @param hashAlg: the hash algorithm to use (like CKM_SHA256)
         @param mgf: the mask generation function to use (like
-        L{CKG_MGF1_SHA256})
+        CKG_MGF1_SHA256)
         @param label: the (optional) label to use
         """
         self._param = PyKCS11.LowLevel.CK_RSA_PKCS_OAEP_PARAMS()
@@ -764,9 +764,9 @@ class RSA_PSS_Mechanism(object):
 
     def __init__(self, hashAlg, mgf, sLen):
         """
-        @param hashAlg: the hash algorithm to use (like L{CKM_SHA384})
+        @param hashAlg: the hash algorithm to use (like CKM_SHA384)
         @param mgf: the mask generation function to use (like
-        L{CKG_MGF1_SHA384})
+        CKG_MGF1_SHA384)
         @param sLen: length, in bytes, of the salt value used in the PSS
         encoding
         """
