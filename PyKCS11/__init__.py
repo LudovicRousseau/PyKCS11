@@ -1154,7 +1154,6 @@ class Session(object):
             ''.join(chr(i) for i in ckbytelistData)
 
         """
-        m = PyKCS11.LowLevel.CK_MECHANISM()
         wrapped = ckbytelist()
         native = mecha.to_native()
         # first call get wrapped size
