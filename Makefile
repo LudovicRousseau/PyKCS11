@@ -41,7 +41,7 @@ pypi: clean
 prepare4test: build
 	cd PyKCS11 ; ln -sf ../build/lib.*/PyKCS11/_LowLevel*.so
 
-test: prepare4test
+tests: prepare4test
 	$(PYTHON) run_test.py
 
 coverage: prepare4test
