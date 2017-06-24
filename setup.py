@@ -55,7 +55,7 @@ else:
     libraries_val = []
 
 setup(name="PyKCS11",
-    version="1.4.2",
+    version="1.4.3",
     description="A Full PKCS#11 wrapper for Python",
     keywords="crypto,pki,pkcs11,c++",
     classifiers=classifiers,

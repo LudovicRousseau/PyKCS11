@@ -90,6 +90,15 @@ that doesn't come with the standard distribution.
 History
 =======
 
+1.4.3 - June 2017, Ludovic Rousseau
+   - Add support of CKM_RSA_PKCS_PSS mechanism
+   - fix CKM_AES_CBC issue with Python 3
+   - add Unitary Tests (make tests)
+   - add tox support (automate and standardize testing in Python)
+   - add coverage support (measuring code coverage of Python programs)
+   - add Travis-CI configuration (automatic build and tests)
+   - some minor improvements
+
 1.4.2 - May 2017, Ludovic Rousseau
    - Moved the project from https://bitbucket.org/PyKCS11/pykcs11 to
      https://github.com/LudovicRousseau/PyKCS11
