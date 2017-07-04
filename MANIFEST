@@ -14,6 +14,7 @@ samples/generate.py
 samples/genkeypair_import_cert.py
 samples/getinfo.py
 samples/modulus.py
+samples/rsa_encrypt.py
 samples/signature.py
 samples/unblock.py
 samples/LowLevel/dumpit.py
@@ -23,6 +24,7 @@ samples/LowLevel/test.py
 samples/LowLevel/test1.py
 PyKCS11/LowLevel.py
 PyKCS11/__init__.py
+run_test.py
 src/ck_attribute_smart.cpp
 src/ck_attribute_smart.h
 src/dyn_generic.h
@@ -41,3 +43,13 @@ src/utility.cpp
 src/utility.h
 src/opensc/pkcs11.h
 src/pykcs11_wrap.cpp
+tests/__init__.py
+tests/test_CK.py
+tests/test_asymetric.py
+tests/test_ckbytelist.py
+tests/test_digest.py
+tests/test_exception.py
+tests/test_info.py
+tests/test_random.py
+tests/test_symetric.py
+tox.ini
