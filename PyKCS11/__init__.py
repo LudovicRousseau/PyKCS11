@@ -1388,8 +1388,8 @@ class Session(object):
             valTemplate[x].SetType(attr[x])
         # first call to get the attribute size and reserve the memory
         rv = self.lib.C_GetAttributeValue(self.session, obj_id, valTemplate)
-        if rv == CKR_ATTRIBUTE_TYPE_INVALID \
-           or rv == CKR_ATTRIBUTE_SENSITIVE:
+        if rv in (CKR_ATTRIBUTE_TYPE_INVALID, CKR_ATTRIBUTE_SENSITIVE,
+                  CKR_ARGUMENTS_BAD):
             return self.getAttributeValue_fragmented(obj_id, attr, allAsBinary)
 
         if rv != CKR_OK:
@@ -1434,8 +1434,8 @@ class Session(object):
             valTemplate[0].SetType(attr[x])
             # first call to get the attribute size and reserve the memory
             rv = self.lib.C_GetAttributeValue(self.session, obj_id, valTemplate)
-            if rv == CKR_ATTRIBUTE_TYPE_INVALID \
-               or rv == CKR_ATTRIBUTE_SENSITIVE:
+            if rv in (CKR_ATTRIBUTE_TYPE_INVALID,
+                      CKR_ATTRIBUTE_SENSITIVE, CKR_ARGUMENTS_BAD):
                 # append an empty value
                 res.append(None)
                 continue
