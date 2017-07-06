@@ -165,6 +165,7 @@ for s in slots:
             try:
                 attributes = session.getAttributeValue(o, all_attributes)
             except PyKCS11.PyKCS11Error as e:
+                print(e)
                 continue
             attrDict = dict(list(zip(all_attributes, attributes)))
             if attrDict[PyKCS11.CKA_CLASS] == PyKCS11.CKO_PRIVATE_KEY \
