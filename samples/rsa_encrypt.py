@@ -55,9 +55,8 @@ privTemplate = [
 (pubKey, privKey) = session.generateKeyPair(pubTemplate, privTemplate)
 
 PLAINTEXT = "A test string"
-pt = [ord(i) for i in PLAINTEXT]
 mech = RSAOAEPMechanism(CKM_SHA_1, CKG_MGF1_SHA1)
-ciphertext = session.encrypt(pubKey, pt, mech)
+ciphertext = session.encrypt(pubKey, PLAINTEXT, mech)
 decrypted = "".join([chr(i) for i in session.decrypt(privKey, ciphertext, mech)])
 assert decrypted == PLAINTEXT
 
