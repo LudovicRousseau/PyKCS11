@@ -40,8 +40,8 @@ enc = session.encrypt(pubKey, binascii.unhexlify(message))
 dec = session.decrypt(privKey, enc)
 
 print("\nmessage: " + message)
-print("\nencrypted: " + binascii.hexlify(bytearray(enc)))
-print("\ndecrypted: " + bytearray(dec))
+print("\nencrypted: {}".format(binascii.hexlify(bytearray(enc))))
+print("\ndecrypted: {}".format(bytearray(dec)))
 
 # logout
 session.logout()

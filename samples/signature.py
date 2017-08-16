@@ -39,7 +39,7 @@ toSign = "48656c6c6f20776f726c640d0a"
 # find private key and compute signature
 privKey = session.findObjects([(CKA_CLASS, CKO_PRIVATE_KEY), (CKA_ID, keyID)])[0]
 signature = session.sign(privKey, binascii.unhexlify(toSign), Mechanism(CKM_SHA1_RSA_PKCS, None))
-print("\nsignature: " + binascii.hexlify(bytearray(signature)))
+print("\nsignature: {}".format(binascii.hexlify(bytearray(signature))))
 
 # find public key and verify signature
 pubKey = session.findObjects([(CKA_CLASS, CKO_PUBLIC_KEY), (CKA_ID, keyID)])[0]
