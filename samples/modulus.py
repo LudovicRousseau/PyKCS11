@@ -36,7 +36,7 @@ keyID = (0x22,)
 # find public key and print modulus
 pubKey = session.findObjects([(CKA_CLASS, CKO_PUBLIC_KEY), (CKA_ID, keyID)])[0]
 modulus = session.getAttributeValue(pubKey, [CKA_MODULUS])[0]
-print("\nmodulus: " + binascii.hexlify(bytearray(modulus)))
+print("\nmodulus: {}".format(binascii.hexlify(bytearray(modulus))))
 
 # logout
 session.logout()
