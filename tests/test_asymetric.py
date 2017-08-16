@@ -88,7 +88,7 @@ class TestUtil(unittest.TestCase):
 
             self.assertEqual(text, plainText)
         except PyKCS11.PyKCS11Error as e:
-            # RSA OAEP is not support by SoftHSM1
+            # RSA OAEP is not supported by SoftHSM1
             if not e.value == PyKCS11.CKR_MECHANISM_INVALID:
                 raise
 
