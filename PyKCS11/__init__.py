@@ -962,7 +962,7 @@ class Session(object):
         @param mecha: the digesting mechanism to be used
         @type mecha: L{Mechanism} instance or L{MechanismSHA1}
         for CKM_SHA_1
-        @return: A DigestSession object
+        @return: A L{DigestSession} object
         @rtype: DigestSession
         """
         return DigestSession(self.lib, self.session, mecha)
