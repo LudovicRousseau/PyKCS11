@@ -981,6 +981,8 @@ class Session(object):
 
         @note: the returned value is an istance of L{ckbytelist}.
         You can easly convert it to a binary string with::
+            bytes(ckbytelistDigest)
+        or, for Python 2::
             ''.join(chr(i) for i in ckbytelistDigest)
 
         """
@@ -1016,6 +1018,8 @@ class Session(object):
 
         @note: the returned value is an instance of L{ckbytelist}.
         You can easly convert it to a binary string with::
+            bytes(ckbytelistSignature)
+        or, for Python 2::
             ''.join(chr(i) for i in ckbytelistSignature)
 
         """
@@ -1081,6 +1085,8 @@ class Session(object):
 
         @note: the returned value is an instance of L{ckbytelist}.
         You can easly convert it to a binary string with::
+            bytes(ckbytelistEncrypted)
+        or, for Python 2::
             ''.join(chr(i) for i in ckbytelistEncrypted)
 
         """
@@ -1116,6 +1122,8 @@ class Session(object):
 
         @note: the returned value is an instance of L{ckbytelist}.
         You can easly convert it to a binary string with::
+            bytes(ckbytelistData)
+        or, for Python 2::
             ''.join(chr(i) for i in ckbytelistData)
 
         """
@@ -1151,6 +1159,8 @@ class Session(object):
 
         @note: the returned value is an instance of L{ckbytelist}.
         You can easily convert it to a binary string with::
+            bytes(ckbytelistData)
+        or, for Python 2::
             ''.join(chr(i) for i in ckbytelistData)
 
         """
@@ -1377,9 +1387,12 @@ class Session(object):
 
         @note: if allAsBinary is True the function do not convert results to
         Python types (i.e.: CKA_TOKEN to Bool, CKA_CLASS to int, ...).
+
         Binary data is returned as L{ckbytelist} type, usable
         as a list containing only bytes.
         You can easly convert it to a binary string with::
+            bytes(ckbytelistVariable)
+        or, for Python 2::
             ''.join(chr(i) for i in ckbytelistVariable)
 
         """
@@ -1485,6 +1498,8 @@ class Session(object):
 
         @note: the returned value is an instance of L{ckbytelist}.
         You can easly convert it to a binary string with::
+            bytes(random)
+        or, for Python 2::
             ''.join(chr(i) for i in random)
         """
         low_rand = ckbytelist(size)
