@@ -54,6 +54,7 @@ doc: build
 	epydoc --verbose PyKCS11
 
 doc-upload: doc
+	rm -r api
 	mv html api
 	scp -r api ludov@web.sourceforge.net:/home/project-web/pkcs11wrap/htdocs
 
