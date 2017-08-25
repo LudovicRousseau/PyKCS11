@@ -67,13 +67,18 @@ class TestUtil(unittest.TestCase):
         toSign = "Hello world"
 
         # sign/verify
-        signature = self.session.sign(self.privKey, toSign,
-                PyKCS11.Mechanism(PyKCS11.CKM_SHA1_RSA_X_509, None))
+        try:
+            signature = self.session.sign(self.privKey, toSign,
+                    PyKCS11.Mechanism(PyKCS11.CKM_RSA_X_509, None))
 
-        result = self.session.verify(self.pubKey, toSign, signature,
-                PyKCS11.Mechanism(PyKCS11.CKM_SHA1_RSA_X_509, None))
+            result = self.session.verify(self.pubKey, toSign, signature,
+                    PyKCS11.Mechanism(PyKCS11.CKM_RSA_X_509, None))
 
-        self.assertTrue(result)
+            self.assertTrue(result)
+        except PyKCS11.PyKCS11Error as e:
+            # RSA X509 is not supported by SoftHSM1
+            if not e.value == PyKCS11.CKR_MECHANISM_INVALID:
+                raise
 
     def test_encrypt_PKCS(self):
         # encrypt/decrypt using CMK_RSA_PKCS (default)
@@ -90,21 +95,26 @@ class TestUtil(unittest.TestCase):
         # encrypt/decrypt using CKM_RSA_X_509
         dataIn = "Hello world!"
         mecha = PyKCS11.Mechanism(PyKCS11.CKM_RSA_X_509, None)
-        encrypted = self.session.encrypt(self.pubKey, dataIn, mecha=mecha)
-        decrypted = self.session.decrypt(self.privKey, encrypted, mecha=mecha)
+        try:
+            encrypted = self.session.encrypt(self.pubKey, dataIn, mecha=mecha)
+            decrypted = self.session.decrypt(self.privKey, encrypted, mecha=mecha)
 
-        # remove padding NUL bytes
-        padding_length = 0
-        for e in decrypted:
-            if e != 0:
-                break
-            padding_length += 1
-        decrypted = list(decrypted)[padding_length:]
+            # remove padding NUL bytes
+            padding_length = 0
+            for e in decrypted:
+                if e != 0:
+                    break
+                padding_length += 1
+            decrypted = list(decrypted)[padding_length:]
 
-        # convert in a string
-        text = "".join(map(chr, decrypted))
+            # convert in a string
+            text = "".join(map(chr, decrypted))
 
-        self.assertEqual(dataIn, text)
+            self.assertEqual(dataIn, text)
+        except PyKCS11.PyKCS11Error as e:
+            # RSA X509 is not supported by SoftHSM1
+            if not e.value == PyKCS11.CKR_MECHANISM_INVALID:
+                raise
 
     def test_RSA_OAEP(self):
         # RSA OAEP
