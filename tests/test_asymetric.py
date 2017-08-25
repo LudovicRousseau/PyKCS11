@@ -55,18 +55,21 @@ class TestUtil(unittest.TestCase):
         # get the first private key with given KeyID
         privKey = self.session.findObjects([(PyKCS11.CKA_CLASS,
                 PyKCS11.CKO_PRIVATE_KEY), (PyKCS11.CKA_ID, keyID)])[0]
-        signature = self.session.sign(privKey, toSign,
-                PyKCS11.Mechanism(PyKCS11.CKM_SHA1_RSA_PKCS, None))
 
         # get the first public key with given KeyID
         pubKey = self.session.findObjects([(PyKCS11.CKA_CLASS,
                 PyKCS11.CKO_PUBLIC_KEY), (PyKCS11.CKA_ID, keyID)])[0]
+
+        # sign/verify
+        signature = self.session.sign(privKey, toSign,
+                PyKCS11.Mechanism(PyKCS11.CKM_SHA1_RSA_PKCS, None))
+
         result = self.session.verify(pubKey, toSign, signature,
                 PyKCS11.Mechanism(PyKCS11.CKM_SHA1_RSA_PKCS, None))
 
         self.assertTrue(result)
 
-        # sign/verify
+        # encrypt/decrypt
         dataIn = "Hello world"
         encrypted = self.session.encrypt(pubKey, dataIn)
         decrypted = self.session.decrypt(privKey, encrypted)
