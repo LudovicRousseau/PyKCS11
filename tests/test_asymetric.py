@@ -51,7 +51,7 @@ class TestUtil(unittest.TestCase):
         self.pkcs11.closeAllSessions(self.slot)
         del self.pkcs11
 
-    def test_sign(self):
+    def test_sign_PKCS(self):
         toSign = "Hello world"
 
         # sign/verify
@@ -63,7 +63,19 @@ class TestUtil(unittest.TestCase):
 
         self.assertTrue(result)
 
-    def test_encryptPKCS(self):
+    def test_sign_X509(self):
+        toSign = "Hello world"
+
+        # sign/verify
+        signature = self.session.sign(self.privKey, toSign,
+                PyKCS11.Mechanism(PyKCS11.CKM_SHA1_RSA_X_509, None))
+
+        result = self.session.verify(self.pubKey, toSign, signature,
+                PyKCS11.Mechanism(PyKCS11.CKM_SHA1_RSA_X_509, None))
+
+        self.assertTrue(result)
+
+    def test_encrypt_PKCS(self):
         # encrypt/decrypt using CMK_RSA_PKCS (default)
         dataIn = "Hello world"
         encrypted = self.session.encrypt(self.pubKey, dataIn)
