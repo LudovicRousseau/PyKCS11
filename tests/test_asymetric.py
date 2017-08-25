@@ -13,12 +13,7 @@ class TestUtil(unittest.TestCase):
                                                PyKCS11.CKF_RW_SESSION)
         self.session.login("1234")
 
-    def tearDown(self):
-        self.session.logout()
-        self.pkcs11.closeAllSessions(self.slot)
-        del self.pkcs11
-
-    def test_sign(self):
+        keyID = (0x22,)
         pubTemplate = [
             (PyKCS11.CKA_CLASS, PyKCS11.CKO_PUBLIC_KEY),
             (PyKCS11.CKA_TOKEN, PyKCS11.CK_TRUE),
@@ -30,7 +25,7 @@ class TestUtil(unittest.TestCase):
             (PyKCS11.CKA_VERIFY_RECOVER, PyKCS11.CK_TRUE),
             (PyKCS11.CKA_WRAP, PyKCS11.CK_TRUE),
             (PyKCS11.CKA_LABEL, "My Public Key"),
-            (PyKCS11.CKA_ID, (0x22,))
+            (PyKCS11.CKA_ID, keyID)
         ]
 
         privTemplate = [
@@ -41,49 +36,50 @@ class TestUtil(unittest.TestCase):
             (PyKCS11.CKA_SIGN, PyKCS11.CK_TRUE),
             (PyKCS11.CKA_SIGN_RECOVER, PyKCS11.CK_TRUE),
             (PyKCS11.CKA_UNWRAP, PyKCS11.CK_TRUE),
-            (PyKCS11.CKA_ID, (0x22,))
+            (PyKCS11.CKA_ID, keyID)
         ]
 
-        (pubKey, privKey) = self.session.generateKeyPair(pubTemplate,
-                                                         privTemplate)
-        self.assertIsNotNone(pubKey)
-        self.assertIsNotNone(privKey)
+        (self.pubKey, self.privKey) = self.session.generateKeyPair(pubTemplate, privTemplate)
+        self.assertIsNotNone(self.pubKey)
+        self.assertIsNotNone(self.privKey)
 
-        keyID = (0x22,)
+    def tearDown(self):
+        self.session.destroyObject(self.pubKey)
+        self.session.destroyObject(self.privKey)
+
+        self.session.logout()
+        self.pkcs11.closeAllSessions(self.slot)
+        del self.pkcs11
+
+    def test_sign(self):
         toSign = "Hello world"
 
-        # get the first private key with given KeyID
-        privKey = self.session.findObjects([(PyKCS11.CKA_CLASS,
-                PyKCS11.CKO_PRIVATE_KEY), (PyKCS11.CKA_ID, keyID)])[0]
-
-        # get the first public key with given KeyID
-        pubKey = self.session.findObjects([(PyKCS11.CKA_CLASS,
-                PyKCS11.CKO_PUBLIC_KEY), (PyKCS11.CKA_ID, keyID)])[0]
-
         # sign/verify
-        signature = self.session.sign(privKey, toSign,
+        signature = self.session.sign(self.privKey, toSign,
                 PyKCS11.Mechanism(PyKCS11.CKM_SHA1_RSA_PKCS, None))
 
-        result = self.session.verify(pubKey, toSign, signature,
+        result = self.session.verify(self.pubKey, toSign, signature,
                 PyKCS11.Mechanism(PyKCS11.CKM_SHA1_RSA_PKCS, None))
 
         self.assertTrue(result)
 
+    def test_encryptPKCS(self):
         # encrypt/decrypt using CMK_RSA_PKCS (default)
         dataIn = "Hello world"
-        encrypted = self.session.encrypt(pubKey, dataIn)
-        decrypted = self.session.decrypt(privKey, encrypted)
+        encrypted = self.session.encrypt(self.pubKey, dataIn)
+        decrypted = self.session.decrypt(self.privKey, encrypted)
 
         # convert in a string
         text = "".join(map(chr, decrypted))
 
         self.assertEqual(dataIn, text)
 
+    def test_encrypt_X509(self):
         # encrypt/decrypt using CKM_RSA_X_509
         dataIn = "Hello world!"
         mecha = PyKCS11.Mechanism(PyKCS11.CKM_RSA_X_509, None)
-        encrypted = self.session.encrypt(pubKey, dataIn, mecha=mecha)
-        decrypted = self.session.decrypt(privKey, encrypted, mecha=mecha)
+        encrypted = self.session.encrypt(self.pubKey, dataIn, mecha=mecha)
+        decrypted = self.session.decrypt(self.privKey, encrypted, mecha=mecha)
 
         # remove padding NUL bytes
         padding_length = 0
@@ -98,13 +94,14 @@ class TestUtil(unittest.TestCase):
 
         self.assertEqual(dataIn, text)
 
+    def test_RSA_OAEP(self):
         # RSA OAEP
         plainText = "A test string"
 
         mech = PyKCS11.RSAOAEPMechanism(PyKCS11.CKM_SHA_1, PyKCS11.CKG_MGF1_SHA1)
         try:
-            cipherText = self.session.encrypt(pubKey, plainText, mech)
-            decrypted = self.session.decrypt(privKey, cipherText, mech)
+            cipherText = self.session.encrypt(self.pubKey, plainText, mech)
+            decrypted = self.session.decrypt(self.privKey, cipherText, mech)
 
             text = "".join(map(chr, decrypted))
 
@@ -114,11 +111,14 @@ class TestUtil(unittest.TestCase):
             if not e.value == PyKCS11.CKR_MECHANISM_INVALID:
                 raise
 
+    def test_RSA_PSS(self):
         # RSA PSS
+        plainText = "A test string"
+
         mech = PyKCS11.RSA_PSS_Mechanism(PyKCS11.CKM_SHA384, PyKCS11.CKG_MGF1_SHA384, 48)
         try:
-            cipherText = self.session.encrypt(pubKey, plainText, mech)
-            decrypted = self.session.decrypt(privKey, cipherText, mech)
+            cipherText = self.session.encrypt(self.pubKey, plainText, mech)
+            decrypted = self.session.decrypt(self.privKey, cipherText, mech)
             text = "".join(map(chr, decrypted))
 
             self.assertEqual(text, plainText)
@@ -128,8 +128,5 @@ class TestUtil(unittest.TestCase):
                 raise
 
         # test CK_OBJECT_HANDLE.__repr__()
-        text = str(pubKey)
+        text = str(self.pubKey)
         self.assertIsNotNone(text)
-
-        self.session.destroyObject(pubKey)
-        self.session.destroyObject(privKey)
