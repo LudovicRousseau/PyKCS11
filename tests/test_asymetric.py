@@ -69,10 +69,29 @@ class TestUtil(unittest.TestCase):
 
         self.assertTrue(result)
 
-        # encrypt/decrypt
+        # encrypt/decrypt using CMK_RSA_PKCS (default)
         dataIn = "Hello world"
         encrypted = self.session.encrypt(pubKey, dataIn)
         decrypted = self.session.decrypt(privKey, encrypted)
+
+        # convert in a string
+        text = "".join(map(chr, decrypted))
+
+        self.assertEqual(dataIn, text)
+
+        # encrypt/decrypt using CKM_RSA_X_509
+        dataIn = "Hello world!"
+        mecha = PyKCS11.Mechanism(PyKCS11.CKM_RSA_X_509, None)
+        encrypted = self.session.encrypt(pubKey, dataIn, mecha=mecha)
+        decrypted = self.session.decrypt(privKey, encrypted, mecha=mecha)
+
+        # remove padding NUL bytes
+        padding_length = 0
+        for e in decrypted:
+            if e != 0:
+                break
+            padding_length += 1
+        decrypted = list(decrypted)[padding_length:]
 
         # convert in a string
         text = "".join(map(chr, decrypted))
