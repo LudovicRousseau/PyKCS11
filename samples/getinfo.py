@@ -96,6 +96,7 @@ class getInfo(object):
 
 def usage():
     print("Usage:", sys.argv[0], end=' ')
+    print("[-a][--all]", end=' ')
     print("[-p pin][--pin=pin] (use 'NULL' for pinpad)", end=' ')
     print("[-s slot][--slot=slot]", end=' ')
     print("[-c lib][--lib=lib]", end=' ')
@@ -105,8 +106,8 @@ if __name__ == '__main__':
     import getopt
 
     try:
-        opts, args = getopt.getopt(sys.argv[1:], "p:s:c:ho",
-            ["pin=", "slot=", "lib=", "help", "opensession"])
+        opts, args = getopt.getopt(sys.argv[1:], "p:s:c:hoa",
+            ["pin=", "slot=", "lib=", "help", "opensession", "all"])
     except getopt.GetoptError:
         # print help information and exit:
         usage()
@@ -115,6 +116,7 @@ if __name__ == '__main__':
     slot = None
     lib = None
     pin = ""
+    token_present = True
     for o, a in opts:
         if o in ("-h", "--help"):
             usage()
@@ -127,11 +129,13 @@ if __name__ == '__main__':
             slot = int(a)
         if o in ("-c", "--lib"):
             lib = a
+        if o in ("-a", "--all"):
+            token_present = False
 
     gi = getInfo(lib)
     gi.getInfo()
 
-    slots = gi.pkcs11.getSlotList()
+    slots = gi.pkcs11.getSlotList(token_present)
     print("Available Slots:", len(slots), slots)
 
     if len(slots) == 0:
