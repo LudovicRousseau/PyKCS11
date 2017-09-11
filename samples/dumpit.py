@@ -55,6 +55,7 @@ def dump(src, length=16):
 
 def usage():
     print("Usage:", sys.argv[0], end=' ')
+    print("[-a][--all]", end=' ')
     print("[-p pin][--pin=pin] (use --pin=NULL for pinpad)", end=' ')
     print("[-c lib][--lib=lib]", end=' ')
     print("[-S][--sign]", end=' ')
@@ -64,7 +65,8 @@ def usage():
     print()
 
 try:
-    opts, args = getopt.getopt(sys.argv[1:], "p:c:Sdhs:", ["pin=", "lib=", "sign", "decrypt", "slot=", "help"])
+    opts, args = getopt.getopt(sys.argv[1:], "p:c:Sdhs:a",
+       ["pin=", "lib=", "sign", "decrypt", "slot=", "help", "all"])
 except getopt.GetoptError:
     # print help information and exit:
     usage()
@@ -74,6 +76,7 @@ pin_available = False
 decrypt = sign = False
 lib = None
 slot = None
+token_present = True
 for o, a in opts:
     if o in ("-h", "--help"):
         usage()
@@ -92,6 +95,8 @@ for o, a in opts:
         decrypt = True
     elif o in ("-s", "--slot"):
         slot = int(a)
+    if o in ("-a", "--all"):
+        token_present = False
 
 red = blue = magenta = normal = ""
 if sys.stdout.isatty() and platform.system().lower() != 'windows':
@@ -109,7 +114,7 @@ pkcs11.load(lib)
 info = pkcs11.getInfo()
 print("Library manufacturerID:", info.manufacturerID)
 
-slots = pkcs11.getSlotList()
+slots = pkcs11.getSlotList(token_present)
 print("Available Slots:", len(slots), slots)
 
 if slot is not None:
