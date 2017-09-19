@@ -1482,9 +1482,7 @@ class Session(object):
         @param seed: seed material
         @type seed: iterable
         """
-        low_seed = ckbytelist(len(seed))
-        for c in range(len(seed)):
-            low_seed.append(seed[c])
+        low_seed = ckbytelist(seed)
         rv = self.lib.C_SeedRandom(self.session, low_seed)
         if rv != CKR_OK:
             raise PyKCS11Error(rv)
