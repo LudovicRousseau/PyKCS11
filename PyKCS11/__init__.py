@@ -116,7 +116,7 @@ class ckbytelist(PyKCS11.LowLevel.ckbytelist):
         return the representation of a tuple
         the __str__ method will use it also
         """
-        rep = [elt for elt in self]
+        rep = [int(elt) for elt in self]
         return repr(rep)
 
 
