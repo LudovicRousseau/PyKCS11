@@ -707,7 +707,7 @@ struct ck_rsa_pkcs_oaep_params {
   unsigned long source_data_len;
 } ;
 
-typedef struct ck_rsa_pkcs_pss_params {
+struct ck_rsa_pkcs_pss_params {
   unsigned long hashAlg;
   unsigned long mgf;
   unsigned long sLen;
