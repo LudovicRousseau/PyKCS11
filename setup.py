@@ -46,7 +46,7 @@ if (platform.system().lower() == 'windows'):
     source_files.append("src/dyn_win32.c")
     source_files.append("pykcs11.rc")
     libraries_val = ["python%d%d" % pyver[:2]]
-    extra_compile_args = ["/Fdvc70.pdb", "/Zi", "/GR"]
+    extra_compile_args = ["/Fdvc70.pdb", "/Zi", "/GR", "/EHsc"]
     extra_link_args = ["/DEBUG", "/PDB:_LowLevel.pdb", "/SUBSYSTEM:WINDOWS", "/OPT:REF", "/OPT:ICF"]
 else:
     source_files.append("src/dyn_unix.c")
