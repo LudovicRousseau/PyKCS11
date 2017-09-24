@@ -441,12 +441,12 @@ class PyKCS11Error(Exception):
         The text representation of a PKCS#11 error is something like:
         "CKR_DEVICE_ERROR (0x00000030)"
         """
-        if (self.value in CKR):
-            if (self.value < 0):
+        if self.value in CKR:
+            if self.value < 0:
                 return CKR[self.value] + " (%s)" % self.text
             else:
                 return CKR[self.value] + " (0x%08X)" % self.value
-        elif (self.value & CKR_VENDOR_DEFINED):
+        elif self.value & CKR_VENDOR_DEFINED:
             return "Vendor error (0x%08X)" % (self.value & 0xffffffff & ~CKR_VENDOR_DEFINED)
         else:
             return "Unknown error (0x%08X)" % self.value
@@ -1419,7 +1419,7 @@ class Session(object):
 
         res = []
         for x in range(len(attr)):
-            if (allAsBinary):
+            if allAsBinary:
                 res.append(valTemplate[x].GetBin())
             elif valTemplate[x].IsNum():
                 res.append(valTemplate[x].GetNum())
@@ -1465,7 +1465,7 @@ class Session(object):
             if rv != CKR_OK:
                 raise PyKCS11Error(rv)
 
-            if (allAsBinary):
+            if allAsBinary:
                 res.append(valTemplate[0].GetBin())
             elif valTemplate[0].IsNum():
                 res.append(valTemplate[0].GetNum())
