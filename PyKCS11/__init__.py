@@ -441,10 +441,15 @@ class PyKCS11Error(Exception):
         The text representation of a PKCS#11 error is something like:
         "CKR_DEVICE_ERROR (0x00000030)"
         """
-        if (self.value < 0):
-            return CKR[self.value] + " (%s)" % self.text
+        if (self.value in CKR):
+            if (self.value < 0):
+                return CKR[self.value] + " (%s)" % self.text
+            else:
+                return CKR[self.value] + " (0x%08X)" % self.value
+        elif (self.value & CKR_VENDOR_DEFINED):
+            return "Vendor error (0x%08X)" % (self.value & 0xffffffff & ~CKR_VENDOR_DEFINED)
         else:
-            return CKR[self.value] + " (0x%08X)" % self.value
+            return "Unknown error (0x%08X)" % self.value
 
 
 class PyKCS11Lib(object):
