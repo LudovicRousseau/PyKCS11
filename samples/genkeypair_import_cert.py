@@ -111,6 +111,8 @@ cert_template = [
     (PyKCS11.CKA_ID, key_id)  # must be set, and DER see Table 24, X.509 Certificate Object Attributes
     ]
 
+# create the certificate object
+session.createObject(cert_template)
 
 # logout
 session.logout()
