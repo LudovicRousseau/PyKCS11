@@ -90,6 +90,17 @@ that doesn't come with the standard distribution.
 History
 =======
 
+1.4.4 - October 2017, Ludovic Rousseau
+   - getAttributeValue(): handle CKR_ARGUMENTS_BAD error
+   - seedRandom: fix the seed convertion
+   - Add vendor errors support to PyKCS11Error
+   - samples/getinfo & dumpit: list only slots with a token present by default
+   - run_test: add support of OpenSC PKCS#11 spy
+   - ckbytelist: update __repr__()
+   - include tests files in the archive
+   - dumpit: display the error if getAttributeValue() fails
+   - some minor improvements
+
 1.4.3 - June 2017, Ludovic Rousseau
    - Add support of CKM_RSA_PKCS_PSS mechanism
    - fix CKM_AES_CBC issue with Python 3
