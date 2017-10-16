@@ -27,7 +27,7 @@ if __name__ == '__main__':
 
     def usage():
         print("Usage:", sys.argv[0], end=' ')
-        print("[-p pin][--pin=pin]", end=' ')
+        print("[-p pin][--pin=pin] (use 'NULL' for pinpad)", end=' ')
         print("[-c lib][--lib=lib]", end=' ')
         print("[-h][--help]", end=' ')
         print("[-o][--opensession]")
@@ -42,7 +42,7 @@ if __name__ == '__main__':
         sys.exit(2)
 
     lib = None
-    pin = None
+    pin = ""
     open_session = False
     pin_available = False
     list_mechanisms = False
@@ -52,6 +52,8 @@ if __name__ == '__main__':
             sys.exit()
         if o in ("-p", "--pin"):
             pin = a
+            if pin == "NULL":
+                pin = None
             pin_available = True
             open_session = True
         if o in ("-c", "--lib"):
