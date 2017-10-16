@@ -51,8 +51,10 @@ class getInfo(object):
         self.pkcs11 = PyKCS11.PyKCS11Lib()
         self.pkcs11.load(lib)
 
-    def getSlotInfo(self, slot):
-        print("Slot n.:", slot)
+    def getSlotInfo(self, slot, slot_index, nb_slots):
+        print()
+        print(self.red + "Slot %d/%d (number %d):" % (slot_index, nb_slots,
+            slot) + self.normal)
         self.display(self.pkcs11.getSlotInfo(slot), " ")
 
     def getTokenInfo(self, slot):
@@ -151,9 +153,12 @@ if __name__ == '__main__':
         slots = [slots[slot]]
         print("Using slot:", slots[0])
 
+    slot_index = 0
+    nb_slots = len(slots)
     for slot in slots:
+        slot_index += 1
         try:
-            gi.getSlotInfo(slot)
+            gi.getSlotInfo(slot, slot_index, nb_slots)
             gi.getSessionInfo(slot, pin)
             gi.getTokenInfo(slot)
             if list_mechanisms:
