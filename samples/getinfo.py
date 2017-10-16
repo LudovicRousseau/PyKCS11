@@ -100,14 +100,17 @@ def usage():
     print("[-p pin][--pin=pin] (use 'NULL' for pinpad)", end=' ')
     print("[-s slot][--slot=slot]", end=' ')
     print("[-c lib][--lib=lib]", end=' ')
+    print("[-m][--mechanisms]", end=' ')
     print("[-h][--help]")
+
 
 if __name__ == '__main__':
     import getopt
 
     try:
-        opts, args = getopt.getopt(sys.argv[1:], "p:s:c:hoa",
-            ["pin=", "slot=", "lib=", "help", "opensession", "all"])
+        opts, args = getopt.getopt(sys.argv[1:], "p:s:c:hoam",
+            ["pin=", "slot=", "lib=", "help", "opensession", "all",
+             "mechanisms"])
     except getopt.GetoptError:
         # print help information and exit:
         usage()
@@ -117,6 +120,7 @@ if __name__ == '__main__':
     lib = None
     pin = ""
     token_present = True
+    list_mechanisms = False
     for o, a in opts:
         if o in ("-h", "--help"):
             usage()
@@ -131,6 +135,8 @@ if __name__ == '__main__':
             lib = a
         if o in ("-a", "--all"):
             token_present = False
+        if o in ("-m", "--mechanisms"):
+            list_mechanisms = True
 
     gi = getInfo(lib)
     gi.getInfo()
@@ -150,6 +156,7 @@ if __name__ == '__main__':
             gi.getSlotInfo(slot)
             gi.getSessionInfo(slot, pin)
             gi.getTokenInfo(slot)
-            gi.getMechanismInfo(slot)
+            if list_mechanisms:
+                gi.getMechanismInfo(slot)
         except PyKCS11.PyKCS11Error as e:
             print("Error:", e)
