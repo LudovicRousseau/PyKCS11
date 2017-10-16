@@ -70,7 +70,8 @@ if __name__ == '__main__':
         slot = gi.pkcs11.waitForSlotEvent()
 
         try:
-            gi.getSlotInfo(slot)
+            print("Slot %d changed" % slot)
+            gi.getSlotInfo(slot, 0, len(slots))
             gi.getSessionInfo(slot, pin)
             gi.getTokenInfo(slot)
             gi.getMechanismInfo(slot)
