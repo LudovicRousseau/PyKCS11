@@ -33,8 +33,9 @@ if __name__ == '__main__':
         print("[-o][--opensession]")
 
     try:
-        opts, args = getopt.getopt(sys.argv[1:], "p:c:ho",
-                                   ["pin=", "lib=", "help", "opensession"])
+        opts, args = getopt.getopt(sys.argv[1:], "p:c:hom",
+                                   ["pin=", "lib=", "help",
+                                    "opensession", "mechanisms"])
     except getopt.GetoptError:
         # print help information and exit:
         usage()
@@ -44,6 +45,7 @@ if __name__ == '__main__':
     pin = None
     open_session = False
     pin_available = False
+    list_mechanisms = False
     for o, a in opts:
         if o in ("-h", "--help"):
             usage()
@@ -56,6 +58,8 @@ if __name__ == '__main__':
             lib = a
         if o in ("-o", "--opensession"):
             open_session = True
+        if o in ("-m", "--mechanisms"):
+            list_mechanisms = True
 
     gi = getinfo.getInfo(lib)
     gi.getInfo()
@@ -74,6 +78,7 @@ if __name__ == '__main__':
             gi.getSlotInfo(slot, 0, len(slots))
             gi.getSessionInfo(slot, pin)
             gi.getTokenInfo(slot)
-            gi.getMechanismInfo(slot)
+            if list_mechanisms:
+                gi.getMechanismInfo(slot)
         except PyKCS11.PyKCS11Error as e:
             print("Error:", e)
