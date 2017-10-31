@@ -27,35 +27,41 @@ if __name__ == '__main__':
 
     def usage():
         print("Usage:", sys.argv[0], end=' ')
-        print("[-p pin][--pin=pin]", end=' ')
+        print("[-p pin][--pin=pin] (use 'NULL' for pinpad)", end=' ')
         print("[-c lib][--lib=lib]", end=' ')
         print("[-h][--help]", end=' ')
         print("[-o][--opensession]")
 
     try:
-        opts, args = getopt.getopt(sys.argv[1:], "p:c:ho",
-                                   ["pin=", "lib=", "help", "opensession"])
+        opts, args = getopt.getopt(sys.argv[1:], "p:c:hom",
+                                   ["pin=", "lib=", "help",
+                                    "opensession", "mechanisms"])
     except getopt.GetoptError:
         # print help information and exit:
         usage()
         sys.exit(2)
 
     lib = None
-    pin = None
+    pin = ""
     open_session = False
     pin_available = False
+    list_mechanisms = False
     for o, a in opts:
         if o in ("-h", "--help"):
             usage()
             sys.exit()
         if o in ("-p", "--pin"):
             pin = a
+            if pin == "NULL":
+                pin = None
             pin_available = True
             open_session = True
         if o in ("-c", "--lib"):
             lib = a
         if o in ("-o", "--opensession"):
             open_session = True
+        if o in ("-m", "--mechanisms"):
+            list_mechanisms = True
 
     gi = getinfo.getInfo(lib)
     gi.getInfo()
@@ -70,9 +76,11 @@ if __name__ == '__main__':
         slot = gi.pkcs11.waitForSlotEvent()
 
         try:
-            gi.getSlotInfo(slot)
+            print("Slot %d changed" % slot)
+            gi.getSlotInfo(slot, 0, len(slots))
             gi.getSessionInfo(slot, pin)
             gi.getTokenInfo(slot)
-            gi.getMechanismInfo(slot)
+            if list_mechanisms:
+                gi.getMechanismInfo(slot)
         except PyKCS11.PyKCS11Error as e:
             print("Error:", e)

@@ -22,7 +22,7 @@ pkcs11 = PyKCS11Lib()
 pkcs11.load()  # define environment variable PYKCS11LIB=YourPKCS11Lib
 
 # get 1st slot
-slot = pkcs11.getSlotList()[0]
+slot = pkcs11.getSlotList(tokenPresent=True)[0]
 
 session = pkcs11.openSession(slot, CKF_SERIAL_SESSION | CKF_RW_SESSION)
 session.login("1234")

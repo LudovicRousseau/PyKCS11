@@ -51,8 +51,10 @@ class getInfo(object):
         self.pkcs11 = PyKCS11.PyKCS11Lib()
         self.pkcs11.load(lib)
 
-    def getSlotInfo(self, slot):
-        print("Slot n.:", slot)
+    def getSlotInfo(self, slot, slot_index, nb_slots):
+        print()
+        print(self.red + "Slot %d/%d (number %d):" % (slot_index, nb_slots,
+            slot) + self.normal)
         self.display(self.pkcs11.getSlotInfo(slot), " ")
 
     def getTokenInfo(self, slot):
@@ -100,14 +102,17 @@ def usage():
     print("[-p pin][--pin=pin] (use 'NULL' for pinpad)", end=' ')
     print("[-s slot][--slot=slot]", end=' ')
     print("[-c lib][--lib=lib]", end=' ')
+    print("[-m][--mechanisms]", end=' ')
     print("[-h][--help]")
+
 
 if __name__ == '__main__':
     import getopt
 
     try:
-        opts, args = getopt.getopt(sys.argv[1:], "p:s:c:hoa",
-            ["pin=", "slot=", "lib=", "help", "opensession", "all"])
+        opts, args = getopt.getopt(sys.argv[1:], "p:s:c:hoam",
+            ["pin=", "slot=", "lib=", "help", "opensession", "all",
+             "mechanisms"])
     except getopt.GetoptError:
         # print help information and exit:
         usage()
@@ -117,6 +122,7 @@ if __name__ == '__main__':
     lib = None
     pin = ""
     token_present = True
+    list_mechanisms = False
     for o, a in opts:
         if o in ("-h", "--help"):
             usage()
@@ -131,6 +137,8 @@ if __name__ == '__main__':
             lib = a
         if o in ("-a", "--all"):
             token_present = False
+        if o in ("-m", "--mechanisms"):
+            list_mechanisms = True
 
     gi = getInfo(lib)
     gi.getInfo()
@@ -145,11 +153,15 @@ if __name__ == '__main__':
         slots = [slots[slot]]
         print("Using slot:", slots[0])
 
+    slot_index = 0
+    nb_slots = len(slots)
     for slot in slots:
+        slot_index += 1
         try:
-            gi.getSlotInfo(slot)
+            gi.getSlotInfo(slot, slot_index, nb_slots)
             gi.getSessionInfo(slot, pin)
             gi.getTokenInfo(slot)
-            gi.getMechanismInfo(slot)
+            if list_mechanisms:
+                gi.getMechanismInfo(slot)
         except PyKCS11.PyKCS11Error as e:
             print("Error:", e)

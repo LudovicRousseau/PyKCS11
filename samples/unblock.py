@@ -25,7 +25,7 @@ puk = "1234"
 
 pkcs11 = PyKCS11.PyKCS11Lib()
 pkcs11.load()
-slot = pkcs11.getSlotList()[0]
+slot = pkcs11.getSlotList(tokenPresent=True)[0]
 session = pkcs11.openSession(slot, PyKCS11.CKF_RW_SESSION)
 session.login(puk, PyKCS11.CKU_SO)
 session.initPin(pin)
