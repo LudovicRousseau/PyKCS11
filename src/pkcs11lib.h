@@ -102,7 +102,7 @@ public:
 	CK_RV C_Login(
 		CK_SESSION_HANDLE hSession,
 		unsigned long userType,
-		char* pPin, unsigned long ulPinLen);
+		vector<unsigned char> pin);
 #ifdef SWIG
 %clear (char* pPin, unsigned long ulPinLen),
 	(char* pOldPin, unsigned long ulOldLen),

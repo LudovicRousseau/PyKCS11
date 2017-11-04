@@ -250,12 +250,11 @@ CK_RV CPKCS11Lib::C_GetSessionInfo(
 CK_RV CPKCS11Lib::C_Login(
 	CK_SESSION_HANDLE hSession,
 	CK_USER_TYPE userType,
-	char* pPin,
-	CK_ULONG ulPinLen)
+	vector<unsigned char> pin)
 {
 	CPKCS11LIB_PROLOGUE(C_Login);
-	if (NULL == pPin)
-		ulPinLen = 0;
+	CK_ULONG ulPinLen = 0;
+	CK_BYTE* pPin = Vector2Buffer(pin, ulPinLen);
 	rv = m_pFunc->C_Login(hSession, userType, (CK_UTF8CHAR_PTR)pPin, ulPinLen);
 	CPKCS11LIB_EPILOGUE;
 	return rv;

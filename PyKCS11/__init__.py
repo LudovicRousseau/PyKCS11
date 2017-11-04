@@ -904,7 +904,8 @@ class Session(object):
         CKU_USER. You may also use CKU_SO
         @type user_type: integer
         """
-        rv = self.lib.C_Login(self.session, user_type, pin)
+        pin1 = ckbytelist(pin)
+        rv = self.lib.C_Login(self.session, user_type, pin1)
         if rv != CKR_OK:
             raise PyKCS11Error(rv)
 
