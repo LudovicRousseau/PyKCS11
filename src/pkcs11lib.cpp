@@ -173,7 +173,7 @@ CK_RV CPKCS11Lib::C_InitToken(
 	CPKCS11LIB_PROLOGUE(C_InitToken);
 	CK_ULONG ulPinLen = 0;
 	CK_BYTE* pPin = Vector2Buffer(pin, ulPinLen);
-	rv = m_pFunc->C_InitToken(slotID, (CK_CHAR*)pPin, ulPinLen,
+	rv = m_pFunc->C_InitToken(slotID, (CK_UTF8CHAR_PTR) pPin, ulPinLen,
 		(CK_CHAR*)pLabel);
 	CPKCS11LIB_EPILOGUE;
 	return rv;
