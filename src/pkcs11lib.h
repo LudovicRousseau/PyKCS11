@@ -79,10 +79,8 @@ public:
 
 	CK_RV C_SetPIN(
 		CK_SESSION_HANDLE hSession,
-		char* pOldPin,
-		unsigned long ulOldLen,
-		char* pNewPin,
-		unsigned long ulNewLen);
+		vector<unsigned char> OldPin,
+		vector<unsigned char> NewPin);
 
 	CK_RV C_OpenSession(
 		unsigned long slotID,

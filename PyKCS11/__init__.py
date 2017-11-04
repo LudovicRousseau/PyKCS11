@@ -938,7 +938,9 @@ class Session(object):
         @param old_pin: old PIN
         @param new_pin: new PIN
         """
-        rv = self.lib.C_SetPIN(self.session, old_pin, new_pin)
+        old_pin1 = ckbytelist(old_pin)
+        new_pin1 = ckbytelist(new_pin)
+        rv = self.lib.C_SetPIN(self.session, old_pin1, new_pin1)
         if rv != CKR_OK:
             raise PyKCS11Error(rv)
 

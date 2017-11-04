@@ -193,16 +193,14 @@ CK_RV CPKCS11Lib::C_InitPIN(
 
 CK_RV CPKCS11Lib::C_SetPIN(
 	CK_SESSION_HANDLE hSession,
-	char* pOldPin,
-	CK_ULONG ulOldLen,
-	char* pNewPin,
-	CK_ULONG ulNewLen)
+	vector<unsigned char> OldPin,
+	vector<unsigned char> NewPin)
 {
 	CPKCS11LIB_PROLOGUE(C_SetPIN);
-	if (NULL == pOldPin)
-		ulOldLen = 0;
-	if (NULL == pNewPin)
-		ulNewLen = 0;
+	CK_ULONG ulOldLen = 0;
+	CK_BYTE* pOldPin = Vector2Buffer(OldPin, ulOldLen);
+	CK_ULONG ulNewLen = 0;
+	CK_BYTE* pNewPin = Vector2Buffer(NewPin, ulNewLen);
 	rv = m_pFunc->C_SetPIN(hSession,
 		(CK_UTF8CHAR_PTR)pOldPin, ulOldLen,
 		(CK_UTF8CHAR_PTR)pNewPin, ulNewLen);
