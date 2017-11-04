@@ -167,11 +167,12 @@ CK_RV CPKCS11Lib::C_GetTokenInfo (
 
 CK_RV CPKCS11Lib::C_InitToken(
 	CK_SLOT_ID slotID,
-	char* pPin,
-	CK_ULONG ulPinLen,
+	vector<unsigned char> pin,
 	const char* pLabel)
 {
 	CPKCS11LIB_PROLOGUE(C_InitToken);
+	CK_ULONG ulPinLen = 0;
+	CK_BYTE* pPin = Vector2Buffer(pin, ulPinLen);
 	rv = m_pFunc->C_InitToken(slotID, (CK_CHAR*)pPin, ulPinLen,
 		(CK_CHAR*)pLabel);
 	CPKCS11LIB_EPILOGUE;

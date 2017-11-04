@@ -492,7 +492,8 @@ class PyKCS11Lib(object):
         @param pin: SO's initial PIN
         @param label: new label of the token
         """
-        rv = self.lib.C_InitToken(slot, pin, label)
+        pin1 = ckbytelist(pin)
+        rv = self.lib.C_InitToken(slot, pin1, label)
         if rv != CKR_OK:
             raise PyKCS11Error(rv)
 

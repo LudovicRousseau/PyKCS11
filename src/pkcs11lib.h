@@ -70,8 +70,7 @@ public:
 
 #endif
 	CK_RV C_InitToken(unsigned long slotID,
-		char* pPin,
-		unsigned long ulPinLen,
+		vector<unsigned char> pin,
 		const char* pLabel);
 
 	CK_RV C_InitPIN(
