@@ -75,8 +75,7 @@ public:
 
 	CK_RV C_InitPIN(
 		CK_SESSION_HANDLE hSession,
-		char* pPin,
-		unsigned long ulPinLen);
+		vector<unsigned char> pin);
 
 	CK_RV C_SetPIN(
 		CK_SESSION_HANDLE hSession,
