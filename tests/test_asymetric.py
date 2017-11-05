@@ -53,26 +53,25 @@ class TestUtil(unittest.TestCase):
 
     def test_sign_PKCS(self):
         toSign = "Hello world"
+        mecha = PyKCS11.Mechanism(PyKCS11.CKM_SHA1_RSA_PKCS, None)
 
         # sign/verify
-        signature = self.session.sign(self.privKey, toSign,
-                PyKCS11.Mechanism(PyKCS11.CKM_SHA1_RSA_PKCS, None))
+        signature = self.session.sign(self.privKey, toSign, mecha)
 
         result = self.session.verify(self.pubKey, toSign, signature,
-                PyKCS11.Mechanism(PyKCS11.CKM_SHA1_RSA_PKCS, None))
+                mecha)
 
         self.assertTrue(result)
 
     def test_sign_X509(self):
         toSign = "Hello world"
+        mecha = PyKCS11.Mechanism(PyKCS11.CKM_RSA_X_509, None)
 
         # sign/verify
         try:
-            signature = self.session.sign(self.privKey, toSign,
-                    PyKCS11.Mechanism(PyKCS11.CKM_RSA_X_509, None))
+            signature = self.session.sign(self.privKey, toSign, mecha)
 
-            result = self.session.verify(self.pubKey, toSign, signature,
-                    PyKCS11.Mechanism(PyKCS11.CKM_RSA_X_509, None))
+            result = self.session.verify(self.pubKey, toSign, signature, mecha)
 
             self.assertTrue(result)
         except PyKCS11.PyKCS11Error as e:
