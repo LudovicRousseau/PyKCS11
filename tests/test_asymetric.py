@@ -160,6 +160,22 @@ class TestUtil(unittest.TestCase):
             if not e.value == PyKCS11.CKR_MECHANISM_INVALID:
                 raise
 
+    def test_RSA_PSS_SHA256(self):
+        # RSA PSS
+        toSign = "test_RSA_sign_PSS SHA256"
+
+        mech = PyKCS11.RSA_PSS_Mechanism(PyKCS11.CKM_SHA256_RSA_PKCS_PSS,
+                PyKCS11.CKM_SHA256, PyKCS11.CKG_MGF1_SHA256, 0)
+        try:
+            signature = self.session.sign(self.privKey, toSign, mech)
+            result = self.session.verify(self.pubKey, toSign, signature, mech)
+
+            self.assertTrue(result)
+        except PyKCS11.PyKCS11Error as e:
+            # RSA PSS is not yet supported by SoftHSM1
+            if not e.value == PyKCS11.CKR_MECHANISM_INVALID:
+                raise
+
     def test_pubKey(self):
         # test CK_OBJECT_HANDLE.__repr__()
         text = str(self.pubKey)
