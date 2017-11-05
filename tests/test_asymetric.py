@@ -63,6 +63,18 @@ class TestUtil(unittest.TestCase):
 
         self.assertTrue(result)
 
+    def test_sign_PKCS_SHA256(self):
+        toSign = "Hello world"
+        mecha = PyKCS11.Mechanism(PyKCS11.CKM_SHA256_RSA_PKCS, None)
+
+        # sign/verify
+        signature = self.session.sign(self.privKey, toSign, mecha)
+
+        result = self.session.verify(self.pubKey, toSign, signature,
+                mecha)
+
+        self.assertTrue(result)
+
     def test_sign_X509(self):
         toSign = "Hello world"
         mecha = PyKCS11.Mechanism(PyKCS11.CKM_RSA_X_509, None)
