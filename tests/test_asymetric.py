@@ -160,6 +160,7 @@ class TestUtil(unittest.TestCase):
             if not e.value == PyKCS11.CKR_MECHANISM_INVALID:
                 raise
 
+    def test_pubKey(self):
         # test CK_OBJECT_HANDLE.__repr__()
         text = str(self.pubKey)
         self.assertIsNotNone(text)
