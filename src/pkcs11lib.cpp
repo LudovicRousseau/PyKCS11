@@ -261,6 +261,17 @@ CK_RV CPKCS11Lib::C_Login(
 	return rv;
 }
 
+CK_RV CPKCS11Lib::C_Login(
+	CK_SESSION_HANDLE hSession,
+	CK_USER_TYPE userType,
+	vector<unsigned char> pin)
+{
+    CK_ULONG ulPinLen;
+    CK_BYTE* pPin = Vector2Buffer(pin, ulPinLen);
+	
+    return C_Login(hSession, userType, (char *)pPin, ulPinLen);
+}
+
 CK_RV CPKCS11Lib::C_Logout(
 	CK_SESSION_HANDLE hSession)
 {
