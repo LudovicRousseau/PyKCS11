@@ -60,7 +60,6 @@ class TestUtil(unittest.TestCase):
             self.session.sign(self.privKey, toSign, mecha)
         except PyKCS11.PyKCS11Error as e:
             self.assertEqual(e.value, -3)
-            self.assertEqual(str(e), "Unknown format (<type 'int'>)")
 
     def test_sign_PKCS(self):
         toSign = "Hello world"
