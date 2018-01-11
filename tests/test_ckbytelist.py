@@ -14,7 +14,7 @@ class Testutil(unittest.TestCase):
         self.assertSequenceEqual(ck, [0, 0, 0, 0, 0])
 
     def test_data(self):
-        ck = PyKCS11.ckbytelist(5)
+        ck = PyKCS11.ckbytelist([0] * 5)
         for index in range(5):
             ck[index] = index
         self.assertSequenceEqual(ck, [0, 1, 2, 3, 4])
@@ -30,7 +30,7 @@ class Testutil(unittest.TestCase):
         self.assertEqual(len(ck), 0)
 
     def test_length5(self):
-        ck = PyKCS11.ckbytelist(5)
+        ck = PyKCS11.ckbytelist([0] * 5)
         self.assertEqual(len(ck), 5)
 
     def test_string(self):

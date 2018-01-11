@@ -74,10 +74,6 @@ class ckbytelist(PyKCS11.LowLevel.ckbytelist):
     def __init__(self, data=[]):
         # default size of the vector
         size = 0
-        if isinstance(data, int):
-            size = data
-            data = None
-
         super(ckbytelist, self).__init__(size)
 
         # No value to initialize
