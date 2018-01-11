@@ -1511,7 +1511,7 @@ class Session(object):
         or, for Python 2::
             ''.join(chr(i) for i in random)
         """
-        low_rand = ckbytelist(size)
+        low_rand = ckbytelist([0] * size)
         rv = self.lib.C_GenerateRandom(self.session, low_rand)
         if rv != CKR_OK:
             raise PyKCS11Error(rv)
