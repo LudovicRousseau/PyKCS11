@@ -51,6 +51,17 @@ class TestUtil(unittest.TestCase):
         self.pkcs11.closeAllSessions(self.slot)
         del self.pkcs11
 
+    def test_sign_integer(self):
+        toSign = 1234567890
+        mecha = PyKCS11.Mechanism(PyKCS11.CKM_SHA1_RSA_PKCS, None)
+
+        # sign/verify
+        try:
+            self.session.sign(self.privKey, toSign, mecha)
+        except PyKCS11.PyKCS11Error as e:
+            self.assertEqual(e.value, -3)
+            self.assertEqual(str(e), "Unknown format (<type 'int'>)")
+
     def test_sign_PKCS(self):
         toSign = "Hello world"
         mecha = PyKCS11.Mechanism(PyKCS11.CKM_SHA1_RSA_PKCS, None)
