@@ -37,7 +37,7 @@ key_length = 2048  # key-length in bits
 
 # the key_id has to be the same for both objects, it will also be necessary
 # when importing the certificate, to ensure it is linked with these keys.
-key_id = '\x01'
+key_id = (0x01,)
 
 public_template = [
     (PyKCS11.CKA_CLASS, PyKCS11.CKO_PUBLIC_KEY),
