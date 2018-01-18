@@ -18,6 +18,9 @@
 
 from PyKCS11 import *
 
+# the key_id has to be the same for both objects
+key_id = (0x22,)
+
 pkcs11 = PyKCS11Lib()
 pkcs11.load()  # define environment variable PYKCS11LIB=YourPKCS11Lib
 
@@ -38,7 +41,7 @@ pubTemplate = [
     (CKA_VERIFY_RECOVER, CK_TRUE),
     (CKA_WRAP, CK_TRUE),
     (CKA_LABEL, "My Public Key"),
-    (CKA_ID, (0x22,))
+    (CKA_ID, key_id)
 ]
 
 privTemplate = [
@@ -49,7 +52,7 @@ privTemplate = [
     (CKA_SIGN, CK_TRUE),
     (CKA_SIGN_RECOVER, CK_TRUE),
     (CKA_UNWRAP, CK_TRUE),
-    (CKA_ID, (0x22,))
+    (CKA_ID, key_id)
 ]
 
 (pubKey, privKey) = session.generateKeyPair(pubTemplate, privTemplate)
