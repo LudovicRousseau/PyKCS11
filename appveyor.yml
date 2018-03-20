@@ -24,6 +24,7 @@ build_script:
   - python setup.py sdist
   - python setup.py bdist
   - python setup.py install
+  - copy /Y src\LowLevel.py PyKCS11\
   - copy /Y %PYTHON%\\Lib\\site-packages\\PyKCS11\\* PyKCS11\\
 
 test_script:
