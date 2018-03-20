@@ -1,0 +1,31 @@
+os: Windows Server 2012 R2
+
+environment:
+  matrix:
+    - PYTHON: "C:\\Python36"
+    - PYTHON: "C:\\Python36-x64"
+    - PYTHON: "C:\\Python35-x64"
+    - PYTHON: "C:\\Python27"
+
+cache:
+  ## Cache swig, which we install via AppVeyor.
+  # The syntax here is <dir-to-cache> -> <invalidated-when-this-file-changes>
+  # If the appveyor.yml script is changed, then the cache is invalidated.
+  # https://www.appveyor.com/docs/build-cache/
+  - C:\ProgramData\chocolatey\bin -> appveyor.yml # swig.exe
+  - C:\ProgramData\chocolatey\lib -> appveyor.yml # supporting swig Lib files.
+
+install:
+  - "SET PATH=%PYTHON%;%PYTHON%\\Scripts;%PATH%;c:\\SoftHSM2\\bin;c:\\SoftHSM2\\lib"
+  - "SET SOFTHSM2_CONF=C:\\SoftHSM2\\etc\\softhsm2.conf"
+  - tests\appveyor_install.cmd
+
+build_script:
+  - python setup.py sdist
+  - python setup.py bdist
+  - python setup.py install
+  - copy /Y src\LowLevel.py PyKCS11\
+  - copy /Y %PYTHON%\\Lib\\site-packages\\PyKCS11\\* PyKCS11\\
+
+test_script:
+  - python run_test.py
