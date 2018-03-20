@@ -20,11 +20,19 @@ if "PKCS11SPY" in os.environ:
     LIBS = ["/usr/local/lib/pkcs11-spy.so",  # macOS or local build
             "/usr/lib/x86_64-linux-gnu/pkcs11-spy.so"]  # Debian amd64
 else:
+    if sys.maxsize > 2 ** 32:
+        # 64-bits
+        WINDOWS_SOFTHSM = "c:/SoftHSM2/lib/softhsm2-x64.dll"
+    else:
+        # 32-bits
+        WINDOWS_SOFTHSM = "c:/SoftHSM2/lib/softhsm2.dll"
     # use SoftHSM2 or SoftHSM1
     LIBS = ["/usr/local/lib/softhsm/libsofthsm2.so",  # macOS or local build
             "/usr/lib/softhsm/libsofthsm2.so",  # Debian libsofthsm2
             "/usr/lib/softhsm/libsofthsm.so",  # Debian libsofthsm
-            "/usr/lib/libsofthsm.so"]  # Ubuntu 12.04 libsofthsm
+            "/usr/lib/libsofthsm.so",  # Ubuntu 12.04 libsofthsm
+            WINDOWS_SOFTHSM,  # Windows
+            ]
 
 for lib in LIBS:
     if os.path.isfile(lib):
