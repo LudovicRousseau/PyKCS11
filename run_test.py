@@ -24,7 +24,9 @@ else:
     LIBS = ["/usr/local/lib/softhsm/libsofthsm2.so",  # macOS or local build
             "/usr/lib/softhsm/libsofthsm2.so",  # Debian libsofthsm2
             "/usr/lib/softhsm/libsofthsm.so",  # Debian libsofthsm
-            "/usr/lib/libsofthsm.so"]  # Ubuntu 12.04 libsofthsm
+            "/usr/lib/libsofthsm.so",  # Ubuntu 12.04 libsofthsm
+            "c:/SoftHSM2/lib/softhsm2-x64.dll" if sys.maxsize > 2 ** 32 else "c:/SoftHSM2/lib/softhsm2.dll"
+    ]
 
 for lib in LIBS:
     if os.path.isfile(lib):
