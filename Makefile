@@ -9,6 +9,7 @@ build: build-stamp
 
 build-stamp:
 	$(PYTHON) setup.py build
+	cp src/LowLevel.py PyKCS11/
 	touch build-stamp
 
 install: build
