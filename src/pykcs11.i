@@ -233,7 +233,10 @@ typedef struct CK_DATE{
     if (SWIG_IsOK(SWIG_ConvertPtr($input, (void **)&vect, SWIGTYPE_p_std__vectorT_unsigned_char_std__allocatorT_unsigned_char_t_t, 0)))
     {
         // Get the data from the vector
-        arg2 = vect->data();
+        // The recommanded code in C++11 should be vect->data() but
+        // Microsoft Visual Studio 9.0 does not suport it and this
+        // compiler is needed for Python 2.7
+        arg2 = &vect->operator[](0);
     }
     else
     {
