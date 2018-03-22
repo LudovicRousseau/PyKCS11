@@ -29,3 +29,7 @@ build_script:
 
 test_script:
   - python run_test.py
+
+artifacts:
+  - path: dist/*
+    name: PythonPackages
