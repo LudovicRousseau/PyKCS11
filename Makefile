@@ -4,6 +4,7 @@ ifeq (, $(PYTHON))
 PYTHON=python
 endif
 PREFIX ?= $(shell $(PYTHON) -c 'import sys; print(sys.prefix)')
+COVERAGE ?= coverage
 
 build: build-stamp
 
@@ -43,9 +44,9 @@ tests: prepare4test
 	$(PYTHON) run_test.py
 
 coverage: prepare4test
-	coverage run run_test.py
-	coverage report
-	coverage html
+	$(COVERAGE) run run_test.py
+	$(COVERAGE) report
+	$(COVERAGE) html
 
 doc: build
 	rm -rf html
