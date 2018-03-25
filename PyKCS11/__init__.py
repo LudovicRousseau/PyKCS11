@@ -201,6 +201,8 @@ class CkClass(object):
         for field in self.fields.keys():
             if field == "flags":
                 dico[field] = self.flags2text()
+            elif field == "state":
+                dico[field] = self.state2text()
             else:
                 dico[field] = eval("self." + field)
         return dico
