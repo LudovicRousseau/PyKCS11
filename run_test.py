@@ -39,6 +39,10 @@ for lib in LIBS:
         print("Using lib:", lib)
         os.environ['PYKCS11LIB'] = lib
         break
+try:
+    os.environ['PYKCS11LIB']
+except KeyError:
+    raise Exception("PYKCS11LIB is not defined. No SoftHSM library found?")
 
 tl = unittest.TestLoader()
 suite = tl.discover("tests", pattern=pattern)
