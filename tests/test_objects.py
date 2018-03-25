@@ -61,3 +61,13 @@ class TestUtil(unittest.TestCase):
                 ]
         handle = self.session.createObject(template)
         self.session.destroyObject(handle)
+
+    def test_getAttributeValue(self):
+        # attributes as define by AESKeyTemplate
+        all_attributes = [PyKCS11.CKA_CLASS, PyKCS11.CKA_KEY_TYPE,
+                          PyKCS11.CKA_TOKEN, PyKCS11.CKA_LABEL,
+                          PyKCS11.CKA_ID]
+        values = self.session.getAttributeValue(self.AESKey, all_attributes)
+        self.assertEqual(values, [PyKCS11.CKO_SECRET_KEY,
+                                  PyKCS11.CKK_AES, PyKCS11.CK_TRUE,
+                                  b"TestAESKey", (0x01,)])
