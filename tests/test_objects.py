@@ -53,3 +53,11 @@ class TestUtil(unittest.TestCase):
 
         text = str(symKey)
         self.assertIsNotNone(text)
+
+    def test_CreateObject(self):
+        template = [
+                (PyKCS11.CKA_CLASS, PyKCS11.CKO_DATA),
+                (PyKCS11.CKA_LABEL, "data"),
+                ]
+        handle = self.session.createObject(template)
+        self.session.destroyObject(handle)
