@@ -8,6 +8,8 @@ class TestUtil(unittest.TestCase):
         self.pkcs11 = PyKCS11.PyKCS11Lib()
         self.pkcs11.load()
         self.slot = self.pkcs11.getSlotList(tokenPresent=True)[0]
+        self.manufacturerIDs = ("SoftHSM".ljust(32),
+                                "SoftHSM project".ljust(32))
 
     def test_getInfo(self):
         info = self.pkcs11.getInfo()
@@ -23,7 +25,7 @@ class TestUtil(unittest.TestCase):
     def test_getSlotInfo(self):
         info = self.pkcs11.getSlotInfo(self.slot)
 
-        self.assertEqual(info.manufacturerID, "SoftHSM project".ljust(32))
+        self.assertIn(info.manufacturerID, self.manufacturerIDs)
 
         text = str(info)
         self.assertIsNotNone(text)
@@ -31,7 +33,7 @@ class TestUtil(unittest.TestCase):
     def test_getTokenInfo(self):
         info = self.pkcs11.getTokenInfo(self.slot)
 
-        self.assertEqual(info.manufacturerID, "SoftHSM project".ljust(32))
+        self.assertIn(info.manufacturerID, self.manufacturerIDs)
 
         text = str(info)
         self.assertIsNotNone(text)
