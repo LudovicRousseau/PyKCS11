@@ -11,16 +11,28 @@ class TestUtil(unittest.TestCase):
 
     def test_getInfo(self):
         info = self.pkcs11.getInfo()
+
+        # check the CK_UTF8CHAR to string convertion
+        self.assertEqual(info.manufacturerID, "SoftHSM".ljust(32))
+        self.assertEqual(info.libraryDescription,
+                         "Implementation of PKCS11".ljust(32))
+
         text = str(info)
         self.assertIsNotNone(text)
 
     def test_getSlotInfo(self):
         info = self.pkcs11.getSlotInfo(self.slot)
+
+        self.assertEqual(info.manufacturerID, "SoftHSM project".ljust(32))
+
         text = str(info)
         self.assertIsNotNone(text)
 
     def test_getTokenInfo(self):
         info = self.pkcs11.getTokenInfo(self.slot)
+
+        self.assertEqual(info.manufacturerID, "SoftHSM project".ljust(32))
+
         text = str(info)
         self.assertIsNotNone(text)
 
