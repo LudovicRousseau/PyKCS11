@@ -92,6 +92,23 @@ that doesn't come with the standard distribution.
 History
 =======
 
+1.5.0 - March 2018, Ludovic Rousseau
+   - Python 3: use strings instead of binary buffers for CK_UTF8CHAR
+	 PKCS#11 types. The behavior is now the same as with Python 2
+   - allow non string PIN values (binary PIN) for login(), initToken(),
+	 initPin(), setPin()
+   - fix support of RSA PKCS PSS mechanism
+	 The mechanism object now uses a parameter "mechanism" instead of hard
+	 coding the mechanism value to CKM_RSA_PKCS_PSS.
+   - add support of Python 2.7 on Windows
+   - add AppVeyor configuration (automatic Windows builds)
+   - ckbytelist: remove possibility to give a initial size
+   - samples/getinfo: do not list the mechanisms by default
+   - samples/events:
+     . do not list the mechanisms by default
+     . add support of pinpad readers
+   - some minor improvements
+
 1.4.4 - October 2017, Ludovic Rousseau
    - getAttributeValue(): handle CKR_ARGUMENTS_BAD error
    - seedRandom: fix the seed convertion
