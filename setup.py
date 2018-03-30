@@ -4,6 +4,8 @@
 # PYTHONPATH=/tmp/p/usr/lib/python2.4/site-packages python test.py
 
 from distutils.core import setup, Extension
+from distutils.command.build import build
+from distutils.file_util import copy_file
 from sys import version_info as pyver
 from os import path, system
 import platform
@@ -52,6 +54,13 @@ else:
     source_files.append("src/dyn_unix.c")
     libraries_val = []
 
+class my_build(build):
+    def run(self):
+        self.run_command("build_ext")
+        copy_file("src/LowLevel.py", "PyKCS11")
+        self.run_command("build_py")
+        build.run(self)
+
 setup(name="PyKCS11",
     version="1.5.0",
     description="A Full PKCS#11 wrapper for Python",
@@ -66,6 +75,7 @@ setup(name="PyKCS11",
     url="https://github.com/LudovicRousseau/PyKCS11",
     download_url="http://sourceforge.net/projects/pkcs11wrap/files/pykcs11/",
     license="GPL",
+    cmdclass={'build': my_build},
     ext_modules=[
         Extension(
             "PyKCS11._LowLevel",
