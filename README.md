@@ -92,6 +92,9 @@ that doesn't come with the standard distribution.
 History
 =======
 
+1.5.1 - March 2018, Ludovic Rousseau
+   - Fix "pip install"
+
 1.5.0 - March 2018, Ludovic Rousseau
    - Python 3: use strings instead of binary buffers for CK_UTF8CHAR
 	 PKCS#11 types. The behavior is now the same as with Python 2
