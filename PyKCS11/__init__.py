@@ -918,11 +918,11 @@ class Session(object):
 
         del self
 
-    def initPin(self, new_pin):
+    def initPin(self, pin):
         """
         C_InitPIN
 
-        @param new_pin: new PIN
+        @param pin: new PIN
         """
         new_pin1 = ckbytelist(pin)
         rv = self.lib.C_InitPIN(self.session, new_pin1)
