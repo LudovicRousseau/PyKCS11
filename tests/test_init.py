@@ -49,3 +49,16 @@ class TestUtil(unittest.TestCase):
         # revert to old PIN
         self.session.setPin("4321", "1234")
         self.session.logout()
+
+    def test_initToken(self):
+        self.pkcs11.closeAllSessions(self.slot)
+
+        # use admin PIN
+        self.pkcs11.initToken(self.slot, "123456", "my label")
+        self.session = self.pkcs11.openSession(self.slot,
+                                               PyKCS11.CKF_SERIAL_SESSION |
+                                               PyKCS11.CKF_RW_SESSION)
+        self.session.login("123456", user_type=PyKCS11.CKU_SO)
+        # set user PIN
+        self.session.initPin("1234")
+        self.session.logout()
