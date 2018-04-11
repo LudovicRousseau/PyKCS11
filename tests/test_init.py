@@ -35,3 +35,17 @@ class TestUtil(unittest.TestCase):
         # check old PIN
         self.session.login("1234")
         self.session.logout()
+
+    def test_setPin(self):
+        self.session.login("1234")
+
+        # change PIN
+        self.session.setPin("1234", "4321")
+        self.session.logout()
+
+        # test new PIN
+        self.session.login("4321")
+
+        # revert to old PIN
+        self.session.setPin("4321", "1234")
+        self.session.logout()
