@@ -92,6 +92,10 @@ that doesn't come with the standard distribution.
 History
 =======
 
+1.5.2 - April 2018, Ludovic Rousseau
+   - Fix initPin()
+   - add tests for initPin(), setPin(), initToken()
+
 1.5.1 - March 2018, Ludovic Rousseau
    - Fix "pip install"
 
