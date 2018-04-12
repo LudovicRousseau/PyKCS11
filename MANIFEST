@@ -44,6 +44,7 @@ src/stdafx.h
 src/utility.cpp
 src/utility.h
 tests/__init__.py
+tests/reset_softHSM.sh
 tests/test_CK.py
 tests/test_asymetric.py
 tests/test_ckbytelist.py
