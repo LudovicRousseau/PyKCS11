@@ -50,6 +50,10 @@ tests/test_ckbytelist.py
 tests/test_digest.py
 tests/test_exception.py
 tests/test_info.py
+tests/test_init.py
+tests/test_objects.py
+tests/test_pin.py
 tests/test_random.py
 tests/test_symetric.py
+tests/test_wrap.py
 tox.ini
