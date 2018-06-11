@@ -56,8 +56,8 @@ bool CPKCS11Lib::Load(const char* szLib)
 	CK_RV rv;
 	Unload();
 	SYS_dyn_LoadLibrary((void**)&m_hLib, szLib);
-	//m_hLib = LoadLibrary(szLib);
-	if (!m_hLib) return false;
+	if (!m_hLib)
+		return false;
 
 	CK_C_GetFunctionList pC_GetFunctionList;
 	SYS_dyn_GetAddress(m_hLib, (function_ptr *)&pC_GetFunctionList, "C_GetFunctionList");
