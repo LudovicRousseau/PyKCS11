@@ -1,3 +1,5 @@
+# -*- coding: utf-8 -*-
+
 import unittest
 from PyKCS11 import PyKCS11
 
@@ -64,6 +66,12 @@ class TestUtil(unittest.TestCase):
         self.session.logout()
 
     def test_initToken_utf8(self):
+
+        # for Python version ≥ 3 only
+        import sys
+        if sys.version_info[0] < 3:
+            return
+
         self.pkcs11.closeAllSessions(self.slot)
 
         # Create a label using UTF-8
