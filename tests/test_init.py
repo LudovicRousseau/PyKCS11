@@ -62,3 +62,25 @@ class TestUtil(unittest.TestCase):
         # set user PIN
         self.session.initPin("1234")
         self.session.logout()
+
+    def test_initToken_utf8(self):
+        self.pkcs11.closeAllSessions(self.slot)
+
+        # Create a label using UTF-8
+        label = "abcéàç"
+        # padding with spaces up to 32 _bytes_ (not characters)
+        label += " " * (32 - len(label.encode("utf-8")))
+
+        # use admin PIN
+        self.pkcs11.initToken(self.slot, "123456", label)
+        self.session = self.pkcs11.openSession(self.slot,
+                                               PyKCS11.CKF_SERIAL_SESSION |
+                                               PyKCS11.CKF_RW_SESSION)
+        self.session.login("123456", user_type=PyKCS11.CKU_SO)
+        # set user PIN
+        self.session.initPin("1234")
+
+        token_info = self.pkcs11.getTokenInfo(self.slot)
+        self.assertEqual(token_info.label, label)
+
+        self.session.logout()
