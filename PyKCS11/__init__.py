@@ -181,11 +181,11 @@ class CkClass(object):
 
     def flags2text(self):
         """
-        parse the L{self.flags} field and create a list of "CKF_*" strings
+        parse the `self.flags` field and create a list of `CKF_*` strings
         corresponding to bits set in flags
 
-        @return: a list of strings
-        @rtype: list
+        :return: a list of strings
+        :rtype: list
         """
         r = []
         for v in self.flags_dict.keys():
@@ -228,16 +228,16 @@ class CK_SLOT_INFO(CkClass):
     """
     matches the PKCS#11 CK_SLOT_INFO structure
 
-    @ivar slotDescription: blank padded
-    @type slotDescription: string
-    @ivar manufacturerID: blank padded
-    @type manufacturerID: string
-    @ivar flags: See L{flags2text}
-    @type flags: integer
-    @ivar hardwareVersion: 2 elements list
-    @type hardwareVersion: list
-    @ivar firmwareVersion: 2 elements list
-    @type firmwareVersion: list
+    :ivar slotDescription: blank padded
+    :type slotDescription: string
+    :ivar manufacturerID: blank padded
+    :type manufacturerID: string
+    :ivar flags: See :func:`CkClass.flags2text`
+    :type flags: integer
+    :ivar hardwareVersion: 2 elements list
+    :type hardwareVersion: list
+    :ivar firmwareVersion: 2 elements list
+    :type firmwareVersion: list
     """
 
     flags_dict = {
@@ -256,16 +256,16 @@ class CK_INFO(CkClass):
     """
     matches the PKCS#11 CK_INFO structure
 
-    @ivar cryptokiVersion: Cryptoki interface version
-    @type cryptokiVersion: integer
-    @ivar manufacturerID: blank padded
-    @type manufacturerID: string
-    @ivar flags: must be zero
-    @type flags: integer
-    @ivar libraryDescription: blank padded
-    @type libraryDescription: string
-    @ivar libraryVersion: 2 elements list
-    @type libraryVersion: list
+    :ivar cryptokiVersion: Cryptoki interface version
+    :type cryptokiVersion: integer
+    :ivar manufacturerID: blank padded
+    :type manufacturerID: string
+    :ivar flags: must be zero
+    :type flags: integer
+    :ivar libraryDescription: blank padded
+    :type libraryDescription: string
+    :var libraryVersion: 2 elements list
+    :type libraryVersion: list
     """
 
     fields = {"cryptokiVersion": "pair",
@@ -279,14 +279,14 @@ class CK_SESSION_INFO(CkClass):
     """
     matches the PKCS#11 CK_SESSION_INFO structure
 
-    @ivar slotID: ID of the slot that interfaces with the token
-    @type slotID: integer
-    @ivar state: state of the session
-    @type state: integer
-    @ivar flags: bit flags that define the type of session
-    @type flags: integer
-    @ivar ulDeviceError: an error code defined by the cryptographic token
-    @type ulDeviceError: integer
+    :ivar slotID: ID of the slot that interfaces with the token
+    :type slotID: integer
+    :ivar state: state of the session
+    :type state: integer
+    :ivar flags: bit flags that define the type of session
+    :type flags: integer
+    :ivar ulDeviceError: an error code defined by the cryptographic token
+    :type ulDeviceError: integer
     """
 
     flags_dict = {
@@ -296,11 +296,11 @@ class CK_SESSION_INFO(CkClass):
 
     def state2text(self):
         """
-        parse the L{self.state} field and return a "CKS_*" string
+        parse the `self.state` field and return a `CKS_*` string
         corresponding to the state
 
-        @return: a string
-        @rtype: string
+        :return: a string
+        :rtype: string
         """
         return CKS[self.state]
 
@@ -314,42 +314,42 @@ class CK_TOKEN_INFO(CkClass):
     """
     matches the PKCS#11 CK_TOKEN_INFO structure
 
-    @ivar label: blank padded
-    @type label: string
-    @ivar manufacturerID: blank padded
-    @type manufacturerID: string
-    @ivar model: string blank padded
-    @type model: string
-    @ivar serialNumber: string blank padded
-    @type serialNumber: string
-    @ivar flags:
-    @type flags: integer
-    @ivar ulMaxSessionCount:
-    @type ulMaxSessionCount: integer
-    @ivar ulSessionCount:
-    @type ulSessionCount: integer
-    @ivar ulMaxRwSessionCount:
-    @type ulMaxRwSessionCount: integer
-    @ivar ulRwSessionCount:
-    @type ulRwSessionCount: integer
-    @ivar ulMaxPinLen:
-    @type ulMaxPinLen: integer
-    @ivar ulMinPinLen:
-    @type ulMinPinLen: integer
-    @ivar ulTotalPublicMemory:
-    @type ulTotalPublicMemory: integer
-    @ivar ulFreePublicMemory:
-    @type ulFreePublicMemory: integer
-    @ivar ulTotalPrivateMemory:
-    @type ulTotalPrivateMemory: integer
-    @ivar ulFreePrivateMemory:
-    @type ulFreePrivateMemory: integer
-    @ivar hardwareVersion: 2 elements list
-    @type hardwareVersion: list
-    @ivar firmwareVersion: 2 elements list
-    @type firmwareVersion: list
-    @ivar utcTime: string
-    @type utcTime: string
+    :ivar label: blank padded
+    :type label: string
+    :ivar manufacturerID: blank padded
+    :type manufacturerID: string
+    :ivar model: string blank padded
+    :type model: string
+    :ivar serialNumber: string blank padded
+    :type serialNumber: string
+    :ivar flags:
+    :type flags: integer
+    :ivar ulMaxSessionCount:
+    :type ulMaxSessionCount: integer
+    :ivar ulSessionCount:
+    :type ulSessionCount: integer
+    :ivar ulMaxRwSessionCount:
+    :type ulMaxRwSessionCount: integer
+    :ivar ulRwSessionCount:
+    :type ulRwSessionCount: integer
+    :ivar ulMaxPinLen:
+    :type ulMaxPinLen: integer
+    :ivar ulMinPinLen:
+    :type ulMinPinLen: integer
+    :ivar ulTotalPublicMemory:
+    :type ulTotalPublicMemory: integer
+    :ivar ulFreePublicMemory:
+    :type ulFreePublicMemory: integer
+    :ivar ulTotalPrivateMemory:
+    :type ulTotalPrivateMemory: integer
+    :ivar ulFreePrivateMemory:
+    :type ulFreePrivateMemory: integer
+    :ivar hardwareVersion: 2 elements list
+    :type hardwareVersion: list
+    :ivar firmwareVersion: 2 elements list
+    :type firmwareVersion: list
+    :ivar utcTime: string
+    :type utcTime: string
     """
 
     flags_dict = {
@@ -397,12 +397,12 @@ class CK_MECHANISM_INFO(CkClass):
     """
     matches the PKCS#11 CK_MECHANISM_INFO structure
 
-    @ivar ulMinKeySize: minimum size of the key
-    @type ulMinKeySize: integer
-    @ivar ulMaxKeySize: maximum size of the key
-    @type ulMaxKeySize: integer
-    @ivar flags: bit flags specifying mechanism capabilities
-    @type flags: integer
+    :ivar ulMinKeySize: minimum size of the key
+    :type ulMinKeySize: integer
+    :ivar ulMaxKeySize: maximum size of the key
+    :type ulMaxKeySize: integer
+    :ivar flags: bit flags specifying mechanism capabilities
+    :type flags: integer
     """
 
     flags_dict = {
@@ -428,7 +428,7 @@ class CK_MECHANISM_INFO(CkClass):
 
 
 class PyKCS11Error(Exception):
-    """ define the possible PKCS#11 error codes """
+    """ define the possible PyKCS11 exceptions """
 
     def __init__(self, value, text=""):
         self.value = value
@@ -467,11 +467,12 @@ class PyKCS11Lib(object):
         """
         load a PKCS#11 library
 
-        @type pkcs11dll_filename: string
-        @param pkcs11dll_filename: the library name. If this parameter
-        is not set the environment variable PYKCS11LIB is used instead
-        @return: a L{PyKCS11Lib} object
-        @raise PyKCS11Error(-1): when the load fails
+        :type pkcs11dll_filename: string
+        :param pkcs11dll_filename: the library name.
+          If this parameter is not set then the environment variable
+          `PYKCS11LIB` is used instead
+        :returns: a :class:`PyKCS11Lib` object
+        :raises: :class:`PyKCS11Error` (-1): when the load fails
         """
         if pkcs11dll_filename is None:
             pkcs11dll_filename = os.getenv("PYKCS11LIB")
@@ -485,10 +486,10 @@ class PyKCS11Lib(object):
         """
         C_InitToken
 
-        @param slot: slot number returned by L{getSlotList}
-        @type slot: integer
-        @param pin: SO's initial PIN
-        @param label: new label of the token
+        :param slot: slot number returned by :func:`getSlotList`
+        :type slot: integer
+        :param pin: Security Officer's initial PIN
+        :param label: new label of the token
         """
         pin1 = ckbytelist(pin)
         rv = self.lib.C_InitToken(slot, pin1, label)
@@ -499,7 +500,7 @@ class PyKCS11Lib(object):
         """
         C_GetInfo
 
-        @return: a L{CK_INFO} object
+        :return: a :class:`CK_INFO` object
         """
         info = PyKCS11.LowLevel.CK_INFO()
         rv = self.lib.C_GetInfo(info)
@@ -518,11 +519,11 @@ class PyKCS11Lib(object):
         """
         C_GetSlotList
 
-        @param tokenPresent: L{False} (default) to list all slots,
-        L{True} to list only slots with present tokens
-        @type tokenPresent: bool
-        @return: a list of available slots
-        @rtype: list
+        :param tokenPresent: `False` (default) to list all slots,
+          `True` to list only slots with present tokens
+        :type tokenPresent: bool
+        :return: a list of available slots
+        :rtype: list
         """
         slotList = PyKCS11.LowLevel.ckintlist()
         rv = self.lib.C_GetSlotList(CK_TRUE if tokenPresent else CK_FALSE,
@@ -539,9 +540,9 @@ class PyKCS11Lib(object):
         """
         C_GetSlotInfo
 
-        @param slot: slot number returned by L{getSlotList}
-        @type slot: integer
-        @return: a L{CK_SLOT_INFO} object
+        :param slot: slot number returned by :func:`getSlotList`
+        :type slot: integer
+        :return: a :class:`CK_SLOT_INFO` object
         """
         slotInfo = PyKCS11.LowLevel.CK_SLOT_INFO()
         rv = self.lib.C_GetSlotInfo(slot, slotInfo)
@@ -561,9 +562,9 @@ class PyKCS11Lib(object):
         """
         C_GetTokenInfo
 
-        @param slot: slot number returned by L{getSlotList}
-        @type slot: integer
-        @return: a L{CK_TOKEN_INFO} object
+        :param slot: slot number returned by :func:`getSlotList`
+        :type slot: integer
+        :return: a :class:`CK_TOKEN_INFO` object
         """
         tokeninfo = PyKCS11.LowLevel.CK_TOKEN_INFO()
         rv = self.lib.C_GetTokenInfo(slot, tokeninfo)
@@ -613,11 +614,11 @@ class PyKCS11Lib(object):
         """
         C_OpenSession
 
-        @param slot: slot number returned by L{getSlotList}
-        @type slot: integer
-        @param flags: 0 (default), CKF_RW_SESSION for RW session
-        @type flags: integer
-        @return: a L{Session} object
+        :param slot: slot number returned by :func:`getSlotList`
+        :type slot: integer
+        :param flags: 0 (default), `CKF_RW_SESSION` for RW session
+        :type flags: integer
+        :return: a :class:`Session` object
         """
         se = PyKCS11.LowLevel.CK_SESSION_HANDLE()
         flags |= CKF_SERIAL_SESSION
@@ -631,8 +632,8 @@ class PyKCS11Lib(object):
         """
         C_CloseAllSessions
 
-        @param slot: slot number
-        @type slot: integer
+        :param slot: slot number
+        :type slot: integer
         """
         rv = self.lib.C_CloseAllSessions(slot)
         if rv != CKR_OK:
@@ -642,10 +643,10 @@ class PyKCS11Lib(object):
         """
         C_GetMechanismList
 
-        @param slot: slot number returned by L{getSlotList}
-        @type slot: integer
-        @return: the list of available mechanisms for a slot
-        @rtype: list
+        :param slot: slot number returned by :func:`getSlotList`
+        :type slot: integer
+        :return: the list of available mechanisms for a slot
+        :rtype: list
         """
         mechanismList = PyKCS11.LowLevel.ckintlist()
         rv = self.lib.C_GetMechanismList(slot, mechanismList)
@@ -666,12 +667,12 @@ class PyKCS11Lib(object):
         """
         C_GetMechanismInfo
 
-        @param slot: slot number returned by L{getSlotList}
-        @type slot: integer
-        @param type: a CKM_* type
-        @type type: integer
-        @return: information about a mechanism
-        @rtype: a L{CK_MECHANISM_INFO} object
+        :param slot: slot number returned by :func:`getSlotList`
+        :type slot: integer
+        :param type: a `CKM_*` type
+        :type type: integer
+        :return: information about a mechanism
+        :rtype: a :class:`CK_MECHANISM_INFO` object
         """
         info = PyKCS11.LowLevel.CK_MECHANISM_INFO()
         rv = self.lib.C_GetMechanismInfo(slot, CKM[type], info)
@@ -689,10 +690,10 @@ class PyKCS11Lib(object):
         """
         C_WaitForSlotEvent
 
-        @param flags: 0 (default) or CKF_DONT_BLOCK
-        @type flags: integer
-        @return: slot
-        @rtype: integer
+        :param flags: 0 (default) or `CKF_DONT_BLOCK`
+        :type flags: integer
+        :return: slot
+        :rtype: integer
         """
         tmp = 0
         (rv, slot) = self.lib.C_WaitForSlotEvent(flags, tmp)
@@ -707,13 +708,13 @@ class Mechanism(object):
 
     def __init__(self, mechanism, param=None):
         """
-        @param mechanism: the mechanism to be used
-        @type mechanism: integer, any CKM_* value
-        @param param: data to be used as crypto operation parameter
-        (i.e. the IV for some algorithms)
-        @type param: string or list/tuple of bytes
+        :param mechanism: the mechanism to be used
+        :type mechanism: integer, any `CKM_*` value
+        :param param: data to be used as crypto operation parameter
+          (i.e. the IV for some algorithms)
+        :type param: string or list/tuple of bytes
 
-        @see: L{Session.decrypt}, L{Session.sign}
+        :see: :func:`Session.decrypt`, :func:`Session.sign`
         """
         self._mech = PyKCS11.LowLevel.CK_MECHANISM()
         self._mech.mechanism = mechanism
@@ -738,10 +739,10 @@ class RSAOAEPMechanism(object):
 
     def __init__(self, hashAlg, mgf, label=None):
         """
-        @param hashAlg: the hash algorithm to use (like CKM_SHA256)
-        @param mgf: the mask generation function to use (like
-        CKG_MGF1_SHA256)
-        @param label: the (optional) label to use
+        :param hashAlg: the hash algorithm to use (like `CKM_SHA256`)
+        :param mgf: the mask generation function to use (like
+          `CKG_MGF1_SHA256`)
+        :param label: the (optional) label to use
         """
         self._param = PyKCS11.LowLevel.CK_RSA_PKCS_OAEP_PARAMS()
         self._param.hashAlg = hashAlg
@@ -768,12 +769,13 @@ class RSA_PSS_Mechanism(object):
 
     def __init__(self, mecha, hashAlg, mgf, sLen):
         """
-        @param mecha: the mechanism to use (like CKM_SHA384_RSA_PKCS_PSS)
-        @param hashAlg: the hash algorithm to use (like CKM_SHA384)
-        @param mgf: the mask generation function to use (like
-        CKG_MGF1_SHA384)
-        @param sLen: length, in bytes, of the salt value used in the PSS
-        encoding (like 0 or the message length)
+        :param mecha: the mechanism to use (like
+          `CKM_SHA384_RSA_PKCS_PSS`)
+        :param hashAlg: the hash algorithm to use (like `CKM_SHA384`)
+        :param mgf: the mask generation function to use (like
+          `CKG_MGF1_SHA384`)
+        :param sLen: length, in bytes, of the salt value used in the PSS
+          encoding (like 0 or the message length)
         """
         self._param = PyKCS11.LowLevel.CK_RSA_PKCS_PSS_PARAMS()
         self._param.hashAlg = hashAlg
@@ -801,8 +803,8 @@ class DigestSession(object):
         """
         C_DigestUpdate
 
-        @param data: data to add to the digest
-        @type data: bytes or string
+        :param data: data to add to the digest
+        :type data: bytes or string
         """
         data1 = ckbytelist(data)
         rv = self._lib.C_DigestUpdate(self._session, data1)
@@ -814,8 +816,8 @@ class DigestSession(object):
         """
         C_DigestKey
 
-        @param handle: key handle
-        @type handle: CK_OBJECT_HANDLE
+        :param handle: key handle
+        :type handle: CK_OBJECT_HANDLE
         """
         rv = self._lib.C_DigestKey(self._session, handle)
         if rv != CKR_OK:
@@ -826,8 +828,8 @@ class DigestSession(object):
         """
         C_DigestFinal
 
-        @return: the digest
-        @rtype: ckbytelist
+        :return: the digest
+        :rtype: ckbytelist
         """
         digest = ckbytelist()
         # Get the size of the digest
@@ -842,14 +844,14 @@ class DigestSession(object):
 
 
 class Session(object):
-    """ Manage L{PyKCS11Lib.openSession} objects """
+    """ Manage :func:`PyKCS11Lib.openSession` objects """
 
     def __init__(self, pykcs11, session):
         """
-        @param pykcs11: PyKCS11 library object
-        @type pykcs11: PyKCS11Lib
-        @param session: session handle
-        @type session: instance of CK_SESSION_HANDLE
+        :param pykcs11: PyKCS11 library object
+        :type pykcs11: PyKCS11Lib
+        :param session: session handle
+        :type session: instance of :class:`CK_SESSION_HANDLE`
         """
         if not isinstance(pykcs11, PyKCS11Lib):
             raise TypeError("pykcs11 must be a PyKCS11Lib")
@@ -879,7 +881,7 @@ class Session(object):
         """
         C_GetSessionInfo
 
-        @return: a L{CK_SESSION_INFO} object
+        :return: a :class:`CK_SESSION_INFO` object
         """
         sessioninfo = PyKCS11.LowLevel.CK_SESSION_INFO()
         rv = self.lib.C_GetSessionInfo(self.session, sessioninfo)
@@ -897,11 +899,11 @@ class Session(object):
         """
         C_Login
 
-        @param pin: the user's PIN or None for CKF_PROTECTED_AUTHENTICATION_PATH
-        @type pin: string
-        @param user_type: the user type. The default value is
-        CKU_USER. You may also use CKU_SO
-        @type user_type: integer
+        :param pin: the user's PIN or None for CKF_PROTECTED_AUTHENTICATION_PATH
+        :type pin: string
+        :param user_type: the user type. The default value is
+          CKU_USER. You may also use CKU_SO
+        :type user_type: integer
         """
         pin1 = ckbytelist(pin)
         rv = self.lib.C_Login(self.session, user_type, pin1)
@@ -922,7 +924,7 @@ class Session(object):
         """
         C_InitPIN
 
-        @param pin: new PIN
+        :param pin: new PIN
         """
         new_pin1 = ckbytelist(pin)
         rv = self.lib.C_InitPIN(self.session, new_pin1)
@@ -933,8 +935,8 @@ class Session(object):
         """
         C_SetPIN
 
-        @param old_pin: old PIN
-        @param new_pin: new PIN
+        :param old_pin: old PIN
+        :param new_pin: new PIN
         """
         old_pin1 = ckbytelist(old_pin)
         new_pin1 = ckbytelist(new_pin)
@@ -946,7 +948,7 @@ class Session(object):
         """
         C_CreateObject
 
-        @param template: object template
+        :param template: object template
         """
         attrs = self._template2ckattrlist(template)
         handle = PyKCS11.LowLevel.CK_OBJECT_HANDLE()
@@ -959,7 +961,7 @@ class Session(object):
         """
         C_DestroyObject
 
-        @param obj: object ID
+        :param obj: object ID
         """
         rv = self.lib.C_DestroyObject(self.session, obj)
         if rv != CKR_OK:
@@ -968,11 +970,12 @@ class Session(object):
     def digestSession(self, mecha=MechanismSHA1):
         """
         C_DigestInit/C_DigestUpdate/C_DigestKey/C_DigestFinal
-        @param mecha: the digesting mechanism to be used
-        @type mecha: L{Mechanism} instance or L{MechanismSHA1}
-        for CKM_SHA_1
-        @return: A L{DigestSession} object
-        @rtype: DigestSession
+
+        :param mecha: the digesting mechanism to be used
+          (use `MechanismSHA1` for `CKM_SHA_1`)
+        :type mecha: :class:`Mechanism`
+        :return: A :class:`DigestSession` object
+        :rtype: DigestSession
         """
         return DigestSession(self.lib, self.session, mecha)
 
@@ -980,19 +983,19 @@ class Session(object):
         """
         C_DigestInit/C_Digest
 
-        @param data: the data to be digested
-        @type data:  (binary) sring or list/tuple of bytes
-        @param mecha: the digesting mechanism to be used
-        @type mecha: L{Mechanism} instance or L{MechanismSHA1}
-        for CKM_SHA_1
-        @return: the computed digest
-        @rtype: list of bytes
+        :param data: the data to be digested
+        :type data:  (binary) sring or list/tuple of bytes
+        :param mecha: the digesting mechanism to be used
+          (use `MechanismSHA1` for `CKM_SHA_1`)
+        :type mecha: :class:`Mechanism`
+        :return: the computed digest
+        :rtype: list of bytes
 
-        @note: the returned value is an istance of L{ckbytelist}.
-        You can easly convert it to a binary string with::
-            bytes(ckbytelistDigest)
-        or, for Python 2::
-            ''.join(chr(i) for i in ckbytelistDigest)
+        :note: the returned value is an istance of :class:`ckbytelist`.
+          You can easly convert it to a binary string with:
+          ``bytes(ckbytelistDigest)``
+          or, for Python 2:
+          ``''.join(chr(i) for i in ckbytelistDigest)``
 
         """
         digest = ckbytelist()
@@ -1015,21 +1018,21 @@ class Session(object):
         """
         C_SignInit/C_Sign
 
-        @param key: a key handle, obtained calling L{findObjects}.
-        @type key: integer
-        @param data: the data to be signed
-        @type data:  (binary) string or list/tuple of bytes
-        @param mecha: the signing mechanism to be used
-        @type mecha: L{Mechanism} instance or L{MechanismRSAPKCS1}
-        for CKM_RSA_PKCS
-        @return: the computed signature
-        @rtype: list of bytes
+        :param key: a key handle, obtained calling :func:`findObjects`.
+        :type key: integer
+        :param data: the data to be signed
+        :type data:  (binary) string or list/tuple of bytes
+        :param mecha: the signing mechanism to be used
+          (use `MechanismRSAPKCS1` for `CKM_RSA_PKCS`)
+        :type mecha: :class:`Mechanism`
+        :return: the computed signature
+        :rtype: list of bytes
 
-        @note: the returned value is an instance of L{ckbytelist}.
-        You can easly convert it to a binary string with::
-            bytes(ckbytelistSignature)
-        or, for Python 2::
-            ''.join(chr(i) for i in ckbytelistSignature)
+        :note: the returned value is an instance of :class:`ckbytelist`.
+          You can easly convert it to a binary string with:
+          ``bytes(ckbytelistSignature)``
+          or, for Python 2:
+          ``''.join(chr(i) for i in ckbytelistSignature)``
 
         """
         m = mecha.to_native()
@@ -1052,17 +1055,17 @@ class Session(object):
         """
         C_VerifyInit/C_Verify
 
-        @param key: a key handle, obtained calling L{findObjects}.
-        @type key: integer
-        @param data: the data that was signed
-        @type data:  (binary) string or list/tuple of bytes
-        @param signature: the signature to be verified
-        @type signature:  (binary) string or list/tuple of bytes
-        @param mecha: the signing mechanism to be used
-        @type mecha: L{Mechanism} instance or L{MechanismRSAPKCS1}
-        for CKM_RSA_PKCS
-        @return: True if signature is valid, False otherwise
-        @rtype: bool
+        :param key: a key handle, obtained calling :func:`findObjects`.
+        :type key: integer
+        :param data: the data that was signed
+        :type data:  (binary) string or list/tuple of bytes
+        :param signature: the signature to be verified
+        :type signature:  (binary) string or list/tuple of bytes
+        :param mecha: the signing mechanism to be used
+          (use `MechanismRSAPKCS1` for `CKM_RSA_PKCS`)
+        :type mecha: :class:`Mechanism`
+        :return: True if signature is valid, False otherwise
+        :rtype: bool
 
         """
         m = mecha.to_native()
@@ -1082,21 +1085,21 @@ class Session(object):
         """
         C_EncryptInit/C_Encrypt
 
-        @param key: a key handle, obtained calling L{findObjects}.
-        @type key: integer
-        @param data: the data to be encrypted
-        @type data:  (binary) string or list/tuple of bytes
-        @param mecha: the encryption mechanism to be used
-        @type mecha: L{Mechanism} instance or L{MechanismRSAPKCS1}
-        for CKM_RSA_PKCS
-        @return: the encrypted data
-        @rtype: list of bytes
+        :param key: a key handle, obtained calling :func:`findObjects`.
+        :type key: integer
+        :param data: the data to be encrypted
+        :type data:  (binary) string or list/tuple of bytes
+        :param mecha: the encryption mechanism to be used
+          (use `MechanismRSAPKCS1` for `CKM_RSA_PKCS`)
+        :type mecha: :class:`Mechanism`
+        :return: the encrypted data
+        :rtype: list of bytes
 
-        @note: the returned value is an instance of L{ckbytelist}.
-        You can easly convert it to a binary string with::
-            bytes(ckbytelistEncrypted)
-        or, for Python 2::
-            ''.join(chr(i) for i in ckbytelistEncrypted)
+        :note: the returned value is an instance of :class:`ckbytelist`.
+          You can easly convert it to a binary string with:
+          ``bytes(ckbytelistEncrypted)``
+          or, for Python 2:
+          ``''.join(chr(i) for i in ckbytelistEncrypted)``
 
         """
         encrypted = ckbytelist()
@@ -1119,21 +1122,21 @@ class Session(object):
         """
         C_DecryptInit/C_Decrypt
 
-        @param key: a key handle, obtained calling L{findObjects}.
-        @type key: integer
-        @param data: the data to be decrypted
-        @type data:  (binary) string or list/tuple of bytes
-        @param mecha: the decrypt mechanism to be used
-        @type mecha: L{Mechanism} instance or L{MechanismRSAPKCS1}
-        for CKM_RSA_PKCS
-        @return: the decrypted data
-        @rtype: list of bytes
+        :param key: a key handle, obtained calling :func:`findObjects`.
+        :type key: integer
+        :param data: the data to be decrypted
+        :type data:  (binary) string or list/tuple of bytes
+        :param mecha: the decrypt mechanism to be used
+        :type mecha: :class:`Mechanism` instance or :class:`MechanismRSAPKCS1`
+          for CKM_RSA_PKCS
+        :return: the decrypted data
+        :rtype: list of bytes
 
-        @note: the returned value is an instance of L{ckbytelist}.
-        You can easly convert it to a binary string with::
-            bytes(ckbytelistData)
-        or, for Python 2::
-            ''.join(chr(i) for i in ckbytelistData)
+        :note: the returned value is an instance of :class:`ckbytelist`.
+          You can easly convert it to a binary string with:
+          ``bytes(ckbytelistData)``
+          or, for Python 2:
+          ``''.join(chr(i) for i in ckbytelistData)``
 
         """
         m = mecha.to_native()
@@ -1156,21 +1159,21 @@ class Session(object):
         """
         C_WrapKey
 
-        @param wrappingKey: a wrapping key handle
-        @type wrappingKey: integer
-        @param key: a handle of the key to be wrapped
-        @type key: integer
-        @param mecha: the encrypt mechanism to be used
-        @type mecha: L{Mechanism} instance or L{MechanismRSAPKCS1}
-        for CKM_RSA_PKCS
-        @return: the wrapped key bytes
-        @rtype: list of bytes
+        :param wrappingKey: a wrapping key handle
+        :type wrappingKey: integer
+        :param key: a handle of the key to be wrapped
+        :type key: integer
+        :param mecha: the encrypt mechanism to be used
+          (use `MechanismRSAPKCS1` for `CKM_RSA_PKCS`)
+        :type mecha: :class:`Mechanism`
+        :return: the wrapped key bytes
+        :rtype: list of bytes
 
-        @note: the returned value is an instance of L{ckbytelist}.
-        You can easily convert it to a binary string with::
-            bytes(ckbytelistData)
-        or, for Python 2::
-            ''.join(chr(i) for i in ckbytelistData)
+        :note: the returned value is an instance of :class:`ckbytelist`.
+          You can easily convert it to a binary string with:
+          ``bytes(ckbytelistData)``
+          or, for Python 2:
+          ``''.join(chr(i) for i in ckbytelistData)``
 
         """
         wrapped = ckbytelist()
@@ -1189,16 +1192,16 @@ class Session(object):
         """
         C_UnwrapKey
 
-        @param unwrappingKey: the unwrapping key handle
-        @type unwrappingKey: integer
-        @param wrappedKey: the bytes of the wrapped key
-        @type wrappedKey:  (binary) string or list/tuple of bytes
-        @param template: template for the unwrapped key
-        @param mecha: the decrypt mechanism to be used
-        @type mecha: L{Mechanism} instance or L{MechanismRSAPKCS1}
-        for CKM_RSA_PKCS
-        @return: the unwrapped key object
-        @rtype: integer
+        :param unwrappingKey: the unwrapping key handle
+        :type unwrappingKey: integer
+        :param wrappedKey: the bytes of the wrapped key
+        :type wrappedKey:  (binary) string or list/tuple of bytes
+        :param template: template for the unwrapped key
+        :param mecha: the decrypt mechanism to be used (use
+          `MechanismRSAPKCS1` for `CKM_RSA_PKCS`)
+        :type mecha: :class:`Mechanism`
+        :return: the unwrapped key object
+        :rtype: integer
 
         """
         m = mecha.to_native()
@@ -1214,8 +1217,8 @@ class Session(object):
         """
         is the type a numerical value?
 
-        @param type: PKCS#11 type like CKA_CERTIFICATE_TYPE
-        @rtype: bool
+        :param type: PKCS#11 type like `CKA_CERTIFICATE_TYPE`
+        :rtype: bool
         """
         if type in (CKA_CERTIFICATE_TYPE,
             CKA_CLASS,
@@ -1231,8 +1234,8 @@ class Session(object):
         """
         is the type a string value?
 
-        @param type: PKCS#11 type like CKA_LABEL
-        @rtype: bool
+        :param type: PKCS#11 type like `CKA_LABEL`
+        :rtype: bool
         """
         if type in (CKA_LABEL,
             CKA_APPLICATION):
@@ -1243,8 +1246,8 @@ class Session(object):
         """
         is the type a boolean value?
 
-        @param type: PKCS#11 type like CKA_ALWAYS_SENSITIVE
-        @rtype: bool
+        :param type: PKCS#11 type like `CKA_ALWAYS_SENSITIVE`
+        :rtype: bool
         """
         if type in (CKA_ALWAYS_SENSITIVE,
             CKA_DECRYPT,
@@ -1275,8 +1278,8 @@ class Session(object):
         """
         is the type a byte array value?
 
-        @param type: PKCS#11 type like CKA_MODULUS
-        @rtype: bool
+        :param type: PKCS#11 type like `CKA_MODULUS`
+        :rtype: bool
         """
         return (not self.isBool(type)) and (not self.isString(type)) and (not self.isNum(type))
 
@@ -1306,10 +1309,10 @@ class Session(object):
         """
         generate a secret key
 
-        @param template: template for the secret key
-        @param mecha: mechanism to use
-        @return: handle of the generated key
-        @rtype: PyKCS11.LowLevel.CK_OBJECT_HANDLE
+        :param template: template for the secret key
+        :param mecha: mechanism to use
+        :return: handle of the generated key
+        :rtype: PyKCS11.LowLevel.CK_OBJECT_HANDLE
         """
         t = self._template2ckattrlist(template)
         ck_handle = PyKCS11.LowLevel.CK_OBJECT_HANDLE()
@@ -1323,11 +1326,11 @@ class Session(object):
         """
         generate a key pair
 
-        @param templatePub: template for the public key
-        @param templatePriv:  template for the private key
-        @param mecha: mechanism to use
-        @return: a tuple of handles (pub, priv)
-        @rtype: tuple
+        :param templatePub: template for the public key
+        :param templatePriv:  template for the private key
+        :param mecha: mechanism to use
+        :return: a tuple of handles (pub, priv)
+        :rtype: tuple
         """
         tPub = self._template2ckattrlist(templatePub)
         tPriv = self._template2ckattrlist(templatePriv)
@@ -1345,11 +1348,11 @@ class Session(object):
         """
         find the objects matching the template pattern
 
-        @param template: list of attributes tuples (attribute,value).
-        The default value is () and all the objects are returned
-        @type template: list
-        @return: a list of object ids
-        @rtype: list
+        :param template: list of attributes tuples (attribute,value).
+          The default value is () and all the objects are returned
+        :type template: list
+        :return: a list of object ids
+        :rtype: list
         """
         t = self._template2ckattrlist(template)
 
@@ -1383,26 +1386,26 @@ class Session(object):
         """
         C_GetAttributeValue
 
-        @param obj_id: object ID returned by L{findObjects}
-        @type obj_id: integer
-        @param attr: list of attributes
-        @type attr: list
-        @param allAsBinary: return all values as binary data; default is False.
-        @type allAsBinary: Boolean
-        @return: a list of values corresponding to the list of attributes
-        @rtype: list
+        :param obj_id: object ID returned by :func:`findObjects`
+        :type obj_id: integer
+        :param attr: list of attributes
+        :type attr: list
+        :param allAsBinary: return all values as binary data; default is False.
+        :type allAsBinary: Boolean
+        :return: a list of values corresponding to the list of attributes
+        :rtype: list
 
-        @see: L{getAttributeValue_fragmented}
+        :see: :func:`getAttributeValue_fragmented`
 
-        @note: if allAsBinary is True the function do not convert results to
-        Python types (i.e.: CKA_TOKEN to Bool, CKA_CLASS to int, ...).
+        :note: if allAsBinary is True the function do not convert results to
+          Python types (i.e.: CKA_TOKEN to Bool, CKA_CLASS to int, ...).
 
-        Binary data is returned as L{ckbytelist} type, usable
-        as a list containing only bytes.
-        You can easly convert it to a binary string with::
-            bytes(ckbytelistVariable)
-        or, for Python 2::
-            ''.join(chr(i) for i in ckbytelistVariable)
+          Binary data is returned as :class:`ckbytelist` type, usable
+          as a list containing only bytes.
+          You can easly convert it to a binary string with:
+          ``bytes(ckbytelistVariable)``
+          or, for Python 2:
+          ``''.join(chr(i) for i in ckbytelistVariable)``
 
         """
         valTemplate = PyKCS11.LowLevel.ckattrlist(len(attr))
@@ -1440,12 +1443,12 @@ class Session(object):
 
     def getAttributeValue_fragmented(self, obj_id, attr, allAsBinary=False):
         """
-        Same as L{getAttributeValue} except that when some attribute
+        Same as :func:`getAttributeValue` except that when some attribute
         is sensitive or unknown an empty value (None) is returned.
 
         Note: this is achived by getting attributes one by one.
 
-        @see: L{getAttributeValue}
+        :see: :func:`getAttributeValue`
         """
         # some attributes does not exists or is sensitive
         # but we don't know which ones. So try one by one
@@ -1488,8 +1491,8 @@ class Session(object):
         """
         C_SeedRandom
 
-        @param seed: seed material
-        @type seed: iterable
+        :param seed: seed material
+        :type seed: iterable
         """
         low_seed = ckbytelist(seed)
         rv = self.lib.C_SeedRandom(self.session, low_seed)
@@ -1500,14 +1503,14 @@ class Session(object):
         """
         C_GenerateRandom
 
-        @param size: number of random bytes to get
-        @type size: integer
+        :param size: number of random bytes to get
+        :type size: integer
 
-        @note: the returned value is an instance of L{ckbytelist}.
-        You can easly convert it to a binary string with::
-            bytes(random)
-        or, for Python 2::
-            ''.join(chr(i) for i in random)
+        :note: the returned value is an instance of :class:`ckbytelist`.
+          You can easly convert it to a binary string with:
+          ``bytes(random)``
+          or, for Python 2:
+          ``''.join(chr(i) for i in random)``
         """
         low_rand = ckbytelist([0] * size)
         rv = self.lib.C_GenerateRandom(self.session, low_rand)
