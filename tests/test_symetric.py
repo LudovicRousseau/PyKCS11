@@ -8,6 +8,10 @@ class TestUtil(unittest.TestCase):
     def setUp(self):
         self.pkcs11 = PyKCS11.PyKCS11Lib()
         self.pkcs11.load()
+
+        # get SoftHSM major version
+        self.SoftHSMversion = self.pkcs11.getInfo().libraryVersion[0]
+
         self.slot = self.pkcs11.getSlotList(tokenPresent=True)[0]
         self.session = self.pkcs11.openSession(self.slot,
                                                PyKCS11.CKF_SERIAL_SESSION |
@@ -19,12 +23,14 @@ class TestUtil(unittest.TestCase):
         self.pkcs11.closeAllSessions(self.slot)
         del self.pkcs11
 
-    def test_mechanism(self):
+    def test_symetric(self):
         # AES CBC with IV
         mechanism = PyKCS11.Mechanism(PyKCS11.CKM_AES_CBC, '1234567812345678')
         self.assertIsNotNone(mechanism)
 
-    def test_encrypt(self):
+        if (self.SoftHSMversion < 2):
+            self.skipTest("generateKey() only supported by SoftHSM >= 2")
+
         keyID = (0x01,)
         AESKeyTemplate = [
                 (PyKCS11.CKA_CLASS, PyKCS11.CKO_SECRET_KEY),
@@ -40,14 +46,7 @@ class TestUtil(unittest.TestCase):
                 (PyKCS11.CKA_ID, keyID)
                 ]
 
-        try:
-            AESKey = self.session.generateKey(AESKeyTemplate)
-        except PyKCS11.PyKCS11Error as e:
-            # generateKey() is not support by SoftHSM1
-            if e.value == PyKCS11.CKR_FUNCTION_NOT_SUPPORTED:
-                return
-            else:
-                raise
+        AESKey = self.session.generateKey(AESKeyTemplate)
         self.assertIsNotNone(AESKey)
 
         # buffer of 32 bytes 0x00
