@@ -7,6 +7,10 @@ class TestUtil(unittest.TestCase):
     def setUp(self):
         self.pkcs11 = PyKCS11.PyKCS11Lib()
         self.pkcs11.load()
+
+        # get SoftHSM major version
+        self.SoftHSMversion = self.pkcs11.getInfo().libraryVersion[0]
+
         self.slot = self.pkcs11.getSlotList(tokenPresent=True)[0]
         self.session = self.pkcs11.openSession(self.slot,
                                                PyKCS11.CKF_SERIAL_SESSION |
@@ -89,17 +93,15 @@ class TestUtil(unittest.TestCase):
         toSign = "Hello world"
         mecha = PyKCS11.Mechanism(PyKCS11.CKM_RSA_X_509, None)
 
+        if (self.SoftHSMversion < 2):
+            self.skipTest("RSA X.509 only supported by SoftHSM >= 2")
+
         # sign/verify
-        try:
-            signature = self.session.sign(self.privKey, toSign, mecha)
+        signature = self.session.sign(self.privKey, toSign, mecha)
 
-            result = self.session.verify(self.pubKey, toSign, signature, mecha)
+        result = self.session.verify(self.pubKey, toSign, signature, mecha)
 
-            self.assertTrue(result)
-        except PyKCS11.PyKCS11Error as e:
-            # RSA X509 is not supported by SoftHSM1
-            if not e.value == PyKCS11.CKR_MECHANISM_INVALID:
-                raise
+        self.assertTrue(result)
 
     def test_encrypt_PKCS(self):
         # encrypt/decrypt using CMK_RSA_PKCS (default)
@@ -113,78 +115,70 @@ class TestUtil(unittest.TestCase):
         self.assertEqual(dataIn, text)
 
     def test_encrypt_X509(self):
+        if (self.SoftHSMversion < 2):
+            self.skipTest("RSA X.509 only supported by SoftHSM >= 2")
+
         # encrypt/decrypt using CKM_RSA_X_509
         dataIn = "Hello world!"
         mecha = PyKCS11.Mechanism(PyKCS11.CKM_RSA_X_509, None)
-        try:
-            encrypted = self.session.encrypt(self.pubKey, dataIn, mecha=mecha)
-            decrypted = self.session.decrypt(self.privKey, encrypted, mecha=mecha)
+        encrypted = self.session.encrypt(self.pubKey, dataIn, mecha=mecha)
+        decrypted = self.session.decrypt(self.privKey, encrypted, mecha=mecha)
 
-            # remove padding NUL bytes
-            padding_length = 0
-            for e in decrypted:
-                if e != 0:
-                    break
-                padding_length += 1
-            decrypted = list(decrypted)[padding_length:]
+        # remove padding NUL bytes
+        padding_length = 0
+        for e in decrypted:
+            if e != 0:
+                break
+            padding_length += 1
+        decrypted = list(decrypted)[padding_length:]
 
-            # convert in a string
-            text = "".join(map(chr, decrypted))
+        # convert in a string
+        text = "".join(map(chr, decrypted))
 
-            self.assertEqual(dataIn, text)
-        except PyKCS11.PyKCS11Error as e:
-            # RSA X509 is not supported by SoftHSM1
-            if not e.value == PyKCS11.CKR_MECHANISM_INVALID:
-                raise
+        self.assertEqual(dataIn, text)
 
     def test_RSA_OAEP(self):
+        if (self.SoftHSMversion < 2):
+            self.skipTest("RSA OAEP only supported by SoftHSM >= 2")
+
         # RSA OAEP
         plainText = "A test string"
 
         mech = PyKCS11.RSAOAEPMechanism(PyKCS11.CKM_SHA_1, PyKCS11.CKG_MGF1_SHA1)
-        try:
-            cipherText = self.session.encrypt(self.pubKey, plainText, mech)
-            decrypted = self.session.decrypt(self.privKey, cipherText, mech)
+        cipherText = self.session.encrypt(self.pubKey, plainText, mech)
+        decrypted = self.session.decrypt(self.privKey, cipherText, mech)
 
-            text = "".join(map(chr, decrypted))
+        text = "".join(map(chr, decrypted))
 
-            self.assertEqual(text, plainText)
-        except PyKCS11.PyKCS11Error as e:
-            # RSA OAEP is not supported by SoftHSM1
-            if not e.value == PyKCS11.CKR_MECHANISM_INVALID:
-                raise
+        self.assertEqual(text, plainText)
 
     def test_RSA_PSS_SHA1(self):
+        if (self.SoftHSMversion < 2):
+            self.skipTest("RSA PSS only supported by SoftHSM >= 2")
+
         # RSA PSS
         toSign = "test_RSA_sign_PSS SHA1"
 
         mech = PyKCS11.RSA_PSS_Mechanism(PyKCS11.CKM_SHA1_RSA_PKCS_PSS,
                 PyKCS11.CKM_SHA_1, PyKCS11.CKG_MGF1_SHA1, 0)
-        try:
-            signature = self.session.sign(self.privKey, toSign, mech)
-            result = self.session.verify(self.pubKey, toSign, signature, mech)
+        signature = self.session.sign(self.privKey, toSign, mech)
+        result = self.session.verify(self.pubKey, toSign, signature, mech)
 
-            self.assertTrue(result)
-        except PyKCS11.PyKCS11Error as e:
-            # RSA PSS is not yet supported by SoftHSM1
-            if not e.value == PyKCS11.CKR_MECHANISM_INVALID:
-                raise
+        self.assertTrue(result)
 
     def test_RSA_PSS_SHA256(self):
+        if (self.SoftHSMversion < 2):
+            self.skipTest("RSA PSS only supported by SoftHSM >= 2")
+
         # RSA PSS
         toSign = "test_RSA_sign_PSS SHA256"
 
         mech = PyKCS11.RSA_PSS_Mechanism(PyKCS11.CKM_SHA256_RSA_PKCS_PSS,
                 PyKCS11.CKM_SHA256, PyKCS11.CKG_MGF1_SHA256, 0)
-        try:
-            signature = self.session.sign(self.privKey, toSign, mech)
-            result = self.session.verify(self.pubKey, toSign, signature, mech)
+        signature = self.session.sign(self.privKey, toSign, mech)
+        result = self.session.verify(self.pubKey, toSign, signature, mech)
 
-            self.assertTrue(result)
-        except PyKCS11.PyKCS11Error as e:
-            # RSA PSS is not yet supported by SoftHSM1
-            if not e.value == PyKCS11.CKR_MECHANISM_INVALID:
-                raise
+        self.assertTrue(result)
 
     def test_pubKey(self):
         # test CK_OBJECT_HANDLE.__repr__()
