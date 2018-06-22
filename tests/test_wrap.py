@@ -7,12 +7,22 @@ class TestUtil(unittest.TestCase):
     def setUp(self):
         self.pkcs11 = PyKCS11.PyKCS11Lib()
         self.pkcs11.load()
+
+        # get SoftHSM major version
+        self.SoftHSMversion = self.pkcs11.getInfo().libraryVersion[0]
+
         self.slot = self.pkcs11.getSlotList(tokenPresent=True)[0]
         self.session = self.pkcs11.openSession(self.slot,
                                                PyKCS11.CKF_SERIAL_SESSION |
                                                PyKCS11.CKF_RW_SESSION)
         self.session.login("1234")
 
+    def tearDown(self):
+        self.session.logout()
+        self.pkcs11.closeAllSessions(self.slot)
+        del self.pkcs11
+
+    def test_wrapKey(self):
         keyID = (0x01,)
         AESKeyTemplate = [
                 (PyKCS11.CKA_CLASS, PyKCS11.CKO_SECRET_KEY),
@@ -29,15 +39,10 @@ class TestUtil(unittest.TestCase):
                 (PyKCS11.CKA_ID, keyID)
                 ]
 
-        try:
-            self.wrapKey = self.session.generateKey(AESKeyTemplate)
-        except PyKCS11.PyKCS11Error as e:
-            # generateKey() is not support by SoftHSM1
-            if e.value == PyKCS11.CKR_FUNCTION_NOT_SUPPORTED:
-                self.wrapKey = None
-                return
-            else:
-                raise
+        if (self.SoftHSMversion < 2):
+            self.skipTest("generateKey() only supported by SoftHSM >= 2")
+
+        self.wrapKey = self.session.generateKey(AESKeyTemplate)
         self.assertIsNotNone(self.wrapKey)
 
         keyID = (0x02,)
@@ -47,20 +52,6 @@ class TestUtil(unittest.TestCase):
 
         self.AESKey = self.session.generateKey(AESKeyTemplate)
         self.assertIsNotNone(self.AESKey)
-
-    def tearDown(self):
-        if self.wrapKey:
-            self.session.destroyObject(self.wrapKey)
-
-        self.session.logout()
-        self.pkcs11.closeAllSessions(self.slot)
-        del self.pkcs11
-
-    def test_wrapKey(self):
-        # SoftHSM1 does not support generateKey() so no key is
-        # abvailable
-        if not self.wrapKey:
-            return
 
         # buffer of 32 bytes 0x42
         DataIn = [42] * 32
@@ -107,3 +98,5 @@ class TestUtil(unittest.TestCase):
 
         # cleanup
         self.session.destroyObject(unwrapped)
+
+        self.session.destroyObject(self.wrapKey)
