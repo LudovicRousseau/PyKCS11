@@ -47,13 +47,12 @@ coverage: prepare4test
 	$(COVERAGE) report
 	$(COVERAGE) html
 
-doc: build
-	rm -rf html
-	epydoc --verbose PyKCS11
+doc:
+	cd docs ; ./generate.sh
 
 doc-upload: doc
 	rm -r api
-	mv html api
+	mv docs/_build/html api
 	scp -r api ludov@web.sourceforge.net:/home/project-web/pkcs11wrap/htdocs
 
 .PHONY: build install clean rebuild dist doc
