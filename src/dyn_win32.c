@@ -16,8 +16,34 @@
 #include <string.h>
 
 #include "windows.h"
+#include <strsafe.h>
 #include <winscard.h>
 #include "dyn_generic.h"
+
+/* copy from https://docs.microsoft.com/fr-fr/windows/desktop/Debug/retrieving-the-last-error-code */
+static void DisplayError(LPTSTR lpszFunction)
+{
+    // Retrieve the system error message for the last-error code
+
+    LPVOID lpMsgBuf;
+    DWORD dw = GetLastError();
+
+    FormatMessage(
+        FORMAT_MESSAGE_ALLOCATE_BUFFER |
+        FORMAT_MESSAGE_FROM_SYSTEM |
+        FORMAT_MESSAGE_IGNORE_INSERTS,
+        NULL,
+        dw,
+        MAKELANGID(LANG_NEUTRAL, SUBLANG_DEFAULT),
+        (LPTSTR) &lpMsgBuf,
+        0, NULL );
+
+    // Display the error message
+    printf("%s failed with error %d: %s\n", lpszFunction, dw, lpMsgBuf);
+
+    LocalFree(lpMsgBuf);
+}
+
 
 int SYS_dyn_LoadLibrary(void **pvLHandle, const char *pcLibrary)
 {
@@ -26,7 +52,7 @@ int SYS_dyn_LoadLibrary(void **pvLHandle, const char *pcLibrary)
 
 	if (*pvLHandle == NULL)
 	{
-		printf("LoadLibrary() failed: %d\n", GetLastError());
+		DisplayError("LoadLibrary()");
 		return -1;
 	}
 
@@ -44,7 +70,7 @@ int SYS_dyn_CloseLibrary(void **pvLHandle)
 	 * information, call GetLastError. */
 	if (ret == 0)
 	{
-		printf("FreeLibrary() failed: %d\n", GetLastError());
+		DisplayError("FreeLibrary()");
 		return -1;
 	}
 
@@ -70,7 +96,7 @@ int SYS_dyn_GetAddress(void *pvLHandle, function_ptr *pvFHandle,
 
 	if (*pvFHandle == NULL)
 	{
-		printf("GetProcAddress() failed: %d\n", GetLastError());
+		DisplayError("GetProcAddress()");
 		rv = -1;
 	}
 	else
