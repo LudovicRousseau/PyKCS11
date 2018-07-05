@@ -12,14 +12,12 @@
  * @brief This abstracts dynamic library loading functions and timing.
  */
 
-//#include "config.h"
 #if defined(WIN32) || defined(_WIN32)
 #include <string.h>
 
 #include "windows.h"
 #include <winscard.h>
 #include "dyn_generic.h"
-//#include "debug.h"
 
 int SYS_dyn_LoadLibrary(void **pvLHandle, const char *pcLibrary)
 {
@@ -28,9 +26,7 @@ int SYS_dyn_LoadLibrary(void **pvLHandle, const char *pcLibrary)
 
 	if (*pvLHandle == NULL)
 	{
-#if 0
-		Log2(PCSC_LOG_ERROR, "DYN_LoadLibrary: dlerror() reports %s", dlerror());
-#endif
+		printf("LoadLibrary() failed: %d\n", GetLastError());
 		return -1;
 	}
 
@@ -48,9 +44,7 @@ int SYS_dyn_CloseLibrary(void **pvLHandle)
 	 * information, call GetLastError. */
 	if (ret == 0)
 	{
-#if 0
-		Log2(PCSC_LOG_ERROR, "DYN_CloseLibrary: dlerror() reports %s", dlerror());
-#endif
+		printf("FreeLibrary() failed: %d\n", GetLastError());
 		return -1;
 	}
 
@@ -76,9 +70,7 @@ int SYS_dyn_GetAddress(void *pvLHandle, function_ptr *pvFHandle,
 
 	if (*pvFHandle == NULL)
 	{
-#if 0
-		Log2(PCSC_LOG_ERROR, "DYN_GetAddress: dlerror() reports %s", dlerror());
-#endif
+		printf("GetProcAddress() failed: %d\n", GetLastError());
 		rv = -1;
 	}
 	else
