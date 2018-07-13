@@ -9,8 +9,8 @@ PyKCS11/LowLevel.py
 build-stamp
 build/
 dist/
-htmlcov
-src/pykcs11_wrap.cpp
-src/LowLevel.py
-virtualenv
 docs/_build
+htmlcov
+src/LowLevel.py
+src/pykcs11_wrap.cpp
+virtualenv
