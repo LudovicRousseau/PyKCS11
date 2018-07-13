@@ -11,5 +11,6 @@ build/
 dist/
 htmlcov
 src/pykcs11_wrap.cpp
+src/LowLevel.py
 virtualenv
 docs/_build
