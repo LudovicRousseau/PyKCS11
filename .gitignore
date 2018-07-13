@@ -11,3 +11,5 @@ build/
 dist/
 htmlcov
 src/pykcs11_wrap.cpp
+virtualenv
+docs/_build
