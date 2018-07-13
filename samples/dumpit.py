@@ -271,3 +271,4 @@ for s in slots:
 
     except PyKCS11.PyKCS11Error as e:
         print("Error:", e)
+        raise
