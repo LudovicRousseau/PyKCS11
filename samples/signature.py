@@ -1,6 +1,7 @@
 #!/usr/bin/env python
 
 #   Copyright (C) 2015 Roman Pasechnik
+#   Copyright (C) 2018 Ludovic Rousseau
 #
 # This file is free software; you can redistribute it and/or modify it
 # under the terms of the GNU General Public License as published by
@@ -30,19 +31,16 @@ slot = pkcs11.getSlotList(tokenPresent=True)[0]
 session = pkcs11.openSession(slot, CKF_SERIAL_SESSION | CKF_RW_SESSION)
 session.login("1234")
 
-# key ID in hex (has to be tuple, that's why trailing comma)
-keyID = (0x22,)
-
 # "Hello world" in hex
 toSign = "48656c6c6f20776f726c640d0a"
 
-# find private key and compute signature
-privKey = session.findObjects([(CKA_CLASS, CKO_PRIVATE_KEY), (CKA_ID, keyID)])[0]
+# find first private key and compute signature
+privKey = session.findObjects([(CKA_CLASS, CKO_PRIVATE_KEY)])[0]
 signature = session.sign(privKey, binascii.unhexlify(toSign), Mechanism(CKM_SHA1_RSA_PKCS, None))
 print("\nsignature: {}".format(binascii.hexlify(bytearray(signature))))
 
-# find public key and verify signature
-pubKey = session.findObjects([(CKA_CLASS, CKO_PUBLIC_KEY), (CKA_ID, keyID)])[0]
+# find first public key and verify signature
+pubKey = session.findObjects([(CKA_CLASS, CKO_PUBLIC_KEY)])[0]
 result = session.verify(pubKey, binascii.unhexlify(toSign), signature, Mechanism(CKM_SHA1_RSA_PKCS, None))
 print("\nVerified:", result)
 
