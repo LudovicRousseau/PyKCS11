@@ -33,15 +33,17 @@ session.login("1234")
 
 # "Hello world" in hex
 toSign = "48656c6c6f20776f726c640d0a"
+mechanism = Mechanism(CKM_SHA1_RSA_PKCS, None)
 
 # find first private key and compute signature
 privKey = session.findObjects([(CKA_CLASS, CKO_PRIVATE_KEY)])[0]
-signature = session.sign(privKey, binascii.unhexlify(toSign), Mechanism(CKM_SHA1_RSA_PKCS, None))
+signature = session.sign(privKey, binascii.unhexlify(toSign), mechanism)
 print("\nsignature: {}".format(binascii.hexlify(bytearray(signature))))
 
 # find first public key and verify signature
 pubKey = session.findObjects([(CKA_CLASS, CKO_PUBLIC_KEY)])[0]
-result = session.verify(pubKey, binascii.unhexlify(toSign), signature, Mechanism(CKM_SHA1_RSA_PKCS, None))
+result = session.verify(pubKey, binascii.unhexlify(toSign), signature,
+                        mechanism)
 print("\nVerified:", result)
 
 # logout
