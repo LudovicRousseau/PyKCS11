@@ -110,9 +110,8 @@ if __name__ == '__main__':
     import getopt
 
     try:
-        opts, args = getopt.getopt(sys.argv[1:], "p:s:c:hoam",
-            ["pin=", "slot=", "lib=", "help", "opensession", "all",
-             "mechanisms"])
+        opts, args = getopt.getopt(sys.argv[1:], "p:s:c:ham",
+            ["pin=", "slot=", "lib=", "help", "all", "mechanisms"])
     except getopt.GetoptError:
         # print help information and exit:
         usage()
