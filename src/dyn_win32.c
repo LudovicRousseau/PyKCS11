@@ -25,7 +25,7 @@ static void DisplayError(LPTSTR lpszFunction)
 {
     // Retrieve the system error message for the last-error code
 
-    LPVOID lpMsgBuf;
+    LPTSTR lpMsgBuf;
     DWORD dw = GetLastError();
 
     FormatMessage(
