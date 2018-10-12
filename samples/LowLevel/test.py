@@ -1,6 +1,7 @@
 #!/usr/bin/env python
 
 #   Copyright (C) 2004 Midori (midori -- a-t -- paipai dot net)
+#   Copyright (C) 2018 Ludovic Rousseau (ludovic.rousseau@free.fr)
 #
 # This file is free software; you can redistribute it and/or modify it
 # under the terms of the GNU General Public License as published by
@@ -19,6 +20,7 @@
 from __future__ import print_function
 
 import PyKCS11.LowLevel
+from PyKCS11 import ckbytelist
 import os
 
 a = PyKCS11.LowLevel.CPKCS11Lib()
@@ -31,7 +33,7 @@ session = PyKCS11.LowLevel.CK_SESSION_HANDLE()
 sessionInfo = PyKCS11.LowLevel.CK_SESSION_INFO()
 tokenInfo = PyKCS11.LowLevel.CK_TOKEN_INFO()
 slotList = PyKCS11.LowLevel.ckintlist()
-pin = "12345678"
+pin = ckbytelist("1234")
 
 print("Load of " + lib + ": " + str(a.Load(lib)))
 print("C_GetInfo: " + hex(a.C_GetInfo(info)))

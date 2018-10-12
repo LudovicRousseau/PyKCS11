@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 
 #   Copyright (C) 2004 Midori (midori -- a-t -- paipai dot net)
-#   Copyright (C) 2006-2014 Ludovic Rousseau (ludovic.rousseau@free.fr)
+#   Copyright (C) 2006-2018 Ludovic Rousseau (ludovic.rousseau@free.fr)
 #
 # This file is free software; you can redistribute it and/or modify it
 # under the terms of the GNU General Public License as published by
@@ -20,6 +20,7 @@
 from __future__ import print_function
 
 from PyKCS11.LowLevel import *
+from PyKCS11 import ckbytelist
 import os
 
 a = CPKCS11Lib()
@@ -32,7 +33,7 @@ session = CK_SESSION_HANDLE()
 sessionInfo = CK_SESSION_INFO()
 tokenInfo = CK_TOKEN_INFO()
 slotList = ckintlist()
-pin = "12345678"
+pin = ckbytelist("1234")
 
 print("Load of " + lib + ": " + str(a.Load(lib)))
 print("C_GetInfo:", hex(a.C_GetInfo(info)))

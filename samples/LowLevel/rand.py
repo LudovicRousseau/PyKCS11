@@ -40,7 +40,7 @@ del info
 print("C_GetSlotList(NULL): " + hex(a.C_GetSlotList(0, slotList)))
 print("\tAvailable Slots: " + str(len(slotList)))
 
-print("C_OpenSession(): " + hex(a.C_OpenSession(slotList[1], PyKCS11.LowLevel.CKF_RW_SESSION | PyKCS11.LowLevel.CKF_SERIAL_SESSION, session)))
+print("C_OpenSession(): " + hex(a.C_OpenSession(slotList[0], PyKCS11.LowLevel.CKF_RW_SESSION | PyKCS11.LowLevel.CKF_SERIAL_SESSION, session)))
 
 print(' '.join("%02X" % i for i in seed))
 print("C_SeedRandom(): " + hex(a.C_SeedRandom(session, seed)))
