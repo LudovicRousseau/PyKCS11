@@ -96,6 +96,11 @@ that doesn't come with the standard distribution.
 History
 =======
 
+1.5.3 - October 2018, Ludovic Rousseau
+   - Do not fail when converting a UTF-8 string
+   - Documentation: convert from Epydoc to Sphinx
+   - some minor improvements
+
 1.5.2 - April 2018, Ludovic Rousseau
    - Fix initPin()
    - add tests for initPin(), setPin(), initToken()
