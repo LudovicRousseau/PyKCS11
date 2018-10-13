@@ -19,5 +19,6 @@ class TestUtil(unittest.TestCase):
     def test_CKR(self):
         self.assertEqual(PyKCS11.CKR_VENDOR_DEFINED, 0x80000000)
 
+
 if __name__ == '__main__':
     unittest.main()
