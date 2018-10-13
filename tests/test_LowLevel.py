@@ -3,6 +3,7 @@ from PyKCS11 import ckbytelist
 import PyKCS11.LowLevel
 import os
 
+
 class TestUtil(unittest.TestCase):
 
     def test_LowLevel(self):
@@ -16,7 +17,7 @@ class TestUtil(unittest.TestCase):
         self.assertIsNotNone(slotInfo)
 
         lib = os.getenv("PYKCS11LIB")
-        if lib == None:
+        if lib is None:
             raise(Exception("Define PYKCS11LIB"))
 
         session = PyKCS11.LowLevel.CK_SESSION_HANDLE()
@@ -41,44 +42,49 @@ class TestUtil(unittest.TestCase):
         a.C_GetSlotList(0, slotList)
         slot = slotList[0]
 
-        self.assertEqual(a.C_GetSlotInfo(slot, slotInfo), PyKCS11.LowLevel.CKR_OK)
+        self.assertEqual(a.C_GetSlotInfo(slot, slotInfo),
+                         PyKCS11.LowLevel.CKR_OK)
 
         self.assertEqual(a.C_OpenSession(slot,
-                PyKCS11.LowLevel.CKF_SERIAL_SESSION |
-                PyKCS11.LowLevel.CKF_RW_SESSION, session),
-                PyKCS11.LowLevel.CKR_OK)
+                                         PyKCS11.LowLevel.CKF_SERIAL_SESSION |
+                                         PyKCS11.LowLevel.CKF_RW_SESSION,
+                                         session),
+                         PyKCS11.LowLevel.CKR_OK)
         self.assertEqual(a.C_GetSessionInfo(session, sessionInfo),
-                PyKCS11.LowLevel.CKR_OK)
+                         PyKCS11.LowLevel.CKR_OK)
 
         self.assertEqual(a.C_GetTokenInfo(slot, tokenInfo),
-                PyKCS11.LowLevel.CKR_OK)
+                         PyKCS11.LowLevel.CKR_OK)
         label = tokenInfo.GetLabel()
         manufacturerID = tokenInfo.GetManufacturerID()
         flags = tokenInfo.flags
         model = tokenInfo.GetModel()
 
         pin = ckbytelist("1234")
-        self.assertEqual(a.C_Login(session, PyKCS11.LowLevel.CKU_USER,
-                pin), PyKCS11.LowLevel.CKR_OK)
+        self.assertEqual(a.C_Login(session, PyKCS11.LowLevel.CKU_USER, pin),
+                         PyKCS11.LowLevel.CKR_OK)
         self.assertEqual(a.C_Logout(session), PyKCS11.LowLevel.CKR_OK)
         self.assertEqual(a.C_CloseSession(session), PyKCS11.LowLevel.CKR_OK)
 
         self.assertEqual(a.C_OpenSession(slotList[0],
-                PyKCS11.LowLevel.CKF_SERIAL_SESSION, session),
-                PyKCS11.LowLevel.CKR_OK)
-        self.assertEqual(a.C_Login(session, PyKCS11.LowLevel.CKU_USER,
-                pin), PyKCS11.LowLevel.CKR_OK)
+                                         PyKCS11.LowLevel.CKF_SERIAL_SESSION,
+                                         session),
+                         PyKCS11.LowLevel.CKR_OK)
+        self.assertEqual(a.C_Login(session, PyKCS11.LowLevel.CKU_USER, pin),
+                         PyKCS11.LowLevel.CKR_OK)
 
         SearchResult = PyKCS11.LowLevel.ckobjlist(10)
         SearchTemplate = PyKCS11.LowLevel.ckattrlist(2)
-        SearchTemplate[0].SetNum(PyKCS11.LowLevel.CKA_CLASS, PyKCS11.LowLevel.CKO_CERTIFICATE)
+        SearchTemplate[0].SetNum(PyKCS11.LowLevel.CKA_CLASS,
+                                 PyKCS11.LowLevel.CKO_CERTIFICATE)
         SearchTemplate[1].SetBool(PyKCS11.LowLevel.CKA_TOKEN, True)
 
         self.assertEqual(a.C_FindObjectsInit(session, SearchTemplate),
-                PyKCS11.LowLevel.CKR_OK)
+                         PyKCS11.LowLevel.CKR_OK)
         self.assertEqual(a.C_FindObjects(session, SearchResult),
-                PyKCS11.LowLevel.CKR_OK)
-        self.assertEqual(a.C_FindObjectsFinal(session), PyKCS11.LowLevel.CKR_OK)
+                         PyKCS11.LowLevel.CKR_OK)
+        self.assertEqual(a.C_FindObjectsFinal(session),
+                         PyKCS11.LowLevel.CKR_OK)
 
         for x in SearchResult:
             print("object: " + hex(x.value()))
