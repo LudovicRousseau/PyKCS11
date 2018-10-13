@@ -25,7 +25,7 @@ a = PyKCS11.LowLevel.CPKCS11Lib()
 info = PyKCS11.LowLevel.CK_INFO()
 slotInfo = PyKCS11.LowLevel.CK_SLOT_INFO()
 lib = os.getenv("PYKCS11LIB")
-if lib == None:
+if lib is None:
     raise(Exception("Define PYKCS11LIB"))
 session = PyKCS11.LowLevel.CK_SESSION_HANDLE()
 slotList = PyKCS11.LowLevel.ckintlist()

@@ -27,7 +27,7 @@ a = CPKCS11Lib()
 info = CK_INFO()
 slotInfo = CK_SLOT_INFO()
 lib = os.getenv("PYKCS11LIB")
-if lib == None:
+if lib is None:
     raise(Exception("Define PYKCS11LIB"))
 session = CK_SESSION_HANDLE()
 sessionInfo = CK_SESSION_INFO()
