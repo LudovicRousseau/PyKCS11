@@ -54,7 +54,7 @@ class getInfo(object):
     def getSlotInfo(self, slot, slot_index, nb_slots):
         print()
         print(self.red + "Slot %d/%d (number %d):" % (slot_index, nb_slots,
-            slot) + self.normal)
+              slot) + self.normal)
         self.display(self.pkcs11.getSlotInfo(slot), " ")
 
     def getTokenInfo(self, slot):
@@ -111,7 +111,8 @@ if __name__ == '__main__':
 
     try:
         opts, args = getopt.getopt(sys.argv[1:], "p:s:c:ham",
-            ["pin=", "slot=", "lib=", "help", "all", "mechanisms"])
+                                   ["pin=", "slot=", "lib=", "help",
+                                    "all", "mechanisms"])
     except getopt.GetoptError:
         # print help information and exit:
         usage()
