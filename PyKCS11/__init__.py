@@ -135,7 +135,7 @@ class CK_OBJECT_HANDLE(PyKCS11.LowLevel.CK_OBJECT_HANDLE):
 
         # only use the integer values and not the strings like 'CKM_RSA_PKCS'
         all_attributes = [attr for attr in all_attributes if
-            isinstance(attr, int)]
+                          isinstance(attr, int)]
 
         # all the attributes of the object
         attributes = self.session.getAttributeValue(self, all_attributes)
@@ -246,10 +246,10 @@ class CK_SLOT_INFO(CkClass):
         CKF_HW_SLOT: "CKF_HW_SLOT"}
 
     fields = {"slotDescription": "text",
-        "manufacturerID": "text",
-        "flags": "flags",
-        "hardwareVersion": "text",
-        "firmwareVersion": "text"}
+              "manufacturerID": "text",
+              "flags": "flags",
+              "hardwareVersion": "text",
+              "firmwareVersion": "text"}
 
 
 class CK_INFO(CkClass):
@@ -269,10 +269,10 @@ class CK_INFO(CkClass):
     """
 
     fields = {"cryptokiVersion": "pair",
-        "manufacturerID": "text",
-        "flags": "flags",
-        "libraryDescription": "text",
-        "libraryVersion": "pair"}
+              "manufacturerID": "text",
+              "flags": "flags",
+              "libraryDescription": "text",
+              "libraryVersion": "pair"}
 
 
 class CK_SESSION_INFO(CkClass):
@@ -305,9 +305,9 @@ class CK_SESSION_INFO(CkClass):
         return CKS[self.state]
 
     fields = {"slotID": "text",
-        "state": "text",
-        "flags": "flags",
-        "ulDeviceError": "text"}
+              "state": "text",
+              "flags": "flags",
+              "ulDeviceError": "text"}
 
 
 class CK_TOKEN_INFO(CkClass):
@@ -374,23 +374,23 @@ class CK_TOKEN_INFO(CkClass):
     }
 
     fields = {"label": "text",
-        "manufacturerID": "text",
-        "model": "text",
-        "serialNumber": "text",
-        "flags": "flags",
-        "ulMaxSessionCount": "text",
-        "ulSessionCount": "text",
-        "ulMaxRwSessionCount": "text",
-        "ulRwSessionCount": "text",
-        "ulMaxPinLen": "text",
-        "ulMinPinLen": "text",
-        "ulTotalPublicMemory": "text",
-        "ulFreePublicMemory": "text",
-        "ulTotalPrivateMemory": "text",
-        "ulFreePrivateMemory": "text",
-        "hardwareVersion": "pair",
-        "firmwareVersion": "pair",
-        "utcTime": "text"}
+              "manufacturerID": "text",
+              "model": "text",
+              "serialNumber": "text",
+              "flags": "flags",
+              "ulMaxSessionCount": "text",
+              "ulSessionCount": "text",
+              "ulMaxRwSessionCount": "text",
+              "ulRwSessionCount": "text",
+              "ulMaxPinLen": "text",
+              "ulMinPinLen": "text",
+              "ulTotalPublicMemory": "text",
+              "ulFreePublicMemory": "text",
+              "ulTotalPrivateMemory": "text",
+              "ulFreePrivateMemory": "text",
+              "hardwareVersion": "pair",
+              "firmwareVersion": "pair",
+              "utcTime": "text"}
 
 
 class CK_MECHANISM_INFO(CkClass):
@@ -423,8 +423,8 @@ class CK_MECHANISM_INFO(CkClass):
     }
 
     fields = {"ulMinKeySize": "text",
-        "ulMaxKeySize": "text",
-        "flags": "flags"}
+              "ulMaxKeySize": "text",
+              "flags": "flags"}
 
 
 class PyKCS11Error(Exception):
@@ -508,11 +508,13 @@ class PyKCS11Lib(object):
             raise PyKCS11Error(rv)
 
         i = CK_INFO()
-        i.cryptokiVersion = (info.cryptokiVersion.major, info.cryptokiVersion.minor)
+        i.cryptokiVersion = (info.cryptokiVersion.major,
+                             info.cryptokiVersion.minor)
         i.manufacturerID = info.GetManufacturerID()
         i.flags = info.flags
         i.libraryDescription = info.GetLibraryDescription()
-        i.libraryVersion = (info.libraryVersion.major, info.libraryVersion.minor)
+        i.libraryVersion = (info.libraryVersion.major,
+                            info.libraryVersion.minor)
         return i
 
     def getSlotList(self, tokenPresent=False):
@@ -527,7 +529,7 @@ class PyKCS11Lib(object):
         """
         slotList = PyKCS11.LowLevel.ckintlist()
         rv = self.lib.C_GetSlotList(CK_TRUE if tokenPresent else CK_FALSE,
-                slotList)
+                                    slotList)
         if rv != CKR_OK:
             raise PyKCS11Error(rv)
 
@@ -604,8 +606,10 @@ class PyKCS11Lib(object):
         t.ulFreePrivateMemory = tokeninfo.ulFreePrivateMemory
         if t.ulFreePrivateMemory == CK_UNAVAILABLE_INFORMATION:
             t.ulFreePrivateMemory = -1
-        t.hardwareVersion = (tokeninfo.hardwareVersion.major, tokeninfo.hardwareVersion.minor)
-        t.firmwareVersion = (tokeninfo.firmwareVersion.major, tokeninfo.firmwareVersion.minor)
+        t.hardwareVersion = (tokeninfo.hardwareVersion.major,
+                             tokeninfo.hardwareVersion.minor)
+        t.firmwareVersion = (tokeninfo.firmwareVersion.major,
+                             tokeninfo.firmwareVersion.minor)
         t.utcTime = tokeninfo.GetUtcTime()
 
         return t
@@ -726,6 +730,7 @@ class Mechanism(object):
 
     def to_native(self):
         return self._mech
+
 
 MechanismSHA1 = Mechanism(CKM_SHA_1, None)
 MechanismRSAPKCS1 = Mechanism(CKM_RSA_PKCS, None)
@@ -1179,16 +1184,19 @@ class Session(object):
         wrapped = ckbytelist()
         native = mecha.to_native()
         # first call get wrapped size
-        rv = self.lib.C_WrapKey(self.session, native, wrappingKey, key, wrapped)
+        rv = self.lib.C_WrapKey(self.session, native, wrappingKey, key,
+                                wrapped)
         if rv != CKR_OK:
             raise PyKCS11Error(rv)
         # second call get actual wrapped key data
-        rv = self.lib.C_WrapKey(self.session, native, wrappingKey, key, wrapped)
+        rv = self.lib.C_WrapKey(self.session, native, wrappingKey, key,
+                                wrapped)
         if rv != CKR_OK:
             raise PyKCS11Error(rv)
         return wrapped
 
-    def unwrapKey(self, unwrappingKey, wrappedKey, template, mecha=MechanismRSAPKCS1):
+    def unwrapKey(self, unwrappingKey, wrappedKey, template,
+                  mecha=MechanismRSAPKCS1):
         """
         C_UnwrapKey
 
@@ -1208,7 +1216,8 @@ class Session(object):
         data1 = ckbytelist(wrappedKey)
         handle = PyKCS11.LowLevel.CK_OBJECT_HANDLE()
         attrs = self._template2ckattrlist(template)
-        rv = self.lib.C_UnwrapKey(self.session, m, unwrappingKey, data1, attrs, handle)
+        rv = self.lib.C_UnwrapKey(self.session, m, unwrappingKey,
+                                  data1, attrs, handle)
         if rv != CKR_OK:
             raise PyKCS11Error(rv)
         return handle
@@ -1221,12 +1230,12 @@ class Session(object):
         :rtype: bool
         """
         if type in (CKA_CERTIFICATE_TYPE,
-            CKA_CLASS,
-            CKA_KEY_GEN_MECHANISM,
-            CKA_KEY_TYPE,
-            CKA_MODULUS_BITS,
-            CKA_VALUE_BITS,
-            CKA_VALUE_LEN):
+                    CKA_CLASS,
+                    CKA_KEY_GEN_MECHANISM,
+                    CKA_KEY_TYPE,
+                    CKA_MODULUS_BITS,
+                    CKA_VALUE_BITS,
+                    CKA_VALUE_LEN):
             return True
         return False
 
@@ -1238,7 +1247,7 @@ class Session(object):
         :rtype: bool
         """
         if type in (CKA_LABEL,
-            CKA_APPLICATION):
+                    CKA_APPLICATION):
             return True
         return False
 
@@ -1250,27 +1259,27 @@ class Session(object):
         :rtype: bool
         """
         if type in (CKA_ALWAYS_SENSITIVE,
-            CKA_DECRYPT,
-            CKA_DERIVE,
-            CKA_ENCRYPT,
-            CKA_EXTRACTABLE,
-            CKA_HAS_RESET,
-            CKA_LOCAL,
-            CKA_MODIFIABLE,
-            CKA_NEVER_EXTRACTABLE,
-            CKA_PRIVATE,
-            CKA_RESET_ON_INIT,
-            CKA_SECONDARY_AUTH,
-            CKA_SENSITIVE,
-            CKA_SIGN,
-            CKA_SIGN_RECOVER,
-            CKA_TOKEN,
-            CKA_TRUSTED,
-            CKA_UNWRAP,
-            CKA_VERIFY,
-            CKA_VERIFY_RECOVER,
-            CKA_WRAP,
-            CKA_WRAP_WITH_TRUSTED):
+                    CKA_DECRYPT,
+                    CKA_DERIVE,
+                    CKA_ENCRYPT,
+                    CKA_EXTRACTABLE,
+                    CKA_HAS_RESET,
+                    CKA_LOCAL,
+                    CKA_MODIFIABLE,
+                    CKA_NEVER_EXTRACTABLE,
+                    CKA_PRIVATE,
+                    CKA_RESET_ON_INIT,
+                    CKA_SECONDARY_AUTH,
+                    CKA_SENSITIVE,
+                    CKA_SIGN,
+                    CKA_SIGN_RECOVER,
+                    CKA_TOKEN,
+                    CKA_TRUSTED,
+                    CKA_UNWRAP,
+                    CKA_VERIFY,
+                    CKA_VERIFY_RECOVER,
+                    CKA_WRAP,
+                    CKA_WRAP_WITH_TRUSTED):
             return True
         return False
 
@@ -1281,7 +1290,9 @@ class Session(object):
         :param type: PKCS#11 type like `CKA_MODULUS`
         :rtype: bool
         """
-        return (not self.isBool(type)) and (not self.isString(type)) and (not self.isNum(type))
+        return (not self.isBool(type)) \
+            and (not self.isString(type)) \
+            and (not self.isNum(type))
 
     def _template2ckattrlist(self, template):
         t = PyKCS11.LowLevel.ckattrlist(len(template))
@@ -1322,7 +1333,8 @@ class Session(object):
             raise PyKCS11Error(rv)
         return ck_handle
 
-    def generateKeyPair(self, templatePub, templatePriv, mecha=MechanismRSAGENERATEKEYPAIR):
+    def generateKeyPair(self, templatePub, templatePriv,
+                        mecha=MechanismRSAGENERATEKEYPAIR):
         """
         generate a key pair
 
@@ -1338,7 +1350,7 @@ class Session(object):
         ck_prv_handle = PyKCS11.LowLevel.CK_OBJECT_HANDLE()
         m = mecha.to_native()
         rv = self.lib.C_GenerateKeyPair(self.session, m, tPub, tPriv,
-            ck_pub_handle, ck_prv_handle)
+                                        ck_pub_handle, ck_prv_handle)
 
         if rv != CKR_OK:
             raise PyKCS11Error(rv)
@@ -1458,7 +1470,8 @@ class Session(object):
             valTemplate[0].Reset()
             valTemplate[0].SetType(attr[x])
             # first call to get the attribute size and reserve the memory
-            rv = self.lib.C_GetAttributeValue(self.session, obj_id, valTemplate)
+            rv = self.lib.C_GetAttributeValue(self.session, obj_id,
+                                              valTemplate)
             if rv in (CKR_ATTRIBUTE_TYPE_INVALID,
                       CKR_ATTRIBUTE_SENSITIVE, CKR_ARGUMENTS_BAD):
                 # append an empty value
@@ -1468,7 +1481,8 @@ class Session(object):
             if rv != CKR_OK:
                 raise PyKCS11Error(rv)
             # second call to get the attribute value
-            rv = self.lib.C_GetAttributeValue(self.session, obj_id, valTemplate)
+            rv = self.lib.C_GetAttributeValue(self.session, obj_id,
+                                              valTemplate)
             if rv != CKR_OK:
                 raise PyKCS11Error(rv)
 
@@ -1517,6 +1531,7 @@ class Session(object):
         if rv != CKR_OK:
             raise PyKCS11Error(rv)
         return low_rand
+
 
 if __name__ == "__main__":
     # sample test/debug code
