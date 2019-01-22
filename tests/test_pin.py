@@ -6,14 +6,13 @@ from PyKCS11 import PyKCS11
 
 
 class TestUtil(unittest.TestCase):
-
     def setUp(self):
         self.pkcs11 = PyKCS11.PyKCS11Lib()
         self.pkcs11.load()
         self.slot = self.pkcs11.getSlotList(tokenPresent=True)[0]
-        self.session = self.pkcs11.openSession(self.slot,
-                                               PyKCS11.CKF_SERIAL_SESSION |
-                                               PyKCS11.CKF_RW_SESSION)
+        self.session = self.pkcs11.openSession(
+            self.slot, PyKCS11.CKF_SERIAL_SESSION | PyKCS11.CKF_RW_SESSION
+        )
 
     def tearDown(self):
         self.pkcs11.closeAllSessions(self.slot)
