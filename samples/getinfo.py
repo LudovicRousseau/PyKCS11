@@ -42,7 +42,7 @@ class getInfo(object):
                 self.colorize(left, dico[key])
 
     def __init__(self, lib=None):
-        if sys.stdout.isatty() and platform.system().lower() != 'windows':
+        if sys.stdout.isatty() and platform.system().lower() != "windows":
             self.red = "\x1b[01;31m"
             self.blue = "\x1b[34m"
             self.magenta = "\x1b[35m"
@@ -53,8 +53,11 @@ class getInfo(object):
 
     def getSlotInfo(self, slot, slot_index, nb_slots):
         print()
-        print(self.red + "Slot %d/%d (number %d):" % (slot_index, nb_slots,
-              slot) + self.normal)
+        print(
+            self.red
+            + "Slot %d/%d (number %d):" % (slot_index, nb_slots, slot)
+            + self.normal
+        )
         self.display(self.pkcs11.getSlotInfo(slot), " ")
 
     def getTokenInfo(self, slot):
@@ -78,7 +81,7 @@ class getInfo(object):
         self.display(self.pkcs11.getInfo())
 
     def getSessionInfo(self, slot, pin=""):
-        print(" SessionInfo", end=' ')
+        print(" SessionInfo", end=" ")
         session = self.pkcs11.openSession(slot)
 
         if pin != "":
@@ -97,22 +100,24 @@ class getInfo(object):
 
 
 def usage():
-    print("Usage:", sys.argv[0], end=' ')
-    print("[-a][--all]", end=' ')
-    print("[-p pin][--pin=pin] (use 'NULL' for pinpad)", end=' ')
-    print("[-s slot][--slot=slot]", end=' ')
-    print("[-c lib][--lib=lib]", end=' ')
-    print("[-m][--mechanisms]", end=' ')
+    print("Usage:", sys.argv[0], end=" ")
+    print("[-a][--all]", end=" ")
+    print("[-p pin][--pin=pin] (use 'NULL' for pinpad)", end=" ")
+    print("[-s slot][--slot=slot]", end=" ")
+    print("[-c lib][--lib=lib]", end=" ")
+    print("[-m][--mechanisms]", end=" ")
     print("[-h][--help]")
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     import getopt
 
     try:
-        opts, args = getopt.getopt(sys.argv[1:], "p:s:c:ham",
-                                   ["pin=", "slot=", "lib=", "help",
-                                    "all", "mechanisms"])
+        opts, args = getopt.getopt(
+            sys.argv[1:],
+            "p:s:c:ham",
+            ["pin=", "slot=", "lib=", "help", "all", "mechanisms"],
+        )
     except getopt.GetoptError:
         # print help information and exit:
         usage()
