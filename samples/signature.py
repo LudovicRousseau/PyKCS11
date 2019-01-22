@@ -42,8 +42,7 @@ print("\nsignature: {}".format(binascii.hexlify(bytearray(signature))))
 
 # find first public key and verify signature
 pubKey = session.findObjects([(CKA_CLASS, CKO_PUBLIC_KEY)])[0]
-result = session.verify(pubKey, binascii.unhexlify(toSign), signature,
-                        mechanism)
+result = session.verify(pubKey, binascii.unhexlify(toSign), signature, mechanism)
 print("\nVerified:", result)
 
 # logout
