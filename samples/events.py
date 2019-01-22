@@ -21,21 +21,23 @@ from __future__ import print_function
 import PyKCS11
 import getinfo
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     import getopt
     import sys
 
     def usage():
-        print("Usage:", sys.argv[0], end=' ')
-        print("[-p pin][--pin=pin] (use 'NULL' for pinpad)", end=' ')
-        print("[-c lib][--lib=lib]", end=' ')
-        print("[-h][--help]", end=' ')
+        print("Usage:", sys.argv[0], end=" ")
+        print("[-p pin][--pin=pin] (use 'NULL' for pinpad)", end=" ")
+        print("[-c lib][--lib=lib]", end=" ")
+        print("[-h][--help]", end=" ")
         print("[-o][--opensession]")
 
     try:
-        opts, args = getopt.getopt(sys.argv[1:], "p:c:hom",
-                                   ["pin=", "lib=", "help",
-                                    "opensession", "mechanisms"])
+        opts, args = getopt.getopt(
+            sys.argv[1:],
+            "p:c:hom",
+            ["pin=", "lib=", "help", "opensession", "mechanisms"],
+        )
     except getopt.GetoptError:
         # print help information and exit:
         usage()
