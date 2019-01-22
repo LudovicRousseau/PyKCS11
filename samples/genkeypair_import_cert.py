@@ -24,7 +24,7 @@ pkcs11.load()  # define environment variable PYKCS11LIB=YourPKCS11Lib
 slot = pkcs11.getSlotList(tokenPresent=True)[0]
 session = pkcs11.openSession(slot, PyKCS11.CKF_RW_SESSION)
 
-pin = '1111'
+pin = "1111"
 session.login(pin, PyKCS11.CKU_USER)
 
 
@@ -32,7 +32,7 @@ session.login(pin, PyKCS11.CKU_USER)
 # The first step in the process is to create the key-templates. See PKCS#11
 # `10.8 Public key objects` to learn which attributes are available. Section
 # 10.9 covers private keys.
-label = 'pkcs_is_fun'  # just a label for identifying objects
+label = "pkcs_is_fun"  # just a label for identifying objects
 key_length = 2048  # key-length in bits
 
 # the key_id has to be the same for both objects, it will also be necessary
@@ -65,7 +65,7 @@ private_template = [
     (PyKCS11.CKA_UNWRAP, PyKCS11.CK_TRUE),
     (PyKCS11.CKA_LABEL, label),
     (PyKCS11.CKA_ID, key_id),
-    ]
+]
 
 session.generateKeyPair(public_template, private_template)
 # ############# the keys were generated and stored on the card ###############
@@ -88,7 +88,7 @@ session.generateKeyPair(public_template, private_template)
 # already). It will be assumed that the raw data of the certificate are in
 # `cert`.
 
-cert = 'replace this with the raw certificate itself'
+cert = "replace this with the raw certificate itself"
 
 
 # keep in mind that certain elements, such as the subject, must not be
@@ -106,10 +106,15 @@ cert_template = [
     (PyKCS11.CKA_VERIFY, PyKCS11.CK_TRUE),
     (PyKCS11.CKA_MODIFIABLE, PyKCS11.CK_TRUE),
     (PyKCS11.CKA_VALUE, cert),  # must be BER-encoded
-
-    (PyKCS11.CKA_SUBJECT, subject),  # must be set and DER, see Table 24, X.509 Certificate Object Attributes
-    (PyKCS11.CKA_ID, key_id)  # must be set, and DER see Table 24, X.509 Certificate Object Attributes
-    ]
+    (
+        PyKCS11.CKA_SUBJECT,
+        subject,
+    ),  # must be set and DER, see Table 24, X.509 Certificate Object Attributes
+    (
+        PyKCS11.CKA_ID,
+        key_id,
+    ),  # must be set, and DER see Table 24, X.509 Certificate Object Attributes
+]
 
 # create the certificate object
 session.createObject(cert_template)
