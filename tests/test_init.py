@@ -5,14 +5,13 @@ from PyKCS11 import PyKCS11
 
 
 class TestUtil(unittest.TestCase):
-
     def setUp(self):
         self.pkcs11 = PyKCS11.PyKCS11Lib()
         self.pkcs11.load()
         self.slot = self.pkcs11.getSlotList(tokenPresent=True)[0]
-        self.session = self.pkcs11.openSession(self.slot,
-                                               PyKCS11.CKF_SERIAL_SESSION |
-                                               PyKCS11.CKF_RW_SESSION)
+        self.session = self.pkcs11.openSession(
+            self.slot, PyKCS11.CKF_SERIAL_SESSION | PyKCS11.CKF_RW_SESSION
+        )
 
     def tearDown(self):
         self.pkcs11.closeAllSessions(self.slot)
@@ -57,9 +56,9 @@ class TestUtil(unittest.TestCase):
 
         # use admin PIN
         self.pkcs11.initToken(self.slot, "123456", "my label")
-        self.session = self.pkcs11.openSession(self.slot,
-                                               PyKCS11.CKF_SERIAL_SESSION |
-                                               PyKCS11.CKF_RW_SESSION)
+        self.session = self.pkcs11.openSession(
+            self.slot, PyKCS11.CKF_SERIAL_SESSION | PyKCS11.CKF_RW_SESSION
+        )
         self.session.login("123456", user_type=PyKCS11.CKU_SO)
         # set user PIN
         self.session.initPin("1234")
@@ -69,6 +68,7 @@ class TestUtil(unittest.TestCase):
 
         # for Python version ≥ 3 only
         import sys
+
         if sys.version_info[0] < 3:
             return
 
@@ -81,9 +81,9 @@ class TestUtil(unittest.TestCase):
 
         # use admin PIN
         self.pkcs11.initToken(self.slot, "123456", label)
-        self.session = self.pkcs11.openSession(self.slot,
-                                               PyKCS11.CKF_SERIAL_SESSION |
-                                               PyKCS11.CKF_RW_SESSION)
+        self.session = self.pkcs11.openSession(
+            self.slot, PyKCS11.CKF_SERIAL_SESSION | PyKCS11.CKF_RW_SESSION
+        )
         self.session.login("123456", user_type=PyKCS11.CKU_SO)
         # set user PIN
         self.session.initPin("1234")
