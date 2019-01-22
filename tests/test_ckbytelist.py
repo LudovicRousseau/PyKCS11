@@ -80,5 +80,6 @@ class Testutil(unittest.TestCase):
             expected = "Unknown format (<type 'dict'>)"
         self.assertEqual(str(the_exception), expected)
 
+
 if __name__ == '__main__':
     unittest.main()
