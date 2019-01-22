@@ -3,7 +3,6 @@ import PyKCS11
 
 
 class Testutil(unittest.TestCase):
-
     def test_empty(self):
         e = PyKCS11.PyKCS11Error(0)
         self.assertEqual(e.value, 0)
@@ -15,7 +14,7 @@ class Testutil(unittest.TestCase):
 
     def test_CKR_PIN_INVALID(self):
         e = PyKCS11.PyKCS11Error(PyKCS11.CKR_PIN_INVALID)
-        self.assertEqual(e.value, 0xa1)
+        self.assertEqual(e.value, 0xA1)
         self.assertEqual(str(e), "CKR_PIN_INVALID (0x000000A1)")
 
     def test_Load(self):
