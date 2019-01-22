@@ -34,5 +34,6 @@ class TestUtil(unittest.TestCase):
         digest = digestSession.final()
         self.assertSequenceEqual(digest, SHA1_abc)
 
+
 if __name__ == '__main__':
     unittest.main()
