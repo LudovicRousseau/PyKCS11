@@ -133,6 +133,7 @@ for s in slots:
         print(format_normal % ("manufacturerID ", i.manufacturerID.strip()))
         print(format_normal % ("hardwareVersion", i.hardwareVersion))
         print(format_normal % ("firmwareVersion", i.firmwareVersion))
+        print(format_normal % ("flags          ", ", ".join(i.flags2text())))
 
         t = pkcs11.getTokenInfo(s)
         print("TokenInfo")
