@@ -28,7 +28,7 @@ info = CK_INFO()
 slotInfo = CK_SLOT_INFO()
 lib = os.getenv("PYKCS11LIB")
 if lib is None:
-    raise(Exception("Define PYKCS11LIB"))
+    raise (Exception("Define PYKCS11LIB"))
 session = CK_SESSION_HANDLE()
 sessionInfo = CK_SESSION_INFO()
 tokenInfo = CK_TOKEN_INFO()
@@ -45,21 +45,51 @@ print("\tAvailable Slots: " + str(len(slotList)))
 
 for x in range(len(slotList)):
     print("\tC_SlotInfo(): " + hex(a.C_GetSlotInfo(slotList[x], slotInfo)))
-    print("\t\tSlot N." + str(x) + ": ID=" + str(slotList[x]) + ", name='" + slotInfo.GetSlotDescription() + "'")
-    print("\tC_OpenSession(): " + hex(a.C_OpenSession(slotList[x], CKF_SERIAL_SESSION | CKF_RW_SESSION, session)))
+    print(
+        "\t\tSlot N."
+        + str(x)
+        + ": ID="
+        + str(slotList[x])
+        + ", name='"
+        + slotInfo.GetSlotDescription()
+        + "'"
+    )
+    print(
+        "\tC_OpenSession(): "
+        + hex(
+            a.C_OpenSession(slotList[x], CKF_SERIAL_SESSION | CKF_RW_SESSION, session)
+        )
+    )
     print("\t\tSession:" + str(session))
     print("\tC_GetSessionInfo(): " + hex(a.C_GetSessionInfo(session, sessionInfo)))
-    print("\t\tSessionInfo: state=" + hex(sessionInfo.state) + ", flags=" + hex(sessionInfo.flags))
+    print(
+        "\t\tSessionInfo: state="
+        + hex(sessionInfo.state)
+        + ", flags="
+        + hex(sessionInfo.flags)
+    )
 
     print("\tC_GetTokenInfo(): " + hex(a.C_GetTokenInfo(slotList[x], tokenInfo)))
-    print("\t\tTokenInfo: Label=" + tokenInfo.GetLabel() + ", ManufacturerID=" + tokenInfo.GetManufacturerID())
-    print("\t\tTokenInfo: flags=" + hex(tokenInfo.flags) + ", Model=" + tokenInfo.GetModel())
+    print(
+        "\t\tTokenInfo: Label="
+        + tokenInfo.GetLabel()
+        + ", ManufacturerID="
+        + tokenInfo.GetManufacturerID()
+    )
+    print(
+        "\t\tTokenInfo: flags="
+        + hex(tokenInfo.flags)
+        + ", Model="
+        + tokenInfo.GetModel()
+    )
 
     print("\tC_Login(): " + hex(a.C_Login(session, CKU_USER, pin)))
     print("\tC_Logout(): " + hex(a.C_Logout(session)))
     print("\tC_CloseSession(): " + hex(a.C_CloseSession(session)))
 
-print("C_OpenSession(): " + hex(a.C_OpenSession(slotList[0], CKF_SERIAL_SESSION, session)))
+print(
+    "C_OpenSession(): " + hex(a.C_OpenSession(slotList[0], CKF_SERIAL_SESSION, session))
+)
 print("C_Login(): " + hex(a.C_Login(session, CKU_USER, pin)))
 
 SearchResult = ckobjlist(10)
@@ -117,7 +147,7 @@ attributes = [
     ["CKA_MODIFIABLE", CKA_MODIFIABLE],
     ["CKA_ECDSA_PARAMS", CKA_ECDSA_PARAMS],
     ["CKA_EC_POINT", CKA_EC_POINT],
-    ]
+]
 
 for x in SearchResult:
     print("object: " + hex(x.value()))
@@ -130,7 +160,7 @@ for x in SearchResult:
         # second call to get the attribute value
         rv = a.C_GetAttributeValue(session, x, valTemplate)
         if rv == CKR_OK:
-            print("\t" + attr[0] + ": ", end=' ')
+            print("\t" + attr[0] + ": ", end=" ")
             if valTemplate[0].IsNum():
                 print(valTemplate[0].GetNum())
             if valTemplate[0].IsBool():
@@ -138,7 +168,7 @@ for x in SearchResult:
             if valTemplate[0].IsString():
                 print(valTemplate[0].GetString())
             if valTemplate[0].IsBin():
-                print("(" + str(valTemplate[0].GetLen()) + " bytes)", end=' ')
+                print("(" + str(valTemplate[0].GetLen()) + " bytes)", end=" ")
                 print(list(map(hex, valTemplate[0].GetBin())))
 
 print("C_Logout(): " + hex(a.C_Logout(session)))
