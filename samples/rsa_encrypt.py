@@ -38,7 +38,7 @@ pubTemplate = [
     (CKA_VERIFY_RECOVER, CK_TRUE),
     (CKA_WRAP, CK_TRUE),
     (CKA_LABEL, "Encryption key"),
-    (CKA_ID, (0x43,))
+    (CKA_ID, (0x43,)),
 ]
 
 privTemplate = [
@@ -49,7 +49,7 @@ privTemplate = [
     (CKA_SIGN, CK_TRUE),
     (CKA_SIGN_RECOVER, CK_TRUE),
     (CKA_UNWRAP, CK_TRUE),
-    (CKA_ID, (0x43,))
+    (CKA_ID, (0x43,)),
 ]
 
 (pubKey, privKey) = session.generateKeyPair(pubTemplate, privTemplate)
