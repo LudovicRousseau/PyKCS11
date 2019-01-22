@@ -26,7 +26,7 @@ info = PyKCS11.LowLevel.CK_INFO()
 slotInfo = PyKCS11.LowLevel.CK_SLOT_INFO()
 lib = os.getenv("PYKCS11LIB")
 if lib is None:
-    raise(Exception("Define PYKCS11LIB"))
+    raise (Exception("Define PYKCS11LIB"))
 session = PyKCS11.LowLevel.CK_SESSION_HANDLE()
 slotList = PyKCS11.LowLevel.ckintlist()
 rand = PyKCS11.LowLevel.ckbytelist(20)
@@ -40,13 +40,22 @@ del info
 print("C_GetSlotList(NULL): " + hex(a.C_GetSlotList(0, slotList)))
 print("\tAvailable Slots: " + str(len(slotList)))
 
-print("C_OpenSession(): " + hex(a.C_OpenSession(slotList[0], PyKCS11.LowLevel.CKF_RW_SESSION | PyKCS11.LowLevel.CKF_SERIAL_SESSION, session)))
+print(
+    "C_OpenSession(): "
+    + hex(
+        a.C_OpenSession(
+            slotList[0],
+            PyKCS11.LowLevel.CKF_RW_SESSION | PyKCS11.LowLevel.CKF_SERIAL_SESSION,
+            session,
+        )
+    )
+)
 
-print(' '.join("%02X" % i for i in seed))
+print(" ".join("%02X" % i for i in seed))
 print("C_SeedRandom(): " + hex(a.C_SeedRandom(session, seed)))
 
 print("C_GenerateRandom(): " + hex(a.C_GenerateRandom(session, rand)))
-print(' '.join("%02X" % i for i in rand))
+print(" ".join("%02X" % i for i in rand))
 
 print("C_CloseSession(): " + hex(a.C_CloseSession(session)))
 print("C_Finalize(): " + hex(a.C_Finalize()))
