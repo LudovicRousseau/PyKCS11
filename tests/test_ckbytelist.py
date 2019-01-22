@@ -3,7 +3,6 @@ import PyKCS11
 
 
 class Testutil(unittest.TestCase):
-
     def test_empty(self):
         ck = PyKCS11.ckbytelist()
         self.assertSequenceEqual(ck, [])
@@ -72,6 +71,7 @@ class Testutil(unittest.TestCase):
         the_exception = cm.exception
         self.assertEqual(the_exception.value, -3)
         import sys
+
         if sys.version_info[0] >= 3:
             # Python 3 and later
             expected = "Unknown format (<class 'dict'>)"
@@ -81,5 +81,5 @@ class Testutil(unittest.TestCase):
         self.assertEqual(str(the_exception), expected)
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     unittest.main()
