@@ -130,7 +130,9 @@ for s in slots:
         i = pkcs11.getSlotInfo(s)
         print("Slot no:", s)
         print(format_normal % ("slotDescription", i.slotDescription.strip()))
-        print(format_normal % ("manufacturerID", i.manufacturerID.strip()))
+        print(format_normal % ("manufacturerID ", i.manufacturerID.strip()))
+        print(format_normal % ("hardwareVersion", i.hardwareVersion))
+        print(format_normal % ("firmwareVersion", i.firmwareVersion))
 
         t = pkcs11.getTokenInfo(s)
         print("TokenInfo")
