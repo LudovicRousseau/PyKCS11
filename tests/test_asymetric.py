@@ -3,7 +3,6 @@ from PyKCS11 import PyKCS11
 
 
 class TestUtil(unittest.TestCase):
-
     def setUp(self):
         self.pkcs11 = PyKCS11.PyKCS11Lib()
         self.pkcs11.load()
@@ -12,9 +11,9 @@ class TestUtil(unittest.TestCase):
         self.SoftHSMversion = self.pkcs11.getInfo().libraryVersion[0]
 
         self.slot = self.pkcs11.getSlotList(tokenPresent=True)[0]
-        self.session = self.pkcs11.openSession(self.slot,
-                                               PyKCS11.CKF_SERIAL_SESSION |
-                                               PyKCS11.CKF_RW_SESSION)
+        self.session = self.pkcs11.openSession(
+            self.slot, PyKCS11.CKF_SERIAL_SESSION | PyKCS11.CKF_RW_SESSION
+        )
         self.session.login("1234")
 
         keyID = (0x22,)
@@ -29,7 +28,7 @@ class TestUtil(unittest.TestCase):
             (PyKCS11.CKA_VERIFY_RECOVER, PyKCS11.CK_TRUE),
             (PyKCS11.CKA_WRAP, PyKCS11.CK_TRUE),
             (PyKCS11.CKA_LABEL, "My Public Key"),
-            (PyKCS11.CKA_ID, keyID)
+            (PyKCS11.CKA_ID, keyID),
         ]
 
         privTemplate = [
@@ -40,10 +39,12 @@ class TestUtil(unittest.TestCase):
             (PyKCS11.CKA_SIGN, PyKCS11.CK_TRUE),
             (PyKCS11.CKA_SIGN_RECOVER, PyKCS11.CK_TRUE),
             (PyKCS11.CKA_UNWRAP, PyKCS11.CK_TRUE),
-            (PyKCS11.CKA_ID, keyID)
+            (PyKCS11.CKA_ID, keyID),
         ]
 
-        (self.pubKey, self.privKey) = self.session.generateKeyPair(pubTemplate, privTemplate)
+        (self.pubKey, self.privKey) = self.session.generateKeyPair(
+            pubTemplate, privTemplate
+        )
         self.assertIsNotNone(self.pubKey)
         self.assertIsNotNone(self.privKey)
 
@@ -72,8 +73,7 @@ class TestUtil(unittest.TestCase):
         # sign/verify
         signature = self.session.sign(self.privKey, toSign, mecha)
 
-        result = self.session.verify(self.pubKey, toSign, signature,
-                mecha)
+        result = self.session.verify(self.pubKey, toSign, signature, mecha)
 
         self.assertTrue(result)
 
@@ -84,8 +84,7 @@ class TestUtil(unittest.TestCase):
         # sign/verify
         signature = self.session.sign(self.privKey, toSign, mecha)
 
-        result = self.session.verify(self.pubKey, toSign, signature,
-                mecha)
+        result = self.session.verify(self.pubKey, toSign, signature, mecha)
 
         self.assertTrue(result)
 
@@ -93,7 +92,7 @@ class TestUtil(unittest.TestCase):
         toSign = "Hello world"
         mecha = PyKCS11.Mechanism(PyKCS11.CKM_RSA_X_509, None)
 
-        if (self.SoftHSMversion < 2):
+        if self.SoftHSMversion < 2:
             self.skipTest("RSA X.509 only supported by SoftHSM >= 2")
 
         # sign/verify
@@ -115,7 +114,7 @@ class TestUtil(unittest.TestCase):
         self.assertEqual(dataIn, text)
 
     def test_encrypt_X509(self):
-        if (self.SoftHSMversion < 2):
+        if self.SoftHSMversion < 2:
             self.skipTest("RSA X.509 only supported by SoftHSM >= 2")
 
         # encrypt/decrypt using CKM_RSA_X_509
@@ -138,7 +137,7 @@ class TestUtil(unittest.TestCase):
         self.assertEqual(dataIn, text)
 
     def test_RSA_OAEP(self):
-        if (self.SoftHSMversion < 2):
+        if self.SoftHSMversion < 2:
             self.skipTest("RSA OAEP only supported by SoftHSM >= 2")
 
         # RSA OAEP
@@ -153,28 +152,33 @@ class TestUtil(unittest.TestCase):
         self.assertEqual(text, plainText)
 
     def test_RSA_PSS_SHA1(self):
-        if (self.SoftHSMversion < 2):
+        if self.SoftHSMversion < 2:
             self.skipTest("RSA PSS only supported by SoftHSM >= 2")
 
         # RSA PSS
         toSign = "test_RSA_sign_PSS SHA1"
 
-        mech = PyKCS11.RSA_PSS_Mechanism(PyKCS11.CKM_SHA1_RSA_PKCS_PSS,
-                PyKCS11.CKM_SHA_1, PyKCS11.CKG_MGF1_SHA1, 0)
+        mech = PyKCS11.RSA_PSS_Mechanism(
+            PyKCS11.CKM_SHA1_RSA_PKCS_PSS, PyKCS11.CKM_SHA_1, PyKCS11.CKG_MGF1_SHA1, 0
+        )
         signature = self.session.sign(self.privKey, toSign, mech)
         result = self.session.verify(self.pubKey, toSign, signature, mech)
 
         self.assertTrue(result)
 
     def test_RSA_PSS_SHA256(self):
-        if (self.SoftHSMversion < 2):
+        if self.SoftHSMversion < 2:
             self.skipTest("RSA PSS only supported by SoftHSM >= 2")
 
         # RSA PSS
         toSign = "test_RSA_sign_PSS SHA256"
 
-        mech = PyKCS11.RSA_PSS_Mechanism(PyKCS11.CKM_SHA256_RSA_PKCS_PSS,
-                PyKCS11.CKM_SHA256, PyKCS11.CKG_MGF1_SHA256, 0)
+        mech = PyKCS11.RSA_PSS_Mechanism(
+            PyKCS11.CKM_SHA256_RSA_PKCS_PSS,
+            PyKCS11.CKM_SHA256,
+            PyKCS11.CKG_MGF1_SHA256,
+            0,
+        )
         signature = self.session.sign(self.privKey, toSign, mech)
         result = self.session.verify(self.pubKey, toSign, signature, mech)
 
