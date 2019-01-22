@@ -28,7 +28,7 @@ info = PyKCS11.LowLevel.CK_INFO()
 slotInfo = PyKCS11.LowLevel.CK_SLOT_INFO()
 lib = os.getenv("PYKCS11LIB")
 if lib is None:
-    raise(Exception("Define PYKCS11LIB"))
+    raise (Exception("Define PYKCS11LIB"))
 session = PyKCS11.LowLevel.CK_SESSION_HANDLE()
 sessionInfo = PyKCS11.LowLevel.CK_SESSION_INFO()
 tokenInfo = PyKCS11.LowLevel.CK_TOKEN_INFO()
@@ -49,26 +49,70 @@ if len(slotList) != 0:
     print("\tC_SlotInfo(): " + hex(a.C_GetSlotInfo(slotList[0], slotInfo)))
 
     print("\tC_GetTokenInfo(): " + hex(a.C_GetTokenInfo(slotList[0], tokenInfo)))
-    print("\t\tTokenInfo: Label=" + tokenInfo.GetLabel() + ", ManufacturerID=" + tokenInfo.GetManufacturerID())
-    print("\t\tTokenInfo: flags=" + hex(tokenInfo.flags) + ", Model=" + tokenInfo.GetModel())
+    print(
+        "\t\tTokenInfo: Label="
+        + tokenInfo.GetLabel()
+        + ", ManufacturerID="
+        + tokenInfo.GetManufacturerID()
+    )
+    print(
+        "\t\tTokenInfo: flags="
+        + hex(tokenInfo.flags)
+        + ", Model="
+        + tokenInfo.GetModel()
+    )
     print("\tC_InitToken(): " + hex(a.C_InitToken(slotList[0], puk, Label)))
 
     print("\tC_GetTokenInfo(): " + hex(a.C_GetTokenInfo(slotList[0], tokenInfo)))
-    print("\t\tTokenInfo: Label=" + tokenInfo.GetLabel() + ", ManufacturerID=" + tokenInfo.GetManufacturerID())
-    print("\t\tTokenInfo: flags=" + hex(tokenInfo.flags) + ", Model=" + tokenInfo.GetModel())
+    print(
+        "\t\tTokenInfo: Label="
+        + tokenInfo.GetLabel()
+        + ", ManufacturerID="
+        + tokenInfo.GetManufacturerID()
+    )
+    print(
+        "\t\tTokenInfo: flags="
+        + hex(tokenInfo.flags)
+        + ", Model="
+        + tokenInfo.GetModel()
+    )
 
-    print("\tC_OpenSession(): " + hex(a.C_OpenSession(slotList[0], PyKCS11.LowLevel.CKF_SERIAL_SESSION | PyKCS11.LowLevel.CKF_RW_SESSION, session)))
+    print(
+        "\tC_OpenSession(): "
+        + hex(
+            a.C_OpenSession(
+                slotList[0],
+                PyKCS11.LowLevel.CKF_SERIAL_SESSION | PyKCS11.LowLevel.CKF_RW_SESSION,
+                session,
+            )
+        )
+    )
     print("\t\tSession:" + str(session))
     print("\tC_GetSessionInfo(): " + hex(a.C_GetSessionInfo(session, sessionInfo)))
-    print("\t\tSessionInfo: state=" + hex(sessionInfo.state) + ", flags=" + hex(sessionInfo.flags))
+    print(
+        "\t\tSessionInfo: state="
+        + hex(sessionInfo.state)
+        + ", flags="
+        + hex(sessionInfo.flags)
+    )
 
     print("\tC_Login(SO): " + hex(a.C_Login(session, PyKCS11.LowLevel.CKU_SO, puk)))
     print("\tC_InitPIN(): " + hex(a.C_InitPIN(session, pin)))
     print("\tC_Logout(SO): " + hex(a.C_Logout(session)))
 
     print("\tC_GetTokenInfo(): " + hex(a.C_GetTokenInfo(slotList[0], tokenInfo)))
-    print("\t\tTokenInfo: Label=" + tokenInfo.GetLabel() + ", ManufacturerID=" + tokenInfo.GetManufacturerID())
-    print("\t\tTokenInfo: flags=" + hex(tokenInfo.flags) + ", Model=" + tokenInfo.GetModel())
+    print(
+        "\t\tTokenInfo: Label="
+        + tokenInfo.GetLabel()
+        + ", ManufacturerID="
+        + tokenInfo.GetManufacturerID()
+    )
+    print(
+        "\t\tTokenInfo: flags="
+        + hex(tokenInfo.flags)
+        + ", Model="
+        + tokenInfo.GetModel()
+    )
 
     print("C_Login(USER): " + hex(a.C_Login(session, PyKCS11.LowLevel.CKU_USER, pin)))
     print("C_Logout(USER): " + hex(a.C_Logout(session)))
