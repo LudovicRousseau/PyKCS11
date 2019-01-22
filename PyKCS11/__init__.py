@@ -610,7 +610,7 @@ class PyKCS11Lib(object):
                              tokeninfo.hardwareVersion.minor)
         t.firmwareVersion = (tokeninfo.firmwareVersion.major,
                              tokeninfo.firmwareVersion.minor)
-        t.utcTime = tokeninfo.GetUtcTime()
+        t.utcTime = tokeninfo.GetUtcTime().replace('\000', ' ')
 
         return t
 
