@@ -3,7 +3,6 @@ from PyKCS11 import PyKCS11
 
 
 class TestUtil(unittest.TestCase):
-
     def setUp(self):
         self.pkcs11 = PyKCS11.PyKCS11Lib()
         self.pkcs11.load()
@@ -12,9 +11,9 @@ class TestUtil(unittest.TestCase):
         self.SoftHSMversion = self.pkcs11.getInfo().libraryVersion[0]
 
         self.slot = self.pkcs11.getSlotList(tokenPresent=True)[0]
-        self.session = self.pkcs11.openSession(self.slot,
-                                               PyKCS11.CKF_SERIAL_SESSION |
-                                               PyKCS11.CKF_RW_SESSION)
+        self.session = self.pkcs11.openSession(
+            self.slot, PyKCS11.CKF_SERIAL_SESSION | PyKCS11.CKF_RW_SESSION
+        )
         self.session.login("1234")
 
     def tearDown(self):
@@ -25,21 +24,21 @@ class TestUtil(unittest.TestCase):
     def test_wrapKey(self):
         keyID = (0x01,)
         AESKeyTemplate = [
-                (PyKCS11.CKA_CLASS, PyKCS11.CKO_SECRET_KEY),
-                (PyKCS11.CKA_KEY_TYPE, PyKCS11.CKK_AES),
-                (PyKCS11.CKA_TOKEN, PyKCS11.CK_TRUE),
-                (PyKCS11.CKA_PRIVATE, PyKCS11.CK_FALSE),
-                (PyKCS11.CKA_ENCRYPT, PyKCS11.CK_TRUE),
-                (PyKCS11.CKA_DECRYPT, PyKCS11.CK_TRUE),
-                (PyKCS11.CKA_SIGN, PyKCS11.CK_FALSE),
-                (PyKCS11.CKA_EXTRACTABLE, PyKCS11.CK_TRUE),
-                (PyKCS11.CKA_VERIFY, PyKCS11.CK_FALSE),
-                (PyKCS11.CKA_VALUE_LEN, 32),
-                (PyKCS11.CKA_LABEL, "TestAESKey"),
-                (PyKCS11.CKA_ID, keyID)
-                ]
+            (PyKCS11.CKA_CLASS, PyKCS11.CKO_SECRET_KEY),
+            (PyKCS11.CKA_KEY_TYPE, PyKCS11.CKK_AES),
+            (PyKCS11.CKA_TOKEN, PyKCS11.CK_TRUE),
+            (PyKCS11.CKA_PRIVATE, PyKCS11.CK_FALSE),
+            (PyKCS11.CKA_ENCRYPT, PyKCS11.CK_TRUE),
+            (PyKCS11.CKA_DECRYPT, PyKCS11.CK_TRUE),
+            (PyKCS11.CKA_SIGN, PyKCS11.CK_FALSE),
+            (PyKCS11.CKA_EXTRACTABLE, PyKCS11.CK_TRUE),
+            (PyKCS11.CKA_VERIFY, PyKCS11.CK_FALSE),
+            (PyKCS11.CKA_VALUE_LEN, 32),
+            (PyKCS11.CKA_LABEL, "TestAESKey"),
+            (PyKCS11.CKA_ID, keyID),
+        ]
 
-        if (self.SoftHSMversion < 2):
+        if self.SoftHSMversion < 2:
             self.skipTest("generateKey() only supported by SoftHSM >= 2")
 
         self.wrapKey = self.session.generateKey(AESKeyTemplate)
@@ -47,8 +46,7 @@ class TestUtil(unittest.TestCase):
 
         keyID = (0x02,)
         # make the key extractable
-        AESKeyTemplate.append((PyKCS11.CKA_EXTRACTABLE,
-                               PyKCS11.CK_TRUE))
+        AESKeyTemplate.append((PyKCS11.CKA_EXTRACTABLE, PyKCS11.CK_TRUE))
 
         self.AESKey = self.session.generateKey(AESKeyTemplate)
         self.assertIsNotNone(self.AESKey)
@@ -68,8 +66,7 @@ class TestUtil(unittest.TestCase):
 
         # wrap
         mechanismWrap = PyKCS11.Mechanism(PyKCS11.CKM_AES_KEY_WRAP)
-        wrapped = self.session.wrapKey(self.wrapKey, self.AESKey,
-                                       mechanismWrap)
+        wrapped = self.session.wrapKey(self.wrapKey, self.AESKey, mechanismWrap)
         self.assertIsNotNone(wrapped)
 
         # destroy the original key
@@ -77,17 +74,18 @@ class TestUtil(unittest.TestCase):
 
         # unwrap
         template = [
-                (PyKCS11.CKA_CLASS, PyKCS11.CKO_SECRET_KEY),
-                (PyKCS11.CKA_KEY_TYPE, PyKCS11.CKK_AES),
-                (PyKCS11.CKA_TOKEN, PyKCS11.CK_TRUE),
-                (PyKCS11.CKA_PRIVATE, PyKCS11.CK_FALSE),
-                (PyKCS11.CKA_ENCRYPT, PyKCS11.CK_TRUE),
-                (PyKCS11.CKA_DECRYPT, PyKCS11.CK_TRUE),
-                (PyKCS11.CKA_SIGN, PyKCS11.CK_FALSE),
-                (PyKCS11.CKA_VERIFY, PyKCS11.CK_FALSE),
-                ]
-        unwrapped = self.session.unwrapKey(self.wrapKey, wrapped,
-                                           template, mechanismWrap)
+            (PyKCS11.CKA_CLASS, PyKCS11.CKO_SECRET_KEY),
+            (PyKCS11.CKA_KEY_TYPE, PyKCS11.CKK_AES),
+            (PyKCS11.CKA_TOKEN, PyKCS11.CK_TRUE),
+            (PyKCS11.CKA_PRIVATE, PyKCS11.CK_FALSE),
+            (PyKCS11.CKA_ENCRYPT, PyKCS11.CK_TRUE),
+            (PyKCS11.CKA_DECRYPT, PyKCS11.CK_TRUE),
+            (PyKCS11.CKA_SIGN, PyKCS11.CK_FALSE),
+            (PyKCS11.CKA_VERIFY, PyKCS11.CK_FALSE),
+        ]
+        unwrapped = self.session.unwrapKey(
+            self.wrapKey, wrapped, template, mechanismWrap
+        )
         self.assertIsNotNone(unwrapped)
 
         DataCheck = self.session.decrypt(unwrapped, DataOut, mechanism)
