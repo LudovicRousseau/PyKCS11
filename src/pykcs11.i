@@ -362,6 +362,7 @@ typedef unsigned long CK_RV;
 #define CKF_SO_PIN_FINAL_TRY         0x00200000
 #define CKF_SO_PIN_LOCKED            0x00400000
 #define CKF_SO_PIN_TO_BE_CHANGED     0x00800000
+#define CKF_ARRAY_ATTRIBUTE          (1 << 30)
 
 #define CKU_SO                0
 #define CKU_USER              1
