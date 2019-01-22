@@ -67,7 +67,7 @@ class TestUtil(unittest.TestCase):
 
     def test_initToken_utf8(self):
 
-        # for Python version ≥ 3 only
+        # for Python version ≥ 3 only
         import sys
         if sys.version_info[0] < 3:
             return
