@@ -3,7 +3,7 @@
 # python setup.py install --root=/tmp/p
 # PYTHONPATH=/tmp/p/usr/lib/python2.4/site-packages python test.py
 
-from distutils.core import setup, Extension
+from setuptools import setup, Extension
 from distutils.command.build import build
 from distutils.file_util import copy_file
 from sys import version_info as pyver
