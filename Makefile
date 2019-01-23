@@ -31,10 +31,10 @@ src/pykcs11.i: src/opensc/pkcs11.h src/pkcs11lib.h src/pykcs11string.h src/ck_at
 	touch $@
 
 dist: clean
-	$(PYTHON) setup.py sdist
+	$(PYTHON) setup.py sdist bdist_wheel
 
 pypi: clean
-	$(PYTHON) setup.py sdist upload
+	$(PYTHON) setup.py sdist bdist_wheel upload
 
 prepare4test: build
 	cd PyKCS11 ; ln -sf ../build/lib.*/PyKCS11/_LowLevel*.so
