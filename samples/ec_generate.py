@@ -34,7 +34,7 @@ label = 'test'
 curve = 'secp256r1'
 
 # Setup the domain parameters, unicode conversion needed for the curve string
-domain_params = ECDomainParameters(name='named', value=NamedCurve.unmap(unicode(curve)))
+domain_params = ECDomainParameters(name='named', value=NamedCurve.unmap(curve))
 ec_params = domain_params.dump()
 
 ec_public_tmpl = [
