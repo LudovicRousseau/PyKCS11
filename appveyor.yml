@@ -27,7 +27,10 @@ build_script:
   - python setup.py bdist_msi
   - python setup.py install
   - copy /Y src\LowLevel.py PyKCS11\
-  - copy /Y %PYTHON%\\Lib\\site-packages\\PyKCS11\\* PyKCS11\\
+  - pip show  PyKCS11 | python -c "import sys; print([line for line in sys.stdin if line.startswith('Location:')][0].split(':',1)[1].strip())" > _tmp
+  - set /p PYKCS11_INSTALL_DIR=<_tmp
+  - copy /Y %PYKCS11_INSTALL_DIR%\PyKCS11\* PyKCS11\
+  - del _tmp
 
 test_script:
   - python run_test.py
