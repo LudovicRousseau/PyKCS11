@@ -53,6 +53,9 @@ class TestUtil(unittest.TestCase):
             (PyKCS11.CKA_ID, keyID),
         ]
 
+        if self.SoftHSMversion < 2:
+            self.skipTest("ECDSA only supported by SoftHSM >= 2")
+
         (self.pubKey, self.privKey) = self.session.generateKeyPair(
             ec_public_tmpl, ec_priv_tmpl, mecha=PyKCS11.MechanismECGENERATEKEYPAIR
         )
