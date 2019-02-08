@@ -48,7 +48,7 @@ except KeyError:
     raise Exception("PYKCS11LIB is not defined. No SoftHSM library found?")
 
 tl = unittest.TestLoader()
-suite = tl.discover("tests", pattern=pattern)
+suite = tl.discover("test", pattern=pattern)
 result = unittest.TextTestRunner(verbosity=2).run(suite)
 if result.errors or result.failures:
     sys.exit(1)

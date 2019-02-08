@@ -1,8 +1,5 @@
 #! /usr/bin/env python
 
-# execute using:
-# python tests/CK_test.py
-
 import unittest
 from PyKCS11 import PyKCS11
 

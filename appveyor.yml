@@ -18,7 +18,7 @@ cache:
 install:
   - "SET PATH=%PYTHON%;%PYTHON%\\Scripts;%PATH%;c:\\SoftHSM2\\bin;c:\\SoftHSM2\\lib"
   - "SET SOFTHSM2_CONF=C:\\SoftHSM2\\etc\\softhsm2.conf"
-  - tests\appveyor_install.cmd
+  - test\appveyor_install.cmd
 
 build_script:
   - python setup.py sdist

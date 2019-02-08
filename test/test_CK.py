@@ -1,7 +1,7 @@
 #! /usr/bin/env python
 
 # execute using:
-# python tests/CK_test.py
+# python test/test_CK.py
 
 import unittest
 import PyKCS11
