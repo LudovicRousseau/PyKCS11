@@ -31,10 +31,10 @@ key_id = (0x22,)
 label = 'test'
 
 # Select the curve to be used for the keys
-curve = 'secp256r1'
+curve = u'secp256r1'
 
 # Setup the domain parameters, unicode conversion needed for the curve string
-domain_params = ECDomainParameters(name='named', value=NamedCurve.unmap(curve))
+domain_params = ECDomainParameters(name='named', value=NamedCurve(curve))
 ec_params = domain_params.dump()
 
 ec_public_tmpl = [
