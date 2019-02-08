@@ -18,11 +18,11 @@ class TestUtil(unittest.TestCase):
         self.session.login("1234")
 
         # Select the curve to be used for the keys
-        curve = "secp256r1"
+        curve = u"secp256r1"
 
         # Setup the domain parameters, unicode conversion needed
         # for the curve string
-        domain_params = ECDomainParameters(name="named", value=NamedCurve.unmap(curve))
+        domain_params = ECDomainParameters(name="named", value=NamedCurve(curve))
         ec_params = domain_params.dump()
 
         keyID = (0x22,)
