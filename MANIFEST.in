@@ -1,0 +1,7 @@
+include src/*
+include src/opensc/*
+recursive-include samples
+include Changes.txt
+include Makefile*
+include run_test.py
+include tox.ini
