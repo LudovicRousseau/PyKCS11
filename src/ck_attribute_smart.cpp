@@ -137,9 +137,21 @@
 		}
 	}
 
+	bool CK_ATTRIBUTE_SMART::IsAttributeList() const
+	{
+		switch(m_type)
+		{
+		case CKA_WRAP_TEMPLATE:
+		case CKA_UNWRAP_TEMPLATE:
+			return true;
+		default:
+			return false;
+		}
+	}
+
 	bool CK_ATTRIBUTE_SMART::IsBin() const
 	{
-		return !IsBool() && !IsString() && !IsNum();
+		return !IsBool() && !IsString() && !IsNum() && !IsAttributeList();
 	}
 
 	void CK_ATTRIBUTE_SMART::Reset()
@@ -216,6 +228,28 @@
 		m_type = attrType;
 		m_value.push_back(bValue?CK_TRUE:CK_FALSE);
 	}
+
+    void CK_ATTRIBUTE_SMART::SetList(CK_ULONG attrType, const vector<CK_ATTRIBUTE_SMART>& val)
+    {
+        Reset();
+        m_type = attrType;
+
+        vector<CK_ATTRIBUTE_SMART> RWcopy = val;
+        CK_ULONG ulCount = 0;
+        CK_ATTRIBUTE * pTemplate = AttrVector2Template(RWcopy, ulCount);
+
+        if (pTemplate)
+        {
+            const CK_BYTE* tmp2 = (const CK_BYTE*)pTemplate;
+            CK_ULONG i;
+            m_value.reserve(ulCount);
+            m_value.reserve(ulCount * sizeof(CK_ATTRIBUTE));
+            m_value.clear();
+
+            for (i=0; i<ulCount * sizeof(CK_ATTRIBUTE); i++)
+                m_value.push_back(tmp2[i]);
+        }
+    }
 
 	vector<unsigned char>& CK_ATTRIBUTE_SMART::GetBin()
 	{

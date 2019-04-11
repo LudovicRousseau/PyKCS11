@@ -1294,6 +1294,18 @@ class Session(object):
             and (not self.isString(type)) \
             and (not self.isNum(type))
 
+    def isAttributeList(self, type):
+        """
+        is the type a attribute list value?
+
+        :param type: PKCS#11 type like `CKA_WRAP_TEMPLATE`
+        :rtype: bool
+        """
+        if type in (CKA_WRAP_TEMPLATE,
+                    CKA_UNWRAP_TEMPLATE):
+            return True
+        return False
+
     def _template2ckattrlist(self, template):
         t = PyKCS11.LowLevel.ckattrlist(len(template))
         for x in range(len(template)):
@@ -1304,6 +1316,9 @@ class Session(object):
                 t[x].SetString(attr[0], str(attr[1]))
             elif self.isBool(attr[0]):
                 t[x].SetBool(attr[0], attr[1] == CK_TRUE)
+            elif self.isAttributeList(attr[0]):
+                t[x].SetList(attr[0],
+                        self._template2ckattrlist(attr[1]))
             elif self.isBin(attr[0]):
                 attrBin = attr[1]
                 attrStr = attr[1]
@@ -1495,6 +1510,8 @@ class Session(object):
             elif valTemplate[0].IsString():
                 res.append(valTemplate[0].GetString())
             elif valTemplate[0].IsBin():
+                res.append(valTemplate[0].GetBin())
+            elif valTemplate[0].IsAttributeList():
                 res.append(valTemplate[0].GetBin())
             else:
                 raise PyKCS11Error(-2)

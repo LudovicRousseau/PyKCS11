@@ -1045,6 +1045,7 @@ class CK_ATTRIBUTE_SMART
 	bool IsString() const;
 	bool IsBool() const;
 	bool IsNum() const;
+	bool IsAttributeList() const;
 	bool IsBin() const;
 
 	PyKCS11String GetString() const;
@@ -1055,6 +1056,7 @@ class CK_ATTRIBUTE_SMART
 
 	bool GetBool() const;
 	void SetBool(unsigned long attrType, bool bValue);
+	void SetList(unsigned long attrType, const vector<CK_ATTRIBUTE_SMART>& val);
 
 	vector<unsigned char> GetBin();
 	void SetBin(unsigned long attrType, const vector<unsigned char>& pBuf);
