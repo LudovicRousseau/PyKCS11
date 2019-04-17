@@ -1,6 +1,17 @@
 History
 =======
 
+1.5.4 - April 2019, Ludovic Rousseau
+   - getTokenInfo: replace NUL char by ' ' in utcTime
+   - dumpit:
+    . print hardwareVersion and firmwareVersion
+    . print slot flags
+    . move to next slot if token not present
+   - add support of CKA_WRAP_TEMPLATE/CKA_UNWRAP_TEMPLATE
+   - add samples for ECC key generation and use
+   - move from distutils to setuptools
+   - upload of wheels to pypi on "make dist"
+
 1.5.3 - October 2018, Ludovic Rousseau
    - Do not fail when converting a UTF-8 string
    - Documentation: convert from Epydoc to Sphinx
