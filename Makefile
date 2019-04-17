@@ -34,7 +34,9 @@ dist: clean
 	$(PYTHON) setup.py sdist bdist_wheel
 
 pypi: clean
-	$(PYTHON) setup.py sdist bdist_wheel upload
+	rm -rf dist
+	$(PYTHON) setup.py sdist bdist_wheel
+	$(PYTHON) -m twine upload dist/*
 
 prepare4test: build
 	cd PyKCS11 ; ln -sf ../build/lib.*/PyKCS11/_LowLevel*.so
