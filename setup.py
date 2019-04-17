@@ -82,7 +82,7 @@ setup(
     platforms="Win32 Unix",
     long_description=description,
     author="Giuseppe Amato (Midori)",
-    author_email="paipai at tiscali.it",
+    author_email="paipai@tiscali.it",
     maintainer="Ludovic Rousseau",
     maintainer_email="ludovic.rousseau@free.fr",
     url="https://github.com/LudovicRousseau/PyKCS11",
