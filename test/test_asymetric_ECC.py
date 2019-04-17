@@ -26,7 +26,7 @@ class TestUtil(unittest.TestCase):
         ec_params = domain_params.dump()
 
         keyID = (0x22,)
-        label = 'test'
+        label = "test"
 
         ec_public_tmpl = [
             (PyKCS11.CKA_CLASS, PyKCS11.CKO_PUBLIC_KEY),
@@ -95,4 +95,3 @@ class TestUtil(unittest.TestCase):
         result = self.session.verify(self.pubKey, toSign, signature, mecha)
 
         self.assertTrue(result)
-
