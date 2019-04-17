@@ -1,6 +1,8 @@
+# https://packaging.python.org/guides/supporting-windows-using-appveyor/
 os: Windows Server 2012 R2
 
 environment:
+
   matrix:
     - PYTHON: "C:\\Python36"
     - PYTHON: "C:\\Python36-x64"
@@ -18,6 +20,8 @@ cache:
 install:
   - "SET PATH=%PYTHON%;%PYTHON%\\Scripts;%PATH%;c:\\SoftHSM2\\bin;c:\\SoftHSM2\\lib"
   - "SET SOFTHSM2_CONF=C:\\SoftHSM2\\etc\\softhsm2.conf"
+  # We need wheel installed to build wheels
+  - "%PYTHON%\\python.exe -m pip install wheel"
   - test\appveyor_install.cmd
 
 build_script:
@@ -25,9 +29,10 @@ build_script:
   - python setup.py bdist
   - python setup.py bdist_wininst
   - python setup.py bdist_msi
+  - python setup.py bdist_wheel
   - python setup.py install
   - copy /Y src\LowLevel.py PyKCS11\
-  - pip show  PyKCS11 | python -c "import sys; print([line for line in sys.stdin if line.startswith('Location:')][0].split(':',1)[1].strip())" > _tmp
+  - pip show PyKCS11 | python -c "import sys; print([line for line in sys.stdin if line.startswith('Location:')][0].split(':',1)[1].strip())" > _tmp
   - set /p PYKCS11_INSTALL_DIR=<_tmp
   - copy /Y %PYKCS11_INSTALL_DIR%\PyKCS11\* PyKCS11\
   - del _tmp
