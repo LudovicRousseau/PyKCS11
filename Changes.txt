@@ -1,6 +1,9 @@
 History
 =======
 
+1.5.5 - April 2019, Ludovic Rousseau
+   - fix source package generation
+
 1.5.4 - April 2019, Ludovic Rousseau
    - getTokenInfo: replace NUL char by ' ' in utcTime
    - dumpit:
