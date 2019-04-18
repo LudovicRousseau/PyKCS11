@@ -249,7 +249,10 @@ typedef struct CK_DATE{
       if (!SWIG_IsOK(res2)) {
           res2 = SWIG_ConvertPtr($input, &arg2, $descriptor(CK_RSA_PKCS_PSS_PARAMS*), 0);
           if (!SWIG_IsOK(res2)) {
+            res2 = SWIG_ConvertPtr($input, &arg2, $descriptor(CK_GCM_PARAMS*), 0);
+            if (!SWIG_IsOK(res2)) {
               SWIG_exception_fail(SWIG_ArgError(res2), "unsupported CK_MECHANISM Parameter type.");
+            }
           }
       }
     }
@@ -270,6 +273,27 @@ typedef struct CK_MECHANISM {
 		return m;
 	}
 };
+
+typedef struct CK_GCM_PARAMS {
+    void * pIv;
+    unsigned long ulIvLen;
+    void * pAAD;
+    unsigned long ulAADLen;
+    unsigned long ulTagBits;
+} CK_GCM_PARAMS;
+
+%extend CK_GCM_PARAMS
+{
+    CK_GCM_PARAMS()
+    {
+        CK_GCM_PARAMS *p = new CK_GCM_PARAMS();
+        p->pIv = p->pAAD = NULL;
+        p->ulIvLen = p->ulAADLen = p->ulTagBits = 0;
+        return p;
+    }
+};
+
+%constant int CK_GCM_PARAMS_LENGTH = sizeof(CK_GCM_PARAMS);
 
 %typemap(in) void*;
 %typemap(in) void* = char*;
@@ -328,6 +352,7 @@ typedef struct CK_MECHANISM_INFO {
     unsigned long    flags;
 %mutable;
 } CK_MECHANISM_INFO;
+
 typedef unsigned long CK_RV;
 
 #define FALSE 0
