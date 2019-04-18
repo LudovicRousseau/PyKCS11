@@ -93,4 +93,23 @@ class TestUtil(unittest.TestCase):
         # 2nd block
         self.assertSequenceEqual(DataOut[16:], DataECBOut2)
 
+        #
+        # test CK_GCM_PARAMS
+        #
+
+        AES_GCM_IV_SIZE = 12
+        AES_GCM_TAG_SIZE = 16
+        iv = [42] * AES_GCM_IV_SIZE
+        aad = "plaintext aad"
+        tagBits = AES_GCM_TAG_SIZE * 8
+        mechanism = PyKCS11.AES_GCM_Mechanism(iv, aad, tagBits)
+
+        DataOut = self.session.encrypt(symKey, DataIn, mechanism)
+        # print("DataOut", DataOut)
+
+        DataCheck = self.session.decrypt(symKey, DataOut, mechanism)
+        # print("DataCheck:", DataCheck)
+
+        self.assertSequenceEqual(DataIn, DataCheck)
+
         self.session.destroyObject(AESKey)
