@@ -713,6 +713,14 @@ struct ck_rsa_pkcs_pss_params {
   unsigned long sLen;
 } ;
 
+struct ck_gcm_params {
+  void * pIv;
+  unsigned long ulIvLen;
+  void * pAAD;
+  unsigned long ulAADLen;
+  unsigned long ulTagBits;
+} ;
+
 #define CKF_HW			(1 << 0)
 #define CKF_ENCRYPT		(1 << 8)
 #define CKF_DECRYPT		(1 << 9)
@@ -1282,6 +1290,8 @@ typedef struct ck_rsa_pkcs_oaep_params *CK_RSA_PKCS_OAEP_PARAMS_PTR;
 typedef struct ck_rsa_pkcs_pss_params CK_RSA_PKCS_PSS_PARAMS;
 typedef struct ck_rsa_pkcs_pss_params *CK_RSA_PKCS_PSS_PARAMS_PTR;
 
+typedef struct ck_gcm_params CK_GCM_PARAMS;
+
 typedef struct ck_function_list CK_FUNCTION_LIST;
 typedef struct ck_function_list *CK_FUNCTION_LIST_PTR;
 typedef struct ck_function_list **CK_FUNCTION_LIST_PTR_PTR;
@@ -1355,6 +1365,8 @@ typedef struct ck_c_initialize_args *CK_C_INITIALIZE_ARGS_PTR;
 #undef max_key_size
 
 #undef ck_rsa_pkcs_oaep_params
+
+#undef ck_rsa_pkcs_pss_params
 
 #undef ck_rsa_pkcs_pss_params
 
