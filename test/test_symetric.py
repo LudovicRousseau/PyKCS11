@@ -9,7 +9,7 @@ class TestUtil(unittest.TestCase):
         self.pkcs11.load()
 
         # get SoftHSM major version
-        self.SoftHSMversion = self.pkcs11.getInfo().libraryVersion[0]
+        self.SoftHSMversion = self.pkcs11.getInfo().libraryVersion
 
         self.slot = self.pkcs11.getSlotList(tokenPresent=True)[0]
         self.session = self.pkcs11.openSession(
@@ -27,8 +27,8 @@ class TestUtil(unittest.TestCase):
         mechanism = PyKCS11.Mechanism(PyKCS11.CKM_AES_CBC, "1234567812345678")
         self.assertIsNotNone(mechanism)
 
-        if self.SoftHSMversion < 2:
-            self.skipTest("generateKey() only supported by SoftHSM >= 2")
+        if self.SoftHSMversion < (2,0):
+            self.skipTest("generateKey() only supported by SoftHSM >= 2.0")
 
         keyID = (0x01,)
         AESKeyTemplate = [
@@ -96,6 +96,9 @@ class TestUtil(unittest.TestCase):
         #
         # test CK_GCM_PARAMS
         #
+
+        if self.SoftHSMversion <= (2,2):
+            self.skipTest("CKM_AES_GCM only supported by SoftHSM > 2.2")
 
         AES_GCM_IV_SIZE = 12
         AES_GCM_TAG_SIZE = 16
