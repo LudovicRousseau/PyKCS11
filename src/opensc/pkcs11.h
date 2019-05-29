@@ -716,6 +716,7 @@ struct ck_rsa_pkcs_pss_params {
 struct ck_gcm_params {
   void * pIv;
   unsigned long ulIvLen;
+  unsigned long ulIvBits;
   void * pAAD;
   unsigned long ulAADLen;
   unsigned long ulTagBits;
