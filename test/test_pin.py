@@ -28,6 +28,7 @@ class TestUtil(unittest.TestCase):
 
         the_exception = cm.exception
         self.assertEqual(the_exception.value, PyKCS11.CKR_PIN_INCORRECT)
+        self.assertEqual(str(the_exception), "CKR_PIN_INCORRECT (0x000000A0)")
 
     def test_ckbytelist(self):
         pin = PyKCS11.ckbytelist("1234")
@@ -41,6 +42,7 @@ class TestUtil(unittest.TestCase):
 
         the_exception = cm.exception
         self.assertEqual(the_exception.value, PyKCS11.CKR_PIN_INCORRECT)
+        self.assertEqual(str(the_exception), "CKR_PIN_INCORRECT (0x000000A0)")
 
     def test_null(self):
         # SoftHSM2 does not support pinpad (pin = NULL)
@@ -49,3 +51,4 @@ class TestUtil(unittest.TestCase):
 
         the_exception = cm.exception
         self.assertEqual(the_exception.value, PyKCS11.CKR_ARGUMENTS_BAD)
+        self.assertEqual(str(the_exception), "CKR_ARGUMENTS_BAD (0x00000007)")
