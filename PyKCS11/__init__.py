@@ -106,7 +106,7 @@ class ckbytelist(PyKCS11.LowLevel.ckbytelist):
             for c in range(len(data)):
                 self.append(data[c])
         else:
-            raise PyKCS11.PyKCS11Error(-3, text=type(data))
+            raise PyKCS11.PyKCS11Error(-3, text=str(type(data)))
 
     def __repr__(self):
         """
