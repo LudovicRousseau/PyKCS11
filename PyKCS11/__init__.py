@@ -61,6 +61,7 @@ for x in PyKCS11.LowLevel.__dict__.keys():
             eval(x[:3])[x] = eval(x)  # => CKM['CKM_RSA_PKCS'] = CKM_RSA_PKCS
 
 # special CKR[] values
+CKR[-4] = "C_GetFunctionList() not found"
 CKR[-3] = "Unknown format"
 CKR[-2] = "Unkown PKCS#11 type"
 CKR[-1] = "Load"
@@ -479,8 +480,8 @@ class PyKCS11Lib(object):
             if pkcs11dll_filename is None:
                 raise PyKCS11Error(-1, "No PKCS11 library specified (set PYKCS11LIB env variable)")
         rv = self.lib.Load(pkcs11dll_filename)
-        if rv == 0:
-            raise PyKCS11Error(-1, pkcs11dll_filename)
+        if rv != CKR_OK:
+            raise PyKCS11Error(rv, pkcs11dll_filename)
 
     def initToken(self, slot, pin, label):
         """
