@@ -2,12 +2,28 @@ import unittest
 from PyKCS11 import ckbytelist
 import PyKCS11.LowLevel
 import os
+from distutils.util import get_platform
 
 
 class TestUtil(unittest.TestCase):
     def test_LowLevel(self):
         a = PyKCS11.LowLevel.CPKCS11Lib()
         self.assertIsNotNone(a)
+
+        # File not found
+        self.assertEqual(a.Load("NoFile"), -1)
+
+        # C_GetFunctionList() not found
+        if get_platform().startswith('linux'):
+            # GNU/Linux
+            lib = "libc.so.6"
+        elif get_platform().startswith('macosx'):
+            # macOS
+            lib = "/usr/lib/libSystem.B.dylib"
+        else:
+            # Windows
+            lib = "WinSCard.dll"
+        self.assertEqual(a.Load(lib), -4)
 
         info = PyKCS11.LowLevel.CK_INFO()
         self.assertIsNotNone(info)
