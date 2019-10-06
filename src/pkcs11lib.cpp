@@ -51,34 +51,34 @@ CPKCS11Lib::~CPKCS11Lib(void)
 	Unload();
 }
 
-bool CPKCS11Lib::Load(const char* szLib)
+CK_RV CPKCS11Lib::Load(const char* szLib)
 {
 	CK_RV rv;
 	Unload();
 	SYS_dyn_LoadLibrary((void**)&m_hLib, szLib);
 	if (!m_hLib)
-		return false;
+		return -1;
 
 	CK_C_GetFunctionList pC_GetFunctionList;
 	SYS_dyn_GetAddress(m_hLib, (function_ptr *)&pC_GetFunctionList, "C_GetFunctionList");
 	if (!pC_GetFunctionList)
 	{
 		SYS_dyn_CloseLibrary((void**)&m_hLib);
-		return false;
+		return -4;
 	}
 	rv = pC_GetFunctionList(&m_pFunc);
 	if (CKR_OK != rv || !m_pFunc)
 	{
 		SYS_dyn_CloseLibrary((void**)&m_hLib);
-		return false;
+		return rv;
 	}
 
 	rv = m_pFunc->C_Initialize(NULL);
 	if (CKR_OK != rv  && CKR_CRYPTOKI_ALREADY_INITIALIZED != rv)
-		return false;
+		return rv;
 
 	m_bFinalizeOnClose = true;
-	return true;
+	return CKR_OK;
 }
 
 bool CPKCS11Lib::Unload()

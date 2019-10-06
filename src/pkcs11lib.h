@@ -50,7 +50,7 @@ class CPKCS11Lib
 public:
 	CPKCS11Lib(void);
 	~CPKCS11Lib(void);
-	bool Load(const char* szLib);
+	CK_RV Load(const char* szLib);
 	bool Unload();
 
 	CK_RV C_Initialize();
