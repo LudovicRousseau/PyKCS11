@@ -1,16 +1,16 @@
 History
 =======
 
-1.5.7 - Devember 2019, Ludovic Rousseau
+1.5.7 - December 2019, Ludovic Rousseau
    - add missing files in the .tar.gz
 
-1.5.6 - Devember 2019, Ludovic Rousseau
+1.5.6 - December 2019, Ludovic Rousseau
    - AppVeyor:
      . generate bdist_wheel
 	 . add Python 3.7 and 3.8
    - Sample events.py: add a -f/--full argument
    - Add support of CKM_AES_GCM mechanism
-   - CPKCS11Lib::Load(): return diffrent error codes
+   - CPKCS11Lib::Load(): return different error codes
    - minor improvements
 
 1.5.5 - April 2019, Ludovic Rousseau
