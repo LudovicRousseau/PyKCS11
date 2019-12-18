@@ -6,3 +6,7 @@ include Makefile*
 include run_test.py
 include tox.ini
 include pykcs11.rc
+include resource.h
+include dev-requirements.txt
+include docs/*
+include COPYING
