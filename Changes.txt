@@ -1,6 +1,9 @@
 History
 =======
 
+1.5.7 - Devember 2019, Ludovic Rousseau
+   - add missing files in the .tar.gz
+
 1.5.6 - Devember 2019, Ludovic Rousseau
    - AppVeyor:
      . generate bdist_wheel

@@ -75,7 +75,7 @@ class my_build(build):
 
 setup(
     name="PyKCS11",
-    version="1.5.6",
+    version="1.5.7",
     description="A Full PKCS#11 wrapper for Python",
     keywords="crypto,pki,pkcs11,c++",
     classifiers=classifiers,
