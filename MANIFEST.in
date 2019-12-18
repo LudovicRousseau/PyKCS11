@@ -5,3 +5,4 @@ include Changes.txt
 include Makefile*
 include run_test.py
 include tox.ini
+include pykcs11.rc
