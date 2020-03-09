@@ -159,7 +159,10 @@ class TestUtil(unittest.TestCase):
         toSign = "test_RSA_sign_PSS SHA1"
 
         mech = PyKCS11.RSA_PSS_Mechanism(
-            PyKCS11.CKM_SHA1_RSA_PKCS_PSS, PyKCS11.CKM_SHA_1, PyKCS11.CKG_MGF1_SHA1, 0
+            PyKCS11.CKM_SHA1_RSA_PKCS_PSS,
+            PyKCS11.CKM_SHA_1,
+            PyKCS11.CKG_MGF1_SHA1,
+            20 # size of SHA1 result
         )
         signature = self.session.sign(self.privKey, toSign, mech)
         result = self.session.verify(self.pubKey, toSign, signature, mech)
@@ -177,7 +180,7 @@ class TestUtil(unittest.TestCase):
             PyKCS11.CKM_SHA256_RSA_PKCS_PSS,
             PyKCS11.CKM_SHA256,
             PyKCS11.CKG_MGF1_SHA256,
-            0,
+            32 # size of SHA256 result
         )
         signature = self.session.sign(self.privKey, toSign, mech)
         result = self.session.verify(self.pubKey, toSign, signature, mech)
