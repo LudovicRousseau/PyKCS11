@@ -1289,7 +1289,8 @@ class Session(object):
         :param type: PKCS#11 type like `CKA_ALWAYS_SENSITIVE`
         :rtype: bool
         """
-        if type in (CKA_ALWAYS_SENSITIVE,
+        if type in (CKA_ALWAYS_AUTHENTICATE,
+                    CKA_ALWAYS_SENSITIVE,
                     CKA_DECRYPT,
                     CKA_DERIVE,
                     CKA_ENCRYPT,
