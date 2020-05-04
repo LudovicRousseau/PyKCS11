@@ -93,10 +93,12 @@
 	{
 		switch(m_type)
 		{
+		case CKA_ALWAYS_AUTHENTICATE:
 		case CKA_ALWAYS_SENSITIVE:
 		case CKA_DECRYPT:
 		case CKA_DERIVE:
 		case CKA_ENCRYPT:
+		case CKA_EXTRACTABLE:
 		case CKA_HAS_RESET:
 		case CKA_LOCAL:
 		case CKA_MODIFIABLE:
@@ -113,6 +115,7 @@
 		case CKA_VERIFY:
 		case CKA_VERIFY_RECOVER:
 		case CKA_WRAP:
+		case CKA_WRAP_WITH_TRUSTED:
 			return true;
 		default:
 			return false;
