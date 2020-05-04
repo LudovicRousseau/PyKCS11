@@ -311,7 +311,7 @@ class TestUtil(unittest.TestCase):
         self.assertSequenceEqual(DataIn, DataCheck)
 
         attributes = self.session.getAttributeValue(unwrapped, [PyKCS11.CKA_EXTRACTABLE])
-        self.assertSequenceEqual(attributes, [(0,)])
+        self.assertSequenceEqual(attributes, [False])
 
         # cleanup
         self.session.destroyObject(unwrapped)
