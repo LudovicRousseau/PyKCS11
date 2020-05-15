@@ -365,6 +365,7 @@ typedef unsigned long CK_RV;
 #define CK_INVALID_HANDLE 0
 
 #define CKN_SURRENDER       0
+#define CKN_OTP_CHANGED     1
 
 #define CKF_TOKEN_PRESENT     0x00000001
 #define CKF_REMOVABLE_DEVICE  0x00000002
