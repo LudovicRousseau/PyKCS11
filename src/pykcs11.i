@@ -387,6 +387,7 @@ typedef unsigned long CK_RV;
 #define CKF_SO_PIN_FINAL_TRY         0x00200000
 #define CKF_SO_PIN_LOCKED            0x00400000
 #define CKF_SO_PIN_TO_BE_CHANGED     0x00800000
+#define CKF_ERROR_STATE              0x01000000
 #define CKF_ARRAY_ATTRIBUTE          (1 << 30)
 
 #define CKU_SO                0
@@ -1011,6 +1012,12 @@ typedef unsigned long CK_RV;
 #define CKG_MGF1_SHA512  0x00000004
 
 #define CKF_HW                 0x00000001
+#define CKF_MESSAGE_ENCRYPT    0x00000002
+#define CKF_MESSAGE_DECRYPT    0x00000004
+#define CKF_MESSAGE_SIGN       0x00000008
+#define CKF_MESSAGE_VERIFY     0x00000010
+#define CKF_MULTI_MESSGE       0x00000020
+#define CKF_FIND_OBJECTS       0x00000040
 #define CKF_ENCRYPT            0x00000100
 #define CKF_DECRYPT            0x00000200
 #define CKF_DIGEST             0x00000400
@@ -1029,6 +1036,7 @@ typedef unsigned long CK_RV;
 #define CKF_EC_NAMEDCURVE      0x00800000
 #define CKF_EC_UNCOMPRESS      0x01000000
 #define CKF_EC_COMPRESS        0x02000000
+#define CKF_EC_CURVENAME       0x04000000
 #define CKF_EXTENSION          0x80000000UL
 
 #define CKR_OK                                0x00000000
