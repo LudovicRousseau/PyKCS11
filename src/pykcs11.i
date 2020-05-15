@@ -471,6 +471,7 @@ typedef unsigned long CK_RV;
 #define CKA_TOKEN              0x00000001
 #define CKA_PRIVATE            0x00000002
 #define CKA_LABEL              0x00000003
+#define CKA_UNIQUE_ID          0x00000004
 #define CKA_APPLICATION        0x00000010
 #define CKA_VALUE              0x00000011
 #define CKA_OBJECT_ID          0x00000012
@@ -486,6 +487,7 @@ typedef unsigned long CK_RV;
 #define CKA_URL                         0x00000089
 #define CKA_HASH_OF_SUBJECT_PUBLIC_KEY  0x0000008A
 #define CKA_HASH_OF_ISSUER_PUBLIC_KEY   0x0000008B
+#define CKA_NAME_HASH_ALGORITHM         0x0000008C
 #define CKA_CHECK_VALUE                 0x00000090
 #define CKA_KEY_TYPE           0x00000100
 #define CKA_SUBJECT            0x00000101
@@ -511,6 +513,7 @@ typedef unsigned long CK_RV;
 #define CKA_EXPONENT_1         0x00000126
 #define CKA_EXPONENT_2         0x00000127
 #define CKA_COEFFICIENT        0x00000128
+#define CKA_PUBLIC_KEY_INFO    0x00000129
 #define CKA_PRIME              0x00000130
 #define CKA_SUBPRIME           0x00000131
 #define CKA_BASE               0x00000132
@@ -525,6 +528,8 @@ typedef unsigned long CK_RV;
 #define CKA_ALWAYS_SENSITIVE   0x00000165
 #define CKA_KEY_GEN_MECHANISM  0x00000166
 #define CKA_MODIFIABLE         0x00000170
+#define CKA_COPYABLE           0x00000171
+#define CKA_DESTROYABLE        0x00000172
 #define CKA_ECDSA_PARAMS       0x00000180
 #define CKA_EC_PARAMS          0x00000180
 #define CKA_EC_POINT           0x00000181
@@ -534,6 +539,7 @@ typedef unsigned long CK_RV;
 #define CKA_WRAP_WITH_TRUSTED    0x00000210
 #define CKA_WRAP_TEMPLATE        (CKF_ARRAY_ATTRIBUTE|0x00000211)
 #define CKA_UNWRAP_TEMPLATE      (CKF_ARRAY_ATTRIBUTE|0x00000212)
+#define CKA_DERIVE_TEMPLATE      (CKF_ARRAY_ATTRIBUTE|0x00000213)
 #define CKA_OTP_FORMAT                0x00000220
 #define CKA_OTP_LENGTH                0x00000221
 #define CKA_OTP_TIME_INTERVAL         0x00000222
@@ -569,6 +575,7 @@ typedef unsigned long CK_RV;
 #define CKA_DEFAULT_CMS_ATTRIBUTES      0x00000502
 #define CKA_SUPPORTED_CMS_ATTRIBUTES    0x00000503
 #define CKA_ALLOWED_MECHANISMS          (CKF_ARRAY_ATTRIBUTE|0x00000600)
+#define CKA_PROFILE_ID                  0x00000601
 #define CKA_VENDOR_DEFINED     0x80000000UL
 
 #define CKM_RSA_PKCS_KEY_PAIR_GEN      0x00000000
