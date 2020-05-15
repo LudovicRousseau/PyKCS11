@@ -413,6 +413,7 @@ typedef unsigned long CK_RV;
 #define CKO_DOMAIN_PARAMETERS 0x00000006
 #define CKO_MECHANISM         0x00000007
 #define CKO_OTP_KEY           0x00000008
+#define CKO_PROFILE           0x00000009
 #define CKO_VENDOR_DEFINED    0x80000000UL
 
 #define CKH_MONOTONIC_COUNTER  0x00000001
