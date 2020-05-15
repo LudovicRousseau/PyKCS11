@@ -1133,6 +1133,7 @@ typedef unsigned long CK_RV;
 #define CKR_RANDOM_SEED_NOT_SUPPORTED         0x00000120
 #define CKR_RANDOM_NO_RNG                     0x00000121
 #define CKR_DOMAIN_PARAMS_INVALID             0x00000130
+#define CKR_CURVE_NOT_SUPPORTED               0x00000140
 #define CKR_BUFFER_TOO_SMALL                  0x00000150
 #define CKR_SAVED_STATE_INVALID               0x00000160
 #define CKR_INFORMATION_SENSITIVE             0x00000170
@@ -1143,6 +1144,11 @@ typedef unsigned long CK_RV;
 #define CKR_MUTEX_NOT_LOCKED                  0x000001A1
 #define CKR_NEW_PIN_MODE                      0x000001B0
 #define CKR_NEXT_OTP                          0x000001B1
+#define CKR_EXCEEDED_MAX_ITERATIONS           0x000001B5
+#define CKR_FIPS_SELF_TEST_FAILED             0x000001B6
+#define CKR_LIBRARY_LOAD_FAILED               0x000001B7
+#define CKR_PIN_TOO_WEAK                      0x000001B8
+#define CKR_PUBLIC_KEY_INVALID                0x000001B9
 #define CKR_FUNCTION_REJECTED                 0x00000200
 #define CKR_VENDOR_DEFINED                    0x80000000UL
 
