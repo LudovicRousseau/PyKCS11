@@ -1,6 +1,15 @@
 History
 =======
 
+1.5.8 - May 2020, Ludovic Rousseau
+  - CKA_ALWAYS_AUTHENTICATE is boolean
+  - CKM_VENDOR_DEFINED_...
+   . Fix name: use CKM_ instead of CKR_ prefix
+   . Use an explicit hex prefix: CKM_VENDOR_DEFINED_0x45
+  - Add missing CKM_*, CKA_*, CKF_*, CKD_*, CKK_*, CKN_*, CKO_*, CKR_*
+	from PKCS#11 v3.0
+  - fix test_asymetric.py for RSA_PSS_Mechanism
+
 1.5.7 - December 2019, Ludovic Rousseau
    - add missing files in the .tar.gz
 
