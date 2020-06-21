@@ -722,6 +722,25 @@ struct ck_gcm_params {
   unsigned long ulTagBits;
 } ;
 
+struct ck_key_derivation_string_data {
+	void * pData;
+	unsigned long ulLen;
+} ;
+
+struct ck_ecies_params {
+	unsigned long dhPrimitive;
+    unsigned long kdf;
+    unsigned long ulSharedDataLen1;
+    void * pSharedData1;
+    unsigned long encScheme;
+    unsigned long ulEncKeyLenInBits;
+    unsigned long macScheme;
+    unsigned long ulMacKeyLenInBits;
+    unsigned long ulMacLenInBits;
+    unsigned long ulSharedDataLen2;
+    void * pSharedData2;
+} ;
+
 #define CKF_HW			(1 << 0)
 #define CKF_ENCRYPT		(1 << 8)
 #define CKF_DECRYPT		(1 << 9)
@@ -1292,6 +1311,10 @@ typedef struct ck_rsa_pkcs_pss_params CK_RSA_PKCS_PSS_PARAMS;
 typedef struct ck_rsa_pkcs_pss_params *CK_RSA_PKCS_PSS_PARAMS_PTR;
 
 typedef struct ck_gcm_params CK_GCM_PARAMS;
+
+typedef struct ck_key_derivation_string_data CK_KEY_DERIVATION_STRING_DATA;
+
+typedef struct ck_ecies_params CK_ECIES_PARAMS;
 
 typedef struct ck_function_list CK_FUNCTION_LIST;
 typedef struct ck_function_list *CK_FUNCTION_LIST_PTR;

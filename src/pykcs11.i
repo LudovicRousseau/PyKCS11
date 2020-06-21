@@ -251,7 +251,13 @@ typedef struct CK_DATE{
           if (!SWIG_IsOK(res2)) {
             res2 = SWIG_ConvertPtr($input, &arg2, $descriptor(CK_GCM_PARAMS*), 0);
             if (!SWIG_IsOK(res2)) {
-              SWIG_exception_fail(SWIG_ArgError(res2), "unsupported CK_MECHANISM Parameter type.");
+			  res2 = SWIG_ConvertPtr($input, &arg2, $descriptor(CK_KEY_DERIVATION_STRING_DATA*), 0);
+			  if (!SWIG_IsOK(res2)) {
+			    res2 = SWIG_ConvertPtr($input, &arg2, $descriptor(CK_ECIES_PARAMS*), 0);
+				if (!SWIG_IsOK(res2)) {
+                  SWIG_exception_fail(SWIG_ArgError(res2), "unsupported CK_MECHANISM Parameter type.");
+				}
+			  }
             }
           }
       }
@@ -294,6 +300,59 @@ typedef struct CK_GCM_PARAMS {
 };
 
 %constant int CK_GCM_PARAMS_LENGTH = sizeof(CK_GCM_PARAMS);
+
+typedef struct CK_KEY_DERIVATION_STRING_DATA {
+	void * pData;
+	unsigned long ulLen;
+} CK_KEY_DERIVATION_STRING_DATA;
+
+%extend CK_KEY_DERIVATION_STRING_DATA
+{
+    CK_KEY_DERIVATION_STRING_DATA()
+    {
+        CK_KEY_DERIVATION_STRING_DATA *p = new CK_KEY_DERIVATION_STRING_DATA();
+        p->pData = NULL;
+        p->ulLen = 0;
+        return p;
+    }
+};
+
+%constant int CK_KEY_DERIVATION_STRING_DATA_LENGTH = sizeof(CK_KEY_DERIVATION_STRING_DATA);
+
+typedef struct CK_ECIES_PARAMS {
+	unsigned long dhPrimitive;
+    unsigned long kdf;
+    unsigned long ulSharedDataLen1;
+    void * pSharedData1;
+    unsigned long encScheme;
+    unsigned long ulEncKeyLenInBits;
+    unsigned long macScheme;
+    unsigned long ulMacKeyLenInBits;
+    unsigned long ulMacLenInBits;
+    unsigned long ulSharedDataLen2;
+    void * pSharedData2;
+} CK_ECIES_PARAMS;
+
+%extend CK_ECIES_PARAMS
+{
+    CK_ECIES_PARAMS()
+    {
+        CK_ECIES_PARAMS *p = new CK_ECIES_PARAMS();
+        p->pSharedData1 = p->pSharedData2 = NULL;
+        p->dhPrimitive = 0;
+		p->kdf = 0;
+		p->ulSharedDataLen1 = 0;
+		p->encScheme = 0;
+		p->ulEncKeyLenInBits = 0;
+		p->macScheme = 0;
+		p->ulMacKeyLenInBits = 0;
+		p->ulMacLenInBits = 0;
+		p->ulSharedDataLen2 = 0;
+        return p;
+    }
+};
+
+%constant int CK_ECIES_PARAMS_LENGTH = sizeof(CK_ECIES_PARAMS);
 
 %typemap(in) void*;
 %typemap(in) void* = char*;
@@ -1023,6 +1082,9 @@ typedef unsigned long CK_RV;
 #define CKM_HKDF_DATA                  0x0000402b
 #define CKM_HKDF_KEY_GEN               0x0000402c
 #define CKM_VENDOR_DEFINED             0x80000000UL
+#define CKM_DES2_DUKPT_MAC             (CKM_VENDOR_DEFINED + 0x612)
+#define CKM_DES2_DUKPT_DATA            (CKM_VENDOR_DEFINED + 0x614)
+#define CKM_ECIES                      (CKM_VENDOR_DEFINED + 0xa00)
 
 #define CKG_MGF1_SHA1    0x00000001
 #define CKG_MGF1_SHA256  0x00000002
@@ -1190,6 +1252,13 @@ typedef unsigned long CK_RV;
 #define CKD_BLAKE2B_256_KDF      0x00000018
 #define CKD_BLAKE2B_384_KDF      0x00000019
 #define CKD_BLAKE2B_512_KDF      0x0000001a
+
+#define CKDHP_STANDARD           0x00000001
+
+#define CKES_XOR                 0x00000001
+
+#define CKMS_HMAC_SHA1	         0x00000001
+#define CKMS_SHA1		         0x00000002
 
 #define CKP_PKCS5_PBKD2_HMAC_SHA1 0x00000001
 #define CKP_PKCS5_PBKD2_HMAC_GOSTR3411     0x00000002
