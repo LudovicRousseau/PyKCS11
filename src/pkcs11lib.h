@@ -251,6 +251,13 @@ public:
 		CK_OBJECT_HANDLE& outhPublicKey,
 		CK_OBJECT_HANDLE& outhPrivateKey );
 
+	CK_RV C_DeriveKey(
+		CK_SESSION_HANDLE hSession,
+		CK_MECHANISM* pMechanism,
+		CK_OBJECT_HANDLE hBaseKey,
+		vector<CK_ATTRIBUTE_SMART> DeriveKeyTemplate,
+		CK_OBJECT_HANDLE& outhKey );
+
 	CK_RV C_WrapKey(
 		CK_SESSION_HANDLE hSession,
 		CK_MECHANISM* pMechanism,

@@ -769,6 +769,88 @@ class AES_GCM_Mechanism(object):
     def to_native(self):
         return self._mech
 
+class DUKPT_DERIVE_DATAKEY_Mechanism(object):
+    """CKM_DES2_DUKPT_DATA warpping mechanisms"""
+
+    def __init__(self, ksn):
+        """
+        :param ksn: Key Sequence Number
+        """
+        self._param = PyKCS11.LowLevel.CK_KEY_DERIVATION_STRING_DATA()
+
+        self._source_ksn = ckbytelist(ksn)
+        self._param.pData = self._source_ksn
+        self._param.ulLen = len(self._source_ksn)
+
+        self._mech = PyKCS11.LowLevel.CK_MECHANISM()
+        self._mech.mechanism = CKM_DES2_DUKPT_DATA
+        self._mech.pParameter = self._param
+        self._mech.ulParameterLen = PyKCS11.LowLevel.CK_KEY_DERIVATION_STRING_DATA_LENGTH
+
+    def to_native(self):
+        return self._mech
+
+class DUKPT_DERIVE_MACKEY_Mechanism(object):
+    """CKM_DES2_DUKPT_MAC warpping mechanisms"""
+
+    def __init__(self, ksn):
+        """
+        :param ksn: Key Sequence Number
+        """
+        self._param = PyKCS11.LowLevel.CK_KEY_DERIVATION_STRING_DATA()
+
+        self._source_ksn = ckbytelist(ksn)
+        self._param.pData = self._source_ksn
+        self._param.ulLen = len(self._source_ksn)
+
+        self._mech = PyKCS11.LowLevel.CK_MECHANISM()
+        self._mech.mechanism = CKM_DES2_DUKPT_MAC
+        self._mech.pParameter = self._param
+        self._mech.ulParameterLen = PyKCS11.LowLevel.CK_KEY_DERIVATION_STRING_DATA_LENGTH
+
+    def to_native(self):
+        return self._mech
+
+class ECIES_Mechanism(object):
+    """CKM_ECIES warpping mechanism"""
+
+    def __init__(self, dhPrimitive, kdf, sharedData1, sharedData2, encScheme, encKeyLenInBits, macScheme, macKeyLenInBits, macLenInBits):
+        """
+        :param dhPrimitive: This is the Diffie-Hellman primitive used to derive the shared secret value. Valid value -> CKDHP_STANDARD 
+        :param kdf: This is the key derivation function used on the shared secret value. Valid value -> CKD_SHA1_KDF 
+        :param sharedData1: This is the key derivation padding data shared between the two parties
+        :param sharedData2: This is the MAC padding data shared between the two parties
+        :param encScheme: This is the encryption scheme used to transform the input data. Valid value -> CKES_XOR 
+        :param encKeyLenInBits: This is the bit length of the key to use for the encryption scheme
+        :param macScheme: This is the MAC scheme used for MAC generation or validation. Valid values -> CKMS_HMAC_SHA1, CKMS_SHA1 
+        :param macKeyLenInBits: This is the bit length of the key to use for the MAC scheme
+        :param macLenInBits: This is the bit length of the MAC scheme output
+        """
+        self._param = PyKCS11.LowLevel.CK_ECIES_PARAMS()
+
+        self._source_sharedData1 = ckbytelist(sharedData1)
+        self._param.pSharedData1 = self._source_sharedData1
+        self._param.ulSharedDataLen1 = len(self._source_sharedData1)
+
+        self._source_sharedData2 = ckbytelist(sharedData2)
+        self._param.pSharedData2 = self._source_sharedData2
+        self._param.ulSharedDataLen2 = len(self._source_sharedData2)
+
+        self._param.dhPrimitive = dhPrimitive
+        self._param.kdf = kdf
+        self._param.encScheme = encScheme
+        self._param.ulEncKeyLenInBits = encKeyLenInBits
+        self._param.macScheme = macScheme
+        self._param.ulMacKeyLenInBits = macKeyLenInBits
+        self._param.ulMacLenInBits = macLenInBits
+
+        self._mech = PyKCS11.LowLevel.CK_MECHANISM()
+        self._mech.mechanism = CKM_ECIES
+        self._mech.pParameter = self._param
+        self._mech.ulParameterLen = PyKCS11.LowLevel.CK_ECIES_PARAMS_LENGTH
+
+    def to_native(self):
+        return self._mech
 
 class RSAOAEPMechanism(object):
     """RSA OAEP Wrapping mechanism"""
@@ -1402,6 +1484,23 @@ class Session(object):
         if rv != CKR_OK:
             raise PyKCS11Error(rv)
         return ck_pub_handle, ck_prv_handle
+
+    def deriveKey(self, template, baseKey, mecha=MechanismAESGENERATEKEY):
+        """
+        derive a secret key
+
+        :param template: template for the secret key
+        :param mecha: mechanism to use
+        :return: handle of the derived key
+        :rtype: PyKCS11.LowLevel.CK_OBJECT_HANDLE
+        """
+        t = self._template2ckattrlist(template)
+        ck_handle = PyKCS11.LowLevel.CK_OBJECT_HANDLE()
+        m = mecha.to_native()
+        rv = self.lib.C_DeriveKey(self.session, m, baseKey, t, ck_handle)
+        if rv != CKR_OK:
+            raise PyKCS11Error(rv)
+        return ck_handle
 
     def findObjects(self, template=()):
         """
