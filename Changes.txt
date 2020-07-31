@@ -1,6 +1,10 @@
 History
 =======
 
+1.5.9 - July 2020, Ludovic Rousseau
+  - call C_GetSlotList() with a NULL parameter to correctly initialize
+	some PKCS#11 lib conforming to PKCS#11 version 2.40.
+
 1.5.8 - May 2020, Ludovic Rousseau
   - CKA_ALWAYS_AUTHENTICATE is boolean
   - CKM_VENDOR_DEFINED_...
