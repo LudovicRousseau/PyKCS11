@@ -84,3 +84,6 @@ class TestUtil(unittest.TestCase):
         )
 
         self.session.destroyObject(AESKey)
+
+        template = [(PyKCS11.CKA_HW_FEATURE_TYPE, PyKCS11.CKH_USER_INTERFACE)]
+        o = self.session.findObjects(template)
