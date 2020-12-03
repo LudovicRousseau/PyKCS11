@@ -33,6 +33,7 @@ CKA = {}
 CKC = {}
 CKF = {}
 CKG = {}
+CKH = {}
 CKK = {}
 CKM = {}
 CKO = {}
@@ -47,6 +48,7 @@ for x in PyKCS11.LowLevel.__dict__.keys():
       or x[:4] == 'CKC_' \
       or x[:4] == 'CKF_' \
       or x[:4] == 'CKG_' \
+      or x[:4] == 'CKH_' \
       or x[:4] == 'CKK_' \
       or x[:4] == 'CKM_' \
       or x[:4] == 'CKO_' \
