@@ -1264,6 +1264,7 @@ class Session(object):
         """
         if type in (CKA_CERTIFICATE_TYPE,
                     CKA_CLASS,
+                    CKA_HW_FEATURE_TYPE,
                     CKA_KEY_GEN_MECHANISM,
                     CKA_KEY_TYPE,
                     CKA_MODULUS_BITS,
