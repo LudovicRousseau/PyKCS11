@@ -1,7 +1,7 @@
 # give some default values
 DESTDIR ?= /
 ifeq (, $(PYTHON))
-PYTHON=python
+PYTHON=python3
 endif
 PREFIX ?= $(shell $(PYTHON) -c 'import sys; print(sys.prefix)')
 COVERAGE ?= coverage
