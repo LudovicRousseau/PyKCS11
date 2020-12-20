@@ -1,0 +1,26 @@
+name: macOS Build
+
+on: [push, pull_request]
+
+jobs:
+  build:
+
+    runs-on: macos-latest
+
+    steps:
+    - uses: actions/checkout@v2
+
+    - name: Install build tools
+      run: |
+        brew install swig softhsm
+
+    - name: Build
+      run: make
+
+    - name: Install test tools
+      run: |
+        pip3 install -r dev-requirements.txt
+        softhsm2-util --init-token --slot 0 --label "A token" --pin 1234 --so-pin 123456
+
+    - name: Tests
+      run: make tests
