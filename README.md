@@ -28,7 +28,7 @@ Licence
 Status
 ======
 
-[![Build Status](https://travis-ci.org/LudovicRousseau/PyKCS11.svg?branch=master)](https://travis-ci.org/LudovicRousseau/PyKCS11)
+[![Build Status](https://travis-ci.com/LudovicRousseau/PyKCS11.svg?branch=master)](https://travis-ci.com/LudovicRousseau/PyKCS11)
 
 [![Coverage Status](https://coveralls.io/repos/github/LudovicRousseau/PyKCS11/badge.svg?branch=master)](https://coveralls.io/github/LudovicRousseau/PyKCS11?branch=master)
 
