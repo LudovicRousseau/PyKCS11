@@ -1,0 +1,62 @@
+name: Windows Build
+
+on: [push, pull_request]
+
+jobs:
+  build:
+
+    runs-on: windows-latest
+
+    strategy:
+      matrix:
+        python-version: ['3.7', '3.8', '3.9']
+
+    steps:
+    - uses: actions/checkout@v2
+
+    - name: Set up Python ${{ matrix.python-version }}
+      uses: actions/setup-python@v2
+      with:
+        python-version: ${{ matrix.python-version }}
+
+    - name: Install build tools
+      run: |
+        python --version
+        python -c "import struct; print(struct.calcsize('P') * 8)"
+        python -m pip install --upgrade pip
+        pip install -r dev-requirements.txt
+
+        # We need wheel installed to build wheels
+        pip install wheel
+
+        choco install swig --version 2.0.12 --allow-empty-checksums --yes --limit-output
+        swig -version
+
+    - name: Build
+      shell: cmd
+      run: |
+        python setup.py sdist
+        python setup.py bdist
+        python setup.py bdist_wininst
+        python setup.py bdist_msi
+        python setup.py bdist_wheel
+        python setup.py install
+        copy /Y src\LowLevel.py PyKCS11\
+        pip show PyKCS11 | python -c "import sys; print([line for line in sys.stdin if line.startswith('Location:')][0].split(':',1)[1].strip())" > _tmp
+        set /p PYKCS11_INSTALL_DIR=<_tmp
+        copy /Y %PYKCS11_INSTALL_DIR%\PyKCS11\* PyKCS11\
+        del _tmp
+
+    - name: Tests
+      shell: cmd
+      run: |
+        curl -Lo softhsm.zip https://github.com/disig/SoftHSM2-for-Windows/releases/download/v2.4.0/SoftHSM2-2.4.0-portable.zip
+        7z -bb3 -oc:\\ x softhsm.zip
+        set SOFTHSM2_CONF=C:\SoftHSM2\etc\softhsm2.conf
+        set PATH=%PATH%;C:\SoftHSM2\lib\
+        c:\\SoftHSM2\\bin\\softhsm2-util --init-token --slot 0 --label "A token" --pin 1234 --so-pin 123456
+        python run_test.py
+
+    - uses: actions/upload-artifact@v2
+      with:
+        path: dist
