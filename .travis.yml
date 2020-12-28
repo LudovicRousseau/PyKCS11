@@ -9,18 +9,17 @@ addons:
   apt:
     packages:
       - swig
-      - softhsm
+      - softhsm2
 
 before_install:
     - sudo chmod -R a+rx /etc/softhsm
     - sudo chown -R $(whoami) /var/lib/softhsm
-    - sudo sed -i 's/lib\/lib/lib/' /etc/softhsm/softhsm.conf
-    - touch /var/lib/softhsm/slot0.db
+    - mkdir /var/lib/softhsm/tokens
 
 install:
     - pip install -r dev-requirements.txt
     - pip install .
-    - softhsm --init-token --slot 0 --label "A token" --pin 1234 --so-pin 123456
+    - softhsm2-util --init-token --slot 0 --label "A token" --pin 1234 --so-pin 123456
 
 script:
     - make prepare4test
