@@ -41,7 +41,6 @@ jobs:
           sudo chmod -R a+rx /etc/softhsm
           sudo chmod a+r /etc/softhsm/softhsm2.conf
           sudo chown -R $(whoami) /var/lib/softhsm
-          mkdir /var/lib/softhsm/tokens
           softhsm2-util --init-token --slot 0 --label "A token" --pin 1234 --so-pin 123456
 
       - name: test run
