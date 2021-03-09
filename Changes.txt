@@ -3,7 +3,7 @@ History
 
 1.5.10 - December 2020, Ludovic Rousseau
   - Add CKH_* constants
-  - CKA_HW_FEATURE_TYPE artibute value is a number
+  - CKA_HW_FEATURE_TYPE attribute value is a number
   - Makefile: use python3 by default
   - minor improvements
 
