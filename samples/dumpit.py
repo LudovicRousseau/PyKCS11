@@ -1,4 +1,4 @@
-#!/usr/bin/env python
+#!/usr/bin/env python3
 
 #   Copyright (C) 2006-2014 Ludovic Rousseau (ludovic.rousseau@free.fr)
 #
@@ -15,8 +15,6 @@
 # You should have received a copy of the GNU General Public License
 # along with this program; if not, write to the Free Software
 # Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301 USA.
-
-from __future__ import print_function
 
 import PyKCS11
 import binascii
@@ -41,14 +39,18 @@ def hexx(intval):
 
 
 def dump(src, length=16):
-    FILTER = "".join([(len(repr(chr(x))) == 3) and chr(x) or "." for x in range(256)])
+    def to_ascii(x):
+        if x >= 32 and x <= 127:
+            return chr(x)
+        else:
+            return '.'
     N = 0
     result = ""
     while src:
         s, src = src[:length], src[length:]
-        hexa = " ".join(["%02X" % ord(x) for x in s])
-        s = s.translate(FILTER)
-        result += "%04X   %-*s   %s\n" % (N, length * 3, hexa, s)
+        text_hexa = " ".join(["%02X" % x for x in s])
+        text_ascii = "".join(map(to_ascii , s))
+        result += "%04X   %-*s   %s\n" % (N, length * 3, text_hexa, text_ascii)
         N += length
     return result
 
@@ -209,17 +211,18 @@ for s in slots:
                             % (o.value(), toSign)
                         )
                         signature = session.sign(o, toSign)
-                        sx = eval(b"0x" + "".join("%02X" % c for c in signature))
+                        sx = eval("0x" + "".join("%02X" % c for c in signature))
                         print("Signature:")
-                        print(dump("".join(map(chr, signature))))
+                        print(dump(list(signature)))
                         if m and e:
                             print("Verifying using following public key:")
                             print("Modulus:")
-                            print(dump("".join(map(chr, m))))
+                            print(dump(m))
                             print("Exponent:")
-                            print(dump("".join(map(chr, e))))
+                            print(dump(e))
                             decrypted = pow(sx, ex, mx)  # RSA
                             print("Decrypted:")
+                            print(hexx(decrypted))
                             d = binascii.unhexlify(hexx(decrypted))
                             print(dump(d))
                             if toSign == d[-20:]:
@@ -244,15 +247,14 @@ for s in slots:
                                 "FF" * (128 - (len(toEncrypt)) - 3),
                                 toEncrypt,
                             )
-                            padded = binascii.unhexlify(padded)
                             print(
                                 "* Decrypting with 0x%08X following data: %s"
                                 % (o.value(), toEncrypt)
                             )
                             print("padded:")
-                            print(dump(padded))
+                            print(dump(binascii.unhexlify(padded)))
                             encrypted = pow(
-                                eval("0x%sL" % binascii.hexlify(padded)), ex, mx
+                                eval("0x%s" % padded), ex, mx
                             )  # RSA
                             encrypted1 = binascii.unhexlify(hexx(encrypted))
                             print("encrypted:")
@@ -285,7 +287,7 @@ for s in slots:
                 elif session.isBin(q):
                     print(format_binary % (PyKCS11.CKA[q], len(a)))
                     if a:
-                        print(dump("".join(map(chr, a))), end="")
+                        print(dump(a), end="")
                 elif q == PyKCS11.CKA_SERIAL_NUMBER:
                     print(format_binary % (PyKCS11.CKA[q], len(a)))
                     if a:
