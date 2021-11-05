@@ -1,4 +1,4 @@
-#!/usr/bin/env python
+#!/usr/bin/env python3
 
 #   Copyright (C) 2015 Roman Pasechnik
 #   Copyright (C) 2018 Ludovic Rousseau
