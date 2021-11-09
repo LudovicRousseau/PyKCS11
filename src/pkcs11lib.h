@@ -273,6 +273,13 @@ public:
 		vector<CK_ATTRIBUTE_SMART> Template,
 		CK_OBJECT_HANDLE & outhKey);
 
+	CK_RV C_DeriveKey(
+			CK_SESSION_HANDLE hSession,
+			CK_MECHANISM *pMechanism,
+			CK_OBJECT_HANDLE hBaseKey,
+			vector<CK_ATTRIBUTE_SMART> Template,
+			CK_OBJECT_HANDLE & outkey);
+
 	CK_RV C_SeedRandom(
 		CK_SESSION_HANDLE hSession,
 		vector<unsigned char> Seed);
