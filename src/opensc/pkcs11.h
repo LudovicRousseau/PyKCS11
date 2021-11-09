@@ -166,6 +166,8 @@ extern "C" {
 #define source_data pSourceData
 #define source_data_len ulSourceDataLen
 
+#define ck_ecdh1_derive_params CK_ECDH1_DERIVE_PARAMS
+
 #define ck_rv_t CK_RV
 #define ck_notify_t CK_NOTIFY
 
@@ -682,6 +684,11 @@ typedef unsigned long ck_mechanism_type_t;
 #define CKG_MGF1_SHA384  (0x00000003)
 #define CKG_MGF1_SHA512  (0x00000004)
 
+#define CKD_NULL                 (0x00000001)
+#define CKD_SHA1_KDF             (0x00000002)
+#define CKD_SHA1_KDF_ASN1        (0x00000003)
+#define CKD_SHA1_KDF_CONCATENATE (0x00000004)
+
 
 struct ck_mechanism
 {
@@ -721,6 +728,15 @@ struct ck_gcm_params {
   unsigned long ulAADLen;
   unsigned long ulTagBits;
 } ;
+
+struct ck_ecdh1_derive_params {
+  unsigned long kdf;
+  unsigned long ulSharedDataLen;
+  void * pSharedData;
+  unsigned long ulPublicDataLen;
+  void * pPublicData;
+} ;
+
 
 #define CKF_HW			(1 << 0)
 #define CKF_ENCRYPT		(1 << 8)

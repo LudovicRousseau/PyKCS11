@@ -251,7 +251,10 @@ typedef struct CK_DATE{
           if (!SWIG_IsOK(res2)) {
             res2 = SWIG_ConvertPtr($input, &arg2, $descriptor(CK_GCM_PARAMS*), 0);
             if (!SWIG_IsOK(res2)) {
-              SWIG_exception_fail(SWIG_ArgError(res2), "unsupported CK_MECHANISM Parameter type.");
+              res2 = SWIG_ConvertPtr($input, &arg2, $descriptor(CK_ECDH1_DERIVE_PARAMS*), 0);
+              if (!SWIG_IsOK(res2)) {
+                SWIG_exception_fail(SWIG_ArgError(res2), "unsupported CK_MECHANISM Parameter type.");
+              }
             }
           }
       }
@@ -295,8 +298,8 @@ typedef struct CK_GCM_PARAMS {
 
 %constant int CK_GCM_PARAMS_LENGTH = sizeof(CK_GCM_PARAMS);
 
-%typemap(in) void*;
-%typemap(in) void* = char*;
+//%typemap(in) void*;
+//%typemap(in) void* = char*;
 
 typedef struct CK_RSA_PKCS_OAEP_PARAMS {
   unsigned long hashAlg;
@@ -344,6 +347,35 @@ typedef struct CK_RSA_PKCS_PSS_PARAMS {
 };
 
 %constant int CK_RSA_PKCS_PSS_PARAMS_LENGTH = sizeof(CK_RSA_PKCS_PSS_PARAMS);
+
+//%typemap(in) void*;
+//%typemap(in) void* = char*;
+
+typedef struct CK_ECDH1_DERIVE_PARAMS {
+	unsigned long kdf;
+	unsigned long ulSharedDataLen;
+	void* pSharedData;
+	unsigned long ulPublicDataLen;
+	void* pPublicData;
+} CK_ECDH1_DERIVE_PARAMS;
+
+%extend CK_ECDH1_DERIVE_PARAMS
+{
+	CK_ECDH1_DERIVE_PARAMS()
+	{
+		CK_ECDH1_DERIVE_PARAMS *p = new CK_ECDH1_DERIVE_PARAMS();
+		p->kdf = CKD_NULL;
+		p->pSharedData = NULL;
+		p->ulSharedDataLen = 0;
+		p->pPublicData = NULL;
+		p->ulPublicDataLen = 0;
+
+		return p;
+	}
+};
+
+%constant int CK_ECDH1_DERIVE_PARAMS_LENGTH = sizeof(CK_ECDH1_DERIVE_PARAMS);
+
 
 typedef struct CK_MECHANISM_INFO {
 %immutable;
