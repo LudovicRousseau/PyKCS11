@@ -36,7 +36,7 @@ Status
 
 API
 ===
-The API documentation is available at http://pkcs11wrap.sourceforge.net/api/
+The API documentation is available at https://pkcs11wrap.sourceforge.io/api/
 
 Unix Howto
 ==========
