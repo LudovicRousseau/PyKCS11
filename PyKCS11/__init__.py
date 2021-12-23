@@ -56,7 +56,7 @@ for x in PyKCS11.LowLevel.__dict__.keys():
       or x[:4] == 'CKS_' \
       or x[:4] == 'CKU_' \
       or x[:4] == 'CKZ_':
-        a = "%s=PyKCS11.LowLevel.%s" % (x, x)
+        a = "{}=PyKCS11.LowLevel.{}".format(x, x)
         exec(a)
         if x[3:] != "_VENDOR_DEFINED":
             eval(x[:3])[eval(x)] = x  # => CKM[CKM_RSA_PKCS] = 'CKM_RSA_PKCS'
@@ -164,7 +164,7 @@ class CK_OBJECT_HANDLE(PyKCS11.LowLevel.CK_OBJECT_HANDLE):
         dico = self.to_dict()
         lines = list()
         for key in sorted(dico.keys()):
-            lines.append("%s: %s" % (key, dico[key]))
+            lines.append("{}: {}".format(key, dico[key]))
         return "\n".join(lines)
 
 
@@ -219,11 +219,11 @@ class CkClass(object):
         for key in sorted(dico.keys()):
             type = self.fields[key]
             if type == "flags":
-                lines.append("%s: %s" % (key, ", ".join(dico[key])))
+                lines.append("{}: {}".format(key, ", ".join(dico[key])))
             elif type == "pair":
                 lines.append("%s: " % key + "%d.%d" % dico[key])
             else:
-                lines.append("%s: %s" % (key, dico[key]))
+                lines.append("{}: {}".format(key, dico[key]))
         return "\n".join(lines)
 
 
