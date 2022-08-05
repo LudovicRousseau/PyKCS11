@@ -8,7 +8,9 @@ class TestUtil(unittest.TestCase):
         self.pkcs11.load()
 
         # get SoftHSM major version
-        self.SoftHSMversion = self.pkcs11.getInfo().libraryVersion[0]
+        info = self.pkcs11.getInfo()
+        self.SoftHSMversion = info.libraryVersion[0]
+        self.manufacturer = info.manufacturerID
 
         self.slot = self.pkcs11.getSlotList(tokenPresent=True)[0]
         self.session = self.pkcs11.openSession(
@@ -144,6 +146,25 @@ class TestUtil(unittest.TestCase):
         plainText = "A test string"
 
         mech = PyKCS11.RSAOAEPMechanism(PyKCS11.CKM_SHA_1, PyKCS11.CKG_MGF1_SHA1)
+        cipherText = self.session.encrypt(self.pubKey, plainText, mech)
+        decrypted = self.session.decrypt(self.privKey, cipherText, mech)
+
+        text = "".join(map(chr, decrypted))
+
+        self.assertEqual(text, plainText)
+
+    def test_RSA_OAEPwithAAD(self):
+        if self.SoftHSMversion < 2:
+            self.skipTest("RSA OAEP only supported by SoftHSM >= 2")
+
+        if self.manufacturer.startswith("SoftHSM"):
+            self.skipTest("SoftHSMv2 returns CKR_ARGUMENTS_BAD. 'AAD' not in expected format or unsupported.")
+
+        # RSA OAEP
+        plainText = "A test string"
+
+        aad = "sample aad".encode("utf-8")
+        mech = PyKCS11.RSAOAEPMechanism(PyKCS11.CKM_SHA_1, PyKCS11.CKG_MGF1_SHA1, aad)
         cipherText = self.session.encrypt(self.pubKey, plainText, mech)
         decrypted = self.session.decrypt(self.privKey, cipherText, mech)
 

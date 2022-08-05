@@ -914,7 +914,7 @@ class RSA_PSS_Mechanism(object):
 class ECDH1_DERIVE_Mechanism(object):
     """CKM_ECDH1_DERIVE key derivation mechanism"""
 
-    def __init__(self, kdf, sharedData, publicData):
+    def __init__(self, publicData, kdf = CKD_NULL, sharedData = None):
         """
         :param kdf: Key derivation function
         :param sharedData: additional shared data
@@ -924,16 +924,16 @@ class ECDH1_DERIVE_Mechanism(object):
 
         self._param.kdf = kdf
 
+        self._public_data = ckbytelist(publicData)
+        self._param.pPublicData = self._public_data
+        self._param.ulPublicDataLen = len(self._public_data)
+
         if sharedData:
             self._shared_data = ckbytelist(sharedData)
             self._param.pSharedData = self._shared_data
             self._param.ulSharedDataLen = len(self._shared_data)
         else:
             self._source_shared_data = None
-
-        self._public_data = ckbytelist(publicData)
-        self._param.pPublicData = self._public_data
-        self._param.ulPublicDataLen = len(self._public_data)
 
         self._mech = PyKCS11.LowLevel.CK_MECHANISM()
         self._mech.mechanism = CKM_ECDH1_DERIVE
@@ -1385,7 +1385,11 @@ class Session(object):
         :rtype: integer
 
         """
-        m = mecha.to_native()
+        m = None
+        if isinstance(mecha, PyKCS11.LowLevel.CK_MECHANISM):
+            m = mecha
+        else:
+            m = mecha.to_native()
         handle = PyKCS11.LowLevel.CK_OBJECT_HANDLE()
         attrs = self._template2ckattrlist(template)
         rv = self.lib.C_DeriveKey(self.session, m, baseKey, attrs, handle)

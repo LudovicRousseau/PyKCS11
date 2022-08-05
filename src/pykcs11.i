@@ -240,7 +240,12 @@ typedef struct CK_DATE{
         // The recommanded code in C++11 should be vect->data() but
         // Microsoft Visual Studio 9.0 does not suport it and this
         // compiler is needed for Python 2.7
-        arg2 = &vect->operator[](0);
+
+        // Only set value if not null
+        if (vect)
+            arg2 = &vect->operator[](0);
+        else
+            arg2 = NULL;
     }
     else
     {
@@ -259,6 +264,7 @@ typedef struct CK_DATE{
 			      if (!SWIG_IsOK(res2)) {
                     SWIG_exception_fail(SWIG_ArgError(res2), "unsupported CK_MECHANISM Parameter type.");
 			      }
+                }
 			  }
             }
           }
@@ -281,6 +287,29 @@ typedef struct CK_MECHANISM {
 		return m;
 	}
 };
+
+// For all complex mechanism parameters which has 'void *' as a member, it must a ckbytelist
+%typemap(in) void* {
+    vector<unsigned char> *vect;
+    int res = SWIG_ConvertPtr($input, (void **)&vect, SWIGTYPE_p_std__vectorT_unsigned_char_std__allocatorT_unsigned_char_t_t, 0);
+    if (SWIG_IsOK(res))
+    {
+        // Get the data from the vector
+        // The recommanded code in C++11 should be vect->data() but
+        // Microsoft Visual Studio 9.0 does not suport it and this
+        // compiler is needed for Python 2.7
+
+        // Only set value if not null
+        if (vect)
+            arg2 = &vect->operator[](0);
+        else
+            arg2 = NULL;
+    }
+    else
+    {
+        SWIG_exception_fail(SWIG_ArgError(res), "void * members of CK_* mechanism params must be represented as ckbytelist type");
+    }
+}
 
 typedef struct CK_GCM_PARAMS {
     void * pIv;
@@ -356,8 +385,8 @@ typedef struct CK_ECIES_PARAMS {
 
 %constant int CK_ECIES_PARAMS_LENGTH = sizeof(CK_ECIES_PARAMS);
 
-%typemap(in) void*;
-%typemap(in) void* = char*;
+// %typemap(in) void*;
+// %typemap(in) void* = char*;
 
 typedef struct CK_RSA_PKCS_OAEP_PARAMS {
   unsigned long hashAlg;
@@ -383,9 +412,6 @@ typedef struct CK_RSA_PKCS_OAEP_PARAMS {
 
 %constant int CK_RSA_PKCS_OAEP_PARAMS_LENGTH = sizeof(CK_RSA_PKCS_OAEP_PARAMS);
 
-%typemap(in) void*;
-%typemap(in) void* = char*;
-
 typedef struct CK_RSA_PKCS_PSS_PARAMS {
     unsigned long hashAlg;
     unsigned long mgf;
@@ -405,9 +431,6 @@ typedef struct CK_RSA_PKCS_PSS_PARAMS {
 };
 
 %constant int CK_RSA_PKCS_PSS_PARAMS_LENGTH = sizeof(CK_RSA_PKCS_PSS_PARAMS);
-
-%typemap(in) void*;
-%typemap(in) void* = char*;
 
 typedef struct CK_ECDH1_DERIVE_PARAMS {
 	unsigned long kdf;
