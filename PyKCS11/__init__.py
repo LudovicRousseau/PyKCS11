@@ -1544,23 +1544,6 @@ class Session(object):
             raise PyKCS11Error(rv)
         return ck_pub_handle, ck_prv_handle
 
-    def deriveKey(self, template, baseKey, mecha=MechanismAESGENERATEKEY):
-        """
-        derive a secret key
-
-        :param template: template for the secret key
-        :param mecha: mechanism to use
-        :return: handle of the derived key
-        :rtype: PyKCS11.LowLevel.CK_OBJECT_HANDLE
-        """
-        t = self._template2ckattrlist(template)
-        ck_handle = PyKCS11.LowLevel.CK_OBJECT_HANDLE()
-        m = mecha.to_native()
-        rv = self.lib.C_DeriveKey(self.session, m, baseKey, t, ck_handle)
-        if rv != CKR_OK:
-            raise PyKCS11Error(rv)
-        return ck_handle
-
     def findObjects(self, template=()):
         """
         find the objects matching the template pattern

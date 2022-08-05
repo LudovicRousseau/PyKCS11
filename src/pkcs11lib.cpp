@@ -861,29 +861,6 @@ CK_RV CPKCS11Lib::C_GenerateKeyPair(
 	return rv;
 }
 
-CK_RV CPKCS11Lib::C_DeriveKey(
-	CK_SESSION_HANDLE hSession,
-	CK_MECHANISM* pMechanism,
-	CK_OBJECT_HANDLE hBaseKey,
-	vector<CK_ATTRIBUTE_SMART> DeriveKeyTemplate,
-	CK_OBJECT_HANDLE& outhKey)
-{
-	CPKCS11LIB_PROLOGUE(C_DeriveKey);
-	CK_ULONG ulDeriveKeyAttributeCount = 0;
-	CK_OBJECT_HANDLE hKey = static_cast<CK_OBJECT_HANDLE>(outhKey);
-	CK_ATTRIBUTE * pDeriveKeyTemplate = AttrVector2Template(DeriveKeyTemplate,
-		ulDeriveKeyAttributeCount);
-
-	rv = m_pFunc->C_DeriveKey(hSession, pMechanism, hBaseKey,
-		pDeriveKeyTemplate, ulDeriveKeyAttributeCount,
-		&hKey);
-	if (pDeriveKeyTemplate)
-		DestroyTemplate(pDeriveKeyTemplate, ulDeriveKeyAttributeCount);
-	outhKey = static_cast<CK_OBJECT_HANDLE>(hKey);
-	CPKCS11LIB_EPILOGUE;
-	return rv;
-}
-
 CK_RV CPKCS11Lib::C_WrapKey(
 	CK_SESSION_HANDLE hSession,
 	CK_MECHANISM* pMechanism,

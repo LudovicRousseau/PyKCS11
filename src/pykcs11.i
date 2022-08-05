@@ -383,8 +383,8 @@ typedef struct CK_RSA_PKCS_OAEP_PARAMS {
 
 %constant int CK_RSA_PKCS_OAEP_PARAMS_LENGTH = sizeof(CK_RSA_PKCS_OAEP_PARAMS);
 
-//%typemap(in) void*;
-//%typemap(in) void* = char*;
+%typemap(in) void*;
+%typemap(in) void* = char*;
 
 typedef struct CK_RSA_PKCS_PSS_PARAMS {
     unsigned long hashAlg;
@@ -406,8 +406,8 @@ typedef struct CK_RSA_PKCS_PSS_PARAMS {
 
 %constant int CK_RSA_PKCS_PSS_PARAMS_LENGTH = sizeof(CK_RSA_PKCS_PSS_PARAMS);
 
-//%typemap(in) void*;
-//%typemap(in) void* = char*;
+%typemap(in) void*;
+%typemap(in) void* = char*;
 
 typedef struct CK_ECDH1_DERIVE_PARAMS {
 	unsigned long kdf;
