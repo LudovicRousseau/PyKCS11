@@ -28,15 +28,13 @@ Licence
 Status
 ======
 
-[![Build Status](https://travis-ci.org/LudovicRousseau/PyKCS11.svg?branch=master)](https://travis-ci.org/LudovicRousseau/PyKCS11)
-
 [![Coverage Status](https://coveralls.io/repos/github/LudovicRousseau/PyKCS11/badge.svg?branch=master)](https://coveralls.io/github/LudovicRousseau/PyKCS11?branch=master)
 
 [![Build status](https://ci.appveyor.com/api/projects/status/32k1lg805scl0tt3?svg=true)](https://ci.appveyor.com/project/LudovicRousseau/pykcs11)
 
 API
 ===
-The API documentation is available at http://pkcs11wrap.sourceforge.net/api/
+The API documentation is available at https://pkcs11wrap.sourceforge.io/api/
 
 Unix Howto
 ==========

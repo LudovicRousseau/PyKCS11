@@ -1,4 +1,4 @@
-#!/usr/bin/env python
+#!/usr/bin/env python3
 
 #   Copyright (C) 2006-2014 Ludovic Rousseau (ludovic.rousseau@free.fr)
 #
@@ -16,8 +16,6 @@
 # along with this program; if not, write to the Free Software
 # Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301 USA.
 
-from __future__ import print_function
-
 import PyKCS11
 import binascii
 import getopt
@@ -31,24 +29,19 @@ import platform
 # Version no: 1.0
 
 
-def hexx(intval):
-    x = hex(intval)[2:]
-    if x[-1:].upper() == "L":
-        x = x[:-1]
-    if len(x) % 2 != 0:
-        return "0%s" % x
-    return x
-
-
 def dump(src, length=16):
-    FILTER = "".join([(len(repr(chr(x))) == 3) and chr(x) or "." for x in range(256)])
+    def to_ascii(x):
+        if x >= 32 and x <= 127:
+            return chr(x)
+        else:
+            return '.'
     N = 0
     result = ""
     while src:
         s, src = src[:length], src[length:]
-        hexa = " ".join(["%02X" % ord(x) for x in s])
-        s = s.translate(FILTER)
-        result += "%04X   %-*s   %s\n" % (N, length * 3, hexa, s)
+        text_hexa = " ".join(["%02X" % x for x in s])
+        text_ascii = "".join(map(to_ascii , s))
+        result += "%04X   %-*s   %s\n" % (N, length * 3, text_hexa, text_ascii)
         N += length
     return result
 
@@ -58,9 +51,7 @@ def usage():
     print("[-a][--all]", end=" ")
     print("[-p pin][--pin=pin] (use --pin=NULL for pinpad)", end=" ")
     print("[-c lib][--lib=lib]", end=" ")
-    print("[-S][--sign]", end=" ")
     print("[-s slot][--slot=slot]", end=" ")
-    print("[-d][--decrypt]", end=" ")
     print("[-h][--help]", end=" ")
     print()
 
@@ -69,7 +60,7 @@ try:
     opts, args = getopt.getopt(
         sys.argv[1:],
         "p:c:Sdhs:a",
-        ["pin=", "lib=", "sign", "decrypt", "slot=", "help", "all"],
+        ["pin=", "lib=", "slot=", "help", "all"],
     )
 except getopt.GetoptError:
     # print help information and exit:
@@ -77,7 +68,6 @@ except getopt.GetoptError:
     sys.exit(2)
 
 pin_available = False
-decrypt = sign = False
 lib = None
 slot = None
 token_present = True
@@ -93,10 +83,6 @@ for o, a in opts:
     elif o in ("-c", "--lib"):
         lib = a
         print("using PKCS11 lib:", lib)
-    elif o in ("-S", "--sign"):
-        sign = True
-    elif o in ("-d", "--decrypt"):
-        decrypt = True
     elif o in ("-s", "--slot"):
         slot = int(a)
     if o in ("-a", "--all"):
@@ -192,84 +178,6 @@ for s in slots:
                 print("getAttributeValue failed:", e)
                 continue
             attrDict = dict(list(zip(all_attributes, attributes)))
-            if (
-                attrDict[PyKCS11.CKA_CLASS] == PyKCS11.CKO_PRIVATE_KEY
-                and attrDict[PyKCS11.CKA_KEY_TYPE] == PyKCS11.CKK_RSA
-            ):
-                m = attrDict[PyKCS11.CKA_MODULUS]
-                e = attrDict[PyKCS11.CKA_PUBLIC_EXPONENT]
-                if m and e:
-                    mx = eval(b"0x" + str.encode("".join("%02X" % c for c in m)))
-                    ex = eval(b"0x" + str.encode("".join("%02X" % c for c in e)))
-                if sign:
-                    try:
-                        toSign = b"12345678901234567890"  # 20 bytes, SHA1 digest
-                        print(
-                            "* Signing with object 0x%08X following data: %s"
-                            % (o.value(), toSign)
-                        )
-                        signature = session.sign(o, toSign)
-                        sx = eval(b"0x" + "".join("%02X" % c for c in signature))
-                        print("Signature:")
-                        print(dump("".join(map(chr, signature))))
-                        if m and e:
-                            print("Verifying using following public key:")
-                            print("Modulus:")
-                            print(dump("".join(map(chr, m))))
-                            print("Exponent:")
-                            print(dump("".join(map(chr, e))))
-                            decrypted = pow(sx, ex, mx)  # RSA
-                            print("Decrypted:")
-                            d = binascii.unhexlify(hexx(decrypted))
-                            print(dump(d))
-                            if toSign == d[-20:]:
-                                print("*** signature VERIFIED!\n")
-                            else:
-                                print("*** signature NOT VERIFIED; decrypted value:")
-                                print(hex(decrypted), "\n")
-                        else:
-                            print(
-                                "Unable to verify signature: MODULUS/PUBLIC_EXP not found"
-                            )
-                    except PyKCS11.PyKCS11Error as e:
-                        print("Sign failed, exception:", e)
-                        break
-                if decrypt:
-                    if m and e:
-                        try:
-                            toEncrypt = "12345678901234567890"
-                            # note: PKCS1 BT2 padding should be random data,
-                            # but this is just a test and we use 0xFF...
-                            padded = "0002%s00%s" % (
-                                "FF" * (128 - (len(toEncrypt)) - 3),
-                                toEncrypt,
-                            )
-                            padded = binascii.unhexlify(padded)
-                            print(
-                                "* Decrypting with 0x%08X following data: %s"
-                                % (o.value(), toEncrypt)
-                            )
-                            print("padded:")
-                            print(dump(padded))
-                            encrypted = pow(
-                                eval("0x%sL" % binascii.hexlify(padded)), ex, mx
-                            )  # RSA
-                            encrypted1 = binascii.unhexlify(hexx(encrypted))
-                            print("encrypted:")
-                            print(dump(encrypted1))
-                            decrypted = session.decrypt(o, encrypted1)
-                            decrypted1 = "".join(chr(i) for i in decrypted)
-                            print("decrypted:")
-                            print(dump(decrypted1))
-                            if decrypted1 == toEncrypt:
-                                print("decryption SUCCESSFULL!\n")
-                            else:
-                                print("decryption FAILED!\n")
-                        except PyKCS11.PyKCS11Error as e:
-                            print("Decrypt failed, exception:", e)
-                            break
-                    else:
-                        print("ERROR: Private key don't have MODULUS/PUBLIC_EXP")
 
             print("Dumping attributes:")
             for q, a in zip(all_attributes, attributes):
@@ -285,7 +193,7 @@ for s in slots:
                 elif session.isBin(q):
                     print(format_binary % (PyKCS11.CKA[q], len(a)))
                     if a:
-                        print(dump("".join(map(chr, a))), end="")
+                        print(dump(a), end="")
                 elif q == PyKCS11.CKA_SERIAL_NUMBER:
                     print(format_binary % (PyKCS11.CKA[q], len(a)))
                     if a:

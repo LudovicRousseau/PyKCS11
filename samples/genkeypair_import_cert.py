@@ -1,4 +1,4 @@
-#!/usr/bin/env python
+#!/usr/bin/env python3
 
 #   contributed by Alex Railean, a dot railean at dekart.com
 #

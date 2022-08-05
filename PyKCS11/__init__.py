@@ -29,32 +29,34 @@ CK_UNAVAILABLE_INFORMATION = PyKCS11.LowLevel.CK_UNAVAILABLE_INFORMATION
 CK_EFFECTIVELY_INFINITE = PyKCS11.LowLevel.CK_EFFECTIVELY_INFINITE
 CK_INVALID_HANDLE = PyKCS11.LowLevel.CK_INVALID_HANDLE
 
-CKM = {}
-CKR = {}
 CKA = {}
-CKO = {}
-CKU = {}
-CKK = {}
 CKC = {}
 CKF = {}
-CKS = {}
 CKG = {}
+CKH = {}
+CKK = {}
+CKM = {}
+CKO = {}
+CKR = {}
+CKS = {}
+CKU = {}
 CKZ = {}
 
 # redefine PKCS#11 constants using well known prefixes
 for x in PyKCS11.LowLevel.__dict__.keys():
-    if x[:4] == 'CKM_' \
-      or x[:4] == 'CKR_' \
-      or x[:4] == 'CKA_' \
-      or x[:4] == 'CKO_' \
-      or x[:4] == 'CKU_' \
-      or x[:4] == 'CKK_' \
+    if x[:4] == 'CKA_' \
       or x[:4] == 'CKC_' \
       or x[:4] == 'CKF_' \
-      or x[:4] == 'CKS_' \
       or x[:4] == 'CKG_' \
+      or x[:4] == 'CKH_' \
+      or x[:4] == 'CKK_' \
+      or x[:4] == 'CKM_' \
+      or x[:4] == 'CKO_' \
+      or x[:4] == 'CKR_' \
+      or x[:4] == 'CKS_' \
+      or x[:4] == 'CKU_' \
       or x[:4] == 'CKZ_':
-        a = "%s=PyKCS11.LowLevel.%s" % (x, x)
+        a = "{}=PyKCS11.LowLevel.{}".format(x, x)
         exec(a)
         if x[3:] != "_VENDOR_DEFINED":
             eval(x[:3])[eval(x)] = x  # => CKM[CKM_RSA_PKCS] = 'CKM_RSA_PKCS'
@@ -162,7 +164,7 @@ class CK_OBJECT_HANDLE(PyKCS11.LowLevel.CK_OBJECT_HANDLE):
         dico = self.to_dict()
         lines = list()
         for key in sorted(dico.keys()):
-            lines.append("%s: %s" % (key, dico[key]))
+            lines.append("{}: {}".format(key, dico[key]))
         return "\n".join(lines)
 
 
@@ -217,11 +219,11 @@ class CkClass(object):
         for key in sorted(dico.keys()):
             type = self.fields[key]
             if type == "flags":
-                lines.append("%s: %s" % (key, ", ".join(dico[key])))
+                lines.append("{}: {}".format(key, ", ".join(dico[key])))
             elif type == "pair":
                 lines.append("%s: " % key + "%d.%d" % dico[key])
             else:
-                lines.append("%s: %s" % (key, dico[key]))
+                lines.append("{}: {}".format(key, dico[key]))
         return "\n".join(lines)
 
 
@@ -1344,6 +1346,7 @@ class Session(object):
         """
         if type in (CKA_CERTIFICATE_TYPE,
                     CKA_CLASS,
+                    CKA_HW_FEATURE_TYPE,
                     CKA_KEY_GEN_MECHANISM,
                     CKA_KEY_TYPE,
                     CKA_MODULUS_BITS,

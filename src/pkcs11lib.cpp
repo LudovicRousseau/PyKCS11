@@ -134,12 +134,19 @@ CK_RV CPKCS11Lib::C_GetSlotList(
 
 	CK_ULONG i;
 	slotList.clear();
-	CK_SLOT_ID ck_slotList[1024];
-	CK_ULONG ulSlotCount = sizeof(ck_slotList)/sizeof(ck_slotList[0]);
-	rv = m_pFunc->C_GetSlotList(tokenPresent, ck_slotList, &ulSlotCount);
+	CK_ULONG ulSlotCount;
+	rv = m_pFunc->C_GetSlotList(tokenPresent, NULL, &ulSlotCount);
 	if (CKR_OK == rv)
-		for(i=0; i<ulSlotCount; i++)
-			slotList.push_back(ck_slotList[i]);
+	{
+		CK_SLOT_ID_PTR ck_slotList;
+		ck_slotList = (CK_SLOT_ID_PTR)malloc(ulSlotCount * sizeof(CK_SLOT_ID));
+		rv = m_pFunc->C_GetSlotList(tokenPresent, ck_slotList, &ulSlotCount);
+		if (CKR_OK == rv)
+			for(i=0; i<ulSlotCount; i++)
+				slotList.push_back(ck_slotList[i]);
+
+		free(ck_slotList);
+	}
 
 	CPKCS11LIB_EPILOGUE;
 	return rv;

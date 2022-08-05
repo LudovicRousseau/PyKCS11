@@ -34,6 +34,7 @@ else:
         "/usr/lib/softhsm/libsofthsm2.so",  # Debian libsofthsm2
         "/usr/lib/softhsm/libsofthsm.so",  # Debian libsofthsm
         "/usr/lib/libsofthsm.so",  # Ubuntu 12.04 libsofthsm
+        "/usr/lib/x86_64-linux-gnu/softhsm/libsofthsm2.so",  # Ubuntu 16.04 libsofthsm2
         WINDOWS_SOFTHSM,  # Windows
     ]
 

@@ -1,4 +1,4 @@
-#!/usr/bin/env python
+#!/usr/bin/env python3
 
 #   Copyright (C) 2019 Atte Pellikka <atte.pellikka@gmail.com>
 #
