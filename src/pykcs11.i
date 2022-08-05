@@ -385,9 +385,6 @@ typedef struct CK_ECIES_PARAMS {
 
 %constant int CK_ECIES_PARAMS_LENGTH = sizeof(CK_ECIES_PARAMS);
 
-// %typemap(in) void*;
-// %typemap(in) void* = char*;
-
 typedef struct CK_RSA_PKCS_OAEP_PARAMS {
   unsigned long hashAlg;
   unsigned long mgf;

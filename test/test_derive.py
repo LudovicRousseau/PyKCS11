@@ -60,6 +60,7 @@ class TestUtil(unittest.TestCase):
         # Known base symmetric key
         knownAESKeyValue = bytes([0xAA, 0xAA, 0xAA, 0xAA, 0xBB, 0xBB, 0xBB, 0xBB,
                                         0xCC, 0xCC, 0xCC, 0xCC, 0xDD, 0xDD, 0xDD, 0xDD])
+        knownAESKeyCheckValue = (0x9E, 0xCE, 0xA2)
 
         keyID = (0x11,)
         wrapKeyTemplate = [
@@ -100,6 +101,8 @@ class TestUtil(unittest.TestCase):
         ]
         self.baseAESKey = self.session.unwrapKey(AESKey, wrappedKey, baseAESKeyTemplate, mechanism)
         self.assertIsNotNone(self.baseAESKey)
+        checkValue = self.session.encrypt(self.baseAESKey, [0] * 16, mechanism)
+        self.assertSequenceEqual(knownAESKeyCheckValue, checkValue[0:3]) # ZL6
         self.session.destroyObject(AESKey)
 
     def tearDown(self):
@@ -113,7 +116,7 @@ class TestUtil(unittest.TestCase):
 
     def test_deriveKey_ECDH1_DERIVE(self):
         if self.SoftHSMversion < 2:
-            self.skipTest("generateKey() only supported by SoftHSM >= 2")
+            self.skipTest("generateKeyPair() only supported by SoftHSM >= 2")
 
         keyID = (0x22,)
         pubTemplate = [

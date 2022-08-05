@@ -168,7 +168,7 @@ class TestUtil(unittest.TestCase):
         cipherText = self.session.encrypt(self.pubKey, plainText, mech)
         decrypted = self.session.decrypt(self.privKey, cipherText, mech)
 
-        text = "".join(map(chr, decrypted))
+        text = bytes(decrypted).decode("utf-8")
 
         self.assertEqual(text, plainText)
 
