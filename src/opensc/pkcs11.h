@@ -682,6 +682,34 @@ typedef unsigned long ck_mechanism_type_t;
 #define CKG_MGF1_SHA384  (0x00000003)
 #define CKG_MGF1_SHA512  (0x00000004)
 
+#define CKD_NULL                 (0x00000001)
+#define CKD_SHA1_KDF             (0x00000002)
+
+/* The following X9.42 DH key derivation functions are defined */
+#define CKD_SHA1_KDF_ASN1        (0x00000003UL)
+#define CKD_SHA1_KDF_CONCATENATE (0x00000004UL)
+#define CKD_SHA224_KDF           (0x00000005UL)
+#define CKD_SHA256_KDF           (0x00000006UL)
+#define CKD_SHA384_KDF           (0x00000007UL)
+#define CKD_SHA512_KDF           (0x00000008UL)
+#define CKD_CPDIVERSIFY_KDF      (0x00000009UL)
+#define CKD_SHA3_224_KDF         (0x0000000AUL)
+#define CKD_SHA3_256_KDF         (0x0000000BUL)
+#define CKD_SHA3_384_KDF         (0x0000000CUL)
+#define CKD_SHA3_512_KDF         (0x0000000DUL)
+#define CKD_SHA1_KDF_SP800       (0x0000000EUL)
+#define CKD_SHA224_KDF_SP800     (0x0000000FUL)
+#define CKD_SHA256_KDF_SP800     (0x00000010UL)
+#define CKD_SHA384_KDF_SP800     (0x00000011UL)
+#define CKD_SHA512_KDF_SP800     (0x00000012UL)
+#define CKD_SHA3_224_KDF_SP800   (0x00000013UL)
+#define CKD_SHA3_256_KDF_SP800   (0x00000014UL)
+#define CKD_SHA3_384_KDF_SP800   (0x00000015UL)
+#define CKD_SHA3_512_KDF_SP800   (0x00000016UL)
+#define CKD_BLAKE2B_160_KDF      (0x00000017UL)
+#define CKD_BLAKE2B_256_KDF      (0x00000018UL)
+#define CKD_BLAKE2B_384_KDF      (0x00000019UL)
+#define CKD_BLAKE2B_512_KDF      (0x0000001aUL)
 
 struct ck_mechanism
 {
@@ -720,6 +748,14 @@ struct ck_gcm_params {
   void * pAAD;
   unsigned long ulAADLen;
   unsigned long ulTagBits;
+} ;
+
+struct ck_ecdh1_derive_params {
+  unsigned long kdf;
+  unsigned long ulSharedDataLen;
+  void * pSharedData;
+  unsigned long ulPublicDataLen;
+  void * pPublicData;
 } ;
 
 #define CKF_HW			(1 << 0)
@@ -1292,6 +1328,9 @@ typedef struct ck_rsa_pkcs_pss_params CK_RSA_PKCS_PSS_PARAMS;
 typedef struct ck_rsa_pkcs_pss_params *CK_RSA_PKCS_PSS_PARAMS_PTR;
 
 typedef struct ck_gcm_params CK_GCM_PARAMS;
+
+typedef struct ck_ecdh1_derive_params CK_ECDH1_DERIVE_PARAMS;
+typedef struct ck_ecdh1_derive_params *CK_ECDH1_DERIVE_PARAMS_PTR;
 
 typedef struct ck_function_list CK_FUNCTION_LIST;
 typedef struct ck_function_list *CK_FUNCTION_LIST_PTR;

@@ -920,6 +920,33 @@ CK_RV CPKCS11Lib::C_UnwrapKey(
 	return rv;
 }
 
+CK_RV CPKCS11Lib::C_DeriveKey(
+		CK_SESSION_HANDLE hSession,
+		CK_MECHANISM *pMechanism,
+		CK_OBJECT_HANDLE hBaseKey,
+		vector<CK_ATTRIBUTE_SMART> Template,
+		CK_OBJECT_HANDLE & outKey)
+{
+	CPKCS11LIB_PROLOGUE(C_DeriveKey);
+	CK_OBJECT_HANDLE hKey = static_cast<CK_OBJECT_HANDLE>(outKey);
+
+	CK_ULONG ulAttributeCount = 0;
+	CK_ATTRIBUTE* pTemplate = AttrVector2Template(Template, ulAttributeCount);
+
+	rv = m_pFunc->C_DeriveKey(hSession,
+		pMechanism,
+		hBaseKey,
+		pTemplate,
+		ulAttributeCount,
+		&hKey);
+
+	if (pTemplate)
+		DestroyTemplate(pTemplate, ulAttributeCount);
+	outKey = static_cast<CK_OBJECT_HANDLE>(hKey);
+	CPKCS11LIB_EPILOGUE;
+	return rv;
+}
+
 CK_RV CPKCS11Lib::C_SeedRandom(
 	CK_SESSION_HANDLE hSession,
 	vector<unsigned char> Seed)
