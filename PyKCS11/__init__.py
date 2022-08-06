@@ -31,6 +31,7 @@ CK_INVALID_HANDLE = PyKCS11.LowLevel.CK_INVALID_HANDLE
 
 CKA = {}
 CKC = {}
+CKD = {}
 CKF = {}
 CKG = {}
 CKH = {}
@@ -46,6 +47,7 @@ CKZ = {}
 for x in PyKCS11.LowLevel.__dict__.keys():
     if x[:4] == 'CKA_' \
       or x[:4] == 'CKC_' \
+      or x[:4] == 'CKD_' \
       or x[:4] == 'CKF_' \
       or x[:4] == 'CKG_' \
       or x[:4] == 'CKH_' \
@@ -827,6 +829,39 @@ class RSA_PSS_Mechanism(object):
     def to_native(self):
         return self._mech
 
+class ECDH1_DERIVE_Mechanism(object):
+    """CKM_ECDH1_DERIVE key derivation mechanism"""
+
+    def __init__(self, publicData, kdf = CKD_NULL, sharedData = None):
+        """
+        :param publicData: Other party public key which is EC Point [PC || coord-x || coord-y].
+        :param kdf: Key derivation function. OPTIONAL. Defaults to CKD_NULL
+        :param sharedData: additional shared data. OPTIONAL
+        """
+        self._param = PyKCS11.LowLevel.CK_ECDH1_DERIVE_PARAMS()
+
+        self._param.kdf = kdf
+
+        if sharedData:
+            self._shared_data = ckbytelist(sharedData)
+            self._param.pSharedData = self._shared_data
+            self._param.ulSharedDataLen = len(self._shared_data)
+        else:
+            self._source_shared_data = None
+            self._param.ulSharedDataLen = 0
+
+        self._public_data = ckbytelist(publicData)
+        self._param.pPublicData = self._public_data
+        self._param.ulPublicDataLen = len(self._public_data)
+
+        self._mech = PyKCS11.LowLevel.CK_MECHANISM()
+        self._mech.mechanism = CKM_ECDH1_DERIVE
+        self._mech.pParameter = self._param
+        self._mech.ulParameterLen = PyKCS11.LowLevel.CK_ECDH1_DERIVE_PARAMS_LENGTH
+
+    def to_native(self):
+        return self._mech
+
 
 class DigestSession(object):
     def __init__(self, lib, session, mecha):
@@ -1251,6 +1286,26 @@ class Session(object):
         attrs = self._template2ckattrlist(template)
         rv = self.lib.C_UnwrapKey(self.session, m, unwrappingKey,
                                   data1, attrs, handle)
+        if rv != CKR_OK:
+            raise PyKCS11Error(rv)
+        return handle
+
+    def deriveKey(self, baseKey, template, mecha):
+        """
+        C_DeriveKey
+        :param baseKey: the base key handle
+        :type baseKey: integer
+        :param template: template for the unwrapped key
+        :param mecha: the decrypt mechanism to be used (use
+          `ECDH1_DERIVE_Mechanism(...)` for `CKM_ECDH1_DERIVE`)
+        :type mecha: :class:`Mechanism`
+        :return: the unwrapped key object
+        :rtype: integer
+        """
+        m = mecha.to_native()
+        handle = PyKCS11.LowLevel.CK_OBJECT_HANDLE()
+        attrs = self._template2ckattrlist(template)
+        rv = self.lib.C_DeriveKey(self.session, m, baseKey, attrs, handle)
         if rv != CKR_OK:
             raise PyKCS11Error(rv)
         return handle
