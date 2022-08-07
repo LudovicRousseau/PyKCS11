@@ -155,7 +155,7 @@ class TestUtil(unittest.TestCase):
 
     def test_RSA_OAEPwithAAD(self):
         # AAD is "Additional authentication data"
-        # (pSourceData of CK_RSA_PKCS_OAEP_PARAMS struct)
+        # (pSourceData of CK_RSA_PKCS_OAEP_PARAMS struct)
         if self.SoftHSMversion < 2:
             self.skipTest("RSA OAEP only supported by SoftHSM >= 2")
 
