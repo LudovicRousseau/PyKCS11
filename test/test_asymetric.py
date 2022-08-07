@@ -154,13 +154,16 @@ class TestUtil(unittest.TestCase):
         self.assertEqual(text, plainText)
 
     def test_RSA_OAEPwithAAD(self):
-        # AAD is "Additional authentication data"
+        # AAD is "Additional Authentication Data"
         # (pSourceData of CK_RSA_PKCS_OAEP_PARAMS struct)
         if self.SoftHSMversion < 2:
             self.skipTest("RSA OAEP only supported by SoftHSM >= 2")
 
         if self.manufacturer.startswith("SoftHSM"):
-            self.skipTest("SoftHSMv2 returns CKR_ARGUMENTS_BAD. 'AAD' not in expected format or unsupported.")
+            # SoftHSM indicates in syslog:
+            #  "SoftHSM.cpp(12412): pSourceData must be NULL"
+            # and returns CKR_ARGUMENTS_BAD
+            self.skipTest("'AAD' not (yet) supported.")
 
         plainText = "A test string"
 
