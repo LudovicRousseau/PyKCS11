@@ -4,7 +4,7 @@ ifeq (, $(PYTHON))
 PYTHON=python3
 endif
 PREFIX ?= $(shell $(PYTHON) -c 'import sys; print(sys.prefix)')
-COVERAGE ?= coverage
+COVERAGE ?= python3-coverage
 
 build: build-stamp
 
