@@ -4,8 +4,8 @@
 # PYTHONPATH=/tmp/p/usr/lib/python2.4/site-packages python test.py
 
 from setuptools import setup, Extension
-from distutils.command.build import build
-from distutils.file_util import copy_file
+from setuptools.command.build_py import build_py
+import shutil
 from sys import version_info as pyver
 from os import path, system
 import platform
@@ -65,12 +65,11 @@ else:
     libraries_val = []
 
 
-class my_build(build):
+class MyBuild(build_py):
     def run(self):
         self.run_command("build_ext")
-        copy_file("src/LowLevel.py", "PyKCS11")
-        self.run_command("build_py")
-        build.run(self)
+        shutil.copy("src/LowLevel.py", "PyKCS11")
+        build_py.run(self)
 
 
 setup(
@@ -88,10 +87,10 @@ setup(
     url="https://github.com/LudovicRousseau/PyKCS11",
     download_url="http://sourceforge.net/projects/pkcs11wrap/files/pykcs11/",
     license="GPL",
-    cmdclass={"build": my_build},
+    cmdclass={"build_py": MyBuild},
     ext_modules=[
         Extension(
-            "PyKCS11._LowLevel",
+            name="PyKCS11._LowLevel",
             sources=source_files,
             include_dirs=inc_dirs,
             library_dirs=lib_dirs,
