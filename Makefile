@@ -18,6 +18,7 @@ install: build
 clean distclean:
 	$(PYTHON) setup.py clean
 	rm -f src/pykcs11_wrap.cpp
+	rm -f src/LowLevel.py
 	rm -rf build
 	rm -f *.pyc PyKCS11/*.pyc
 	rm -f PyKCS11/LowLevel.py
