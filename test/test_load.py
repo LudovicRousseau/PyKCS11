@@ -2,7 +2,7 @@
 
 import unittest
 from PyKCS11 import PyKCS11
-from distutils.util import get_platform
+import platform
 
 
 class TestUtil(unittest.TestCase):
@@ -23,10 +23,10 @@ class TestUtil(unittest.TestCase):
         self.assertEqual(str(the_exception), "Load (%s)" % lib)
 
         # C_GetFunctionList() not found
-        if get_platform().startswith('linux'):
+        if platform.system() == 'Linux':
             # GNU/Linux
             lib = "libc.so.6"
-        elif get_platform().startswith('macosx'):
+        elif platform.system() == 'Darwin':
             # macOS
             lib = "/usr/lib/libSystem.B.dylib"
         else:
