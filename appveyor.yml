@@ -1,5 +1,7 @@
-# https://packaging.python.org/guides/supporting-windows-using-appveyor/
-os: Windows Server 2012 R2
+# appveyor.yml - https://www.appveyor.com/docs/lang/python
+---
+image:
+  - Visual Studio 2019
 
 environment:
 
