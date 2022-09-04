@@ -47,3 +47,16 @@ jobs:
         shell: bash
         run: |
           PYTHON=python3 make tests
+
+      - name: coverage
+        shell: bash
+        run: |
+          coverage erase
+          coverage run -m unittest discover
+          coverage report
+
+      - name: Covealls
+        uses: AndreMiras/coveralls-python-action@develop
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+
