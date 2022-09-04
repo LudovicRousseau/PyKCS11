@@ -5,6 +5,7 @@
 .coverage
 .swp
 .tox
+PyKCS11.egg-info
 PyKCS11/LowLevel.py
 build-stamp
 build/
