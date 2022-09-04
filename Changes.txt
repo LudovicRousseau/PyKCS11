@@ -1,6 +1,13 @@
 History
 =======
 
+1.5.11 - Septembre 2022, Ludovic Rousseau
+  - add deriveKey() with CKM_ECDH1_DERIVE and CK_ECDH1_DERIVE_PARAMS
+  - support pSourceData in OAEP params
+  - remove use of (deprecated) distutils
+  - samples: port to Python 3
+  - fix code coverage generation
+
 1.5.10 - December 2020, Ludovic Rousseau
   - Add CKH_* constants
   - CKA_HW_FEATURE_TYPE attribute value is a number
