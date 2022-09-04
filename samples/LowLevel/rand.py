@@ -1,4 +1,4 @@
-#!/usr/bin/env python
+#!/usr/bin/env python3
 
 #   Copyright (C) 2010-2014 Ludovic Rousseau <ludovic.rousseau@free.fr>
 #
@@ -15,8 +15,6 @@
 # You should have received a copy of the GNU General Public License
 # along with this program; if not, write to the Free Software
 # Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301 # USA.
-
-from __future__ import print_function
 
 import PyKCS11.LowLevel
 import os
