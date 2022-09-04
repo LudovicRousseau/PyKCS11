@@ -12,7 +12,6 @@ environment:
     - PYTHON: "C:\\Python37-x64"
     - PYTHON: "C:\\Python36"
     - PYTHON: "C:\\Python36-x64"
-    - PYTHON: "C:\\Python35-x64"
 
 cache:
   ## Cache swig, which we install via AppVeyor.
