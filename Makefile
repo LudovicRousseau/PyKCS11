@@ -46,6 +46,7 @@ tests: prepare4test
 	$(PYTHON) run_test.py
 
 coverage: prepare4test
+	$(COVERAGE) erase
 	$(COVERAGE) run run_test.py
 	$(COVERAGE) report
 	$(COVERAGE) html
