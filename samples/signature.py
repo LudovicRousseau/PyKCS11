@@ -33,7 +33,7 @@ session.login("1234")
 
 # "Hello world" in hex
 toSign = "48656c6c6f20776f726c640d0a"
-mechanism = Mechanism(CKM_SHA1_RSA_PKCS, None)
+mechanism = Mechanism(CKM_SHA256_RSA_PKCS, None)
 
 # find first private key and compute signature
 privKey = session.findObjects([(CKA_CLASS, CKO_PRIVATE_KEY)])[0]
