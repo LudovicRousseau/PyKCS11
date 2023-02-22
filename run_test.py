@@ -1,10 +1,8 @@
-#!/usr/bin/env python
+#!/usr/bin/env python3
 
 # use:
 # ./run_test.py
 # ./run_test.py test_ckbytelist.py
-
-from __future__ import print_function
 
 import unittest
 import os
