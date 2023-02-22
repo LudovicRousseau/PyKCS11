@@ -87,7 +87,8 @@ session.generateKeyPair(public_template, private_template)
 # already). It will be assumed that the raw data of the certificate are in
 # `cert`.
 
-cert = "replace this with the raw certificate itself"
+cert = b"replace this with the raw certificate itself"
+subject = b"foobar"
 
 
 # keep in mind that certain elements, such as the subject, must not be
