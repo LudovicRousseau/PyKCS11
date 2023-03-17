@@ -1608,6 +1608,26 @@ class Session(object):
 
         return res
 
+    def setAttributeValue(self, obj_id, template):
+        """
+        C_SetAttributeValue
+
+        :param obj_id: object ID returned by :func:`findObjects`
+        :type obj_id: integer
+        :param template: list of (attribute, value) pairs
+        :type template: list
+        :return: Nothing
+        :rtype: None
+        """
+
+        templ = self._template2ckattrlist(template)
+        rv = self.lib.C_SetAttributeValue(self.session, obj_id, templ)
+
+        if rv != CKR_OK:
+            raise PyKCS11Error(rv)
+
+        return None
+
     def seedRandom(self, seed):
         """
         C_SeedRandom
