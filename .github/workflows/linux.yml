@@ -27,7 +27,7 @@ jobs:
 
       - name: compile
         shell: bash
-        run: PYTHON=python3 make
+        run: make
 
       - name: test prep
         shell: bash
@@ -46,7 +46,7 @@ jobs:
       - name: test run
         shell: bash
         run: |
-          PYTHON=python3 make tests
+          make tests
 
       - name: coverage
         shell: bash
