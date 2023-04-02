@@ -3,13 +3,9 @@ from PyKCS11 import ckbytelist
 import PyKCS11.LowLevel
 import os
 import platform
-import run_test
 
 
 class TestUtil(unittest.TestCase):
-    def setUp(self):
-        run_test.set_PYKCS11LIB()
-
     def test_LowLevel(self):
         a = PyKCS11.LowLevel.CPKCS11Lib()
         self.assertIsNotNone(a)
