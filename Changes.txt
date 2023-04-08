@@ -1,6 +1,10 @@
 History
 =======
 
+1.5.12 - April 2023, Ludovic Rousseau
+  - add setAttributeValue()
+  - minor improvements
+
 1.5.11 - Septembre 2022, Ludovic Rousseau
   - add deriveKey() with CKM_ECDH1_DERIVE and CK_ECDH1_DERIVE_PARAMS
   - support pSourceData in OAEP params

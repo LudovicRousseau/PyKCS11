@@ -26,7 +26,7 @@ author = 'Giuseppe Amato (Midori), Ludovic Rousseau'
 # The short X.Y version
 version = '1.5'
 # The full version, including alpha/beta/rc tags
-release = '1.5.11'
+release = '1.5.12'
 
 
 # -- General configuration ---------------------------------------------------
