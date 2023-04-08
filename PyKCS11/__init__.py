@@ -1293,6 +1293,7 @@ class Session(object):
     def deriveKey(self, baseKey, template, mecha):
         """
         C_DeriveKey
+
         :param baseKey: the base key handle
         :type baseKey: integer
         :param template: template for the unwrapped key
