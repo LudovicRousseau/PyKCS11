@@ -51,6 +51,10 @@ coverage: prepare4test
 	$(COVERAGE) report
 	$(COVERAGE) html
 
+tox:
+	./get_PYKCS11LIB.py > tox.env
+	tox
+
 doc:
 	cd docs ; ./generate.sh
 
