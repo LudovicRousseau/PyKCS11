@@ -59,7 +59,7 @@ doc:
 	cd docs ; ./generate.sh
 
 doc-upload: doc
-	rm -r api
+	rm -rf api
 	mv docs/_build/html api
 	scp -r api ludov@web.sourceforge.net:/home/project-web/pkcs11wrap/htdocs
 
