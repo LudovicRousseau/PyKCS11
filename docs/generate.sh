@@ -1,15 +1,18 @@
 #!/bin/bash
 
-# Enable a virtualenv before running the script to avoid modifying
-# the system Python libraries
-
-if [ ! "$VIRTUAL_ENV" ]
-then
-	echo "Run it from inside a virtualenv"
-	exit 1
-fi
+set -e
 
 cd $(dirname $0)
 
+# Enable a virtualenv before running the script to avoid modifying
+# the system Python libraries
+
+virtualenv tmp
+source tmp/bin/activate
+pip3 install sphinx
+
 (cd .. ; python setup.py install)
 make html
+
+deactivate
+rm -r tmp
