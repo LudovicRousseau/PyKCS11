@@ -7,7 +7,7 @@ from setuptools import setup, Extension
 from setuptools.command.build_py import build_py
 import shutil
 from sys import version_info as pyver
-from os import path, system
+from os import path
 import platform
 
 description = """A complete PKCS#11 wrapper for Python.
