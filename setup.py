@@ -1,4 +1,4 @@
-#! /usr/bin/env python
+#! /usr/bin/env python3
 
 # python setup.py install --root=/tmp/p
 # PYTHONPATH=/tmp/p/usr/lib/python2.4/site-packages python test.py
