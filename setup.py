@@ -9,6 +9,8 @@ import shutil
 from sys import version_info as pyver
 from os import path
 import platform
+from shutil import which
+
 
 description = """A complete PKCS#11 wrapper for Python.
 You can use any PKCS#11 (aka CryptoKi) module such as the PSM which
@@ -67,6 +69,10 @@ else:
 
 class MyBuild(build_py):
     def run(self):
+        if which("swig") is None:
+            print("Install swig and try again")
+            print("")
+            exit(1)
         self.run_command("build_ext")
         shutil.copy("src/LowLevel.py", "PyKCS11")
         build_py.run(self)
