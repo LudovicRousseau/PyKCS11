@@ -7,11 +7,11 @@ cd $(dirname $0)
 # Enable a virtualenv before running the script to avoid modifying
 # the system Python libraries
 
-virtualenv tmp
+python3 -m venv tmp
 source tmp/bin/activate
-pip3 install sphinx
+pip3 install sphinx setuptools
 
-(cd .. ; python setup.py install)
+(cd .. ; python3 -m pip install .)
 make html
 
 deactivate
