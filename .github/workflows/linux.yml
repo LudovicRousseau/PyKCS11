@@ -28,32 +28,28 @@ jobs:
         shell: bash
         run: sudo apt install swig softhsm2 python3-all-dev python3-setuptools
 
-      - name: compile
-        shell: bash
-        run: make
-
-      - name: test prep
-        shell: bash
+      - name: Build
         run: |
+          python3 -m venv temp
+          source temp/bin/activate
           pip3 install -r dev-requirements.txt
-          pip3 install .
+          make
 
-      - name: test prep softhsm
+      - name: Test
         shell: bash
         run: |
           sudo chmod -R a+rx /etc/softhsm
           sudo chmod a+r /etc/softhsm/softhsm2.conf
           sudo chown -R $(whoami) /var/lib/softhsm
           softhsm2-util --init-token --slot 0 --label "A token" --pin 1234 --so-pin 123456
-
-      - name: test run
-        shell: bash
-        run: |
-          make tests
+          source temp/bin/activate
+          make install
+          make test
 
       - name: coverage
         shell: bash
         run: |
+          source temp/bin/activate
           coverage erase
           coverage run -m unittest discover
           coverage report
