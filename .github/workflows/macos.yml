@@ -15,12 +15,15 @@ jobs:
         brew install swig softhsm
 
     - name: Build
-      run: make
-
-    - name: Install test tools
       run: |
+        python3 -m venv temp
+        source temp/bin/activate
         pip3 install -r dev-requirements.txt
-        softhsm2-util --init-token --slot 0 --label "A token" --pin 1234 --so-pin 123456
+        make
 
     - name: Tests
-      run: make tests
+      run: |
+        softhsm2-util --init-token --slot 0 --label "A token" --pin 1234 --so-pin 123456
+        source temp/bin/activate
+        make install
+        make test
