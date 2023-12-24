@@ -1,8 +1,3 @@
-#! /usr/bin/env python3
-
-# python setup.py install --root=/tmp/p
-# PYTHONPATH=/tmp/p/usr/lib/python2.4/site-packages python test.py
-
 from setuptools import setup, Extension
 from setuptools.command.build_py import build_py
 import shutil
