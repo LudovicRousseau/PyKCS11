@@ -1,3 +1,5 @@
 coverage
 coveralls
 asn1crypto
+build
+setuptools

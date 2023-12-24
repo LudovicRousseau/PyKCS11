@@ -36,16 +36,26 @@ API
 ===
 The API documentation is available at https://pkcs11wrap.sourceforge.io/api/
 
-Unix Howto
-==========
-To install::
+Installation
+============
 
-    $ make build
-    $ make install (or make install DESTDIR=/foo/bar)
+    pip install pykcs11
 
+Unix build Howto
+================
+To build:
 
-Windows Howto
-=============
+	python3 -m venv temp
+	source temp/bin/activate
+	pip3 install -r dev-requirements.txt
+	make
+
+To install in editable mode:
+
+	make install
+
+Windows build Howto
+===================
 
 Prerequisites
 
@@ -62,9 +72,3 @@ cd to PyKCS11 folder and run::
 
     > nmake -f Makefile.win32 build
     > nmake -f Makefile.win32 install
-
-Windows binaries
-----------------
-
-You can get (untested) Windows binaries from https://ci.appveyor.com/project/LudovicRousseau/pykcs11 in "artifacts".
-
