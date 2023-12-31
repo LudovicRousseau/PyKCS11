@@ -8,7 +8,7 @@
  *
  * $Id: dyn_generic.h,v 1.3 2003/10/18 17:19:36 aet-guest Exp $
  */
- 
+
 #ifndef __dyn_generic_h__
 #define __dyn_generic_h__
 
@@ -93,6 +93,6 @@ typedef void (*function_ptr)(void);
 #ifdef __cplusplus
 }
 #endif
- 
+
 #endif
 
