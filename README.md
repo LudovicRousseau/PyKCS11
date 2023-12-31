@@ -64,9 +64,4 @@ Prerequisites
 
 To install:
 
-Open "Visual Studio command prompt (2010)"
-
-cd to PyKCS11 folder and run::
-
-    > nmake -f Makefile.win32 build
-    > nmake -f Makefile.win32 install
+    nmake install
