@@ -31,7 +31,7 @@ Retry: \
 	if (!m_hLib || !m_pFunc) \
 		return CKR_CRYPTOKI_NOT_INITIALIZED;
 
-#define CPKCS11LIB_EPILOGUE if (!bRetryed && m_hLib && m_pFunc && m_bAutoInitialized && \
+#define CPKCS11LIB_EPILOGUE if (!bRetryed && m_hLib && m_pFunc && \
 								CKR_CRYPTOKI_NOT_INITIALIZED == rv) { \
 								 m_pFunc->C_Initialize(NULL); \
 								 bRetryed=true; \
@@ -39,8 +39,6 @@ Retry: \
 								}
 
 CPKCS11Lib::CPKCS11Lib(void):
-m_bFinalizeOnClose(false),
-m_bAutoInitialized(false),
 m_hLib(0),
 m_pFunc(NULL)
 {
@@ -48,13 +46,11 @@ m_pFunc(NULL)
 
 CPKCS11Lib::~CPKCS11Lib(void)
 {
-	Unload();
 }
 
 CK_RV CPKCS11Lib::Load(const char* szLib)
 {
 	CK_RV rv;
-	Unload();
 	SYS_dyn_LoadLibrary((void**)&m_hLib, szLib);
 	if (!m_hLib)
 		return -1;
@@ -77,14 +73,13 @@ CK_RV CPKCS11Lib::Load(const char* szLib)
 	if (CKR_OK != rv  && CKR_CRYPTOKI_ALREADY_INITIALIZED != rv)
 		return rv;
 
-	m_bFinalizeOnClose = true;
 	return CKR_OK;
 }
 
 bool CPKCS11Lib::Unload()
 {
 	bool bRes = false;
-	if (m_hLib && m_pFunc && m_bFinalizeOnClose)
+	if (m_hLib && m_pFunc)
 		m_pFunc->C_Finalize(NULL);
 	if (m_hLib)
 	{
@@ -93,7 +88,6 @@ bool CPKCS11Lib::Unload()
 	}
 	m_hLib = 0;
 	m_pFunc = NULL;
-	m_bFinalizeOnClose = false;
 	return bRes;
 }
 
@@ -116,8 +110,6 @@ CK_RV CPKCS11Lib::C_Finalize()
 {
 	CPKCS11LIB_PROLOGUE(C_Finalize);
 	rv = m_pFunc->C_Finalize(NULL);
-	if (CKR_OK == rv)
-		m_bFinalizeOnClose = false;
 
 	CPKCS11LIB_EPILOGUE;
 	return rv;

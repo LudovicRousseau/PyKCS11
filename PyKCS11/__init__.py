@@ -458,6 +458,9 @@ class PyKCS11Error(Exception):
 class PyKCS11Lib(object):
     """ high level PKCS#11 binding """
 
+    # shared by all instances
+    _loaded_libs = dict()
+
     def __init__(self):
         self.lib = PyKCS11.LowLevel.CPKCS11Lib()
 
@@ -466,7 +469,17 @@ class PyKCS11Lib(object):
                 PyKCS11.LowLevel and PyKCS11.LowLevel.__name__ and \
                 PyKCS11.LowLevel._LowLevel and \
                 PyKCS11.LowLevel._LowLevel.__name__:
-            self.lib.Unload()
+            # decrease user number
+            PyKCS11Lib._loaded_libs[self.pkcs11dll_filename]["nb_users"] -= 1
+
+            if PyKCS11Lib._loaded_libs[self.pkcs11dll_filename]["nb_users"] == 0:
+                # unload only if no more used
+                self.lib.Unload()
+
+            # remove unused entry
+            # the case < 0 happens if lib loading failed
+            if PyKCS11Lib._loaded_libs[self.pkcs11dll_filename]["nb_users"] <= 0:
+                del PyKCS11Lib._loaded_libs[self.pkcs11dll_filename]
 
     def load(self, pkcs11dll_filename=None, *init_string):
         """
@@ -483,9 +496,25 @@ class PyKCS11Lib(object):
             pkcs11dll_filename = os.getenv("PYKCS11LIB")
             if pkcs11dll_filename is None:
                 raise PyKCS11Error(-1, "No PKCS11 library specified (set PYKCS11LIB env variable)")
-        rv = self.lib.Load(pkcs11dll_filename)
-        if rv != CKR_OK:
-            raise PyKCS11Error(rv, pkcs11dll_filename)
+
+        # remember the lib file name
+        self.pkcs11dll_filename = pkcs11dll_filename
+
+        # if the lib is already in use: reuse it
+        if pkcs11dll_filename in PyKCS11Lib._loaded_libs:
+            self.lib.Duplicate(PyKCS11Lib._loaded_libs[pkcs11dll_filename]["ref"])
+        else:
+            # else load it
+            PyKCS11Lib._loaded_libs[pkcs11dll_filename] = {
+                    "ref": self.lib,
+                    "nb_users": 0
+                    }
+            rv = self.lib.Load(pkcs11dll_filename)
+            if rv != CKR_OK:
+                raise PyKCS11Error(rv, pkcs11dll_filename)
+
+        # increase user number
+        PyKCS11Lib._loaded_libs[pkcs11dll_filename]["nb_users"] += 1
 
     def initToken(self, slot, pin, label):
         """
