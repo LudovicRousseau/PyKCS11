@@ -97,6 +97,13 @@ bool CPKCS11Lib::Unload()
 	return bRes;
 }
 
+/* duplicate a reference to a library */
+void CPKCS11Lib::Duplicate(CPKCS11Lib *ref)
+{
+    m_hLib = ref->m_hLib;
+    m_pFunc = ref->m_pFunc;
+}
+
 CK_RV CPKCS11Lib::C_Initialize()
 {
 	CPKCS11LIB_PROLOGUE(C_Initialize);

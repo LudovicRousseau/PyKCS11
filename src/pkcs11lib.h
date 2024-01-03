@@ -52,6 +52,7 @@ public:
 	~CPKCS11Lib(void);
 	CK_RV Load(const char* szLib);
 	bool Unload();
+	void Duplicate(CPKCS11Lib *ref);
 
 	CK_RV C_Initialize();
 	CK_RV C_Finalize();
