@@ -23,21 +23,6 @@
 #include <stdio.h>
 #include "dyn_generic.h"
 
-#define CPKCS11LIB_PROLOGUE(FUNCTION_NAME) \
-	bool bRetryed = false; \
-Retry: \
-	CK_RV rv; \
-	rv = CKR_OK; \
-	if (!m_hLib || !m_pFunc) \
-		return CKR_CRYPTOKI_NOT_INITIALIZED;
-
-#define CPKCS11LIB_EPILOGUE if (!bRetryed && m_hLib && m_pFunc && \
-								CKR_CRYPTOKI_NOT_INITIALIZED == rv) { \
-								 m_pFunc->C_Initialize(NULL); \
-								 bRetryed=true; \
-								 goto Retry; \
-								}
-
 CPKCS11Lib::CPKCS11Lib(void):
 m_hLib(0),
 m_pFunc(NULL)
@@ -100,18 +85,16 @@ void CPKCS11Lib::Duplicate(CPKCS11Lib *ref)
 
 CK_RV CPKCS11Lib::C_Initialize()
 {
-	CPKCS11LIB_PROLOGUE(C_Initialize);
+	CK_RV rv;
 	rv = m_pFunc->C_Initialize(NULL);
-	CPKCS11LIB_EPILOGUE;
 	return rv;
 }
 
 CK_RV CPKCS11Lib::C_Finalize()
 {
-	CPKCS11LIB_PROLOGUE(C_Finalize);
+	CK_RV rv;
 	rv = m_pFunc->C_Finalize(NULL);
 
-	CPKCS11LIB_EPILOGUE;
 	return rv;
 }
 
@@ -129,7 +112,7 @@ CK_RV CPKCS11Lib::C_GetSlotList(
 	unsigned char tokenPresent,
 	vector<long>& slotList)
 {
-	CPKCS11LIB_PROLOGUE(C_GetSlotList);
+	CK_RV rv;
 
 	CK_ULONG i;
 	slotList.clear();
@@ -147,7 +130,6 @@ CK_RV CPKCS11Lib::C_GetSlotList(
 		free(ck_slotList);
 	}
 
-	CPKCS11LIB_EPILOGUE;
 	return rv;
 }
 
@@ -155,9 +137,8 @@ CK_RV CPKCS11Lib::C_GetSlotInfo(
 	CK_SLOT_ID slotID,
 	CK_SLOT_INFO* pInfo)
 {
-	CPKCS11LIB_PROLOGUE(C_GetSlotInfo);
+	CK_RV rv;
 	rv = m_pFunc->C_GetSlotInfo(slotID, pInfo);
-	CPKCS11LIB_EPILOGUE;
 	return rv;
 }
 
@@ -165,9 +146,8 @@ CK_RV CPKCS11Lib::C_GetTokenInfo (
 	CK_SLOT_ID slotID,
 	CK_TOKEN_INFO* pInfo)
 {
-	CPKCS11LIB_PROLOGUE(C_GetTokenInfo);
+	CK_RV rv;
 	rv = m_pFunc->C_GetTokenInfo(slotID, pInfo);
-	CPKCS11LIB_EPILOGUE;
 	return rv;
 }
 
@@ -176,12 +156,11 @@ CK_RV CPKCS11Lib::C_InitToken(
 	vector<unsigned char> pin,
 	const char* pLabel)
 {
-	CPKCS11LIB_PROLOGUE(C_InitToken);
+	CK_RV rv;
 	CK_ULONG ulPinLen = 0;
 	CK_BYTE* pPin = Vector2Buffer(pin, ulPinLen);
 	rv = m_pFunc->C_InitToken(slotID, (CK_UTF8CHAR_PTR) pPin, ulPinLen,
 		(CK_CHAR*)pLabel);
-	CPKCS11LIB_EPILOGUE;
 	return rv;
 }
 
@@ -189,11 +168,10 @@ CK_RV CPKCS11Lib::C_InitPIN(
 	CK_SESSION_HANDLE hSession,
 	vector<unsigned char> pin)
 {
-	CPKCS11LIB_PROLOGUE(C_InitPIN);
+	CK_RV rv;
 	CK_ULONG ulPinLen = 0;
 	CK_BYTE* pPin = Vector2Buffer(pin, ulPinLen);
 	rv = m_pFunc->C_InitPIN(hSession, (CK_UTF8CHAR_PTR) pPin, ulPinLen);
-	CPKCS11LIB_EPILOGUE;
 	return rv;
 }
 
@@ -202,7 +180,7 @@ CK_RV CPKCS11Lib::C_SetPIN(
 	vector<unsigned char> OldPin,
 	vector<unsigned char> NewPin)
 {
-	CPKCS11LIB_PROLOGUE(C_SetPIN);
+	CK_RV rv;
 	CK_ULONG ulOldLen = 0;
 	CK_BYTE* pOldPin = Vector2Buffer(OldPin, ulOldLen);
 	CK_ULONG ulNewLen = 0;
@@ -210,7 +188,6 @@ CK_RV CPKCS11Lib::C_SetPIN(
 	rv = m_pFunc->C_SetPIN(hSession,
 		(CK_UTF8CHAR_PTR)pOldPin, ulOldLen,
 		(CK_UTF8CHAR_PTR)pNewPin, ulNewLen);
-	CPKCS11LIB_EPILOGUE;
 	return rv;
 }
 
@@ -219,27 +196,24 @@ CK_RV CPKCS11Lib::C_OpenSession(
 	CK_FLAGS flags,
 	CK_SESSION_HANDLE& outhSession)
 {
-	CPKCS11LIB_PROLOGUE(C_OpenSession);
+	CK_RV rv;
 	rv = m_pFunc->C_OpenSession(slotID, flags, NULL, NULL, &outhSession);
-	CPKCS11LIB_EPILOGUE;
 	return rv;
 }
 
 CK_RV CPKCS11Lib::C_CloseSession(
 	CK_SESSION_HANDLE hSession)
 {
-	CPKCS11LIB_PROLOGUE(C_CloseSession);
+	CK_RV rv;
 	rv = m_pFunc->C_CloseSession(hSession);
-	CPKCS11LIB_EPILOGUE;
 	return rv;
 }
 
 CK_RV CPKCS11Lib::C_CloseAllSessions(
 	CK_SLOT_ID slotID)
 {
-	CPKCS11LIB_PROLOGUE(C_CloseAllSessions);
+	CK_RV rv;
 	rv = m_pFunc->C_CloseAllSessions(slotID);
-	CPKCS11LIB_EPILOGUE;
 	return rv;
 }
 
@@ -247,9 +221,8 @@ CK_RV CPKCS11Lib::C_GetSessionInfo(
 	CK_SESSION_HANDLE hSession,
 	CK_SESSION_INFO* pInfo)
 {
-	CPKCS11LIB_PROLOGUE(C_GetSessionInfo);
+	CK_RV rv;
 	rv = m_pFunc->C_GetSessionInfo(hSession, pInfo);
-	CPKCS11LIB_EPILOGUE;
 	return rv;
 }
 
@@ -258,20 +231,18 @@ CK_RV CPKCS11Lib::C_Login(
 	CK_USER_TYPE userType,
 	vector<unsigned char> pin)
 {
-	CPKCS11LIB_PROLOGUE(C_Login);
+	CK_RV rv;
 	CK_ULONG ulPinLen = 0;
 	CK_BYTE* pPin = Vector2Buffer(pin, ulPinLen);
 	rv = m_pFunc->C_Login(hSession, userType, (CK_UTF8CHAR_PTR)pPin, ulPinLen);
-	CPKCS11LIB_EPILOGUE;
 	return rv;
 }
 
 CK_RV CPKCS11Lib::C_Logout(
 	CK_SESSION_HANDLE hSession)
 {
-	CPKCS11LIB_PROLOGUE(C_Logout);
+	CK_RV rv;
 	rv = m_pFunc->C_Logout(hSession);
-	CPKCS11LIB_EPILOGUE;
 	return rv;
 }
 
@@ -280,7 +251,7 @@ CK_RV CPKCS11Lib::C_CreateObject(
 	vector<CK_ATTRIBUTE_SMART> Template,
 	CK_OBJECT_HANDLE& outhObject)
 {
-	CPKCS11LIB_PROLOGUE(C_CreateObject);
+	CK_RV rv;
 	CK_ULONG ulCount = 0;
 	CK_OBJECT_HANDLE hObj = static_cast<CK_OBJECT_HANDLE>(outhObject);
 
@@ -290,7 +261,6 @@ CK_RV CPKCS11Lib::C_CreateObject(
 	if (pTemplate)
 		DestroyTemplate(pTemplate, ulCount);
 	outhObject = static_cast<CK_OBJECT_HANDLE>(hObj);
-	CPKCS11LIB_EPILOGUE;
 	return rv;
 }
 
@@ -298,9 +268,8 @@ CK_RV CPKCS11Lib::C_DestroyObject(
 	CK_SESSION_HANDLE hSession,
 	CK_OBJECT_HANDLE hObject)
 {
-	CPKCS11LIB_PROLOGUE(C_DestroyObject);
+	CK_RV rv;
 	rv = m_pFunc->C_DestroyObject(hSession, (CK_OBJECT_HANDLE)hObject);
-	CPKCS11LIB_EPILOGUE;
 	return rv;
 }
 
@@ -309,9 +278,8 @@ CK_RV CPKCS11Lib::C_GetObjectSize(
 	CK_OBJECT_HANDLE hObject,
 	CK_ULONG* pulSize)
 {
-	CPKCS11LIB_PROLOGUE(C_GetObjectSize);
+	CK_RV rv;
 	rv = m_pFunc->C_GetObjectSize(hSession, (CK_OBJECT_HANDLE)hObject, pulSize);
-	CPKCS11LIB_EPILOGUE;
 	return rv;
 }
 
@@ -320,7 +288,7 @@ CK_RV CPKCS11Lib::C_GetAttributeValue (
 	CK_OBJECT_HANDLE hObject,
 	vector<CK_ATTRIBUTE_SMART> &Template)
 {
-	CPKCS11LIB_PROLOGUE(C_GetAttributeValue);
+	CK_RV rv;
 	CK_ULONG ulCount = 0, i;
 	CK_ATTRIBUTE * pTemplate = AttrVector2Template(Template, ulCount);
 
@@ -338,7 +306,6 @@ CK_RV CPKCS11Lib::C_GetAttributeValue (
 	}
 	if (pTemplate)
 		DestroyTemplate(pTemplate, ulCount);
-	CPKCS11LIB_EPILOGUE;
 	return rv;
 }
 
@@ -347,7 +314,7 @@ CK_RV CPKCS11Lib::C_SetAttributeValue(
 	CK_OBJECT_HANDLE hObject,
 	vector<CK_ATTRIBUTE_SMART> Template)
 {
-	CPKCS11LIB_PROLOGUE(C_SetAttributeValue);
+	CK_RV rv;
 	CK_ULONG ulCount = 0;
 	CK_ATTRIBUTE * pTemplate = AttrVector2Template(Template, ulCount);
 
@@ -355,7 +322,6 @@ CK_RV CPKCS11Lib::C_SetAttributeValue(
 		pTemplate, ulCount);
 	if (pTemplate)
 		DestroyTemplate(pTemplate, ulCount);
-	CPKCS11LIB_EPILOGUE;
 	return rv;
 }
 
@@ -363,13 +329,12 @@ CK_RV CPKCS11Lib::C_FindObjectsInit(
 	CK_SESSION_HANDLE hSession,
 	vector<CK_ATTRIBUTE_SMART> &Template)
 {
-	CPKCS11LIB_PROLOGUE(C_FindObjectsInit);
+	CK_RV rv;
 	CK_ULONG ulCount = 0;
 	CK_ATTRIBUTE * pTemplate = AttrVector2Template(Template, ulCount);
 	rv = m_pFunc->C_FindObjectsInit(hSession, pTemplate, ulCount);
 	if (pTemplate)
 		DestroyTemplate(pTemplate, ulCount);
-	CPKCS11LIB_EPILOGUE;
 	return rv;
 }
 
@@ -377,7 +342,7 @@ CK_RV CPKCS11Lib::C_FindObjects(
 	CK_SESSION_HANDLE hSession,
 	vector<CK_OBJECT_HANDLE>& objectList)
 {
-	CPKCS11LIB_PROLOGUE(C_FindObjects);
+	CK_RV rv;
 	CK_ULONG i;
 	if (!objectList.size())
 		return CKR_ARGUMENTS_BAD;
@@ -393,16 +358,14 @@ CK_RV CPKCS11Lib::C_FindObjects(
 	}
 	if (pList)
 		delete [] pList;
-	CPKCS11LIB_EPILOGUE;
 	return rv;
 }
 
 CK_RV CPKCS11Lib::C_FindObjectsFinal(
 	CK_SESSION_HANDLE hSession)
 {
-	CPKCS11LIB_PROLOGUE(C_FindObjectsFinal);
+	CK_RV rv;
 	rv = m_pFunc->C_FindObjectsFinal(hSession);
-	CPKCS11LIB_EPILOGUE;
 	return rv;
 }
 
@@ -411,9 +374,8 @@ CK_RV CPKCS11Lib::C_EncryptInit(
 	CK_MECHANISM* pMechanism,
 	CK_OBJECT_HANDLE hKey)
 {
-	CPKCS11LIB_PROLOGUE(C_EncryptInit);
+	CK_RV rv;
 	rv = m_pFunc->C_EncryptInit(hSession, pMechanism, (CK_OBJECT_HANDLE)hKey);
-	CPKCS11LIB_EPILOGUE;
 	return rv;
 }
 
@@ -422,7 +384,7 @@ CK_RV CPKCS11Lib::C_Encrypt(
 	vector<unsigned char> inData,
 	vector<unsigned char> &outEncryptedData)
 {
-	CPKCS11LIB_PROLOGUE(C_Encrypt);
+	CK_RV rv;
 
 	if (!inData.size())
 		return CKR_ARGUMENTS_BAD;
@@ -441,7 +403,6 @@ CK_RV CPKCS11Lib::C_Encrypt(
 		delete []pOutData;
 	if (pInData)
 		delete []pInData;
-	CPKCS11LIB_EPILOGUE;
 	return rv;
 }
 
@@ -450,7 +411,7 @@ CK_RV CPKCS11Lib::C_EncryptUpdate(
 	vector<unsigned char> inData,
 	vector<unsigned char> &outEncryptedData)
 {
-	CPKCS11LIB_PROLOGUE(C_EncryptUpdate);
+	CK_RV rv;
 	if (!inData.size())
 		return CKR_ARGUMENTS_BAD;
 
@@ -468,7 +429,6 @@ CK_RV CPKCS11Lib::C_EncryptUpdate(
 		delete []pOutData;
 	if (pInData)
 		delete []pInData;
-	CPKCS11LIB_EPILOGUE;
 	return rv;
 }
 
@@ -476,7 +436,7 @@ CK_RV CPKCS11Lib::C_EncryptFinal(
 	CK_SESSION_HANDLE hSession,
 	vector<unsigned char> &outEncryptedData)
 {
-	CPKCS11LIB_PROLOGUE(C_EncryptFinal);
+	CK_RV rv;
 
 	CK_ULONG ulOutDataLen = 0;
 	CK_BYTE* pOutData = Vector2Buffer(outEncryptedData, ulOutDataLen);
@@ -487,7 +447,6 @@ CK_RV CPKCS11Lib::C_EncryptFinal(
 		Buffer2Vector(pOutData, ulOutDataLen, outEncryptedData, true);
 	if (pOutData)
 		delete []pOutData;
-	CPKCS11LIB_EPILOGUE;
 	return rv;
 }
 
@@ -496,9 +455,8 @@ CK_RV CPKCS11Lib::C_DecryptInit(
 	CK_MECHANISM* pMechanism,
 	CK_OBJECT_HANDLE hKey)
 {
-	CPKCS11LIB_PROLOGUE(C_DecryptInit);
+	CK_RV rv;
 	rv = m_pFunc->C_DecryptInit(hSession, pMechanism, (CK_OBJECT_HANDLE)hKey);
-	CPKCS11LIB_EPILOGUE;
 	return rv;
 }
 
@@ -507,7 +465,7 @@ CK_RV CPKCS11Lib::C_Decrypt(
 	vector<unsigned char> inEncryptedData,
 	vector<unsigned char> &outData)
 {
-	CPKCS11LIB_PROLOGUE(C_Decrypt);
+	CK_RV rv;
 	if (!inEncryptedData.size())
 		return CKR_ARGUMENTS_BAD;
 
@@ -525,7 +483,6 @@ CK_RV CPKCS11Lib::C_Decrypt(
 		delete []pOutData;
 	if (pInData)
 		delete []pInData;
-	CPKCS11LIB_EPILOGUE;
 	return rv;
 }
 
@@ -534,7 +491,7 @@ CK_RV CPKCS11Lib::C_DecryptUpdate(
 	vector<unsigned char> inEncryptedData,
 	vector<unsigned char> &outData)
 {
-	CPKCS11LIB_PROLOGUE(C_DecryptUpdate);
+	CK_RV rv;
 
 	if (!inEncryptedData.size())
 		return CKR_ARGUMENTS_BAD;
@@ -553,7 +510,6 @@ CK_RV CPKCS11Lib::C_DecryptUpdate(
 		delete []pOutData;
 	if (pInData)
 		delete []pInData;
-	CPKCS11LIB_EPILOGUE;
 	return rv;
 }
 
@@ -561,7 +517,7 @@ CK_RV CPKCS11Lib::C_DecryptFinal(
 	CK_SESSION_HANDLE hSession,
 	vector<unsigned char> &outData)
 {
-	CPKCS11LIB_PROLOGUE(C_DecryptFinal);
+	CK_RV rv;
 	CK_ULONG ulOutDataLen = 0;
 	CK_BYTE* pOutData = Vector2Buffer(outData, ulOutDataLen);
 
@@ -571,7 +527,6 @@ CK_RV CPKCS11Lib::C_DecryptFinal(
 		Buffer2Vector(pOutData, ulOutDataLen, outData, true);
 	if (pOutData)
 		delete []pOutData;
-	CPKCS11LIB_EPILOGUE;
 	return rv;
 }
 
@@ -579,9 +534,8 @@ CK_RV CPKCS11Lib::C_DigestInit(
 	CK_SESSION_HANDLE hSession,
 	CK_MECHANISM* pMechanism)
 {
-	CPKCS11LIB_PROLOGUE(C_DigestInit);
+	CK_RV rv;
 	rv = m_pFunc->C_DigestInit(hSession, pMechanism);
-	CPKCS11LIB_EPILOGUE;
 	return rv;
 }
 
@@ -590,7 +544,7 @@ CK_RV CPKCS11Lib::C_Digest(
 	vector<unsigned char> inData,
 	vector<unsigned char> &outDigest)
 {
-	CPKCS11LIB_PROLOGUE(C_Digest);
+	CK_RV rv;
 	if (!inData.size())
 		return CKR_ARGUMENTS_BAD;
 
@@ -608,7 +562,6 @@ CK_RV CPKCS11Lib::C_Digest(
 		delete []pOutData;
 	if (pInData)
 		delete []pInData;
-	CPKCS11LIB_EPILOGUE;
 	return rv;
 }
 
@@ -616,7 +569,7 @@ CK_RV CPKCS11Lib::C_DigestUpdate(
 	CK_SESSION_HANDLE hSession,
 	vector<unsigned char> inData)
 {
-	CPKCS11LIB_PROLOGUE(C_DigestUpdate);
+	CK_RV rv;
 	if (!inData.size())
 		return CKR_ARGUMENTS_BAD;
 
@@ -626,7 +579,6 @@ CK_RV CPKCS11Lib::C_DigestUpdate(
 	rv = m_pFunc->C_DigestUpdate(hSession, pInData, ulInDataLen);
 	if (pInData)
 		delete []pInData;
-	CPKCS11LIB_EPILOGUE;
 	return rv;
 }
 
@@ -634,9 +586,8 @@ CK_RV CPKCS11Lib::C_DigestKey (
 	CK_SESSION_HANDLE hSession,
 	CK_OBJECT_HANDLE hKey)
 {
-	CPKCS11LIB_PROLOGUE(C_DigestKey);
+	CK_RV rv;
 	rv = m_pFunc->C_DigestKey(hSession, (CK_OBJECT_HANDLE)hKey);
-	CPKCS11LIB_EPILOGUE;
 	return rv;
 }
 
@@ -644,7 +595,7 @@ CK_RV CPKCS11Lib::C_DigestFinal(
 	CK_SESSION_HANDLE hSession,
 	vector<unsigned char> &outDigest)
 {
-	CPKCS11LIB_PROLOGUE(C_DigestFinal);
+	CK_RV rv;
 	CK_ULONG ulOutDataLen = 0;
 	CK_BYTE* pOutData = Vector2Buffer(outDigest, ulOutDataLen);
 
@@ -654,7 +605,6 @@ CK_RV CPKCS11Lib::C_DigestFinal(
 		Buffer2Vector(pOutData, ulOutDataLen, outDigest, true);
 	if (pOutData)
 		delete []pOutData;
-	CPKCS11LIB_EPILOGUE;
 	return rv;
 }
 
@@ -663,9 +613,8 @@ CK_RV CPKCS11Lib::C_SignInit(
 	CK_MECHANISM* pMechanism,
 	CK_OBJECT_HANDLE hKey)
 {
-	CPKCS11LIB_PROLOGUE(C_SignInit);
+	CK_RV rv;
 	rv = m_pFunc->C_SignInit(hSession, pMechanism, (CK_OBJECT_HANDLE)hKey);
-	CPKCS11LIB_EPILOGUE;
 	return rv;
 }
 
@@ -674,7 +623,7 @@ CK_RV CPKCS11Lib::C_Sign(
 	vector<unsigned char> inData,
 	vector<unsigned char> &outSignature)
 {
-	CPKCS11LIB_PROLOGUE(C_Sign);
+	CK_RV rv;
 	if (!inData.size())
 		return CKR_ARGUMENTS_BAD;
 
@@ -692,7 +641,6 @@ CK_RV CPKCS11Lib::C_Sign(
 		delete []pOutData;
 	if (pInData)
 		delete []pInData;
-	CPKCS11LIB_EPILOGUE;
 	return rv;
 }
 
@@ -700,7 +648,7 @@ CK_RV CPKCS11Lib::C_SignUpdate(
 	CK_SESSION_HANDLE hSession,
 	vector<unsigned char> inData)
 {
-	CPKCS11LIB_PROLOGUE(C_SignUpdate);
+	CK_RV rv;
 	if (!inData.size())
 		return CKR_ARGUMENTS_BAD;
 
@@ -710,7 +658,6 @@ CK_RV CPKCS11Lib::C_SignUpdate(
 	rv = m_pFunc->C_SignUpdate(hSession, pInData, ulInDataLen);
 	if (pInData)
 		delete []pInData;
-	CPKCS11LIB_EPILOGUE;
 	return rv;
 }
 
@@ -718,7 +665,7 @@ CK_RV CPKCS11Lib::C_SignFinal (
 	CK_SESSION_HANDLE hSession,
 	vector<unsigned char> &outSignature)
 {
-	CPKCS11LIB_PROLOGUE(C_SignFinal);
+	CK_RV rv;
 	CK_ULONG ulOutDataLen = 0;
 	CK_BYTE* pOutData = Vector2Buffer(outSignature, ulOutDataLen);
 
@@ -728,7 +675,6 @@ CK_RV CPKCS11Lib::C_SignFinal (
 		Buffer2Vector(pOutData, ulOutDataLen, outSignature, true);
 	if (pOutData)
 		delete []pOutData;
-	CPKCS11LIB_EPILOGUE;
 	return rv;
 }
 
@@ -737,9 +683,8 @@ CK_RV CPKCS11Lib::C_VerifyInit (
 	CK_MECHANISM* pMechanism,
 	CK_OBJECT_HANDLE hKey)
 {
-	CPKCS11LIB_PROLOGUE(C_VerifyInit);
+	CK_RV rv;
 	rv = m_pFunc->C_VerifyInit(hSession, pMechanism, (CK_OBJECT_HANDLE)hKey);
-	CPKCS11LIB_EPILOGUE;
 	return rv;
 }
 
@@ -748,7 +693,7 @@ CK_RV CPKCS11Lib::C_Verify(
 	vector<unsigned char> inData,
 	vector<unsigned char> inSignature)
 {
-	CPKCS11LIB_PROLOGUE(C_Verify);
+	CK_RV rv;
 	if (!inData.size())
 		return CKR_ARGUMENTS_BAD;
 	if (!inSignature.size())
@@ -766,7 +711,6 @@ CK_RV CPKCS11Lib::C_Verify(
 		delete []pInData;
 	if (pInSignature)
 		delete []pInSignature;
-	CPKCS11LIB_EPILOGUE;
 	return rv;
 }
 
@@ -774,7 +718,7 @@ CK_RV CPKCS11Lib::C_VerifyUpdate(
 	CK_SESSION_HANDLE hSession,
 	vector<unsigned char> inData)
 {
-	CPKCS11LIB_PROLOGUE(C_VerifyUpdate);
+	CK_RV rv;
 	if (!inData.size())
 		return CKR_ARGUMENTS_BAD;
 
@@ -785,7 +729,6 @@ CK_RV CPKCS11Lib::C_VerifyUpdate(
 
 	if (pInData)
 		delete []pInData;
-	CPKCS11LIB_EPILOGUE;
 	return rv;
 }
 
@@ -793,7 +736,7 @@ CK_RV CPKCS11Lib::C_VerifyFinal(
 	CK_SESSION_HANDLE hSession,
 	vector<unsigned char> inSignature)
 {
-	CPKCS11LIB_PROLOGUE(C_VerifyFinal);
+	CK_RV rv;
 	if (!inSignature.size())
 		return CKR_ARGUMENTS_BAD;
 
@@ -804,7 +747,6 @@ CK_RV CPKCS11Lib::C_VerifyFinal(
 
 	if (pInSignature)
 		delete []pInSignature;
-	CPKCS11LIB_EPILOGUE;
 	return rv;
 }
 
@@ -814,7 +756,7 @@ CK_RV CPKCS11Lib::C_GenerateKey(
 	vector<CK_ATTRIBUTE_SMART> Template,
 	CK_OBJECT_HANDLE& outhKey)
 {
-	CPKCS11LIB_PROLOGUE(C_GenerateKey);
+	CK_RV rv;
 	CK_ULONG ulCount = 0;
 	CK_OBJECT_HANDLE hKey = static_cast<CK_OBJECT_HANDLE>(outhKey);
 	CK_ATTRIBUTE * pTemplate = AttrVector2Template(Template, ulCount);
@@ -824,7 +766,6 @@ CK_RV CPKCS11Lib::C_GenerateKey(
 	if (pTemplate)
 		DestroyTemplate(pTemplate, ulCount);
 	outhKey = static_cast<CK_OBJECT_HANDLE>(hKey);
-	CPKCS11LIB_EPILOGUE;
 	return rv;
 }
 
@@ -836,7 +777,7 @@ CK_RV CPKCS11Lib::C_GenerateKeyPair(
 	CK_OBJECT_HANDLE& outhPublicKey,
 	CK_OBJECT_HANDLE& outhPrivateKey)
 {
-	CPKCS11LIB_PROLOGUE(C_GenerateKeyPair);
+	CK_RV rv;
 	CK_ULONG ulPublicKeyAttributeCount = 0, ulPrivateKeyAttributeCount = 0;
 	CK_OBJECT_HANDLE hPublicKey = static_cast<CK_OBJECT_HANDLE>(outhPublicKey);
 	CK_OBJECT_HANDLE hPrivateKey = static_cast<CK_OBJECT_HANDLE>(outhPrivateKey);
@@ -856,7 +797,6 @@ CK_RV CPKCS11Lib::C_GenerateKeyPair(
 		DestroyTemplate(pPrivateKeyTemplate, ulPrivateKeyAttributeCount);
 	outhPublicKey = static_cast<CK_OBJECT_HANDLE>(hPublicKey);
 	outhPrivateKey = static_cast<CK_OBJECT_HANDLE>(hPrivateKey);
-	CPKCS11LIB_EPILOGUE;
 	return rv;
 }
 
@@ -867,7 +807,7 @@ CK_RV CPKCS11Lib::C_WrapKey(
 	CK_OBJECT_HANDLE hKey,
 	vector<unsigned char> &WrappedKey)
 {
-	CPKCS11LIB_PROLOGUE(C_WrapKey);
+	CK_RV rv;
 	CK_ULONG ulOutDataLen = 0;
 	CK_BYTE* pOutData = Vector2Buffer(WrappedKey, ulOutDataLen);
 
@@ -879,7 +819,6 @@ CK_RV CPKCS11Lib::C_WrapKey(
 		Buffer2Vector(pOutData, ulOutDataLen, WrappedKey, true);
 	if (pOutData)
 		delete []pOutData;
-	CPKCS11LIB_EPILOGUE;
 	return rv;
 }
 
@@ -891,7 +830,7 @@ CK_RV CPKCS11Lib::C_UnwrapKey(
 	vector<CK_ATTRIBUTE_SMART> Template,
 	CK_OBJECT_HANDLE& outhKey)
 {
-	CPKCS11LIB_PROLOGUE(C_UnwrapKey);
+	CK_RV rv;
 	CK_OBJECT_HANDLE hKey = static_cast<CK_OBJECT_HANDLE>(outhKey);
 	if (!WrappedKey.size())
 		return CKR_ARGUMENTS_BAD;
@@ -915,7 +854,6 @@ CK_RV CPKCS11Lib::C_UnwrapKey(
 	if (pTemplate)
 		DestroyTemplate(pTemplate, ulAttributeCount);
 	outhKey = static_cast<CK_OBJECT_HANDLE>(hKey);
-	CPKCS11LIB_EPILOGUE;
 	return rv;
 }
 
@@ -926,7 +864,7 @@ CK_RV CPKCS11Lib::C_DeriveKey(
 		vector<CK_ATTRIBUTE_SMART> Template,
 		CK_OBJECT_HANDLE & outKey)
 {
-	CPKCS11LIB_PROLOGUE(C_DeriveKey);
+	CK_RV rv;
 	CK_OBJECT_HANDLE hKey = static_cast<CK_OBJECT_HANDLE>(outKey);
 
 	CK_ULONG ulAttributeCount = 0;
@@ -942,7 +880,6 @@ CK_RV CPKCS11Lib::C_DeriveKey(
 	if (pTemplate)
 		DestroyTemplate(pTemplate, ulAttributeCount);
 	outKey = static_cast<CK_OBJECT_HANDLE>(hKey);
-	CPKCS11LIB_EPILOGUE;
 	return rv;
 }
 
@@ -950,13 +887,12 @@ CK_RV CPKCS11Lib::C_SeedRandom(
 	CK_SESSION_HANDLE hSession,
 	vector<unsigned char> Seed)
 {
-	CPKCS11LIB_PROLOGUE(C_SeedRandom);
+	CK_RV rv;
 	CK_ULONG ulInDataLen = 0;
 	CK_BYTE* pInData = Vector2Buffer(Seed, ulInDataLen);
 	rv = m_pFunc->C_SeedRandom(hSession, pInData, ulInDataLen);
 	if (pInData)
 		delete []pInData;
-	CPKCS11LIB_EPILOGUE;
 	return rv;
 }
 
@@ -964,7 +900,7 @@ CK_RV CPKCS11Lib::C_GenerateRandom(
 	CK_SESSION_HANDLE hSession,
 	vector<unsigned char> &RandomData)
 {
-	CPKCS11LIB_PROLOGUE(C_GenerateRandom);
+	CK_RV rv;
 	CK_ULONG ulOutDataLen = 0;
 	CK_BYTE* pOutData = Vector2Buffer(RandomData, ulOutDataLen);
 	rv = m_pFunc->C_GenerateRandom(hSession, pOutData, ulOutDataLen);
@@ -972,7 +908,6 @@ CK_RV CPKCS11Lib::C_GenerateRandom(
 		Buffer2Vector(pOutData, ulOutDataLen, RandomData, true);
 	if (pOutData)
 		delete []pOutData;
-	CPKCS11LIB_EPILOGUE;
 	return rv;
 }
 
@@ -980,9 +915,8 @@ CK_RV CPKCS11Lib::C_WaitForSlotEvent(
 	CK_FLAGS flags,
 	unsigned long* pSlot)
 {
-	CPKCS11LIB_PROLOGUE(C_WaitForSlotEvent);
+	CK_RV rv;
 	rv = m_pFunc->C_WaitForSlotEvent(flags, pSlot, NULL);
-	CPKCS11LIB_EPILOGUE;
 	return rv;
 }
 
@@ -990,7 +924,7 @@ CK_RV CPKCS11Lib::C_GetMechanismList(
 	unsigned long slotID,
 	vector<long> &mechanismList)
 {
-	CPKCS11LIB_PROLOGUE(C_GetMechanismList);
+	CK_RV rv;
 
 	CK_ULONG i;
 	mechanismList.clear();
@@ -1001,7 +935,6 @@ CK_RV CPKCS11Lib::C_GetMechanismList(
 		for(i=0; i<ulCount; i++)
 			mechanismList.push_back(ck_mechanismList[i]);
 
-	CPKCS11LIB_EPILOGUE;
 	return rv;
 }
 
@@ -1010,11 +943,10 @@ CK_RV CPKCS11Lib::C_GetMechanismInfo(
 	unsigned long type,
 	CK_MECHANISM_INFO* pInfo)
 {
-	CPKCS11LIB_PROLOGUE(C_GetMechanismInfo);
+	CK_RV rv;
 
 	rv = m_pFunc->C_GetMechanismInfo(slotID, type, pInfo);
 
-	CPKCS11LIB_EPILOGUE;
 	return rv;
 }
 
