@@ -1,6 +1,13 @@
 History
 =======
 
+1.5.13 - January 2024, Ludovic Rousseau
+  - fix issue between Python 3.12 garbage collector and C_Finalize()
+  - Modernize use of setup.py
+  - Check swig is installed
+  - remove unused files
+  - minor improvements
+
 1.5.12 - April 2023, Ludovic Rousseau
   - add setAttributeValue()
   - minor improvements
