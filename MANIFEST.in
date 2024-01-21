@@ -8,3 +8,4 @@ include tox.ini
 include dev-requirements.txt
 include docs/*
 include COPYING
+include get_PYKCS11LIB.py
