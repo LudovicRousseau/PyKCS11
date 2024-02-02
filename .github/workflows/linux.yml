@@ -1,12 +1,8 @@
 name: GNU/Linux Build
 
-# Controls when the action will run. Triggers the workflow on push or pull request
-# events but only for the master branch
-on:
-  push:
-    branches: [ master ]
-  pull_request:
-    branches: [ master ]
+# Controls when the action will run. Triggers the workflow on push or
+# pull request events but only for the master branch
+on: [push, pull_request]
 
 env:
   PYKCS11LIB: /usr/lib/softhsm/libsofthsm2.so
@@ -16,9 +12,10 @@ env:
 jobs:
   # This workflow contains a single job called "build"
   build:
-    runs-on:  ubuntu-latest
+    runs-on: ubuntu-latest
 
-    # Steps represent a sequence of tasks that will be executed as part of the job
+    # Steps represent a sequence of tasks that will be executed as part of
+    # the job
     steps:
       # Checks-out your repository under $GITHUB_WORKSPACE, so your job
       # can access it
@@ -58,4 +55,3 @@ jobs:
         uses: AndreMiras/coveralls-python-action@develop
         with:
           github-token: ${{ secrets.GITHUB_TOKEN }}
-
