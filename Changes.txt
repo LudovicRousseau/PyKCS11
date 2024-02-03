@@ -1,6 +1,9 @@
 History
 =======
 
+1.5.14 - February 2024, Ludovic Rousseau
+  - fix build using swig 4.2.0
+
 1.5.13 - January 2024, Ludovic Rousseau
   - fix issue between Python 3.12 garbage collector and C_Finalize()
   - Modernize use of setup.py
