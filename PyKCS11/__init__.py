@@ -469,6 +469,11 @@ class PyKCS11Lib(object):
                 PyKCS11.LowLevel and PyKCS11.LowLevel.__name__ and \
                 PyKCS11.LowLevel._LowLevel and \
                 PyKCS11.LowLevel._LowLevel.__name__:
+
+            # in case NO library was found and used
+            if not hasattr(self, "pkcs11dll_filename"):
+                return
+
             # decrease user number
             PyKCS11Lib._loaded_libs[self.pkcs11dll_filename]["nb_users"] -= 1
 
