@@ -252,7 +252,7 @@ typedef struct CK_DATE{
     else
     {
       // If the value being set is of CK_RSA_PKCS_OAEP_PARAMS type:
-      int res2 = SWIG_ConvertPtr($input, &arg2, $descriptor(CK_RSA_PKCS_OAEP_PARAMS*), 0 |  0 );
+      int res2 = SWIG_ConvertPtr($input, &arg2, $descriptor(CK_RSA_PKCS_OAEP_PARAMS*), 0);
       if (!SWIG_IsOK(res2)) {
           res2 = SWIG_ConvertPtr($input, &arg2, $descriptor(CK_RSA_PKCS_PSS_PARAMS*), 0);
           if (!SWIG_IsOK(res2)) {
