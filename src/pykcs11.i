@@ -234,13 +234,7 @@ typedef struct CK_DATE{
 %typemap(in) void* {
     vector<unsigned char> *vect;
     // If the value being set is of ckbytelist type:
-    if (SWIG_IsOK(SWIG_ConvertPtr($input, (void **)&vect,
-#if SWIG_VERSION >= 0x040200
-		SWIGTYPE_p_std__vectorT_unsigned_char_t,
-#else
-		SWIGTYPE_p_std__vectorT_unsigned_char_std__allocatorT_unsigned_char_t_t,
-#endif
-		0)))
+    if (SWIG_IsOK(SWIG_ConvertPtr($input, (void **)&vect, $descriptor(vector<unsigned char> *), 0)))
     {
         // Get the data from the vector
         // Only set value if not null
@@ -287,13 +281,7 @@ typedef struct CK_MECHANISM {
 // For all complex mechanism parameters which has 'void *' as a member, it must a ckbytelist
 %typemap(in) void* {
     vector<unsigned char> *vect;
-    int res = SWIG_ConvertPtr($input, (void **)&vect,
-#if SWIG_VERSION >= 0x040200
-		SWIGTYPE_p_std__vectorT_unsigned_char_t,
-#else
-		SWIGTYPE_p_std__vectorT_unsigned_char_std__allocatorT_unsigned_char_t_t,
-#endif
-		0);
+    int res = SWIG_ConvertPtr($input, (void **)&vect, $descriptor(vector<unsigned char> *), 0);
     if (SWIG_IsOK(res))
     {
         // Get the data from the vector
