@@ -37,7 +37,7 @@ using namespace std;
 
 %inline
 %{
-	using namespace std;
+    using namespace std;
 %}
 
 %include cdata.i
@@ -94,11 +94,11 @@ typedef struct CK_INFO {
 	{
 		return PyKCS11String(self->manufacturerID, sizeof(self->manufacturerID));
 	}
-	PyKCS11String GetLibraryDescription()
+    PyKCS11String GetLibraryDescription()
 	{
 		return PyKCS11String(self->libraryDescription, sizeof(self->libraryDescription));
 	}
-	PyKCS11String GetLibraryVersion()
+    PyKCS11String GetLibraryVersion()
 	{
 		char szVal[10];
 		sprintf(szVal, "%d.%d", self->libraryVersion.major, self->libraryVersion.minor);
@@ -122,17 +122,17 @@ typedef struct CK_SLOT_INFO {
 	{
 		return PyKCS11String(self->manufacturerID, sizeof(self->manufacturerID));
 	}
-	PyKCS11String GetSlotDescription()
+    PyKCS11String GetSlotDescription()
 	{
 		return PyKCS11String(self->slotDescription, sizeof(self->slotDescription));
 	}
-	PyKCS11String GetHardwareVersion()
+    PyKCS11String GetHardwareVersion()
 	{
 		char szVal[10];
 		sprintf(szVal, "%d.%02d", self->hardwareVersion.major, self->hardwareVersion.minor);
 		return PyKCS11String(szVal);
 	}
-	PyKCS11String GetFirmwareVersion()
+    PyKCS11String GetFirmwareVersion()
 	{
 		char szVal[10];
 		sprintf(szVal, "%d.%02d", self->firmwareVersion.major, self->firmwareVersion.minor);
@@ -169,25 +169,25 @@ typedef struct CK_TOKEN_INFO {
 	{
 		return PyKCS11String(self->label, sizeof(self->label));
 	}
-	PyKCS11String GetManufacturerID()
+    PyKCS11String GetManufacturerID()
 	{
 		return PyKCS11String(self->manufacturerID, sizeof(self->manufacturerID));
 	}
-	PyKCS11String GetModel()
+    PyKCS11String GetModel()
 	{
 		return PyKCS11String(self->model, sizeof(self->model));
 	}
-	PyKCS11String GetSerialNumber()
+    PyKCS11String GetSerialNumber()
 	{
 		return PyKCS11String(self->serialNumber, sizeof(self->serialNumber));
 	}
-	PyKCS11String GetFirmwareVersion()
+    PyKCS11String GetFirmwareVersion()
 	{
 		char szVal[10];
 		sprintf(szVal, "%d.%02d", self->firmwareVersion.major, self->firmwareVersion.minor);
 		return PyKCS11String(szVal);
 	}
-	PyKCS11String GetUtcTime()
+    PyKCS11String GetUtcTime()
 	{
 		return PyKCS11String(self->utcTime, sizeof(self->utcTime));
 	}
@@ -217,13 +217,13 @@ typedef struct CK_DATE{
 		memcpy(szVal, self->year, sizeof(self->year) );
 		return PyKCS11String(szVal);
 	}
-	PyKCS11String GetMonth()
+    PyKCS11String GetMonth()
 	{
 		char szVal[10];
 		memcpy(szVal, self->month, sizeof(self->month) );
 		return PyKCS11String(szVal);
 	}
-	PyKCS11String GetDay()
+    PyKCS11String GetDay()
 	{
 		char szVal[10];
 		memcpy(szVal, self->day, sizeof(self->day) );
@@ -363,11 +363,11 @@ typedef struct CK_RSA_PKCS_PSS_PARAMS {
 %constant int CK_RSA_PKCS_PSS_PARAMS_LENGTH = sizeof(CK_RSA_PKCS_PSS_PARAMS);
 
 typedef struct CK_ECDH1_DERIVE_PARAMS {
-	unsigned long kdf;
-	unsigned long ulSharedDataLen;
-	void* pSharedData;
-	unsigned long ulPublicDataLen;
-	void* pPublicData;
+    unsigned long kdf;
+    unsigned long ulSharedDataLen;
+    void* pSharedData;
+    unsigned long ulPublicDataLen;
+    void* pPublicData;
 } CK_ECDH1_DERIVE_PARAMS;
 
 %extend CK_ECDH1_DERIVE_PARAMS
