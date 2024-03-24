@@ -11,7 +11,10 @@ build-stamp
 build/
 dist/
 docs/_build
+eggs
 htmlcov
 src/LowLevel.py
 src/pykcs11_wrap.cpp
+temp
+tox.env
 virtualenv
