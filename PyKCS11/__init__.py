@@ -510,13 +510,13 @@ class PyKCS11Lib(object):
             self.lib.Duplicate(PyKCS11Lib._loaded_libs[pkcs11dll_filename]["ref"])
         else:
             # else load it
+            rv = self.lib.Load(pkcs11dll_filename)
+            if rv != CKR_OK:
+                raise PyKCS11Error(rv, pkcs11dll_filename)
             PyKCS11Lib._loaded_libs[pkcs11dll_filename] = {
                     "ref": self.lib,
                     "nb_users": 0
                     }
-            rv = self.lib.Load(pkcs11dll_filename)
-            if rv != CKR_OK:
-                raise PyKCS11Error(rv, pkcs11dll_filename)
 
         # increase user number
         PyKCS11Lib._loaded_libs[pkcs11dll_filename]["nb_users"] += 1

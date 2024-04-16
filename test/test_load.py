@@ -40,3 +40,12 @@ class TestUtil(unittest.TestCase):
         self.assertEqual(the_exception.text, lib)
         self.assertEqual(str(the_exception),
             "C_GetFunctionList() not found (%s)" % lib)
+
+        # try to load the improper lib another time
+        with self.assertRaises(PyKCS11.PyKCS11Error) as cm:
+            self.pkcs11.load(lib)
+        the_exception = cm.exception
+        self.assertEqual(the_exception.value, -4)
+        self.assertEqual(the_exception.text, lib)
+        self.assertEqual(str(the_exception),
+            "C_GetFunctionList() not found (%s)" % lib)
