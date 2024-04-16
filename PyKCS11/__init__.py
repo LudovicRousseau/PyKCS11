@@ -474,6 +474,10 @@ class PyKCS11Lib(object):
             if not hasattr(self, "pkcs11dll_filename"):
                 return
 
+            # in case the load failed
+            if self.pkcs11dll_filename not in PyKCS11Lib._loaded_libs:
+                return
+
             # decrease user number
             PyKCS11Lib._loaded_libs[self.pkcs11dll_filename]["nb_users"] -= 1
 
