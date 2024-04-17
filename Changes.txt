@@ -1,6 +1,11 @@
 History
 =======
 
+1.5.15 - April 2024, Ludovic Rousseau
+  - fix problems when PYKCS11LIB has incorrect values
+  - fix a problem with swig and "pip install ..."
+  - minor improvements
+
 1.5.14 - February 2024, Ludovic Rousseau
   - fix build using swig 4.2.0
 
