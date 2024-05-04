@@ -101,7 +101,7 @@ typedef struct CK_INFO {
     PyKCS11String GetLibraryVersion()
 	{
 		char szVal[10];
-		sprintf(szVal, "%d.%d", self->libraryVersion.major, self->libraryVersion.minor);
+		snprintf(szVal, sizeof szVal, "%d.%d", self->libraryVersion.major, self->libraryVersion.minor);
 		return PyKCS11String(szVal);
 	}
 };
@@ -129,13 +129,13 @@ typedef struct CK_SLOT_INFO {
     PyKCS11String GetHardwareVersion()
 	{
 		char szVal[10];
-		sprintf(szVal, "%d.%02d", self->hardwareVersion.major, self->hardwareVersion.minor);
+		snprintf(szVal, sizeof szVal, "%d.%02d", self->hardwareVersion.major, self->hardwareVersion.minor);
 		return PyKCS11String(szVal);
 	}
     PyKCS11String GetFirmwareVersion()
 	{
 		char szVal[10];
-		sprintf(szVal, "%d.%02d", self->firmwareVersion.major, self->firmwareVersion.minor);
+		snprintf(szVal, sizeof szVal, "%d.%02d", self->firmwareVersion.major, self->firmwareVersion.minor);
 		return PyKCS11String(szVal);
 	}
 };
@@ -184,7 +184,7 @@ typedef struct CK_TOKEN_INFO {
     PyKCS11String GetFirmwareVersion()
 	{
 		char szVal[10];
-		sprintf(szVal, "%d.%02d", self->firmwareVersion.major, self->firmwareVersion.minor);
+		snprintf(szVal, sizeof szVal, "%d.%02d", self->firmwareVersion.major, self->firmwareVersion.minor);
 		return PyKCS11String(szVal);
 	}
     PyKCS11String GetUtcTime()
