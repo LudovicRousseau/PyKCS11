@@ -28,6 +28,7 @@ def get_PYKCS11LIB():
         # use SoftHSM2 or SoftHSM1
         LIBS = [
             "/usr/local/lib/softhsm/libsofthsm2.so",  # macOS or local build
+            "/opt/homebrew/lib/softhsm/libsofthsm2.so",  # macOS arm64
             "/usr/lib/softhsm/libsofthsm2.so",  # Debian libsofthsm2
             "/usr/lib/softhsm/libsofthsm.so",  # Debian libsofthsm
             "/usr/lib/libsofthsm.so",  # Ubuntu 12.04 libsofthsm
