@@ -16,6 +16,7 @@ def get_PYKCS11LIB():
         LIBS = [
             "/usr/local/lib/pkcs11-spy.so",  # macOS or local build
             "/usr/lib/x86_64-linux-gnu/pkcs11-spy.so",  # Debian amd64
+            "/usr/lib64/pkcs11/pkcs11-spy.so",  # Fedora Linux
         ]
     else:
         if sys.maxsize > 2 ** 32:
@@ -31,6 +32,7 @@ def get_PYKCS11LIB():
             "/usr/lib/softhsm/libsofthsm.so",  # Debian libsofthsm
             "/usr/lib/libsofthsm.so",  # Ubuntu 12.04 libsofthsm
             "/usr/lib/x86_64-linux-gnu/softhsm/libsofthsm2.so",  # Ubuntu 16.04 libsofthsm2
+            "/usr/lib64/pkcs11/libsofthsm2.so",  # Fedora Linux
             WINDOWS_SOFTHSM,  # Windows
         ]
 
