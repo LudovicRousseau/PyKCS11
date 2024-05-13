@@ -38,6 +38,7 @@ Installation
 ============
 
     pip install pykcs11
+On windows [OpenSC](https://github.com/OpenSC/OpenSC) must be manually installed and added to the path. Add `OpenSc Project\OpenSc\tools` to the system path.
 
 Unix build Howto
 ================
