@@ -93,6 +93,41 @@ class TestUtil(unittest.TestCase):
         template = [(PyKCS11.CKA_HW_FEATURE_TYPE, PyKCS11.CKH_USER_INTERFACE)]
         o = self.session.findObjects(template)
 
+    def test_BoolAttributes(self):
+        # dictionary of attributes expected to be bool and their expected values
+        boolAttributes = {
+            PyKCS11.CKA_TOKEN : PyKCS11.CK_FALSE,
+            PyKCS11.CKA_PRIVATE : PyKCS11.CK_FALSE,
+            # The attributes below are defaulted to CK_TRUE
+            # ( according to the PKCS#11 standard )
+            PyKCS11.CKA_MODIFIABLE : PyKCS11.CK_TRUE,
+            PyKCS11.CKA_COPYABLE : PyKCS11.CK_TRUE,
+            PyKCS11.CKA_DESTROYABLE : PyKCS11.CK_TRUE,
+        }
+
+        CkoDataTemplate = [
+            (PyKCS11.CKA_CLASS, PyKCS11.CKO_DATA),
+            (PyKCS11.CKA_TOKEN, PyKCS11.CK_FALSE),
+            (PyKCS11.CKA_PRIVATE, PyKCS11.CK_FALSE),
+            (PyKCS11.CKA_LABEL, "TestData"),
+        ]
+
+        # create a CKO_DATA object
+        ckoData = self.session.createObject(CkoDataTemplate)
+        self.assertIsNotNone(ckoData)
+
+        attrValues = self.session.getAttributeValue(
+            ckoData, list(boolAttributes.keys())
+        )
+
+        # check that attributes are of bool type
+        # and have expected values
+        for i, attr in enumerate(boolAttributes):
+            self.assertIsInstance(attrValues[i], bool)
+            self.assertEqual(attrValues[i], boolAttributes[attr])
+
+        # clean up
+        self.session.destroyObject(ckoData)
 
 class TestGetSetAttributeValues(unittest.TestCase):
 

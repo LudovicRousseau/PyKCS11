@@ -1395,6 +1395,8 @@ class Session(object):
                     CKA_HAS_RESET,
                     CKA_LOCAL,
                     CKA_MODIFIABLE,
+                    CKA_COPYABLE,
+                    CKA_DESTROYABLE,
                     CKA_NEVER_EXTRACTABLE,
                     CKA_PRIVATE,
                     CKA_RESET_ON_INIT,
