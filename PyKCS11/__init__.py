@@ -76,41 +76,17 @@ class ckbytelist(PyKCS11.LowLevel.ckbytelist):
     add a __repr__() method to the LowLevel equivalent
     """
 
-    def __init__(self, data=[]):
-        # default size of the vector
-        size = 0
-        super(ckbytelist, self).__init__(size)
-
-        # No value to initialize
+    def __init__(self, data=None):
         if data is None:
-            return
-
-        # b'abc'
-        if isinstance(data, bytes):
-            self.reserve(len(data))
-            for x in data:
-                if sys.version_info[0] <= 2:
-                    # Python 2
-                    v = ord(x)
-                else:
-                    # Python 3 and more
-                    v = x
-                self.append(v)
-
-        # "abc"
+            data = 0
         elif isinstance(data, str):
-            tmp = bytes(data, "utf-8")
-            self.reserve(len(tmp))
-            for x in tmp:
-                self.append(x)
-
-        # [141, 142, 143]
-        elif isinstance(data, list) or isinstance(data, ckbytelist):
-            self.reserve(len(data))
-            for c in range(len(data)):
-                self.append(data[c])
+            data = data.encode("utf-8")
+        elif isinstance(data, (bytes, list, ckbytelist)):
+            data = bytes(data)
         else:
             raise PyKCS11.PyKCS11Error(-3, text=str(type(data)))
+        super(ckbytelist, self).__init__(data)
+
 
     def __repr__(self):
         """
