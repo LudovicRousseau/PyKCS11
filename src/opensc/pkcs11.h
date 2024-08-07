@@ -756,6 +756,11 @@ struct ck_gcm_params {
   unsigned long ulTagBits;
 } ;
 
+struct ck_aes_ctr_params {
+  unsigned long ulCounterBits;
+  unsigned char cb[16];
+} ;
+
 struct ck_ecdh1_derive_params {
   unsigned long kdf;
   unsigned long ulSharedDataLen;
@@ -1334,6 +1339,9 @@ typedef struct ck_rsa_pkcs_pss_params CK_RSA_PKCS_PSS_PARAMS;
 typedef struct ck_rsa_pkcs_pss_params *CK_RSA_PKCS_PSS_PARAMS_PTR;
 
 typedef struct ck_gcm_params CK_GCM_PARAMS;
+
+typedef struct ck_aes_ctr_params CK_AES_CTR_PARAMS;
+typedef struct ck_aes_ctr_params *CK_AES_CTR_PARAMS_PTR;
 
 typedef struct ck_ecdh1_derive_params CK_ECDH1_DERIVE_PARAMS;
 typedef struct ck_ecdh1_derive_params *CK_ECDH1_DERIVE_PARAMS_PTR;

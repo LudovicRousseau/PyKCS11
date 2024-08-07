@@ -93,6 +93,17 @@ class TestUtil(unittest.TestCase):
         # 2nd block
         self.assertSequenceEqual(DataOut[16:], DataECBOut2)
 
+        # AES CTR with IV
+        mechanism = PyKCS11.AES_CTR_Mechanism(128, "1234567812345678")
+
+        DataOut = self.session.encrypt(symKey, DataIn, mechanism)
+        # print("DataOut", DataOut)
+
+        DataCheck = self.session.decrypt(symKey, DataOut, mechanism)
+        # print("DataCheck:", DataCheck)
+
+        self.assertSequenceEqual(DataIn, DataCheck)
+
         #
         # test CK_GCM_PARAMS
         #

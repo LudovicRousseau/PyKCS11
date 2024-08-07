@@ -245,21 +245,59 @@ typedef struct CK_DATE{
     }
     else
     {
-      // If the value being set is of CK_RSA_PKCS_OAEP_PARAMS type:
-      int res2 = SWIG_ConvertPtr($input, &arg2, $descriptor(CK_RSA_PKCS_OAEP_PARAMS*), 0);
-      if (!SWIG_IsOK(res2)) {
-          res2 = SWIG_ConvertPtr($input, &arg2, $descriptor(CK_RSA_PKCS_PSS_PARAMS*), 0);
-          if (!SWIG_IsOK(res2)) {
+        // If the value isn't a ckbytelist, then it must be a pointer to a mechanism parameter
+        int res2 = -1;
+        do { // Add mechanism parameters here
+            res2 = SWIG_ConvertPtr($input, &arg2, $descriptor(CK_RSA_PKCS_OAEP_PARAMS*), 0);
+            if( SWIG_IsOK( res2 ) )
+                break;
+
+            res2 = SWIG_ConvertPtr($input, &arg2, $descriptor(CK_RSA_PKCS_PSS_PARAMS*), 0);
+            if( SWIG_IsOK( res2 ) )
+                break;
+
             res2 = SWIG_ConvertPtr($input, &arg2, $descriptor(CK_GCM_PARAMS*), 0);
-            if (!SWIG_IsOK(res2)) {
-              res2 = SWIG_ConvertPtr($input, &arg2, $descriptor(CK_ECDH1_DERIVE_PARAMS*), 0);
-              if (!SWIG_IsOK(res2)) {
-                SWIG_exception_fail(SWIG_ArgError(res2), "unsupported CK_MECHANISM Parameter type.");
-              }
-            }
-          }
-      }
+            if( SWIG_IsOK( res2 ) )
+                break;
+
+            res2 = SWIG_ConvertPtr($input, &arg2, $descriptor(CK_ECDH1_DERIVE_PARAMS*), 0);
+            if( SWIG_IsOK( res2 ) )
+                break;
+
+            res2 = SWIG_ConvertPtr($input, &arg2, $descriptor(CK_AES_CTR_PARAMS*), 0);
+            if( SWIG_IsOK( res2 ) )
+                break;
+        } while(0);
+
+        if (!SWIG_IsOK(res2)) {
+            SWIG_exception_fail(SWIG_ArgError(res2), "unsupported CK_MECHANISM Parameter type.");
+        }
     }
+}
+
+// typemap for CK_BYTE static arrays
+%typemap(in) unsigned char[ANY](unsigned char out[$1_dim0]) {
+    vector<unsigned char> *vect;
+    // Expect a value of ckbytelist type:
+    int res = SWIG_ConvertPtr($input, (void **)&vect, $descriptor(vector<unsigned char> *), 0);
+    if (SWIG_IsOK(res))
+    {
+        if (vect->size() != $1_dim0)
+        {
+            SWIG_exception_fail(SWIG_ValueError, "Expected a ckbytelist with $1_dim0 elements");
+        }
+
+        for (size_t i = 0; i < $1_dim0; i++)
+        {
+            out[i] = (*vect)[i];
+        }
+    }
+    else
+    {
+        // If a mechanism parameter has a CK_BYTE array as a member, it must be represented as a ckbytelist
+        SWIG_exception_fail(SWIG_ArgError(res), "CK_BYTE arrays of CK_* mechanism params must be represented as ckbytelist type");
+    }
+    $1 = &out[0];
 }
 
 typedef struct CK_MECHANISM {
@@ -317,6 +355,24 @@ typedef struct CK_GCM_PARAMS {
 };
 
 %constant int CK_GCM_PARAMS_LENGTH = sizeof(CK_GCM_PARAMS);
+
+typedef struct CK_AES_CTR_PARAMS {
+    unsigned long ulCounterBits;
+    unsigned char cb[16];
+} CK_AES_CTR_PARAMS;
+
+%extend CK_AES_CTR_PARAMS
+{
+    CK_AES_CTR_PARAMS()
+    {
+        CK_AES_CTR_PARAMS *p = new CK_AES_CTR_PARAMS();
+        p->ulCounterBits = 128;
+        memset(p->cb, 0, sizeof(p->cb));
+        return p;
+    }
+};
+
+%constant int CK_AES_CTR_PARAMS_LENGTH = sizeof(CK_AES_CTR_PARAMS);
 
 typedef struct CK_RSA_PKCS_OAEP_PARAMS {
   unsigned long hashAlg;
