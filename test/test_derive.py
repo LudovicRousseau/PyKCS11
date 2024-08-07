@@ -9,7 +9,7 @@ class TestUtil(unittest.TestCase):
 
         # get SoftHSM major version
         info = self.pkcs11.getInfo()
-        self.SoftHSMversion = info.libraryVersion[0]
+        self.SoftHSMversion = info.libraryVersion
         self.manufacturer = info.manufacturerID
 
         self.slot = self.pkcs11.getSlotList(tokenPresent=True)[0]
@@ -17,6 +17,36 @@ class TestUtil(unittest.TestCase):
             self.slot, PyKCS11.CKF_SERIAL_SESSION | PyKCS11.CKF_RW_SESSION
         )
         self.session.login("1234")
+
+        # common templates used in derive test cases
+        self.aesKeyTemplate = [
+            (PyKCS11.CKA_CLASS, PyKCS11.CKO_SECRET_KEY),
+            (PyKCS11.CKA_KEY_TYPE, PyKCS11.CKK_AES),
+            (PyKCS11.CKA_VALUE_LEN, 32),
+            (PyKCS11.CKA_TOKEN, PyKCS11.CK_TRUE),
+            (PyKCS11.CKA_SENSITIVE, PyKCS11.CK_FALSE),
+            (PyKCS11.CKA_EXTRACTABLE, PyKCS11.CK_TRUE),
+            (PyKCS11.CKA_PRIVATE, PyKCS11.CK_TRUE),
+            (PyKCS11.CKA_LABEL, "DeriveTestBaseAes256Key"),
+            (PyKCS11.CKA_DERIVE, PyKCS11.CK_TRUE),
+        ]
+
+        self.genericKeyTemplate = [
+            (PyKCS11.CKA_CLASS, PyKCS11.CKO_SECRET_KEY),
+            (PyKCS11.CKA_KEY_TYPE, PyKCS11.CKK_GENERIC_SECRET),
+            (PyKCS11.CKA_TOKEN, PyKCS11.CK_FALSE),
+            (PyKCS11.CKA_SENSITIVE, PyKCS11.CK_FALSE),
+            (PyKCS11.CKA_EXTRACTABLE, PyKCS11.CK_TRUE),
+            (PyKCS11.CKA_PRIVATE, PyKCS11.CK_TRUE),
+            (PyKCS11.CKA_LABEL, "DeriveTestGenericKey"),
+        ]
+
+        # generate a common symmetric base key for tests
+        keyID = (0x01,)
+        baseKeyTemplate = self.aesKeyTemplate + [(PyKCS11.CKA_ID, keyID)]
+        mechanism = PyKCS11.Mechanism(PyKCS11.CKM_AES_KEY_GEN, None)
+        self.baseKey = self.session.generateKey(baseKeyTemplate, mechanism)
+        self.assertIsNotNone(self.baseKey)
 
         # Select the curve to be used for the keys
         curve = u"secp256r1"
@@ -65,8 +95,14 @@ class TestUtil(unittest.TestCase):
         self.pkcs11.closeAllSessions(self.slot)
         del self.pkcs11
 
+    def getCkaValue(self, key):
+        return list(
+            self.session.getAttributeValue(
+            key, [PyKCS11.CKA_VALUE])[0]
+        )
+
     def test_deriveKey_ECDH1_DERIVE(self):
-        if self.SoftHSMversion < 2:
+        if self.SoftHSMversion[0] < 2:
             self.skipTest("generateKeyPair() only supported by SoftHSM >= 2")
 
         keyID = (0x11,)
@@ -142,3 +178,128 @@ class TestUtil(unittest.TestCase):
         self.session.destroyObject(derivedKey2)
         self.session.destroyObject(pubKey)
         self.session.destroyObject(pvtKey)
+
+    def test_deriveKey_CKM_CONCATENATE_BASE_AND_KEY(self):
+        # This mechanism is not supported in the current release of SoftHSM (2.6.1), however available in develop branch,
+        # see https://github.com/opendnssec/SoftHSMv2/commit/fa595c07a185656382c18ea2a6a12cad825d48b4
+        if self.SoftHSMversion <= (2,6):
+            self.skipTest("CKM_CONCATENATE_BASE_AND_KEY is not supported by SoftHSM <= 2.6")
+
+        # generate a key to concatenate with
+        keyID = (0x11,)
+        concatenateKeyTemplate = self.aesKeyTemplate + [(PyKCS11.CKA_ID, keyID)]
+        mechanism = PyKCS11.Mechanism(PyKCS11.CKM_AES_KEY_GEN, None)
+        concKey = self.session.generateKey(concatenateKeyTemplate, mechanism)
+        self.assertIsNotNone(concKey)
+
+        # concatenate two keys
+        keyID = (0x22,)
+        derivedKeyTemplate = self.genericKeyTemplate + [
+            (PyKCS11.CKA_VALUE_LEN, 64),
+            (PyKCS11.CKA_ID, keyID)
+        ]
+        mechanism = PyKCS11.CONCATENATE_BASE_AND_KEY_Mechanism(concKey)
+        derivedKey = self.session.deriveKey(
+            self.baseKey, derivedKeyTemplate, mechanism)
+        self.assertIsNotNone(derivedKey)
+
+        # check derived key's value
+        baseKeyValue = self.getCkaValue(self.baseKey)
+        concKeyValue = self.getCkaValue(concKey)
+        derivedKeyValue = self.getCkaValue(derivedKey)
+
+        # match: check values
+        self.assertSequenceEqual(baseKeyValue + concKeyValue, derivedKeyValue)
+
+        # cleanup
+        self.session.destroyObject(derivedKey)
+        self.session.destroyObject(concKey)
+
+    def test_deriveKey_CKM_CONCATENATE_BASE_AND_DATA(self):
+        # This mechanism is not supported in the current release of SoftHSM (2.6.1), however available in develop branch,
+        # see https://github.com/opendnssec/SoftHSMv2/commit/dba00d73e1b69f65b68397d235e7f73bbf59ab6a
+        if self.SoftHSMversion <= (2,6):
+            self.skipTest("CKM_CONCATENATE_BASE_AND_DATA is not supported by SoftHSM <= 2.6")
+
+        # generate data to concatenate with
+        concData = list(self.session.generateRandom(32))
+
+        # concatenate key with data
+        keyID = (0x22,)
+        derivedKeyTemplate = self.genericKeyTemplate + [
+            (PyKCS11.CKA_VALUE_LEN, 64),
+            (PyKCS11.CKA_ID, keyID)
+        ]
+        mechanism = PyKCS11.CONCATENATE_BASE_AND_DATA_Mechanism(concData)
+        derivedKey = self.session.deriveKey(
+            self.baseKey, derivedKeyTemplate, mechanism)
+        self.assertIsNotNone(derivedKey)
+
+        # check derived key's value
+        baseKeyValue = self.getCkaValue(self.baseKey)
+        derivedKeyValue = self.getCkaValue(derivedKey)
+
+        # match: check values
+        self.assertSequenceEqual(baseKeyValue + concData, derivedKeyValue)
+
+        # cleanup
+        self.session.destroyObject(derivedKey)
+
+    def test_deriveKey_CKM_CONCATENATE_DATA_AND_BASE(self):
+        # This mechanism is not supported in the current release of SoftHSM (2.6.1), however available in develop branch,
+        # see https://github.com/opendnssec/SoftHSMv2/commit/fae0d9f769ac30d25f563c5fc6c417e9199e4403
+        if self.SoftHSMversion <= (2,6):
+            self.skipTest("CKM_CONCATENATE_DATA_AND_BASE is not supported by SoftHSM <= 2.6")
+
+        # generate data to concatenate with
+        concData = list(self.session.generateRandom(32))
+
+        # concatenate data with key
+        keyID = (0x22,)
+        derivedKeyTemplate = self.genericKeyTemplate + [
+            (PyKCS11.CKA_VALUE_LEN, 64),
+            (PyKCS11.CKA_ID, keyID)
+        ]
+        mechanism = PyKCS11.CONCATENATE_DATA_AND_BASE_Mechanism(concData)
+        derivedKey = self.session.deriveKey(
+            self.baseKey, derivedKeyTemplate, mechanism)
+        self.assertIsNotNone(derivedKey)
+
+        # check derived key's value
+        baseKeyValue = self.getCkaValue(self.baseKey)
+        derivedKeyValue = self.getCkaValue(derivedKey)
+
+        # match: check values
+        self.assertSequenceEqual(concData + baseKeyValue, derivedKeyValue)
+
+        # cleanup
+        self.session.destroyObject(derivedKey)
+
+    def test_deriveKey_CKM_XOR_BASE_AND_DATA(self):
+        if self.manufacturer.startswith("SoftHSM"):
+            self.skipTest("SoftHSM does not support CKM_XOR_BASE_AND_DATA")
+
+        # generate data to xor with
+        xorData = list(self.session.generateRandom(32))
+
+        # xor key with data
+        keyID = (0x22,)
+        derivedKeyTemplate = self.genericKeyTemplate + [
+            (PyKCS11.CKA_VALUE_LEN, 32),
+            (PyKCS11.CKA_ID, keyID)
+        ]
+        mechanism = PyKCS11.XOR_BASE_AND_DATA_Mechanism(xorData)
+        derivedKey = self.session.deriveKey(
+            self.baseKey, derivedKeyTemplate, mechanism)
+        self.assertIsNotNone(derivedKey)
+
+        # check derived key's value
+        baseKeyValue = self.getCkaValue(self.baseKey)
+        derivedKeyValue = self.getCkaValue(derivedKey)
+        expectedValue = map(lambda x, y: x ^ y, baseKeyValue, xorData)
+
+        # match: check values
+        self.assertSequenceEqual(list(expectedValue), derivedKeyValue)
+
+        # cleanup
+        self.session.destroyObject(derivedKey)

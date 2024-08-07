@@ -769,6 +769,11 @@ struct ck_ecdh1_derive_params {
   void * pPublicData;
 } ;
 
+struct ck_key_derivation_string_data {
+  unsigned char * pData;
+  unsigned long ulLen;
+} ;
+
 #define CKF_HW			(1 << 0)
 #define CKF_ENCRYPT		(1 << 8)
 #define CKF_DECRYPT		(1 << 9)
@@ -1345,6 +1350,9 @@ typedef struct ck_aes_ctr_params *CK_AES_CTR_PARAMS_PTR;
 
 typedef struct ck_ecdh1_derive_params CK_ECDH1_DERIVE_PARAMS;
 typedef struct ck_ecdh1_derive_params *CK_ECDH1_DERIVE_PARAMS_PTR;
+
+typedef struct ck_key_derivation_string_data CK_KEY_DERIVATION_STRING_DATA;
+typedef struct ck_key_derivation_string_data *CK_KEY_DERIVATION_STRING_DATA_PTR;
 
 typedef struct ck_function_list CK_FUNCTION_LIST;
 typedef struct ck_function_list *CK_FUNCTION_LIST_PTR;

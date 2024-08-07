@@ -267,11 +267,40 @@ typedef struct CK_DATE{
             res2 = SWIG_ConvertPtr($input, &arg2, $descriptor(CK_AES_CTR_PARAMS*), 0);
             if( SWIG_IsOK( res2 ) )
                 break;
+
+            res2 = SWIG_ConvertPtr($input, &arg2, $descriptor(CK_KEY_DERIVATION_STRING_DATA*), 0);
+            if( SWIG_IsOK( res2 ) )
+                break;
+
+            res2 = SWIG_ConvertPtr($input, &arg2, $descriptor(CK_OBJECT_HANDLE*), 0);
+            if( SWIG_IsOK( res2 ) )
+                break;
         } while(0);
 
         if (!SWIG_IsOK(res2)) {
             SWIG_exception_fail(SWIG_ArgError(res2), "unsupported CK_MECHANISM Parameter type.");
         }
+    }
+}
+
+// typemap for CK_BYTE_PTR (unsigned char*) mechanism parameters
+%typemap(in) unsigned char* {
+    vector<unsigned char> *vect;
+    // If the value being set is of ckbytelist type:
+    int res = SWIG_ConvertPtr($input, (void **)&vect, $descriptor(vector<unsigned char> *), 0);
+    if (SWIG_IsOK(res))
+    {
+        // Get the data from the vector
+        // Only set value if not null
+        if (vect)
+            arg2 = vect->data();
+        else
+            arg2 = NULL;
+    }
+    else
+    {
+        // If a mechanism parameter has a 'CK_BYTE_PTR' as a member, it must be represented as a ckbytelist
+        SWIG_exception_fail(SWIG_ArgError(res), "CK_BYTE_PTR members of CK_* mechanism params must be represented as ckbytelist type");
     }
 }
 
@@ -334,6 +363,8 @@ typedef struct CK_MECHANISM {
         SWIG_exception_fail(SWIG_ArgError(res), "void * members of CK_* mechanism params must be represented as ckbytelist type");
     }
 }
+
+%constant int CK_OBJECT_HANDLE_LENGTH = sizeof(CK_OBJECT_HANDLE);
 
 typedef struct CK_GCM_PARAMS {
     void * pIv;
@@ -442,6 +473,24 @@ typedef struct CK_ECDH1_DERIVE_PARAMS {
 };
 
 %constant int CK_ECDH1_DERIVE_PARAMS_LENGTH = sizeof(CK_ECDH1_DERIVE_PARAMS);
+
+typedef struct CK_KEY_DERIVATION_STRING_DATA {
+    unsigned char * pData;
+    unsigned long ulLen;
+} CK_KEY_DERIVATION_STRING_DATA;
+
+%extend CK_KEY_DERIVATION_STRING_DATA
+{
+    CK_KEY_DERIVATION_STRING_DATA()
+    {
+        CK_KEY_DERIVATION_STRING_DATA *p = new CK_KEY_DERIVATION_STRING_DATA();
+        p->ulLen = 0;
+        p->pData = NULL;
+        return p;
+    }
+};
+
+%constant int CK_KEY_DERIVATION_STRING_DATA_LENGTH = sizeof(CK_KEY_DERIVATION_STRING_DATA);
 
 typedef struct CK_MECHANISM_INFO {
 %immutable;

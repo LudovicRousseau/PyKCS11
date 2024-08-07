@@ -924,6 +924,75 @@ class ECDH1_DERIVE_Mechanism(object):
         return self._mech
 
 
+class CONCATENATE_BASE_AND_KEY_Mechanism(object):
+    """CKM_CONCATENATE_BASE_AND_KEY key derivation mechanism"""
+
+    def __init__(self, encKey):
+        """
+        :param encKey: a handle of encryption key
+        """
+        self._mech = PyKCS11.LowLevel.CK_MECHANISM()
+        self._mech.mechanism = CKM_CONCATENATE_BASE_AND_KEY
+        self._mech.pParameter = encKey
+        self._mech.ulParameterLen = PyKCS11.LowLevel.CK_OBJECT_HANDLE_LENGTH
+
+    def to_native(self):
+        return self._mech
+
+
+class KEY_DERIVATION_STRING_DATA_MechanismBase(object):
+    """Base class for mechanisms using derivation string data"""
+
+    def __init__(self, data, mechType):
+        """
+        :param data: a byte array to concatenate the key with
+        :param mechType: mechanism type
+        """
+        self._param = PyKCS11.LowLevel.CK_KEY_DERIVATION_STRING_DATA()
+
+        self._data = ckbytelist(data)
+        self._param.pData = self._data
+        self._param.ulLen = len(self._data)
+
+        self._mech = PyKCS11.LowLevel.CK_MECHANISM()
+        self._mech.mechanism = mechType
+        self._mech.pParameter = self._param
+        self._mech.ulParameterLen = PyKCS11.LowLevel.CK_KEY_DERIVATION_STRING_DATA_LENGTH
+
+    def to_native(self):
+        return self._mech
+
+
+class CONCATENATE_BASE_AND_DATA_Mechanism(KEY_DERIVATION_STRING_DATA_MechanismBase):
+    """CKM_CONCATENATE_BASE_AND_DATA key derivation mechanism"""
+
+    def __init__(self, data):
+        """
+        :param data: a byte array to concatenate the key with
+        """
+        super().__init__(data, CKM_CONCATENATE_BASE_AND_DATA)
+
+
+class CONCATENATE_DATA_AND_BASE_Mechanism(KEY_DERIVATION_STRING_DATA_MechanismBase):
+    """CKM_CONCATENATE_DATA_AND_BASE key derivation mechanism"""
+
+    def __init__(self, data):
+        """
+        :param data: a byte array to concatenate the key with
+        """
+        super().__init__(data, CKM_CONCATENATE_DATA_AND_BASE)
+
+
+class XOR_BASE_AND_DATA_Mechanism(KEY_DERIVATION_STRING_DATA_MechanismBase):
+    """CKM_XOR_BASE_AND_DATA key derivation mechanism"""
+
+    def __init__(self, data):
+        """
+        :param data: a byte array to xor the key with
+        """
+        super().__init__(data, CKM_XOR_BASE_AND_DATA)
+
+
 class DigestSession(object):
     def __init__(self, lib, session, mecha):
         self._lib = lib
