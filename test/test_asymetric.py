@@ -56,6 +56,7 @@ class TestUtil(unittest.TestCase):
 
         self.session.logout()
         self.pkcs11.closeAllSessions(self.slot)
+        self.pkcs11.unload()
         del self.pkcs11
 
     def test_sign_integer(self):
