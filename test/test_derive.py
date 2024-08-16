@@ -93,6 +93,7 @@ class TestUtil(unittest.TestCase):
 
         self.session.logout()
         self.pkcs11.closeAllSessions(self.slot)
+        self.pkcs11.unload()
         del self.pkcs11
 
     def getCkaValue(self, key):

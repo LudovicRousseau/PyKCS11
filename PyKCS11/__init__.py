@@ -470,25 +470,8 @@ class PyKCS11Lib(object):
                 PyKCS11.LowLevel._LowLevel and \
                 PyKCS11.LowLevel._LowLevel.__name__:
 
-            # in case NO library was found and used
-            if not hasattr(self, "pkcs11dll_filename"):
-                return
-
-            # in case the load failed
-            if self.pkcs11dll_filename not in PyKCS11Lib._loaded_libs:
-                return
-
-            # decrease user number
-            PyKCS11Lib._loaded_libs[self.pkcs11dll_filename]["nb_users"] -= 1
-
-            if PyKCS11Lib._loaded_libs[self.pkcs11dll_filename]["nb_users"] == 0:
-                # unload only if no more used
-                self.lib.Unload()
-
-            # remove unused entry
-            # the case < 0 happens if lib loading failed
-            if PyKCS11Lib._loaded_libs[self.pkcs11dll_filename]["nb_users"] <= 0:
-                del PyKCS11Lib._loaded_libs[self.pkcs11dll_filename]
+            # unload the library
+            self.unload()
 
     def load(self, pkcs11dll_filename=None, *init_string):
         """
@@ -506,8 +489,11 @@ class PyKCS11Lib(object):
             if pkcs11dll_filename is None:
                 raise PyKCS11Error(-1, "No PKCS11 library specified (set PYKCS11LIB env variable)")
 
-        # remember the lib file name
-        self.pkcs11dll_filename = pkcs11dll_filename
+        if hasattr(self, "pkcs11dll_filename"):
+            self.unload() # unload the previous library
+            # if the instance was previously initialized, 
+            # create a new low level library object for it
+            self.lib = PyKCS11.LowLevel.CPKCS11Lib()
 
         # if the lib is already in use: reuse it
         if pkcs11dll_filename in PyKCS11Lib._loaded_libs:
@@ -521,9 +507,41 @@ class PyKCS11Lib(object):
                     "ref": self.lib,
                     "nb_users": 0
                     }
+            
+        # remember the lib file name
+        self.pkcs11dll_filename = pkcs11dll_filename
 
         # increase user number
         PyKCS11Lib._loaded_libs[pkcs11dll_filename]["nb_users"] += 1
+
+        return self
+
+    def unload(self):
+        """
+        unload the current instance of a PKCS#11 library
+        """
+
+        # in case NO library was found and used
+        if not hasattr(self, "pkcs11dll_filename"):
+            return
+
+        if self.pkcs11dll_filename not in PyKCS11Lib._loaded_libs:
+            raise PyKCS11Error(PyKCS11.LowLevel.CKR_GENERAL_ERROR, 
+                               "invalid PyKCS11Lib state")
+
+        # decrease user number
+        PyKCS11Lib._loaded_libs[self.pkcs11dll_filename]["nb_users"] -= 1
+
+        if PyKCS11Lib._loaded_libs[self.pkcs11dll_filename]["nb_users"] == 0:
+            # unload only if no more used
+            self.lib.Unload()
+
+        # remove unused entry
+        # the case < 0 happens if lib loading failed
+        if PyKCS11Lib._loaded_libs[self.pkcs11dll_filename]["nb_users"] <= 0:
+            del PyKCS11Lib._loaded_libs[self.pkcs11dll_filename]
+
+        delattr(self, "pkcs11dll_filename")
 
     def initToken(self, slot, pin, label):
         """

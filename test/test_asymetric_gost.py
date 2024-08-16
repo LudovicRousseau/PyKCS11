@@ -19,6 +19,7 @@ class TestUtil(unittest.TestCase):
     def tearDown(self):
         self.session.logout()
         self.pkcs11.closeAllSessions(self.slot)
+        self.pkcs11.unload()
         del self.pkcs11
 
     def test_gost(self):
