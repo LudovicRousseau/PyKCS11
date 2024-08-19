@@ -23,7 +23,8 @@ class TestUtil(unittest.TestCase):
 
     def tearDown(self):
         del self.pkcs11
-        self.tmpdir.cleanup()
+        if platform.system() != 'Windows':
+            self.tmpdir.cleanup()
         del self.tmpdir
         del self.lib1_name
         del self.lib2_name
