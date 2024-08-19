@@ -23,7 +23,7 @@ jobs:
 
       - name: setup prerequisites (linux)
         shell: bash
-        run: sudo apt install swig softhsm2 python3-all-dev python3-setuptools
+        run: sudo apt install swig softhsm2 python3-all-dev python3-setuptools tox
 
       - name: Build
         run: |
@@ -42,6 +42,12 @@ jobs:
           source temp/bin/activate
           make install
           make test
+
+      - name: tox
+        shell: bash
+        run: |
+          ./get_PYKCS11LIB.py > tox.env
+          tox -e py310
 
       - name: coverage
         shell: bash
