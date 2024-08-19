@@ -5,16 +5,16 @@ from PyKCS11 import PyKCS11
 import platform
 import shutil
 import gc
+import os
 
 from pathlib import Path
 from tempfile import TemporaryDirectory
-from get_PYKCS11LIB import get_PYKCS11LIB
 
 class TestUtil(unittest.TestCase):
     def setUp(self):
         self.pkcs11 = PyKCS11.PyKCS11Lib()
         self.tmpdir = TemporaryDirectory()
-        self.lib1_name = get_PYKCS11LIB()
+        self.lib1_name = os.environ["PYKCS11LIB"]
         # create a tmp copy of the main lib
         # to use as a different library in tests
         self.lib2_name = str(Path(self.tmpdir.name) /
