@@ -20,6 +20,7 @@ clean distclean:
 	rm -f PyKCS11/_LowLevel*
 	rm -f build-stamp
 	rm -f test/*.pyc
+	find . -name .DS_Store -exec rm {} \;
 
 src/pykcs11.i: src/opensc/pkcs11.h src/pkcs11lib.h src/pykcs11string.h src/ck_attribute_smart.h
 	touch $@
