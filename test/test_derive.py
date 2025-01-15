@@ -199,8 +199,8 @@ class TestUtil(unittest.TestCase):
         # generate a key to concatenate with
         keyID = (0x11,)
         concatenateKeyTemplate = self.aesKeyTemplate + [(PyKCS11.CKA_ID, keyID)]
-        mechanism = PyKCS11.Mechanism(PyKCS11.CKM_AES_KEY_GEN, None)
-        concKey = self.session.generateKey(concatenateKeyTemplate, mechanism)
+        key_gen_mechanism = PyKCS11.Mechanism(PyKCS11.CKM_AES_KEY_GEN, None)
+        concKey = self.session.generateKey(concatenateKeyTemplate, key_gen_mechanism)
         self.assertIsNotNone(concKey)
 
         # concatenate two keys
@@ -220,6 +220,12 @@ class TestUtil(unittest.TestCase):
 
         # match: check values
         self.assertSequenceEqual(baseKeyValue + concKeyValue, derivedKeyValue)
+
+        # check that mechanism shares ownership of temporary key
+        mechanism = PyKCS11.CONCATENATE_BASE_AND_KEY_Mechanism(
+            self.session.generateKey(concatenateKeyTemplate, key_gen_mechanism))
+        derivedKey = self.session.deriveKey(self.baseKey, derivedKeyTemplate, mechanism)
+        self.assertIsNotNone(derivedKey)
 
         # cleanup
         self.session.destroyObject(derivedKey)
