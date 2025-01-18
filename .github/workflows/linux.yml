@@ -47,7 +47,7 @@ jobs:
         shell: bash
         run: |
           ./get_PYKCS11LIB.py > tox.env
-          tox -e py310
+          tox -e py312
 
       - name: coverage
         shell: bash
