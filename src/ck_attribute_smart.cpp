@@ -267,4 +267,3 @@
 		m_value = pBuf;
 		m_type = attrType;
 	}
-

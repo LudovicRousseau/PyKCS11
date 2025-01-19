@@ -18,10 +18,10 @@
 # along with this program; if not, write to the Free Software
 # Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301 USA.
 
-from __future__ import print_function
+
+import binascii
 
 from PyKCS11 import *
-import binascii
 
 pkcs11 = PyKCS11Lib()
 pkcs11.load()  # define environment variable PYKCS11LIB=YourPKCS11Lib
@@ -42,7 +42,7 @@ mechanism = Mechanism(CKM_ECDSA, None)
 # find first private key and compute signature
 privKey = session.findObjects(priv_search_tmpl)[0]
 signature = session.sign(privKey, binascii.unhexlify(toSign), mechanism)
-print("\nsignature: {}".format(binascii.hexlify(bytearray(signature))))
+print(f"\nsignature: {binascii.hexlify(bytearray(signature))}")
 
 # find first public key and verify signature
 pubKey = session.findObjects(pub_search_tmpl)[0]

@@ -1,6 +1,5 @@
-# -*- coding: utf-8 -*-
-
 import unittest
+
 from PyKCS11 import PyKCS11
 
 

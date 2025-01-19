@@ -1,4 +1,5 @@
 import unittest
+
 from PyKCS11 import PyKCS11
 
 # use OpenSC PKCS#11 Spy to check what PIN value is sent to the PKCS#11

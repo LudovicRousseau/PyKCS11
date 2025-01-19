@@ -1,4 +1,5 @@
 import unittest
+
 from PyKCS11 import PyKCS11
 
 # those shortcuts make the testing code more readable
@@ -96,13 +97,13 @@ class TestUtil(unittest.TestCase):
     def test_BoolAttributes(self):
         # dictionary of attributes expected to be bool and their expected values
         boolAttributes = {
-            PyKCS11.CKA_TOKEN : PyKCS11.CK_FALSE,
-            PyKCS11.CKA_PRIVATE : PyKCS11.CK_FALSE,
+            PyKCS11.CKA_TOKEN: PyKCS11.CK_FALSE,
+            PyKCS11.CKA_PRIVATE: PyKCS11.CK_FALSE,
             # The attributes below are defaulted to CK_TRUE
             # ( according to the PKCS#11 standard )
-            PyKCS11.CKA_MODIFIABLE : PyKCS11.CK_TRUE,
-            PyKCS11.CKA_COPYABLE : PyKCS11.CK_TRUE,
-            PyKCS11.CKA_DESTROYABLE : PyKCS11.CK_TRUE,
+            PyKCS11.CKA_MODIFIABLE: PyKCS11.CK_TRUE,
+            PyKCS11.CKA_COPYABLE: PyKCS11.CK_TRUE,
+            PyKCS11.CKA_DESTROYABLE: PyKCS11.CK_TRUE,
         }
 
         CkoDataTemplate = [
@@ -129,6 +130,7 @@ class TestUtil(unittest.TestCase):
         # clean up
         self.session.destroyObject(ckoData)
 
+
 class TestGetSetAttributeValues(unittest.TestCase):
 
     def setUp(self) -> None:
@@ -149,17 +151,17 @@ class TestGetSetAttributeValues(unittest.TestCase):
         self.session.login("1234")
 
         AESKeyTemplate = [
-            (PyKCS11.CKA_CLASS,     PyKCS11.CKO_SECRET_KEY),
-            (PyKCS11.CKA_KEY_TYPE,  PyKCS11.CKK_AES),
-            (PyKCS11.CKA_TOKEN,     CK_TRUE),
-            (PyKCS11.CKA_PRIVATE,   CK_FALSE),
-            (PyKCS11.CKA_ENCRYPT,   CK_TRUE),
-            (PyKCS11.CKA_DECRYPT,   CK_TRUE),
-            (PyKCS11.CKA_SIGN,      CK_FALSE),
-            (PyKCS11.CKA_VERIFY,    CK_FALSE),
+            (PyKCS11.CKA_CLASS, PyKCS11.CKO_SECRET_KEY),
+            (PyKCS11.CKA_KEY_TYPE, PyKCS11.CKK_AES),
+            (PyKCS11.CKA_TOKEN, CK_TRUE),
+            (PyKCS11.CKA_PRIVATE, CK_FALSE),
+            (PyKCS11.CKA_ENCRYPT, CK_TRUE),
+            (PyKCS11.CKA_DECRYPT, CK_TRUE),
+            (PyKCS11.CKA_SIGN, CK_FALSE),
+            (PyKCS11.CKA_VERIFY, CK_FALSE),
             (PyKCS11.CKA_VALUE_LEN, 32),
-            (PyKCS11.CKA_LABEL,     "TestAESKey"),
-            (PyKCS11.CKA_ID,        (0x01,)),
+            (PyKCS11.CKA_LABEL, "TestAESKey"),
+            (PyKCS11.CKA_ID, (0x01,)),
         ]
 
         # generate AES key
@@ -214,11 +216,17 @@ class TestGetSetAttributeValues(unittest.TestCase):
 
         # which binary attributes to flip?
         attributes_to_switch = [
-            PyKCS11.CKA_SIGN, PyKCS11.CKA_ENCRYPT, PyKCS11.CKA_DECRYPT,
-            PyKCS11.CKA_VERIFY, PyKCS11.CKA_WRAP, PyKCS11.CKA_UNWRAP
+            PyKCS11.CKA_SIGN,
+            PyKCS11.CKA_ENCRYPT,
+            PyKCS11.CKA_DECRYPT,
+            PyKCS11.CKA_VERIFY,
+            PyKCS11.CKA_WRAP,
+            PyKCS11.CKA_UNWRAP,
         ]
 
-        old_attributes = self.session.getAttributeValue(self.AESKey, attributes_to_switch)
+        old_attributes = self.session.getAttributeValue(
+            self.AESKey, attributes_to_switch
+        )
 
         flipped_attributes = []
         for i, attr in enumerate(attributes_to_switch):
@@ -228,10 +236,14 @@ class TestGetSetAttributeValues(unittest.TestCase):
         rv = self.session.setAttributeValue(self.AESKey, flipped_attributes)
         assert rv is None
 
-        new_attributes = self.session.getAttributeValue(self.AESKey, attributes_to_switch)
+        new_attributes = self.session.getAttributeValue(
+            self.AESKey, attributes_to_switch
+        )
         for new, old in zip(new_attributes, old_attributes):
             assert new != old
-            assert (new == CK_TRUE and old == CK_FALSE) or (new == CK_FALSE and old == CK_TRUE)
+            assert (new == CK_TRUE and old == CK_FALSE) or (
+                new == CK_FALSE and old == CK_TRUE
+            )
 
     def test_setAttributeValue_with_label_attribute(self):
         # test setAttributeValue with the text field `CKA_Label` by appending some text

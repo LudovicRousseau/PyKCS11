@@ -1,4 +1,5 @@
 import unittest
+
 from PyKCS11 import PyKCS11
 
 
@@ -169,7 +170,7 @@ class TestUtil(unittest.TestCase):
         plainText = "A test string"
 
         # RSA OAEP
-        aad = "sample aad".encode("utf-8")
+        aad = b"sample aad"
         mech = PyKCS11.RSAOAEPMechanism(PyKCS11.CKM_SHA_1, PyKCS11.CKG_MGF1_SHA1, aad)
         cipherText = self.session.encrypt(self.pubKey, plainText, mech)
         decrypted = self.session.decrypt(self.privKey, cipherText, mech)
@@ -189,7 +190,7 @@ class TestUtil(unittest.TestCase):
             PyKCS11.CKM_SHA1_RSA_PKCS_PSS,
             PyKCS11.CKM_SHA_1,
             PyKCS11.CKG_MGF1_SHA1,
-            20 # size of SHA1 result
+            20,  # size of SHA1 result
         )
         signature = self.session.sign(self.privKey, toSign, mech)
         result = self.session.verify(self.pubKey, toSign, signature, mech)
@@ -207,7 +208,7 @@ class TestUtil(unittest.TestCase):
             PyKCS11.CKM_SHA256_RSA_PKCS_PSS,
             PyKCS11.CKM_SHA256,
             PyKCS11.CKG_MGF1_SHA256,
-            32 # size of SHA256 result
+            32,  # size of SHA256 result
         )
         signature = self.session.sign(self.privKey, toSign, mech)
         result = self.session.verify(self.pubKey, toSign, signature, mech)

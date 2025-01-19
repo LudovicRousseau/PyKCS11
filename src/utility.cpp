@@ -92,5 +92,3 @@ void DestroyTemplate(CK_ATTRIBUTE_PTR &pTemplate, CK_ULONG Len)
 	pTemplate = NULL;
 
 }
-
-

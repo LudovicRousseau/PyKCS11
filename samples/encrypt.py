@@ -16,10 +16,10 @@
 # along with this program; if not, write to the Free Software
 # Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301 USA.
 
-from __future__ import print_function
+
+import binascii
 
 from PyKCS11 import *
-import binascii
 
 pkcs11 = PyKCS11Lib()
 pkcs11.load()  # define environment variable PYKCS11LIB=YourPKCS11Lib
@@ -40,8 +40,8 @@ enc = session.encrypt(pubKey, binascii.unhexlify(message))
 dec = session.decrypt(privKey, enc)
 
 print("\nmessage: " + message)
-print("\nencrypted: {}".format(binascii.hexlify(bytearray(enc))))
-print("\ndecrypted: {}".format(bytearray(dec)))
+print(f"\nencrypted: {binascii.hexlify(bytearray(enc))}")
+print(f"\ndecrypted: {bytearray(dec)}")
 
 # logout
 session.logout()

@@ -17,9 +17,10 @@
 # along with this program; if not, write to the Free Software
 # Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301 USA.
 
-from PyKCS11.LowLevel import *
-from PyKCS11 import ckbytelist
 import os
+
+from PyKCS11 import ckbytelist
+from PyKCS11.LowLevel import *
 
 a = CPKCS11Lib()
 info = CK_INFO()

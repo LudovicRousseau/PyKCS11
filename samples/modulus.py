@@ -16,10 +16,10 @@
 # along with this program; if not, write to the Free Software
 # Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301 USA.
 
-from __future__ import print_function
+
+import binascii
 
 from PyKCS11 import *
-import binascii
 
 pkcs11 = PyKCS11Lib()
 pkcs11.load()  # define environment variable PYKCS11LIB=YourPKCS11Lib
@@ -36,7 +36,7 @@ keyID = (0x22,)
 # find public key and print modulus
 pubKey = session.findObjects([(CKA_CLASS, CKO_PUBLIC_KEY), (CKA_ID, keyID)])[0]
 modulus = session.getAttributeValue(pubKey, [CKA_MODULUS])[0]
-print("\nmodulus: {}".format(binascii.hexlify(bytearray(modulus))))
+print(f"\nmodulus: {binascii.hexlify(bytearray(modulus))}")
 
 # logout
 session.logout()

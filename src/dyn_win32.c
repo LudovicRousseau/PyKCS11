@@ -106,4 +106,3 @@ int SYS_dyn_GetAddress(void *pvLHandle, function_ptr *pvFHandle,
 }
 
 #endif	/* WIN32 */
-

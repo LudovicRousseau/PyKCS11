@@ -1,11 +1,11 @@
-from setuptools import setup, Extension
-from setuptools.command.build_py import build_py
-import shutil
-from sys import version_info as pyver
-from os import path
 import platform
+import shutil
+from os import path
 from shutil import which
+from sys import version_info as pyver
 
+from setuptools import Extension, setup
+from setuptools.command.build_py import build_py
 
 description = """A complete PKCS#11 wrapper for Python.
 You can use any PKCS#11 (aka CryptoKi) module such as the PSM which

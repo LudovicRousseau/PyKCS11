@@ -1,6 +1,7 @@
-import unittest
-from PyKCS11 import PyKCS11
 import gc
+import unittest
+
+from PyKCS11 import PyKCS11
 
 
 class TestUtil(unittest.TestCase):

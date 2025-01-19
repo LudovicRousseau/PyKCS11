@@ -29,4 +29,3 @@ typedef struct PyKCS11String
 	PyKCS11String(vector<unsigned char> bin_str);
 	basic_string<char> m_str;
 }PyKCS11String;
-

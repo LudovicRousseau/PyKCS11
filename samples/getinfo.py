@@ -16,14 +16,14 @@
 # along with this program; if not, write to the Free Software
 # Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301 USA.
 
-from __future__ import print_function
 
-import PyKCS11
 import platform
 import sys
 
+import PyKCS11
 
-class getInfo(object):
+
+class getInfo:
     red = blue = magenta = normal = ""
 
     def colorize(self, text, arg):

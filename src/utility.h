@@ -24,4 +24,3 @@ void DestroyTemplate(CK_ATTRIBUTE_PTR &pTemplate, CK_ULONG Len);
 void Buffer2Vector(unsigned char* pBuf, CK_ULONG Len, vector<unsigned char> &Buf, bool bAllocIfNull);
 
 #endif //_UTILITY_H__DEFINED_
-

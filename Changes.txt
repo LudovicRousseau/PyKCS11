@@ -243,4 +243,3 @@ History
 1.0.1 - 2004 Giuseppe Amato (Midori)
    - first version
    - Windows only
-

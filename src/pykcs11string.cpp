@@ -46,4 +46,3 @@ PyKCS11String::PyKCS11String(vector<unsigned char> bin_str)
 	for (i=0; i < iSize; i++)
 		m_str.push_back(bin_str[i]);
 }
-

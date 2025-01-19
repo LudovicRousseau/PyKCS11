@@ -64,4 +64,3 @@ class CK_ATTRIBUTE_SMART
 	vector<unsigned char>& GetBin();
 	void SetBin(unsigned long attrType, const vector<unsigned char>& pBuf);
 };
-

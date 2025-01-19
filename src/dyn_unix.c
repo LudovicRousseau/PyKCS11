@@ -82,4 +82,3 @@ int SYS_dyn_GetAddress(void *handle, function_ptr *func_ptr,
 } /* SYS_dyn_GetAddress */
 
 #endif	/* HAVE_DLFCN_H && !HAVE_DL_H && !__APPLE__ */
-

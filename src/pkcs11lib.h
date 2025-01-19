@@ -294,4 +294,3 @@ public:
 		CK_MECHANISM_INFO* pInfo);
 
 };
-

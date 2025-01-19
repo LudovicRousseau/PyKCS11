@@ -16,11 +16,12 @@
 # along with this program; if not, write to the Free Software
 # Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301 USA.
 
-import PyKCS11
 import binascii
 import getopt
-import sys
 import platform
+import sys
+
+import PyKCS11
 
 # from http://aspn.activestate.com/ASPN/Cookbook/Python/Recipe/142812
 # Title: Hex dumper
@@ -34,13 +35,14 @@ def dump(src, length=16):
         if x >= 32 and x <= 127:
             return chr(x)
         else:
-            return '.'
+            return "."
+
     N = 0
     result = ""
     while src:
         s, src = src[:length], src[length:]
         text_hexa = " ".join(["%02X" % x for x in s])
-        text_ascii = "".join(map(to_ascii , s))
+        text_ascii = "".join(map(to_ascii, s))
         result += "%04X   %-*s   %s\n" % (N, length * 3, text_hexa, text_ascii)
         N += length
     return result

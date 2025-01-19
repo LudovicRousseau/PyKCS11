@@ -4,9 +4,9 @@
 # ./run_test.py
 # ./run_test.py test_ckbytelist.py
 
-import unittest
 import os
 import sys
+import unittest
 
 import get_PYKCS11LIB
 

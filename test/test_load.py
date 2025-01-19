@@ -1,14 +1,13 @@
-# -*- coding: utf-8 -*-
-
-import unittest
-from PyKCS11 import PyKCS11
-import platform
-import shutil
 import gc
 import os
-
+import platform
+import shutil
+import unittest
 from pathlib import Path
 from tempfile import TemporaryDirectory
+
+from PyKCS11 import PyKCS11
+
 
 class TestUtil(unittest.TestCase):
     def setUp(self):
@@ -17,13 +16,12 @@ class TestUtil(unittest.TestCase):
         self.lib1_name = os.environ["PYKCS11LIB"]
         # create a tmp copy of the main lib
         # to use as a different library in tests
-        self.lib2_name = str(Path(self.tmpdir.name) /
-                             Path(self.lib1_name).name)
+        self.lib2_name = str(Path(self.tmpdir.name) / Path(self.lib1_name).name)
         shutil.copy(self.lib1_name, self.tmpdir.name)
 
     def tearDown(self):
         del self.pkcs11
-        if platform.system() != 'Windows':
+        if platform.system() != "Windows":
             self.tmpdir.cleanup()
         del self.tmpdir
         del self.lib1_name
@@ -62,13 +60,13 @@ class TestUtil(unittest.TestCase):
         # _loaded_libs is shared across all instances
         # check the value in self.pkcs11
         self.assertEqual(len(self.pkcs11._loaded_libs), 2)
-        lib1 = PyKCS11.PyKCS11Lib() # unload lib1
+        lib1 = PyKCS11.PyKCS11Lib()  # unload lib1
         self.assertEqual(len(self.pkcs11._loaded_libs), 1)
-        lib2 = PyKCS11.PyKCS11Lib() # unload lib2
+        lib2 = PyKCS11.PyKCS11Lib()  # unload lib2
         self.assertEqual(len(self.pkcs11._loaded_libs), 0)
 
     def test_invalid_load(self):
-        # Library not found
+        # Library not found
         lib = "nolib"
         with self.assertRaises(PyKCS11.PyKCS11Error) as cm:
             self.pkcs11.load(lib)
@@ -79,10 +77,10 @@ class TestUtil(unittest.TestCase):
         self.assertEqual(len(self.pkcs11._loaded_libs), 0)
 
         # C_GetFunctionList() not found
-        if platform.system() == 'Linux':
+        if platform.system() == "Linux":
             # GNU/Linux
             lib = "libc.so.6"
-        elif platform.system() == 'Darwin':
+        elif platform.system() == "Darwin":
             # macOS
             lib = "/usr/lib/libSystem.B.dylib"
         else:
@@ -94,8 +92,7 @@ class TestUtil(unittest.TestCase):
         the_exception = cm.exception
         self.assertEqual(the_exception.value, -4)
         self.assertEqual(the_exception.text, lib)
-        self.assertEqual(str(the_exception),
-            "C_GetFunctionList() not found (%s)" % lib)
+        self.assertEqual(str(the_exception), "C_GetFunctionList() not found (%s)" % lib)
         self.assertEqual(len(self.pkcs11._loaded_libs), 0)
 
         # try to load the improper lib another time
@@ -104,8 +101,7 @@ class TestUtil(unittest.TestCase):
         the_exception = cm.exception
         self.assertEqual(the_exception.value, -4)
         self.assertEqual(the_exception.text, lib)
-        self.assertEqual(str(the_exception),
-            "C_GetFunctionList() not found (%s)" % lib)
+        self.assertEqual(str(the_exception), "C_GetFunctionList() not found (%s)" % lib)
         self.assertEqual(len(self.pkcs11._loaded_libs), 0)
 
         # finally, load a valid library

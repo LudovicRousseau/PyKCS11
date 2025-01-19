@@ -12,6 +12,6 @@ Describe what _did_ happen.
 
 # Steps for reproducing this issue:
 
-1.  
-2.  
-3.  
+1.
+2.
+3.

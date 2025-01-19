@@ -19,7 +19,7 @@ def get_PYKCS11LIB():
             "/usr/lib64/pkcs11/pkcs11-spy.so",  # Fedora Linux
         ]
     else:
-        if sys.maxsize > 2 ** 32:
+        if sys.maxsize > 2**32:
             # 64-bits
             WINDOWS_SOFTHSM = "c:/SoftHSM2/lib/softhsm2-x64.dll"
         else:
@@ -46,4 +46,4 @@ def get_PYKCS11LIB():
 
 if __name__ == "__main__":
     lib = get_PYKCS11LIB()
-    print("PYKCS11LIB={}".format(lib))
+    print(f"PYKCS11LIB={lib}")

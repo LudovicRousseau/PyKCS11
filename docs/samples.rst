@@ -40,5 +40,3 @@ Dump all the token objects
 """"""""""""""""""""""""""
 
 .. literalinclude:: ../samples/dumpit.py
-
-

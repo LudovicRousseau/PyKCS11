@@ -1,6 +1,7 @@
 #! /usr/bin/env python
 
 import unittest
+
 from PyKCS11 import PyKCS11
 
 # SHA1 of "abc"

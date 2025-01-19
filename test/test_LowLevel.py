@@ -1,8 +1,9 @@
-import unittest
-from PyKCS11 import ckbytelist
-import PyKCS11.LowLevel
 import os
 import platform
+import unittest
+
+import PyKCS11.LowLevel
+from PyKCS11 import ckbytelist
 
 
 class TestUtil(unittest.TestCase):
@@ -14,10 +15,10 @@ class TestUtil(unittest.TestCase):
         self.assertEqual(a.Load("NoFile"), -1)
 
         # C_GetFunctionList() not found
-        if platform.system() == 'Linux':
+        if platform.system() == "Linux":
             # GNU/Linux
             lib = "libc.so.6"
-        elif platform.system() == 'Darwin':
+        elif platform.system() == "Darwin":
             # macOS
             lib = "/usr/lib/libSystem.B.dylib"
         else:

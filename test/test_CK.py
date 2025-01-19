@@ -4,6 +4,7 @@
 # python test/test_CK.py
 
 import unittest
+
 import PyKCS11
 
 
@@ -21,7 +22,7 @@ class TestUtil(unittest.TestCase):
 
     def test_CKH(self):
         self.assertEqual(PyKCS11.CKH_USER_INTERFACE, 3)
-        self.assertEqual(PyKCS11.CKH['CKH_USER_INTERFACE'], 3)
+        self.assertEqual(PyKCS11.CKH["CKH_USER_INTERFACE"], 3)
 
 
 if __name__ == "__main__":
