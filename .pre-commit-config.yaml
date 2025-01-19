@@ -1,0 +1,76 @@
+# To use pre-commit, install the tool, perhaps using pipx or perhaps
+# adding it to a virtual environment you use for the repository.
+#
+# pipx install pre-commit
+#
+# Then, run this command to install the tool as a git pre-commit hook:
+#
+# pre-commit install
+#
+# Then, whenever you modify a file (or files) in the repository,
+# pre-commit will run the configured hooks against the modified files.
+# If the files are modified by the hooks, the git commit will fail and
+# you'll have an opportunity to review and stage the changes made by the
+# hooks.
+#
+# To format all files in this repo, you can run this command
+# (but be aware that sometimes the command must be run multiple times
+# because pyupgrade has several stepping-stone upgrades to apply).
+#
+# pre-commit run -a
+#
+# I strongly recommend enabling pre-commit.ci, which -- like coveralls
+# -- will automatically run an additional action against incoming PRs.
+# If the PRs do not comply to
+
+ci:
+  autoupdate_schedule: "quarterly"
+
+default_language_version:
+  python: "python3"
+
+repos:
+  - repo: "meta"
+    hooks:
+      - id: "check-hooks-apply"
+      - id: "check-useless-excludes"
+
+  - repo: "https://github.com/pre-commit/pre-commit-hooks"
+    rev: "v5.0.0"
+    hooks:
+      - id: "check-added-large-files"
+      - id: "check-merge-conflict"
+      - id: "check-yaml"
+      - id: "end-of-file-fixer"
+      - id: "mixed-line-ending"
+        args:
+          - "--fix=lf"
+      - id: "trailing-whitespace"
+
+  - repo: "https://github.com/asottile/pyupgrade"
+    rev: "v3.19.1"
+    hooks:
+      - id: "pyupgrade"
+        name: "Enforce Python 3.9+ idioms"
+        args:
+          - "--py39-plus"
+
+  - repo: "https://github.com/psf/black-pre-commit-mirror"
+    rev: "24.10.0"
+    hooks:
+      - id: "black"
+
+  - repo: "https://github.com/pycqa/isort"
+    rev: "5.13.2"
+    hooks:
+      - id: "isort"
+
+  - repo: "https://github.com/python-jsonschema/check-jsonschema"
+    rev: "0.30.0"
+    hooks:
+      - id: "check-github-workflows"
+
+  - repo: "https://github.com/rhysd/actionlint"
+    rev: "v1.7.6"
+    hooks:
+      - id: "actionlint"
