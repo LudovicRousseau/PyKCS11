@@ -304,3 +304,35 @@ class TestUtil(unittest.TestCase):
 
         # cleanup
         self.session.destroyObject(derivedKey)
+
+    def test_deriveKey_CKM_EXTRACT_KEY_FROM_KEY(self):
+        if self.manufacturer.startswith("SoftHSM"):
+            self.skipTest("SoftHSM does not support CKM_EXTRACT_KEY_FROM_KEY")
+
+        # sample from the PKCS#11 specification 3.0, section 2.43.7
+        # see https://docs.oasis-open.org/pkcs11/pkcs11-curr/v3.0/os/pkcs11-curr-v3.0-os.html#_Toc30061466
+        baseKeyTemplate = self.genericKeyTemplate + [
+            (PyKCS11.CKA_DERIVE, PyKCS11.CK_TRUE),
+            (PyKCS11.CKA_VALUE, [0x32, 0x9f, 0x84, 0xa9])]
+
+        # create a base key
+        baseKey = self.session.createObject(baseKeyTemplate)
+
+        expectedDerivedKeyValue = [0x95, 0x26]
+
+        derivedKeyTemplate = self.genericKeyTemplate + [(
+            PyKCS11.CKA_VALUE_LEN, len(expectedDerivedKeyValue))]
+        
+        # extract bytes from the base key
+        mechanism = PyKCS11.EXTRACT_KEY_FROM_KEY_Mechanism(21)
+        derivedKey = self.session.deriveKey(
+            baseKey, derivedKeyTemplate, mechanism)
+        self.assertIsNotNone(derivedKey)
+
+        derivedKeyValue = self.getCkaValue(derivedKey)
+
+        # match: check derived key value
+        self.assertSequenceEqual(expectedDerivedKeyValue, derivedKeyValue)
+
+        self.session.destroyObject(baseKey)
+        self.session.destroyObject(derivedKey)
