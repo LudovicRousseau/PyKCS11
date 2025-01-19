@@ -321,6 +321,20 @@ class TestUtil(unittest.TestCase):
 
         # sample from the PKCS#11 specification 3.0, section 2.43.7
         # see https://docs.oasis-open.org/pkcs11/pkcs11-curr/v3.0/os/pkcs11-curr-v3.0-os.html#_Toc30061466
+        #
+        # We give an example of how this mechanism works.  Suppose a
+        # token has a secret key with the 4-byte value 0x329F84A9.  We
+        # will derive a 2-byte secret key from this key, starting at bit
+        # position 21 (i.e., the value of the parameter to the
+        # CKM_EXTRACT_KEY_FROM_KEY mechanism is 21).
+        # 1.     We write the key’s value in binary: 0011 0010 1001 1111
+        #    1000 0100 1010 1001.  We regard this binary string as
+        #    holding the 32 bits of the key, labeled as b0, b1, …, b31.
+        # 2.     We then extract 16 consecutive bits (i.e., 2 bytes)
+        #    from this binary string, starting at bit b21.  We obtain
+        #    the binary string 1001 0101 0010 0110.
+        # 3.     The value of the new key is thus 0x9526.
+
         baseKeyTemplate = self.genericKeyTemplate + [
             (PyKCS11.CKA_DERIVE, PyKCS11.CK_TRUE),
             (PyKCS11.CKA_VALUE, [0x32, 0x9F, 0x84, 0xA9]),
