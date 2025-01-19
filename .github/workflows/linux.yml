@@ -23,7 +23,7 @@ jobs:
 
       - name: setup prerequisites (linux)
         shell: bash
-        run: sudo apt install swig softhsm2 python3-all-dev python3-setuptools tox
+        run: sudo apt install python3-all-dev python3-setuptools softhsm2 swig tox
 
       - name: Build
         run: |
@@ -37,7 +37,7 @@ jobs:
         run: |
           sudo chmod -R a+rx /etc/softhsm
           sudo chmod a+r /etc/softhsm/softhsm2.conf
-          sudo chown -R $(whoami) /var/lib/softhsm
+          sudo chown -R "$(whoami)" /var/lib/softhsm
           softhsm2-util --init-token --slot 0 --label "A token" --pin 1234 --so-pin 123456
           source temp/bin/activate
           make install
