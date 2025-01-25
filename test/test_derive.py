@@ -223,7 +223,8 @@ class TestUtil(unittest.TestCase):
 
         # check that mechanism shares ownership of temporary key
         mechanism = PyKCS11.CONCATENATE_BASE_AND_KEY_Mechanism(
-            self.session.generateKey(concatenateKeyTemplate, key_gen_mechanism))
+            self.session.generateKey(concatenateKeyTemplate, key_gen_mechanism)
+        )
         derivedKey = self.session.deriveKey(self.baseKey, derivedKeyTemplate, mechanism)
         self.assertIsNotNone(derivedKey)
 
