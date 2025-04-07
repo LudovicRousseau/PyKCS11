@@ -36,7 +36,10 @@ print("C_GetInfo: " + hex(a.C_GetInfo(info)))
 print("Library manufacturerID: " + info.GetManufacturerID())
 del info
 
-print("C_GetSlotList(CK_TRUE): " + hex(a.C_GetSlotList(PyKCS11.LowLevel.CK_TRUE, slotList)))
+print(
+    "C_GetSlotList(CK_TRUE): "
+    + hex(a.C_GetSlotList(PyKCS11.LowLevel.CK_TRUE, slotList))
+)
 print("\tAvailable Slots: " + str(len(slotList)))
 
 print(
