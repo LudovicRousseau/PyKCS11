@@ -371,9 +371,10 @@ typedef struct CK_MECHANISM {
 %constant int CK_OBJECT_HANDLE_LENGTH = sizeof(CK_OBJECT_HANDLE);
 
 typedef struct CK_GCM_PARAMS {
-    void * pIv;
+    unsigned char * pIv;
     unsigned long ulIvLen;
-    void * pAAD;
+    unsigned long ulIvBits;
+    unsigned char * pAAD;
     unsigned long ulAADLen;
     unsigned long ulTagBits;
 } CK_GCM_PARAMS;
@@ -384,7 +385,7 @@ typedef struct CK_GCM_PARAMS {
     {
         CK_GCM_PARAMS *p = new CK_GCM_PARAMS();
         p->pIv = p->pAAD = NULL;
-        p->ulIvLen = p->ulAADLen = p->ulTagBits = 0;
+        p->ulIvLen = p->ulIvBits = p->ulAADLen = p->ulTagBits = 0;
         return p;
     }
 };
@@ -412,7 +413,7 @@ typedef struct CK_AES_CTR_PARAMS {
 typedef struct CK_RSA_PKCS_OAEP_PARAMS {
   unsigned long hashAlg;
   unsigned long mgf;
-  unsigned long src;
+  unsigned long source;
   void* pSourceData;
   unsigned long ulSourceDataLen;
 } CK_RSA_PKCS_OAEP_PARAMS;
@@ -424,9 +425,9 @@ typedef struct CK_RSA_PKCS_OAEP_PARAMS {
 		CK_RSA_PKCS_OAEP_PARAMS* p = new CK_RSA_PKCS_OAEP_PARAMS();
 		p->hashAlg = 0;
 		p->mgf = 0;
-		p->src = 0;
-		p->source_data = NULL;
-		p->source_data_len = 0;
+		p->source = 0;
+		p->pSourceData = NULL;
+		p->ulSourceDataLen = 0;
     return p;
 	}
 };
@@ -456,9 +457,9 @@ typedef struct CK_RSA_PKCS_PSS_PARAMS {
 typedef struct CK_ECDH1_DERIVE_PARAMS {
     unsigned long kdf;
     unsigned long ulSharedDataLen;
-    void* pSharedData;
+    unsigned char* pSharedData;
     unsigned long ulPublicDataLen;
-    void* pPublicData;
+    unsigned char* pPublicData;
 } CK_ECDH1_DERIVE_PARAMS;
 
 %extend CK_ECDH1_DERIVE_PARAMS

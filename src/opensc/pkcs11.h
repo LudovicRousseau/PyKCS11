@@ -63,9 +63,9 @@ extern "C" {
    version of this file, please consider deleting the revision macro
    (you may use a macro with a different name to keep track of your
    versions).  */
-#define CRYPTOKI_VERSION_MAJOR		2
-#define CRYPTOKI_VERSION_MINOR		20
-#define CRYPTOKI_VERSION_REVISION	6
+#define CRYPTOKI_VERSION_MAJOR		3
+#define CRYPTOKI_VERSION_MINOR		0
+#define CRYPTOKI_VERSION_REVISION	0
 
 
 /* Compatibility interface is default, unless CRYPTOKI_GNU is
@@ -163,8 +163,6 @@ extern "C" {
 #define max_key_size ulMaxKeySize
 
 #define ck_rsa_pkcs_oaep_params _CK_RSA_PCKS_OAEP_PARAMS
-#define source_data pSourceData
-#define source_data_len ulSourceDataLen
 
 #define ck_rv_t CK_RV
 #define ck_notify_t CK_NOTIFY
@@ -736,9 +734,9 @@ struct ck_mechanism_info
 struct ck_rsa_pkcs_oaep_params {
   unsigned long hashAlg;
   unsigned long mgf;
-  unsigned long src;
-  void *source_data;
-  unsigned long source_data_len;
+  unsigned long source;
+  void *pSourceData;
+  unsigned long ulSourceDataLen;
 } ;
 
 struct ck_rsa_pkcs_pss_params {
@@ -764,9 +762,9 @@ struct ck_aes_ctr_params {
 struct ck_ecdh1_derive_params {
   unsigned long kdf;
   unsigned long ulSharedDataLen;
-  void * pSharedData;
+  unsigned char * pSharedData;
   unsigned long ulPublicDataLen;
-  void * pPublicData;
+  unsigned char * pPublicData;
 } ;
 
 struct ck_key_derivation_string_data {
