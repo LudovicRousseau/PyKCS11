@@ -859,7 +859,7 @@ class RSAOAEPMechanism:
         self._param.hashAlg = hashAlg
         self._param.mgf = mgf
         self._source = None
-        self._param.src = CKZ_DATA_SPECIFIED
+        self._param.source = CKZ_DATA_SPECIFIED
         if label:
             self._source = ckbytelist(label)
             self._param.ulSourceDataLen = len(self._source)
