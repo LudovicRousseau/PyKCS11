@@ -18,12 +18,7 @@
 
 #pragma once
 
-#ifdef SWIG
-
-//#define CK_OBJECT_HANDLE unsigned long
-//#define CK_SESSION_HANDLE unsigned long
-
-#else
+#ifndef SWIG
 
 	typedef CK_ATTRIBUTE CK_ATTRIBUTE_INTERNAL;
 #ifdef WIN32
