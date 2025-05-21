@@ -50,7 +50,7 @@ public:
 	CK_RV C_Initialize();
 	CK_RV C_Finalize();
 	CK_RV C_GetInfo(CK_INFO* pInfo);
-	CK_RV C_GetSlotList(unsigned char tokenPresent, vector<long>& slotList);
+	CK_RV C_GetSlotList(unsigned char tokenPresent, vector<unsigned long>& slotList);
 
 	CK_RV C_GetSlotInfo(unsigned long slotID,CK_SLOT_INFO* pInfo);
 
@@ -132,7 +132,7 @@ public:
 
 	CK_RV C_FindObjects(
 		CK_SESSION_HANDLE hSession,
-		vector<CK_OBJECT_HANDLE> &objectsList);
+		vector<unsigned long> &objectsList);
 
 	CK_RV C_FindObjectsFinal(CK_SESSION_HANDLE hSession);
 
@@ -281,7 +281,7 @@ public:
 
 	CK_RV C_GetMechanismList(
 		unsigned long slotID,
-		vector<long> &mechanismList);
+		vector<unsigned long> &mechanismList);
 
 	CK_RV C_GetMechanismInfo(
 		unsigned long slotID,

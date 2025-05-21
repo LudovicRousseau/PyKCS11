@@ -45,8 +45,19 @@ class TestUtil(unittest.TestCase):
         tokenInfo = PyKCS11.LowLevel.CK_TOKEN_INFO()
         self.assertIsNotNone(tokenInfo)
 
-        slotList = PyKCS11.LowLevel.ckintlist()
+        slotList = PyKCS11.LowLevel.ckulonglist()
         self.assertIsNotNone(slotList)
+
+        longList = PyKCS11.LowLevel.ckulonglist(1)
+        longList[0] = 42
+        self.assertEqual(longList[0], 42)
+        longList[0] = 0x80000000
+        self.assertEqual(longList[0], 2147483648)
+        longList[0] = 0xffffffff
+        self.assertEqual(longList[0], 4294967295)
+        # negative numbers are not allowed
+        with self.assertRaises(TypeError):
+            longList[0] = -1
 
         a.Load(lib)
 
@@ -93,7 +104,7 @@ class TestUtil(unittest.TestCase):
             a.C_Login(session, PyKCS11.LowLevel.CKU_USER, pin), PyKCS11.LowLevel.CKR_OK
         )
 
-        SearchResult = PyKCS11.LowLevel.ckobjlist(10)
+        SearchResult = PyKCS11.LowLevel.ckulonglist(10)
         SearchTemplate = PyKCS11.LowLevel.ckattrlist(2)
         SearchTemplate[0].SetNum(
             PyKCS11.LowLevel.CKA_CLASS, PyKCS11.LowLevel.CKO_CERTIFICATE

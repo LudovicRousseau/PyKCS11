@@ -46,10 +46,9 @@ using namespace std;
 %include typemaps.i
 %include std_vector.i
 
-%template(ckintlist) vector<long>;
+%template(ckulonglist) vector<unsigned long>;
 %template(ckbytelist) vector<unsigned char>;
 %template(ckattrlist) vector<CK_ATTRIBUTE_SMART>;
-%template(ckobjlist) vector<CK_OBJECT_HANDLE>;
 
 %pointer_class(unsigned long, CK_SESSION_HANDLE);
 %pointer_class(unsigned long, CK_OBJECT_HANDLE);

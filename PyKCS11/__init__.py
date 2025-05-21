@@ -580,7 +580,7 @@ class PyKCS11Lib:
         :return: a list of available slots
         :rtype: list
         """
-        slotList = PyKCS11.LowLevel.ckintlist()
+        slotList = PyKCS11.LowLevel.ckulonglist()
         rv = self.lib.C_GetSlotList(CK_TRUE if tokenPresent else CK_FALSE, slotList)
         if rv != CKR_OK:
             raise PyKCS11Error(rv)
@@ -708,7 +708,7 @@ class PyKCS11Lib:
         :return: the list of available mechanisms for a slot
         :rtype: list
         """
-        mechanismList = PyKCS11.LowLevel.ckintlist()
+        mechanismList = PyKCS11.LowLevel.ckulonglist()
         rv = self.lib.C_GetMechanismList(slot, mechanismList)
         if rv != CKR_OK:
             raise PyKCS11Error(rv)
@@ -1728,7 +1728,7 @@ class Session:
         t = self._template2ckattrlist(template)
 
         # we search for 10 objects by default. speed/memory tradeoff
-        result = PyKCS11.LowLevel.ckobjlist(10)
+        result = PyKCS11.LowLevel.ckulonglist(10)
 
         rv = self.lib.C_FindObjectsInit(self.session, t)
         if rv != CKR_OK:
@@ -1743,7 +1743,7 @@ class Session:
                 # make a copy of the handle: the original value get
                 # corrupted (!!)
                 a = CK_OBJECT_HANDLE(self)
-                a.assign(x.value())
+                a.assign(x)
                 res.append(a)
             if len(result) == 0:
                 break

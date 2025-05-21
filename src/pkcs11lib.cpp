@@ -110,7 +110,7 @@ CK_RV CPKCS11Lib::C_GetInfo(CK_INFO* pInfo)
 
 CK_RV CPKCS11Lib::C_GetSlotList(
 	unsigned char tokenPresent,
-	vector<long>& slotList)
+	vector<unsigned long>& slotList)
 {
 	CK_RV rv;
 
@@ -340,7 +340,7 @@ CK_RV CPKCS11Lib::C_FindObjectsInit(
 
 CK_RV CPKCS11Lib::C_FindObjects(
 	CK_SESSION_HANDLE hSession,
-	vector<CK_OBJECT_HANDLE>& objectList)
+	vector<unsigned long>& objectList)
 {
 	CK_RV rv;
 	CK_ULONG i;
@@ -354,7 +354,7 @@ CK_RV CPKCS11Lib::C_FindObjects(
 	if (CKR_OK == rv && ulObjects)
 	{
 		for (i=0; i<ulObjects; i++)
-			objectList.push_back(static_cast<CK_OBJECT_HANDLE>(pList[i]));
+			objectList.push_back(static_cast<unsigned long>(pList[i]));
 	}
 	if (pList)
 		delete [] pList;
@@ -940,7 +940,7 @@ CK_RV CPKCS11Lib::C_WaitForSlotEvent(
 
 CK_RV CPKCS11Lib::C_GetMechanismList(
 	unsigned long slotID,
-	vector<long> &mechanismList)
+	vector<unsigned long> &mechanismList)
 {
 	CK_RV rv;
 
