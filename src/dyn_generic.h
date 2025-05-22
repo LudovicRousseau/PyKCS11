@@ -5,6 +5,8 @@
  *
  * Copyright (C) 1999
  *  David Corcoran <corcoran@linuxnet.com>
+ * Copyright (C) 2017-2025
+ *  Ludovic Rousseau <ludovic.rousseau@free.fr>
  *
  * $Id: dyn_generic.h,v 1.3 2003/10/18 17:19:36 aet-guest Exp $
  */
