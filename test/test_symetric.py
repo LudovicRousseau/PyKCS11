@@ -137,12 +137,13 @@ class TestUtil(unittest.TestCase):
         aesMechanisms = {
             "CKM_AES_ECB": PyKCS11.Mechanism(PyKCS11.CKM_AES_ECB),
             "CKM_AES_CBC": PyKCS11.Mechanism(PyKCS11.CKM_AES_CBC, iv),
-            "CKM_AES_CTR": PyKCS11.AES_CTR_Mechanism(128, iv)
+            "CKM_AES_CTR": PyKCS11.AES_CTR_Mechanism(128, iv),
         }
 
         keyID = (0x02,)
         aesKey = self.session.generateKey(
-            self.aesKeyTemplate + [(PyKCS11.CKA_ID, keyID)])
+            self.aesKeyTemplate + [(PyKCS11.CKA_ID, keyID)]
+        )
         self.assertIsNotNone(aesKey)
 
         for mechName in aesMechanisms:
@@ -162,10 +163,10 @@ class TestUtil(unittest.TestCase):
 
         encData = []
         dataPos = 0
-        # encrypt data using parts of different length, 
+        # encrypt data using parts of different length,
         # but each of them must be a multiple of the block size
-        for m in [1,2,3,4]: # total 8 blocks
-            dataPart = list(data[dataPos:dataPos + m * self.aesBlockSize])
+        for m in [1, 2, 3, 4]:  # total 8 blocks
+            dataPart = list(data[dataPos : dataPos + m * self.aesBlockSize])
             encData += list(self.session.encryptUpdate(dataPart))
             dataPos += m * self.aesBlockSize
         encData += list(self.session.encryptFinal())
@@ -174,15 +175,15 @@ class TestUtil(unittest.TestCase):
 
         decData = []
         dataPos = 0
-        for m in [3,1,2,4]: # total 8 blocks
-            encPart = list(encData[dataPos:dataPos + m * self.aesBlockSize])
+        for m in [3, 1, 2, 4]:  # total 8 blocks
+            encPart = list(encData[dataPos : dataPos + m * self.aesBlockSize])
             decData += list(self.session.decryptUpdate(encPart))
             dataPos += m * self.aesBlockSize
         decData += list(self.session.decryptFinal())
 
         self.assertSequenceEqual(data, decData)
 
-        # initiate another encryption to check that 
+        # initiate another encryption to check that
         # the previous operation has been terminated
         self.session.encryptInit(mechanism, key)
         self.session.encryptFinal()
@@ -193,9 +194,10 @@ class TestUtil(unittest.TestCase):
 
         keyID = (0x03,)
         aesKey = self.session.generateKey(
-            self.aesKeyTemplate + [(PyKCS11.CKA_ID, keyID)])
+            self.aesKeyTemplate + [(PyKCS11.CKA_ID, keyID)]
+        )
         self.assertIsNotNone(aesKey)
-        
+
         AES_GCM_IV_SIZE = 12
         AES_GCM_TAG_SIZE = 16
         iv = self.session.generateRandom(AES_GCM_IV_SIZE)
@@ -214,11 +216,11 @@ class TestUtil(unittest.TestCase):
         self.session.decryptInit(mechanism, aesKey)
 
         decData = list(self.session.decryptUpdate(encData))
-        
+
         # check: since CKM_AES_GCM is an AEAD cipher, no data should be returned until decryptFinal()
         # see https://docs.oasis-open.org/pkcs11/pkcs11-curr/v3.0/os/pkcs11-curr-v3.0-os.html#_Toc30061258
         self.assertFalse(decData)
-        
+
         decData += list(self.session.decryptUpdate(tag))
         self.assertFalse(decData)
         decData += list(self.session.decryptFinal())

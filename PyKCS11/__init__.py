@@ -1361,7 +1361,7 @@ class Session:
         C_EncryptInit
 
         :param mech: the encryption mechanism to be used
-        :type mech: instance of :class:`Mechanism` 
+        :type mech: instance of :class:`Mechanism`
         :param key: a key handle
         :type key: integer
         """
@@ -1433,13 +1433,13 @@ class Session:
         if rv != CKR_OK:
             raise PyKCS11Error(rv)
         return decrypted
-    
+
     def decryptInit(self, mech, key):
         """
         C_DecryptInit
 
         :param mech: the decrypt mechanism to be used
-        :type mech: instance of :class:`Mechanism` 
+        :type mech: instance of :class:`Mechanism`
         :param key: a key handle
         :type key: integer
         """

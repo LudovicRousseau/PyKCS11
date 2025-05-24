@@ -428,9 +428,9 @@ CK_RV CPKCS11Lib::C_EncryptUpdate(
 	{
 		// The second call get the actual encrypted data
 		outEncryptedData.resize(ulOutDataLen);
-		rv = m_pFunc->C_EncryptUpdate(hSession, pInData, ulInDataLen, 
+		rv = m_pFunc->C_EncryptUpdate(hSession, pInData, ulInDataLen,
 			outEncryptedData.data(), &ulOutDataLen);
-		outEncryptedData.erase(outEncryptedData.begin() + ulOutDataLen, 
+		outEncryptedData.erase(outEncryptedData.begin() + ulOutDataLen,
 			outEncryptedData.end());
 	}
 
@@ -457,7 +457,7 @@ CK_RV CPKCS11Lib::C_EncryptFinal(
 		rv = m_pFunc->C_EncryptFinal(hSession, outEncryptedData.data(), &ulOutDataLen);
 		outEncryptedData.erase(outEncryptedData.begin() + ulOutDataLen, outEncryptedData.end());
 	}
-	
+
 	return rv;
 }
 
@@ -509,7 +509,7 @@ CK_RV CPKCS11Lib::C_DecryptUpdate(
 
 	CK_ULONG ulInDataLen = static_cast<CK_ULONG>( inEncryptedData.size() );
 	CK_BYTE* pInData = inEncryptedData.data();
-	
+
 	CK_ULONG ulOutDataLen = 0;
 	// The first call to get the decrypted size
 	rv = m_pFunc->C_DecryptUpdate(hSession, pInData, ulInDataLen, nullptr,
@@ -523,7 +523,7 @@ CK_RV CPKCS11Lib::C_DecryptUpdate(
 			&ulOutDataLen);
 		outData.erase(outData.begin() + ulOutDataLen, outData.end());
 	}
-	
+
 	return rv;
 }
 
@@ -544,7 +544,7 @@ CK_RV CPKCS11Lib::C_DecryptFinal(
 		rv = m_pFunc->C_DecryptFinal(hSession, outData.data(), &ulOutDataLen);
 		outData.erase(outData.begin() + ulOutDataLen, outData.end());
 	}
-	
+
 	return rv;
 }
 
