@@ -1356,6 +1356,47 @@ class Session:
             raise PyKCS11Error(rv)
         return encrypted
 
+    def encryptInit(self, mech, key):
+        """
+        C_EncryptInit
+
+        :param mech: the encryption mechanism to be used
+        :type mech: instance of :class:`Mechanism`
+        :param key: a key handle
+        :type key: integer
+        """
+        m = mech.to_native()
+        rv = self.lib.C_EncryptInit(self.session, m, key)
+        if rv != CKR_OK:
+            raise PyKCS11Error(rv)
+
+    def encryptUpdate(self, data):
+        """
+        C_EncryptUpdate
+
+        :param data: the data to be encrypted
+        :type data: (binary) string or list/tuple of bytes
+        """
+        encrypted = ckbytelist()
+        data1 = ckbytelist(data)
+        rv = self.lib.C_EncryptUpdate(self.session, data1, encrypted)
+        if rv != CKR_OK:
+            raise PyKCS11Error(rv)
+        return encrypted
+
+    def encryptFinal(self):
+        """
+        C_EncryptFinal
+
+        :return: the last part of data to be encrypted
+        :rtype: (binary) string or list/tuple of bytes
+        """
+        encrypted = ckbytelist()
+        rv = self.lib.C_EncryptFinal(self.session, encrypted)
+        if rv != CKR_OK:
+            raise PyKCS11Error(rv)
+        return encrypted
+
     def decrypt(self, key, data, mecha=MechanismRSAPKCS1):
         """
         C_DecryptInit/C_Decrypt
@@ -1389,6 +1430,47 @@ class Session:
             raise PyKCS11Error(rv)
         # second call get actual decrypted data
         rv = self.lib.C_Decrypt(self.session, data1, decrypted)
+        if rv != CKR_OK:
+            raise PyKCS11Error(rv)
+        return decrypted
+
+    def decryptInit(self, mech, key):
+        """
+        C_DecryptInit
+
+        :param mech: the decrypt mechanism to be used
+        :type mech: instance of :class:`Mechanism`
+        :param key: a key handle
+        :type key: integer
+        """
+        m = mech.to_native()
+        rv = self.lib.C_DecryptInit(self.session, m, key)
+        if rv != CKR_OK:
+            raise PyKCS11Error(rv)
+
+    def decryptUpdate(self, data):
+        """
+        C_DecryptUpdate
+
+        :param data: the data to be decrypted
+        :type data: (binary) string or list/tuple of bytes
+        """
+        decrypted = ckbytelist()
+        encrypted = ckbytelist(data)
+        rv = self.lib.C_DecryptUpdate(self.session, encrypted, decrypted)
+        if rv != CKR_OK:
+            raise PyKCS11Error(rv)
+        return decrypted
+
+    def decryptFinal(self):
+        """
+        C_DecryptFinal
+
+        :return: the last part of the decrypted data
+        :rtype: (binary) string or list/tuple of bytes
+        """
+        decrypted = ckbytelist()
+        rv = self.lib.C_DecryptFinal(self.session, decrypted)
         if rv != CKR_OK:
             raise PyKCS11Error(rv)
         return decrypted
