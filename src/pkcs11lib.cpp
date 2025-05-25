@@ -412,23 +412,28 @@ CK_RV CPKCS11Lib::C_EncryptUpdate(
 	vector<unsigned char> &outEncryptedData)
 {
 	CK_RV rv;
+
 	if (!inData.size())
 		return CKR_ARGUMENTS_BAD;
 
-	CK_ULONG ulInDataLen = 0;
-	CK_BYTE* pInData = Vector2Buffer(inData, ulInDataLen);
-	CK_ULONG ulOutDataLen = 0;
-	CK_BYTE* pOutData = Vector2Buffer(outEncryptedData, ulOutDataLen);
+	CK_ULONG ulInDataLen = static_cast<CK_ULONG>( inData.size() );
+	CK_BYTE* pInData = inData.data();
 
-	rv = m_pFunc->C_EncryptUpdate(hSession, pInData, ulInDataLen, pOutData,
+	CK_ULONG ulOutDataLen = 0;
+	// the # first call get the encrypted size
+	rv = m_pFunc->C_EncryptUpdate(hSession, pInData, ulInDataLen, nullptr,
 		&ulOutDataLen);
 
 	if (CKR_OK == rv)
-		Buffer2Vector(pOutData, ulOutDataLen, outEncryptedData, true);
-	if (pOutData)
-		delete []pOutData;
-	if (pInData)
-		delete []pInData;
+	{
+		// The second call get the actual encrypted data
+		outEncryptedData.resize(ulOutDataLen);
+		rv = m_pFunc->C_EncryptUpdate(hSession, pInData, ulInDataLen,
+			outEncryptedData.data(), &ulOutDataLen);
+		outEncryptedData.erase(outEncryptedData.begin() + ulOutDataLen,
+			outEncryptedData.end());
+	}
+
 	return rv;
 }
 
@@ -437,16 +442,22 @@ CK_RV CPKCS11Lib::C_EncryptFinal(
 	vector<unsigned char> &outEncryptedData)
 {
 	CK_RV rv;
-
 	CK_ULONG ulOutDataLen = 0;
-	CK_BYTE* pOutData = Vector2Buffer(outEncryptedData, ulOutDataLen);
 
-	rv = m_pFunc->C_EncryptFinal(hSession, pOutData, &ulOutDataLen);
+	// The first call to get the encrypted size
+	rv = m_pFunc->C_EncryptFinal(hSession, nullptr, &ulOutDataLen);
 
 	if (CKR_OK == rv)
-		Buffer2Vector(pOutData, ulOutDataLen, outEncryptedData, true);
-	if (pOutData)
-		delete []pOutData;
+	{
+		// The second call to get the actual encrypted data
+		// Always use a buffer with an extra byte, since C_EncryptFinal may return zero data,
+		// in which case one still have to make the second call with a non-null output buffer
+		// in order to terminate the encryption operation
+		outEncryptedData.resize(ulOutDataLen + 1);
+		rv = m_pFunc->C_EncryptFinal(hSession, outEncryptedData.data(), &ulOutDataLen);
+		outEncryptedData.erase(outEncryptedData.begin() + ulOutDataLen, outEncryptedData.end());
+	}
+
 	return rv;
 }
 
@@ -496,20 +507,23 @@ CK_RV CPKCS11Lib::C_DecryptUpdate(
 	if (!inEncryptedData.size())
 		return CKR_ARGUMENTS_BAD;
 
-	CK_ULONG ulInDataLen = 0;
-	CK_BYTE* pInData = Vector2Buffer(inEncryptedData, ulInDataLen);
-	CK_ULONG ulOutDataLen = 0;
-	CK_BYTE* pOutData = Vector2Buffer(outData, ulOutDataLen);
+	CK_ULONG ulInDataLen = static_cast<CK_ULONG>( inEncryptedData.size() );
+	CK_BYTE* pInData = inEncryptedData.data();
 
-	rv = m_pFunc->C_DecryptUpdate(hSession, pInData, ulInDataLen, pOutData,
+	CK_ULONG ulOutDataLen = 0;
+	// The first call to get the decrypted size
+	rv = m_pFunc->C_DecryptUpdate(hSession, pInData, ulInDataLen, nullptr,
 		&ulOutDataLen);
 
 	if (CKR_OK == rv)
-		Buffer2Vector(pOutData, ulOutDataLen, outData, true);
-	if (pOutData)
-		delete []pOutData;
-	if (pInData)
-		delete []pInData;
+	{
+		// The second call to get the actual decrypted data
+		outData.resize(ulOutDataLen);
+		rv = m_pFunc->C_DecryptUpdate(hSession, pInData, ulInDataLen, outData.data(),
+			&ulOutDataLen);
+		outData.erase(outData.begin() + ulOutDataLen, outData.end());
+	}
+
 	return rv;
 }
 
@@ -519,14 +533,18 @@ CK_RV CPKCS11Lib::C_DecryptFinal(
 {
 	CK_RV rv;
 	CK_ULONG ulOutDataLen = 0;
-	CK_BYTE* pOutData = Vector2Buffer(outData, ulOutDataLen);
 
-	rv = m_pFunc->C_DecryptFinal(hSession, pOutData, &ulOutDataLen);
+	// The first call to get the decrypted size
+	rv = m_pFunc->C_DecryptFinal(hSession, nullptr, &ulOutDataLen);
 
 	if (CKR_OK == rv)
-		Buffer2Vector(pOutData, ulOutDataLen, outData, true);
-	if (pOutData)
-		delete []pOutData;
+	{
+		// The second call to get the actual decrypted data
+		outData.resize(ulOutDataLen + 1);
+		rv = m_pFunc->C_DecryptFinal(hSession, outData.data(), &ulOutDataLen);
+		outData.erase(outData.begin() + ulOutDataLen, outData.end());
+	}
+
 	return rv;
 }
 
