@@ -167,9 +167,9 @@ class TestUtil(unittest.TestCase):
         # but each of them must be a multiple of the block size
         for m in [1, 2, 3, 4]:  # total 8 blocks
             dataPart = list(data[dataPos : dataPos + m * self.aesBlockSize])
-            encData += list(self.session.encryptUpdate(dataPart))
+            encData += self.session.encryptUpdate(dataPart)
             dataPos += m * self.aesBlockSize
-        encData += list(self.session.encryptFinal())
+        encData += self.session.encryptFinal()
 
         self.session.decryptInit(mechanism, key)
 
@@ -177,9 +177,9 @@ class TestUtil(unittest.TestCase):
         dataPos = 0
         for m in [3, 1, 2, 4]:  # total 8 blocks
             encPart = list(encData[dataPos : dataPos + m * self.aesBlockSize])
-            decData += list(self.session.decryptUpdate(encPart))
+            decData += self.session.decryptUpdate(encPart)
             dataPos += m * self.aesBlockSize
-        decData += list(self.session.decryptFinal())
+        decData += self.session.decryptFinal()
 
         self.assertSequenceEqual(data, decData)
 
@@ -215,15 +215,15 @@ class TestUtil(unittest.TestCase):
 
         self.session.decryptInit(mechanism, aesKey)
 
-        decData = list(self.session.decryptUpdate(encData))
+        decData = self.session.decryptUpdate(encData)
 
         # check: since CKM_AES_GCM is an AEAD cipher, no data should be returned until decryptFinal()
         # see https://docs.oasis-open.org/pkcs11/pkcs11-curr/v3.0/os/pkcs11-curr-v3.0-os.html#_Toc30061258
         self.assertFalse(decData)
 
-        decData += list(self.session.decryptUpdate(tag))
+        decData += self.session.decryptUpdate(tag)
         self.assertFalse(decData)
-        decData += list(self.session.decryptFinal())
+        decData += self.session.decryptFinal()
 
-        self.assertSequenceEqual(data, decData)
+        self.assertSequenceEqual(data, list(decData))
         self.session.destroyObject(aesKey)
