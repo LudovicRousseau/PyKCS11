@@ -78,6 +78,17 @@ class Testutil(unittest.TestCase):
         self.assertEqual(the_exception.text, type_str)
         self.assertEqual(str(the_exception), "Unknown format (%s)" % type_str)
 
+    def test_concat(self):
+        a = PyKCS11.ckbytelist("ABC")
+        b = PyKCS11.ckbytelist("DEF")
+        c = a + b
+        self.assertSequenceEqual(c, [65, 66, 67] + [68, 69, 70])
+
+    def test_add(self):
+        a = PyKCS11.ckbytelist("ABC")
+        b = PyKCS11.ckbytelist("DEF")
+        a += b
+        self.assertSequenceEqual(a, [65, 66, 67] + [68, 69, 70])
 
 if __name__ == "__main__":
     unittest.main()
