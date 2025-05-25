@@ -96,6 +96,9 @@ class ckbytelist(PyKCS11.LowLevel.ckbytelist):
         rep = [int(elt) for elt in self]
         return repr(rep)
 
+    def __add__(self, b):
+        return ckbytelist(bytes(self) + bytes(b))
+
 
 class CK_OBJECT_HANDLE(PyKCS11.LowLevel.CK_OBJECT_HANDLE):
     """
