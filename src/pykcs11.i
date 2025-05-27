@@ -276,6 +276,10 @@ typedef struct CK_DATE{
             if( SWIG_IsOK( res2 ) )
                 break;
 
+            res2 = SWIG_ConvertPtr($input, &arg2, $descriptor(CK_EDDSA_PARAMS*), 0);
+            if( SWIG_IsOK( res2 ) )
+                break;
+
             res2 = SWIG_ConvertPtr($input, &arg2, $descriptor(CK_OBJECT_HANDLE*), 0);
             if( SWIG_IsOK( res2 ) )
                 break;
@@ -500,6 +504,26 @@ typedef struct CK_KEY_DERIVATION_STRING_DATA {
 %pointer_class(unsigned long, CK_EXTRACT_PARAMS);
 
 %constant int CK_EXTRACT_PARAMS_LENGTH = sizeof(CK_EXTRACT_PARAMS);
+
+typedef struct CK_EDDSA_PARAMS {
+    unsigned char phFlag;
+    unsigned long ulContextDataLen;
+    unsigned char * pContextData;
+} CK_EDDSA_PARAMS;
+
+%extend CK_EDDSA_PARAMS
+{
+    CK_EDDSA_PARAMS()
+    {
+        CK_EDDSA_PARAMS *p = new CK_EDDSA_PARAMS();
+        p->phFlag = 0;
+        p->ulContextDataLen = 0;
+        p->pContextData = NULL;
+        return p;
+    }
+};
+
+%constant int CK_EDDSA_PARAMS_LENGTH = sizeof(CK_EDDSA_PARAMS);
 
 typedef struct CK_MECHANISM_INFO {
 %immutable;
