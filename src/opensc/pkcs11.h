@@ -663,6 +663,7 @@ typedef unsigned long ck_mechanism_type_t;
 #define CKM_ECDH1_DERIVE		(0x1050)
 #define CKM_ECDH1_COFACTOR_DERIVE	(0x1051)
 #define CKM_ECMQV_DERIVE		(0x1052)
+#define CKM_EDDSA			(0x1057)
 #define CKM_JUNIPER_KEY_GEN		(0x1060)
 #define CKM_JUNIPER_ECB128		(0x1061)
 #define CKM_JUNIPER_CBC128		(0x1062)
@@ -773,6 +774,12 @@ struct ck_key_derivation_string_data {
 } ;
 
 typedef unsigned long ck_extract_params;
+
+struct ck_eddsa_params {
+  unsigned char phFlag;
+  unsigned long ulContextDataLen;
+  unsigned char * pContextData;
+} ;
 
 #define CKF_HW			(1 << 0)
 #define CKF_ENCRYPT		(1 << 8)
@@ -1356,6 +1363,9 @@ typedef struct ck_key_derivation_string_data *CK_KEY_DERIVATION_STRING_DATA_PTR;
 
 typedef ck_extract_params CK_EXTRACT_PARAMS;
 typedef ck_extract_params *CK_EXTRACT_PARAMS_PTR;
+
+typedef struct ck_eddsa_params CK_EDDSA_PARAMS;
+typedef struct ck_eddsa_params *CK_EDDSA_PARAMS_PTR;
 
 typedef struct ck_function_list CK_FUNCTION_LIST;
 typedef struct ck_function_list *CK_FUNCTION_LIST_PTR;

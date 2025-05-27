@@ -1092,6 +1092,38 @@ class EXTRACT_KEY_FROM_KEY_Mechanism:
         return self._mech
 
 
+class EDDSA_Mechanism:
+    """CKM_EDDSA signature mechanism"""
+
+    # pylint: disable=too-few-public-methods
+
+    def __init__(self, phFlag=None, contextData=None):
+        """
+        :param phFlag: prehash flag [True|False]. If this parameter is not set,
+        Ed25519 in pure mode without context is assumed.
+        :param context: context data (optional)
+        """
+        self._param = PyKCS11.LowLevel.CK_EDDSA_PARAMS()
+        self._mech = PyKCS11.LowLevel.CK_MECHANISM()
+        self._mech.mechanism = CKM_EDDSA
+
+        if not phFlag is None:
+            self._phFlag = phFlag
+            self._param.phFlag = self._phFlag
+
+            if contextData:
+                self._contextData = ckbytelist(contextData)
+                self._param.pContextData = self._contextData
+                self._param.ulContextDataLen = len(self._contextData)
+
+            self._mech.pParameter = self._param
+            self._mech.ulParameterLen = PyKCS11.LowLevel.CK_EDDSA_PARAMS_LENGTH
+
+    def to_native(self):
+        """convert mechanism to native format"""
+        return self._mech
+
+
 class DigestSession:
     """Digest session"""
 
