@@ -1230,7 +1230,7 @@ class Session:
           (use `MechanismSHA1` for `CKM_SHA_1`)
         :type mecha: :class:`Mechanism`
         :return: the computed digest
-        :rtype: list of bytes
+        :rtype: ckbytelist
 
         :note: the returned value is an istance of :class:`ckbytelist`.
           You can easly convert it to a binary string with:
@@ -1267,7 +1267,7 @@ class Session:
           (use `MechanismRSAPKCS1` for `CKM_RSA_PKCS`)
         :type mecha: :class:`Mechanism`
         :return: the computed signature
-        :rtype: list of bytes
+        :rtype: ckbytelist
 
         :note: the returned value is an instance of :class:`ckbytelist`.
           You can easly convert it to a binary string with:
@@ -1334,7 +1334,7 @@ class Session:
           (use `MechanismRSAPKCS1` for `CKM_RSA_PKCS`)
         :type mecha: :class:`Mechanism`
         :return: the encrypted data
-        :rtype: list of bytes
+        :rtype: ckbytelist
 
         :note: the returned value is an instance of :class:`ckbytelist`.
           You can easly convert it to a binary string with:
@@ -1412,7 +1412,7 @@ class Session:
         :type mecha: :class:`Mechanism` instance or :class:`MechanismRSAPKCS1`
           for CKM_RSA_PKCS
         :return: the decrypted data
-        :rtype: list of bytes
+        :rtype: ckbytelist
 
         :note: the returned value is an instance of :class:`ckbytelist`.
           You can easly convert it to a binary string with:
@@ -1490,7 +1490,7 @@ class Session:
           (use `MechanismRSAPKCS1` for `CKM_RSA_PKCS`)
         :type mecha: :class:`Mechanism`
         :return: the wrapped key bytes
-        :rtype: list of bytes
+        :rtype: ckbytelist
 
         :note: the returned value is an instance of :class:`ckbytelist`.
           You can easily convert it to a binary string with:
