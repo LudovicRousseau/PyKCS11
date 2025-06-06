@@ -1260,7 +1260,7 @@ class Session:
         C_SignInit/C_Sign
 
         :param key: a key handle, obtained calling :func:`findObjects`.
-        :type key: integer
+        :type key: PyKCS11.LowLevel.CK_OBJECT_HANDLE
         :param data: the data to be signed
         :type data:  (binary) string or list/tuple of bytes
         :param mecha: the signing mechanism to be used
@@ -1297,7 +1297,7 @@ class Session:
         C_VerifyInit/C_Verify
 
         :param key: a key handle, obtained calling :func:`findObjects`.
-        :type key: integer
+        :type key: PyKCS11.LowLevel.CK_OBJECT_HANDLE
         :param data: the data that was signed
         :type data:  (binary) string or list/tuple of bytes
         :param signature: the signature to be verified
@@ -1327,7 +1327,7 @@ class Session:
         C_EncryptInit/C_Encrypt
 
         :param key: a key handle, obtained calling :func:`findObjects`.
-        :type key: integer
+        :type key: PyKCS11.LowLevel.CK_OBJECT_HANDLE
         :param data: the data to be encrypted
         :type data:  (binary) string or list/tuple of bytes
         :param mecha: the encryption mechanism to be used
@@ -1405,7 +1405,7 @@ class Session:
         C_DecryptInit/C_Decrypt
 
         :param key: a key handle, obtained calling :func:`findObjects`.
-        :type key: integer
+        :type key: PyKCS11.LowLevel.CK_OBJECT_HANDLE
         :param data: the data to be decrypted
         :type data:  (binary) string or list/tuple of bytes
         :param mecha: the decrypt mechanism to be used
@@ -1483,9 +1483,9 @@ class Session:
         C_WrapKey
 
         :param wrappingKey: a wrapping key handle
-        :type wrappingKey: integer
+        :type wrappingKey: PyKCS11.LowLevel.CK_OBJECT_HANDLE
         :param key: a handle of the key to be wrapped
-        :type key: integer
+        :type key: PyKCS11.LowLevel.CK_OBJECT_HANDLE
         :param mecha: the encrypt mechanism to be used
           (use `MechanismRSAPKCS1` for `CKM_RSA_PKCS`)
         :type mecha: :class:`Mechanism`
@@ -1516,7 +1516,7 @@ class Session:
         C_UnwrapKey
 
         :param unwrappingKey: the unwrapping key handle
-        :type unwrappingKey: integer
+        :type unwrappingKey: PyKCS11.LowLevel.CK_OBJECT_HANDLE
         :param wrappedKey: the bytes of the wrapped key
         :type wrappedKey:  (binary) string or list/tuple of bytes
         :param template: template for the unwrapped key
@@ -1541,7 +1541,7 @@ class Session:
         C_DeriveKey
 
         :param baseKey: the base key handle
-        :type baseKey: integer
+        :type baseKey: PyKCS11.LowLevel.CK_OBJECT_HANDLE
         :param template: template for the unwrapped key
         :param mecha: the decrypt mechanism to be used (use
           `ECDH1_DERIVE_Mechanism(...)` for `CKM_ECDH1_DERIVE`)
@@ -1758,7 +1758,7 @@ class Session:
         C_GetAttributeValue
 
         :param obj_id: object ID returned by :func:`findObjects`
-        :type obj_id: integer
+        :type obj_id: PyKCS11.LowLevel.CK_OBJECT_HANDLE
         :param attr: list of attributes
         :type attr: list
         :param allAsBinary: return all values as binary data; default is False.
@@ -1871,7 +1871,7 @@ class Session:
         C_SetAttributeValue
 
         :param obj_id: object ID returned by :func:`findObjects`
-        :type obj_id: integer
+        :type obj_id: PyKCS11.LowLevel.CK_OBJECT_HANDLE
         :param template: list of (attribute, value) pairs
         :type template: list
         :return: Nothing
