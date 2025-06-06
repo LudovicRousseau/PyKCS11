@@ -90,5 +90,6 @@ class Testutil(unittest.TestCase):
         a += b
         self.assertSequenceEqual(a, [65, 66, 67] + [68, 69, 70])
 
+
 if __name__ == "__main__":
     unittest.main()
