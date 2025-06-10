@@ -1524,7 +1524,7 @@ class Session:
           `MechanismRSAPKCS1` for `CKM_RSA_PKCS`)
         :type mecha: :class:`Mechanism`
         :return: the unwrapped key object
-        :rtype: integer
+        :rtype: PyKCS11.LowLevel.CK_OBJECT_HANDLE
 
         """
         m = mecha.to_native()
@@ -1547,7 +1547,7 @@ class Session:
           `ECDH1_DERIVE_Mechanism(...)` for `CKM_ECDH1_DERIVE`)
         :type mecha: :class:`Mechanism`
         :return: the unwrapped key object
-        :rtype: integer
+        :rtype: PyKCS11.LowLevel.CK_OBJECT_HANDLE
         """
         m = mecha.to_native()
         handle = PyKCS11.LowLevel.CK_OBJECT_HANDLE()
