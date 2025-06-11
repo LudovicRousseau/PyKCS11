@@ -31,7 +31,7 @@ if lib is None:
 session = PyKCS11.LowLevel.CK_SESSION_HANDLE()
 sessionInfo = PyKCS11.LowLevel.CK_SESSION_INFO()
 tokenInfo = PyKCS11.LowLevel.CK_TOKEN_INFO()
-slotList = PyKCS11.LowLevel.ckintlist()
+slotList = PyKCS11.LowLevel.ckulonglist()
 pin = ckbytelist("1234")
 
 print("Load of " + lib + ": " + str(a.Load(lib)))
@@ -102,7 +102,7 @@ print(
 )
 print("C_Login(): " + hex(a.C_Login(session, PyKCS11.LowLevel.CKU_USER, pin)))
 
-SearchResult = PyKCS11.LowLevel.ckobjlist(10)
+SearchResult = PyKCS11.LowLevel.ckulonglist(10)
 SearchTemplate = PyKCS11.LowLevel.ckattrlist(2)
 SearchTemplate[0].SetNum(PyKCS11.LowLevel.CKA_CLASS, PyKCS11.LowLevel.CKO_CERTIFICATE)
 SearchTemplate[1].SetBool(PyKCS11.LowLevel.CKA_TOKEN, True)

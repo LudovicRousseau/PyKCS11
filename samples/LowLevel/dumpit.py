@@ -31,7 +31,7 @@ if lib is None:
 session = CK_SESSION_HANDLE()
 sessionInfo = CK_SESSION_INFO()
 tokenInfo = CK_TOKEN_INFO()
-slotList = ckintlist()
+slotList = ckulonglist()
 pin = ckbytelist("1234")
 
 print("Load of " + lib + ": " + str(a.Load(lib)))
@@ -91,7 +91,7 @@ print(
 )
 print("C_Login(): " + hex(a.C_Login(session, CKU_USER, pin)))
 
-SearchResult = ckobjlist(10)
+SearchResult = ckulonglist(10)
 SearchTemplate = ckattrlist(0)
 # SearchTemplate[0].SetNum(CKA_CLASS, CKO_CERTIFICATE)
 # SearchTemplate[1].SetBool(CKA_TOKEN, True)
