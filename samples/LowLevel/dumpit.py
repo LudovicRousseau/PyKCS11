@@ -19,8 +19,8 @@
 
 import os
 
-from PyKCS11 import ckbytelist
 from PyKCS11.LowLevel import *
+from PyKCS11 import ckbytelist
 
 a = CPKCS11Lib()
 info = CK_INFO()
