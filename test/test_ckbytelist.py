@@ -67,7 +67,7 @@ class Testutil(unittest.TestCase):
 
     def test_unknown_format(self):
         with self.assertRaises(PyKCS11.PyKCS11Error) as cm:
-            PyKCS11.ckbytelist(dict())
+            PyKCS11.ckbytelist({})
 
         the_exception = cm.exception
         self.assertEqual(the_exception.value, -3)
@@ -76,7 +76,7 @@ class Testutil(unittest.TestCase):
         type_str = "<class 'dict'>"
 
         self.assertEqual(the_exception.text, type_str)
-        self.assertEqual(str(the_exception), "Unknown format (%s)" % type_str)
+        self.assertEqual(str(the_exception), f"Unknown format ({type_str})")
 
     def test_concat(self):
         a = PyKCS11.ckbytelist("ABC")
