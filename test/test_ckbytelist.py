@@ -90,6 +90,18 @@ class Testutil(unittest.TestCase):
         a += b
         self.assertSequenceEqual(a, [65, 66, 67] + [68, 69, 70])
 
+    def test_lowlevel(self):
+        ck = PyKCS11.LowLevel.ckbytelist()
+        self.assertSequenceEqual(ck, [])
+
+        ck = PyKCS11.LowLevel.ckbytelist([0, 1, 2, 3, 4])
+        self.assertSequenceEqual(ck, [0, 1, 2, 3, 4])
+
+        with self.assertRaises(TypeError):
+            ck = PyKCS11.LowLevel.ckbytelist("ABC")
+
+        ck = PyKCS11.LowLevel.ckbytelist(b"ABC")
+        self.assertSequenceEqual(ck, [65, 66, 67])
 
 if __name__ == "__main__":
     unittest.main()
