@@ -103,5 +103,6 @@ class Testutil(unittest.TestCase):
         ck = PyKCS11.LowLevel.ckbytelist(b"ABC")
         self.assertSequenceEqual(ck, [65, 66, 67])
 
+
 if __name__ == "__main__":
     unittest.main()
