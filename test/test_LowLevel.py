@@ -53,7 +53,7 @@ class TestUtil(unittest.TestCase):
         self.assertEqual(longList[0], 42)
         longList[0] = 0x80000000
         self.assertEqual(longList[0], 2147483648)
-        longList[0] = 0xffffffff
+        longList[0] = 0xFFFFFFFF
         self.assertEqual(longList[0], 4294967295)
         # negative numbers are not allowed
         with self.assertRaises(TypeError):
