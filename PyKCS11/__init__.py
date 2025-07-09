@@ -197,10 +197,10 @@ class CkClass:
         dico = self.to_dict()
         lines = list()
         for key in sorted(dico.keys()):
-            type = self.fields[key]
-            if type == "flags":
+            ck_type = self.fields[key]
+            if ck_type == "flags":
                 lines.append("{}: {}".format(key, ", ".join(dico[key])))
-            elif type == "pair":
+            elif ck_type == "pair":
                 lines.append("%s: " % key + "%d.%d" % dico[key])
             else:
                 lines.append(f"{key}: {dico[key]}")
@@ -723,19 +723,19 @@ class PyKCS11Lib:
             m.append(CKM[mechanism])
         return m
 
-    def getMechanismInfo(self, slot, type):
+    def getMechanismInfo(self, slot, ckm_type):
         """
         C_GetMechanismInfo
 
         :param slot: slot number returned by :func:`getSlotList`
         :type slot: integer
-        :param type: a `CKM_*` type
-        :type type: integer
+        :param ckm_type: a `CKM_*` type
+        :type ckm_type: integer
         :return: information about a mechanism
         :rtype: a :class:`CK_MECHANISM_INFO` object
         """
         info = PyKCS11.LowLevel.CK_MECHANISM_INFO()
-        rv = self.lib.C_GetMechanismInfo(slot, CKM[type], info)
+        rv = self.lib.C_GetMechanismInfo(slot, CKM[ckm_type], info)
         if rv != CKR_OK:
             raise PyKCS11Error(rv)
 
@@ -1557,14 +1557,14 @@ class Session:
             raise PyKCS11Error(rv)
         return handle
 
-    def isNum(self, type):
+    def isNum(self, p11_type):
         """
         is the type a numerical value?
 
-        :param type: PKCS#11 type like `CKA_CERTIFICATE_TYPE`
+        :param p11_type: PKCS#11 type like `CKA_CERTIFICATE_TYPE`
         :rtype: bool
         """
-        if type in (
+        if p11_type in (
             CKA_CERTIFICATE_TYPE,
             CKA_CLASS,
             CKA_HW_FEATURE_TYPE,
@@ -1577,25 +1577,25 @@ class Session:
             return True
         return False
 
-    def isString(self, type):
+    def isString(self, p11_type):
         """
         is the type a string value?
 
-        :param type: PKCS#11 type like `CKA_LABEL`
+        :param p11_type: PKCS#11 type like `CKA_LABEL`
         :rtype: bool
         """
-        if type in (CKA_LABEL, CKA_APPLICATION):
+        if p11_type in (CKA_LABEL, CKA_APPLICATION):
             return True
         return False
 
-    def isBool(self, type):
+    def isBool(self, p11_type):
         """
         is the type a boolean value?
 
-        :param type: PKCS#11 type like `CKA_ALWAYS_SENSITIVE`
+        :param p11_type: PKCS#11 type like `CKA_ALWAYS_SENSITIVE`
         :rtype: bool
         """
-        if type in (
+        if p11_type in (
             CKA_ALWAYS_AUTHENTICATE,
             CKA_ALWAYS_SENSITIVE,
             CKA_DECRYPT,
@@ -1625,27 +1625,27 @@ class Session:
             return True
         return False
 
-    def isBin(self, type):
+    def isBin(self, p11_type):
         """
         is the type a byte array value?
 
-        :param type: PKCS#11 type like `CKA_MODULUS`
+        :param p11_type: PKCS#11 type like `CKA_MODULUS`
         :rtype: bool
         """
         return (
-            (not self.isBool(type))
-            and (not self.isString(type))
-            and (not self.isNum(type))
+            (not self.isBool(p11_type))
+            and (not self.isString(p11_type))
+            and (not self.isNum(p11_type))
         )
 
-    def isAttributeList(self, type):
+    def isAttributeList(self, p11_type):
         """
         is the type a attribute list value?
 
-        :param type: PKCS#11 type like `CKA_WRAP_TEMPLATE`
+        :param p11_type: PKCS#11 type like `CKA_WRAP_TEMPLATE`
         :rtype: bool
         """
-        if type in (CKA_WRAP_TEMPLATE, CKA_UNWRAP_TEMPLATE):
+        if p11_type in (CKA_WRAP_TEMPLATE, CKA_UNWRAP_TEMPLATE):
             return True
         return False
 
