@@ -1733,7 +1733,7 @@ class Session:
                     attrBin = ckbytelist(attrStr)
                 t[x].SetBin(attr[0], attrBin)
             else:
-                raise PyKCS11Error(-2)
+                raise PyKCS11Error(-2, f"attr: {attr[0]:08X}")
         return t
 
     def generateKey(self, template, mecha=MechanismAESGENERATEKEY):
@@ -1874,7 +1874,7 @@ class Session:
             elif valTemplate[x].IsBin():
                 res.append(valTemplate[x].GetBin())
             else:
-                raise PyKCS11Error(-2)
+                raise PyKCS11Error(-2, f"valTemplate: {valTemplate[x]:08X}")
 
         return res
 
