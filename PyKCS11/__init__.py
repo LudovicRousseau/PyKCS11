@@ -1975,8 +1975,8 @@ if __name__ == "__main__":
     print()
     print("getAttributeValue")
     for o in objs:
-        attr = se.getAttributeValue(o, [CKA_LABEL, CKA_CLASS])
-        print(attr)
+        _attr = se.getAttributeValue(o, [CKA_LABEL, CKA_CLASS])
+        print(_attr)
 
     print()
     print("logout")
