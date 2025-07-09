@@ -19,6 +19,9 @@ class TestUtil(unittest.TestCase):
 
         text = str(info)
         self.assertIsNotNone(text)
+        d = info.to_dict()
+        self.assertEqual(d["manufacturerID"], "SoftHSM".ljust(32))
+        self.assertEqual(d["libraryDescription"], "Implementation of PKCS11".ljust(32))
 
     def test_getSlotInfo(self):
         info = self.pkcs11.getSlotInfo(self.slot)
@@ -41,6 +44,11 @@ class TestUtil(unittest.TestCase):
         info = self.session.getSessionInfo()
         text = str(info)
         self.assertIsNotNone(text)
+
+        d = info.to_dict()
+        self.assertListEqual(d["flags"], ["CKF_SERIAL_SESSION"])
+        self.assertEqual(d["ulDeviceError"], 0)
+
         self.session.closeSession()
 
     def test_getMechanismList(self):
