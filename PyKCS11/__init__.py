@@ -142,7 +142,7 @@ class CK_OBJECT_HANDLE(PyKCS11.LowLevel.CK_OBJECT_HANDLE):
         text representation of the object
         """
         dico = self.to_dict()
-        lines = list()
+        lines = []
         for key in sorted(dico.keys()):
             lines.append(f"{key}: {dico[key]}")
         return "\n".join(lines)
@@ -195,7 +195,7 @@ class CkClass:
         text representation of the object
         """
         dico = self.to_dict()
-        lines = list()
+        lines = []
         for key in sorted(dico.keys()):
             ck_type = self.fields[key]
             if ck_type == "flags":
