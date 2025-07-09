@@ -123,7 +123,7 @@ class CK_OBJECT_HANDLE(PyKCS11.LowLevel.CK_OBJECT_HANDLE):
         # all the attributes of the object
         attributes = self.session.getAttributeValue(self, all_attributes)
 
-        dico = dict()
+        dico = {}
         for key, attr in zip(all_attributes, attributes):
             if attr is None:
                 continue
@@ -154,11 +154,11 @@ class CkClass:
     """
 
     # dictionnary of integer_value: text_value for the flags bits
-    flags_dict = dict()
+    flags_dict = {}
 
     # dictionnary of fields names and types
     # type can be "pair", "flags" or "text"
-    fields = dict()
+    fields = {}
 
     flags = 0
 
@@ -180,7 +180,7 @@ class CkClass:
         """
         convert the fields of the object into a dictionnary
         """
-        dico = dict()
+        dico = {}
         for field in self.fields.keys():
             if field == "flags":
                 dico[field] = self.flags2text()
@@ -446,7 +446,7 @@ class PyKCS11Lib:
     """high level PKCS#11 binding"""
 
     # shared by all instances
-    _loaded_libs = dict()
+    _loaded_libs = {}
 
     def __init__(self):
         self.lib = PyKCS11.LowLevel.CPKCS11Lib()
