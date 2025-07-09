@@ -110,7 +110,6 @@ class CK_OBJECT_HANDLE(PyKCS11.LowLevel.CK_OBJECT_HANDLE):
     def __init__(self, session):
         PyKCS11.LowLevel.CK_OBJECT_HANDLE.__init__(self)
         self.session = session
-        pass
 
     def to_dict(self):
         """
