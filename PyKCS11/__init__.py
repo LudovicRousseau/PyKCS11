@@ -44,7 +44,7 @@ CKU = {}
 CKZ = {}
 
 # redefine PKCS#11 constants using well known prefixes
-for x in PyKCS11.LowLevel.__dict__.keys():
+for x in PyKCS11.LowLevel.__dict__:
     if (
         x[:4] == "CKA_"
         or x[:4] == "CKC_"
@@ -171,9 +171,9 @@ class CkClass:
         :rtype: list
         """
         r = []
-        for v in self.flags_dict.keys():
-            if self.flags & v:
-                r.append(self.flags_dict[v])
+        for k, v in self.flags_dict.items():
+            if self.flags & k:
+                r.append(v)
         return r
 
     def to_dict(self):
@@ -181,7 +181,7 @@ class CkClass:
         convert the fields of the object into a dictionnary
         """
         dico = {}
-        for field in self.fields.keys():
+        for field in self.fields:
             if field == "flags":
                 dico[field] = self.flags2text()
             elif field == "state":
