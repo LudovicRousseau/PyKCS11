@@ -1843,8 +1843,8 @@ class Session:
 
         """
         valTemplate = PyKCS11.LowLevel.ckattrlist(len(attr))
-        for x in range(len(attr)):
-            valTemplate[x].SetType(attr[x])
+        for index, value in enumerate(attr):
+            valTemplate[index].SetType(value)
         # first call to get the attribute size and reserve the memory
         rv = self.lib.C_GetAttributeValue(self.session, obj_id, valTemplate)
         if rv in (
