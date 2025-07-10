@@ -45,21 +45,21 @@ CKZ = {}
 
 # redefine PKCS#11 constants using well known prefixes
 for x in PyKCS11.LowLevel.__dict__:
-    if (
-        x[:4] == "CKA_"
-        or x[:4] == "CKC_"
-        or x[:4] == "CKD_"
-        or x[:4] == "CKF_"
-        or x[:4] == "CKG_"
-        or x[:4] == "CKH_"
-        or x[:4] == "CKK_"
-        or x[:4] == "CKM_"
-        or x[:4] == "CKO_"
-        or x[:4] == "CKR_"
-        or x[:4] == "CKS_"
-        or x[:4] == "CKU_"
-        or x[:4] == "CKZ_"
-    ):
+    if x[:4] in [
+        "CKA_",
+        "CKC_",
+        "CKD_",
+        "CKF_",
+        "CKG_",
+        "CKH_",
+        "CKK_",
+        "CKM_",
+        "CKO_",
+        "CKR_",
+        "CKS_",
+        "CKU_",
+        "CKZ_",
+    ]:
         a = f"{x}=PyKCS11.LowLevel.{x}"
         exec(a)
         if x[3:] != "_VENDOR_DEFINED":
