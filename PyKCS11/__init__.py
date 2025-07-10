@@ -253,6 +253,13 @@ class CK_SLOT_INFO(CkClass):
         "firmwareVersion": "text",
     }
 
+    def __init__(self):
+        self.slotDescription = None
+        self.manufacturerID = None
+        self.flags = None
+        self.hardwareVersion = None
+        self.firmwareVersion = None
+
 
 class CK_INFO(CkClass):
     """
@@ -278,6 +285,13 @@ class CK_INFO(CkClass):
         "libraryVersion": "pair",
     }
 
+    def __init__(self):
+        self.cryptokiVersion = None
+        self.manufacturerID = None
+        self.flags = None
+        self.libraryDescription = None
+        self.libraryVersion = None
+
 
 class CK_SESSION_INFO(CkClass):
     """
@@ -297,6 +311,12 @@ class CK_SESSION_INFO(CkClass):
         CKF_RW_SESSION: "CKF_RW_SESSION",
         CKF_SERIAL_SESSION: "CKF_SERIAL_SESSION",
     }
+
+    def __init__(self):
+        self.slotID = None
+        self.state = None
+        self.flags = None
+        self.ulDeviceError = None
 
     def state2text(self):
         """
@@ -400,6 +420,26 @@ class CK_TOKEN_INFO(CkClass):
         "utcTime": "text",
     }
 
+    def __init__(self):
+        self.label = None
+        self.manufacturerID = None
+        self.model = None
+        self.serialNumber = None
+        self.flags = None
+        self.ulMaxSessionCount = None
+        self.ulSessionCount = None
+        self.ulMaxRwSessionCount = None
+        self.ulRwSessionCount = None
+        self.ulMaxPinLen = None
+        self.ulMinPinLen = None
+        self.ulTotalPublicMemory = None
+        self.ulFreePublicMemory = None
+        self.ulTotalPrivateMemory = None
+        self.ulFreePrivateMemory = None
+        self.hardwareVersion = None
+        self.firmwareVersion = None
+        self.utcTime = None
+
 
 class CK_MECHANISM_INFO(CkClass):
     """
@@ -431,6 +471,11 @@ class CK_MECHANISM_INFO(CkClass):
     }
 
     fields = {"ulMinKeySize": "text", "ulMaxKeySize": "text", "flags": "flags"}
+
+    def __init__(self):
+        self.ulMinKeySize = None
+        self.ulMaxKeySize = None
+        self.flags = None
 
 
 class PyKCS11Error(Exception):
