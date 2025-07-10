@@ -186,6 +186,12 @@ class CkClass:
                 r.append(v)
         return r
 
+    def state2text(self):
+        """
+        Dummy method. Will be overwriden if necessary
+        """
+        return ""
+
     def to_dict(self):
         """
         convert the fields of the object into a dictionnary
