@@ -526,7 +526,7 @@ class PyKCS11Lib:
             # unload the library
             self.unload()
 
-    def load(self, pkcs11dll_filename=None, *init_string):
+    def load(self, pkcs11dll_filename=None):
         """
         load a PKCS#11 library
 
