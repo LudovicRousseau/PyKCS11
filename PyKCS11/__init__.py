@@ -43,28 +43,38 @@ CKS = {}
 CKU = {}
 CKZ = {}
 
-# redefine PKCS#11 constants using well known prefixes
-for x in PyKCS11.LowLevel.__dict__:
-    if x[:4] in [
-        "CKA_",
-        "CKC_",
-        "CKD_",
-        "CKF_",
-        "CKG_",
-        "CKH_",
-        "CKK_",
-        "CKM_",
-        "CKO_",
-        "CKR_",
-        "CKS_",
-        "CKU_",
-        "CKZ_",
-    ]:
-        a = f"{x}=PyKCS11.LowLevel.{x}"
-        exec(a)
-        if x[3:] != "_VENDOR_DEFINED":
-            eval(x[:3])[eval(x)] = x  # => CKM[CKM_RSA_PKCS] = 'CKM_RSA_PKCS'
-            eval(x[:3])[x] = eval(x)  # => CKM['CKM_RSA_PKCS'] = CKM_RSA_PKCS
+
+def _init():
+    # redefine PKCS#11 constants using well known prefixes
+    this = sys.modules[__name__]
+    for k, v in PyKCS11.LowLevel.__dict__.items():
+        if k[:4] in [
+            "CKA_",
+            "CKC_",
+            "CKD_",
+            "CKF_",
+            "CKG_",
+            "CKH_",
+            "CKK_",
+            "CKM_",
+            "CKO_",
+            "CKR_",
+            "CKS_",
+            "CKU_",
+            "CKZ_",
+        ]:
+            this.__dict__[k] = v
+
+            head = k[:3]  # 'CKM_RSA_PKCS' => 'CKM'
+            if k[3:] != "_VENDOR_DEFINED":
+                # CKM['CKM_RSA_PKCS'] = CKM_RSA_PKCS
+                this.__dict__[head][k] = v
+
+                # CKM[CKM_RSA_PKCS] = 'CKM_RSA_PKCS'
+                this.__dict__[head][v] = k
+
+
+_init()
 
 # special CKR[] values
 CKR[-4] = "C_GetFunctionList() not found"
