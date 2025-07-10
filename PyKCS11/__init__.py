@@ -1947,8 +1947,6 @@ class Session:
         if rv != CKR_OK:
             raise PyKCS11Error(rv)
 
-        return None
-
     def seedRandom(self, seed):
         """
         C_SeedRandom
