@@ -203,7 +203,7 @@ class CkClass:
             elif field == "state":
                 dico[field] = self.state2text()
             else:
-                dico[field] = eval("self." + field)
+                dico[field] = self.__dict__[field]
         return dico
 
     def __str__(self):
