@@ -511,6 +511,7 @@ class PyKCS11Lib:
 
     def __init__(self):
         self.lib = PyKCS11.LowLevel.CPKCS11Lib()
+        self.pkcs11dll_filename = None
 
     def __del__(self):
         if (
@@ -543,7 +544,7 @@ class PyKCS11Lib:
                     -1, "No PKCS11 library specified (set PYKCS11LIB env variable)"
                 )
 
-        if hasattr(self, "pkcs11dll_filename"):
+        if self.pkcs11dll_filename is not None:
             self.unload()  # unload the previous library
             # if the instance was previously initialized,
             # create a new low level library object for it
@@ -576,12 +577,13 @@ class PyKCS11Lib:
         """
 
         # in case NO library was found and used
-        if not hasattr(self, "pkcs11dll_filename"):
+        if self.pkcs11dll_filename is None:
             return
 
         if self.pkcs11dll_filename not in PyKCS11Lib._loaded_libs:
             raise PyKCS11Error(
-                PyKCS11.LowLevel.CKR_GENERAL_ERROR, "invalid PyKCS11Lib state"
+                -1,
+                f"invalid PyKCS11Lib state: {self.pkcs11dll_filename} not in {PyKCS11Lib._loaded_libs}",
             )
 
         # decrease user number
@@ -596,7 +598,7 @@ class PyKCS11Lib:
         if PyKCS11Lib._loaded_libs[self.pkcs11dll_filename]["nb_users"] <= 0:
             del PyKCS11Lib._loaded_libs[self.pkcs11dll_filename]
 
-        delattr(self, "pkcs11dll_filename")
+        self.pkcs11dll_filename = None
 
     def initToken(self, slot, pin, label):
         """

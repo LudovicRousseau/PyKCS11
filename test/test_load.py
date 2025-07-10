@@ -127,16 +127,16 @@ class TestUtil(unittest.TestCase):
     def test_unload(self):
         self.pkcs11.load().unload()
         # no pkcs11dll_filename should remain after unload
-        self.assertFalse(hasattr(self.pkcs11, "pkcs11dll_filename"))
+        self.assertIsNone(self.pkcs11.pkcs11dll_filename)
 
         self.pkcs11.load()
         self.openSession(self.pkcs11)
         # one library has been loaded
         self.assertEqual(len(self.pkcs11._loaded_libs), 1)
-        self.assertTrue(hasattr(self.pkcs11, "pkcs11dll_filename"))
+        self.assertIsNotNone(self.pkcs11.pkcs11dll_filename)
 
         self.pkcs11.unload()
         gc.collect()
         # manually unloaded the library using gc.collect()
         self.assertEqual(len(self.pkcs11._loaded_libs), 0)
-        self.assertFalse(hasattr(self.pkcs11, "pkcs11dll_filename"))
+        self.assertIsNone(self.pkcs11.pkcs11dll_filename)
