@@ -1107,7 +1107,7 @@ class Session:
         """
         if not isinstance(pykcs11, PyKCS11Lib):
             raise TypeError("pykcs11 must be a PyKCS11Lib")
-        if not isinstance(session, LowLevel.CK_SESSION_HANDLE):
+        if not isinstance(session, PyKCS11.LowLevel.CK_SESSION_HANDLE):
             raise TypeError("session must be a CK_SESSION_HANDLE")
 
         # hold the PyKCS11Lib reference, so that it's not Garbage Collection'd
