@@ -48,6 +48,9 @@ tox:
 	./get_PYKCS11LIB.py > tox.env
 	tox
 
+pylint:
+	$(PYTHON) -m pylint PyKCS11
+
 doc:
 	cd docs ; ./generate.sh
 
