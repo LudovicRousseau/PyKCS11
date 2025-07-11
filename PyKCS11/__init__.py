@@ -1328,10 +1328,9 @@ class Session:
         rv = self.lib.C_Verify(self.session, data1, signature)
         if rv == CKR_OK:
             return True
-        elif rv == CKR_SIGNATURE_INVALID:
+        if rv == CKR_SIGNATURE_INVALID:
             return False
-        else:
-            raise PyKCS11Error(rv)
+        raise PyKCS11Error(rv)
 
     def encrypt(self, key, data, mecha=MechanismRSAPKCS1):
         """
