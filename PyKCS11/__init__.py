@@ -22,59 +22,7 @@ import sys
 
 import PyKCS11.LowLevel
 
-# redefine PKCS#11 constants
-CK_TRUE = PyKCS11.LowLevel.CK_TRUE
-CK_FALSE = PyKCS11.LowLevel.CK_FALSE
-CK_UNAVAILABLE_INFORMATION = PyKCS11.LowLevel.CK_UNAVAILABLE_INFORMATION
-CK_EFFECTIVELY_INFINITE = PyKCS11.LowLevel.CK_EFFECTIVELY_INFINITE
-CK_INVALID_HANDLE = PyKCS11.LowLevel.CK_INVALID_HANDLE
-
-CKA = {}
-CKC = {}
-CKD = {}
-CKF = {}
-CKG = {}
-CKH = {}
-CKK = {}
-CKM = {}
-CKO = {}
-CKR = {}
-CKS = {}
-CKU = {}
-CKZ = {}
-
-
-def _init():
-    # redefine PKCS#11 constants using well known prefixes
-    this = sys.modules[__name__]
-    for k, v in PyKCS11.LowLevel.__dict__.items():
-        if k[:4] in [
-            "CKA_",
-            "CKC_",
-            "CKD_",
-            "CKF_",
-            "CKG_",
-            "CKH_",
-            "CKK_",
-            "CKM_",
-            "CKO_",
-            "CKR_",
-            "CKS_",
-            "CKU_",
-            "CKZ_",
-        ]:
-            this.__dict__[k] = v
-
-            head = k[:3]  # 'CKM_RSA_PKCS' => 'CKM'
-            if k[3:] != "_VENDOR_DEFINED":
-                # CKM['CKM_RSA_PKCS'] = CKM_RSA_PKCS
-                this.__dict__[head][k] = v
-
-                # CKM[CKM_RSA_PKCS] = 'CKM_RSA_PKCS'
-                this.__dict__[head][v] = k
-
-
-_init()
+from .constants import *
 
 # special CKR[] values
 CKR[-4] = "C_GetFunctionList() not found"

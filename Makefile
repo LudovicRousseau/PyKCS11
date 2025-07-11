@@ -7,6 +7,11 @@ COVERAGE ?= python3-coverage
 build:
 	$(PYTHON) -m build
 
+constants:
+	mv PyKCS11/__init__.py PyKCS11/__init__.py.x
+	$(PYTHON) generate_constants.py > PyKCS11/constants.py
+	mv PyKCS11/__init__.py.x PyKCS11/__init__.py
+
 install:
 	$(PYTHON) -m pip install --editable .
 

@@ -101,5 +101,5 @@ setup(
             extra_link_args=extra_link_args,
         )
     ],
-    py_modules=["PyKCS11.__init__", "PyKCS11.LowLevel"],
+    py_modules=["PyKCS11.__init__", "PyKCS11.LowLevel", "PyKCS11.constants"],
 )
