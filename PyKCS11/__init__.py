@@ -443,14 +443,12 @@ class PyKCS11Error(Exception):
         if self.value in CKR:
             if self.value < 0:
                 return CKR[self.value] + " (%s)" % self.text
-            else:
-                return CKR[self.value] + " (0x%08X)" % self.value
-        elif self.value & CKR_VENDOR_DEFINED:
+            return CKR[self.value] + " (0x%08X)" % self.value
+        if self.value & CKR_VENDOR_DEFINED:
             return "Vendor error (0x%08X)" % (
                 self.value & 0xFFFFFFFF & ~CKR_VENDOR_DEFINED
             )
-        else:
-            return "Unknown error (0x%08X)" % self.value
+        return "Unknown error (0x%08X)" % self.value
 
 
 class PyKCS11Lib:
