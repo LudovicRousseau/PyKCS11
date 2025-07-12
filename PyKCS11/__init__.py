@@ -1080,6 +1080,8 @@ class EXTRACT_KEY_FROM_KEY_Mechanism:
 
 
 class DigestSession:
+    """Digest session"""
+
     def __init__(self, lib, session, mecha):
         self._lib = lib
         self._session = session
