@@ -165,9 +165,11 @@ class CkClass:
         for key in sorted(dico.keys()):
             ck_type = self.fields[key]
             if ck_type == "flags":
-                lines.append("{}: {}".format(key, ", ".join(dico[key])))
+                flags = ", ".join(dico[key])
+                lines.append(f"{key}: {flags}")
             elif ck_type == "pair":
-                lines.append("%s: " % key + "%d.%d" % dico[key])
+                p1, p2 = dico[key]
+                lines.append(f"{key}: {p1}.{p2}")
             else:
                 lines.append(f"{key}: {dico[key]}")
         return "\n".join(lines)
