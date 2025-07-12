@@ -731,7 +731,8 @@ class PyKCS11Lib:
         m = []
         for mechanism in mechanismList:
             if mechanism >= CKM_VENDOR_DEFINED:
-                k = "CKM_VENDOR_DEFINED_0x%X" % (mechanism - CKM_VENDOR_DEFINED)
+                mecha = mechanism - CKM_VENDOR_DEFINED
+                k = f"CKM_VENDOR_DEFINED_0x{mecha:X}"
                 CKM[k] = mechanism
                 CKM[mechanism] = k
             m.append(CKM[mechanism])
