@@ -462,6 +462,7 @@ class PyKCS11Lib:
         self.pkcs11dll_filename = None
 
     def __del__(self):
+        # pylint: disable=too-many-boolean-expressions
         if (
             PyKCS11
             and PyKCS11.__name__
