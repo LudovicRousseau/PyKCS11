@@ -328,6 +328,8 @@ class CK_TOKEN_INFO(CkClass):
     :type utcTime: string
     """
 
+    # pylint: disable=too-many-instance-attributes
+
     flags_dict = {
         CKF_RNG: "CKF_RNG",
         CKF_WRITE_PROTECTED: "CKF_WRITE_PROTECTED",
