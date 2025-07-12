@@ -599,8 +599,8 @@ class PyKCS11Lib:
             raise PyKCS11Error(rv)
 
         s = []
-        for x in range(len(slotList)):
-            s.append(slotList[x])
+        for x in slotList:
+            s.append(x)
         return s
 
     def getSlotInfo(self, slot):
