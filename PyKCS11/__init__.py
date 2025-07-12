@@ -780,6 +780,8 @@ class PyKCS11Lib:
 class Mechanism:
     """Wraps CK_MECHANISM"""
 
+    # pylint: disable=too-few-public-methods
+
     def __init__(self, mechanism, param=None):
         """
         :param mechanism: the mechanism to be used
@@ -813,6 +815,8 @@ MechanismAESGENERATEKEY = Mechanism(CKM_AES_KEY_GEN, None)
 class AES_GCM_Mechanism:
     """CKM_AES_GCM warpping mechanism"""
 
+    # pylint: disable=too-few-public-methods
+
     def __init__(self, iv, aad, tagBits):
         """
         :param iv: initialization vector
@@ -844,6 +848,8 @@ class AES_GCM_Mechanism:
 class AES_CTR_Mechanism:
     """CKM_AES_CTR encryption mechanism"""
 
+    # pylint: disable=too-few-public-methods
+
     def __init__(self, counterBits, counterBlock):
         """
         :param counterBits: the number of incremented bits in the counter block
@@ -867,6 +873,8 @@ class AES_CTR_Mechanism:
 
 class RSAOAEPMechanism:
     """RSA OAEP Wrapping mechanism"""
+
+    # pylint: disable=too-few-public-methods
 
     def __init__(self, hashAlg, mgf, label=None):
         """
@@ -899,6 +907,8 @@ class RSAOAEPMechanism:
 class RSA_PSS_Mechanism:
     """RSA PSS Wrapping mechanism"""
 
+    # pylint: disable=too-few-public-methods
+
     def __init__(self, mecha, hashAlg, mgf, sLen):
         """
         :param mecha: the mechanism to use (like
@@ -925,6 +935,8 @@ class RSA_PSS_Mechanism:
 
 class ECDH1_DERIVE_Mechanism:
     """CKM_ECDH1_DERIVE key derivation mechanism"""
+
+    # pylint: disable=too-few-public-methods
 
     def __init__(self, publicData, kdf=CKD_NULL, sharedData=None):
         """
@@ -961,6 +973,8 @@ class ECDH1_DERIVE_Mechanism:
 class CONCATENATE_BASE_AND_KEY_Mechanism:
     """CKM_CONCATENATE_BASE_AND_KEY key derivation mechanism"""
 
+    # pylint: disable=too-few-public-methods
+
     def __init__(self, encKey):
         """
         :param encKey: a handle of encryption key
@@ -979,6 +993,8 @@ class CONCATENATE_BASE_AND_KEY_Mechanism:
 
 class KEY_DERIVATION_STRING_DATA_MechanismBase:
     """Base class for mechanisms using derivation string data"""
+
+    # pylint: disable=too-few-public-methods
 
     def __init__(self, data, mechType):
         """
@@ -1006,6 +1022,8 @@ class KEY_DERIVATION_STRING_DATA_MechanismBase:
 class CONCATENATE_BASE_AND_DATA_Mechanism(KEY_DERIVATION_STRING_DATA_MechanismBase):
     """CKM_CONCATENATE_BASE_AND_DATA key derivation mechanism"""
 
+    # pylint: disable=too-few-public-methods
+
     def __init__(self, data):
         """
         :param data: a byte array to concatenate the key with
@@ -1015,6 +1033,8 @@ class CONCATENATE_BASE_AND_DATA_Mechanism(KEY_DERIVATION_STRING_DATA_MechanismBa
 
 class CONCATENATE_DATA_AND_BASE_Mechanism(KEY_DERIVATION_STRING_DATA_MechanismBase):
     """CKM_CONCATENATE_DATA_AND_BASE key derivation mechanism"""
+
+    # pylint: disable=too-few-public-methods
 
     def __init__(self, data):
         """
@@ -1026,6 +1046,8 @@ class CONCATENATE_DATA_AND_BASE_Mechanism(KEY_DERIVATION_STRING_DATA_MechanismBa
 class XOR_BASE_AND_DATA_Mechanism(KEY_DERIVATION_STRING_DATA_MechanismBase):
     """CKM_XOR_BASE_AND_DATA key derivation mechanism"""
 
+    # pylint: disable=too-few-public-methods
+
     def __init__(self, data):
         """
         :param data: a byte array to xor the key with
@@ -1035,6 +1057,8 @@ class XOR_BASE_AND_DATA_Mechanism(KEY_DERIVATION_STRING_DATA_MechanismBase):
 
 class EXTRACT_KEY_FROM_KEY_Mechanism:
     """CKM_EXTRACT_KEY_FROM_KEY key derivation mechanism"""
+
+    # pylint: disable=too-few-public-methods
 
     def __init__(self, extractParams):
         """
