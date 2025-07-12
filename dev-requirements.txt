@@ -1,5 +1,6 @@
-coverage
-coveralls
 asn1crypto
 build
+coverage
+coveralls
+pylint
 setuptools
