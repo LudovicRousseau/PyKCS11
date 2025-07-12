@@ -531,7 +531,8 @@ class PyKCS11Lib:
         if self.pkcs11dll_filename not in PyKCS11Lib._loaded_libs:
             raise PyKCS11Error(
                 -1,
-                f"invalid PyKCS11Lib state: {self.pkcs11dll_filename} not in {PyKCS11Lib._loaded_libs}",
+                f"invalid PyKCS11Lib state: {self.pkcs11dll_filename} "
+                + f"not in {PyKCS11Lib._loaded_libs}",
             )
 
         # decrease user number
@@ -1027,8 +1028,9 @@ class EXTRACT_KEY_FROM_KEY_Mechanism:
 
     def __init__(self, extractParams):
         """
-        :param extractParams: the index of the first bit of the original key to be used in the newly-derived key.
-                              For example if extractParams=5 then the 5 first bits are skipped and not used.
+        :param extractParams: the index of the first bit of the original
+        key to be used in the newly-derived key.  For example if
+        extractParams=5 then the 5 first bits are skipped and not used.
         """
         self._param = PyKCS11.LowLevel.CK_EXTRACT_PARAMS()
         self._param.assign(extractParams)
