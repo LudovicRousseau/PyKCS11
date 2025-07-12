@@ -727,8 +727,7 @@ class PyKCS11Lib:
             raise PyKCS11Error(rv)
 
         m = []
-        for x in range(len(mechanismList)):
-            mechanism = mechanismList[x]
+        for mechanism in mechanismList:
             if mechanism >= CKM_VENDOR_DEFINED:
                 k = "CKM_VENDOR_DEFINED_0x%X" % (mechanism - CKM_VENDOR_DEFINED)
                 CKM[k] = mechanism
