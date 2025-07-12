@@ -1698,8 +1698,7 @@ class Session:
 
     def _template2ckattrlist(self, template):
         t = PyKCS11.LowLevel.ckattrlist(len(template))
-        for x in range(len(template)):
-            attr = template[x]
+        for x, attr in enumerate(template):
             if self.isNum(attr[0]):
                 t[x].SetNum(attr[0], int(attr[1]))
             elif self.isString(attr[0]):
