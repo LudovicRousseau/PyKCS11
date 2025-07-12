@@ -1137,6 +1137,8 @@ class DigestSession:
 class Session:
     """Manage :func:`PyKCS11Lib.openSession` objects"""
 
+    # pylint: disable=too-many-public-methods
+
     def __init__(self, pykcs11, session):
         """
         :param pykcs11: PyKCS11 library object
