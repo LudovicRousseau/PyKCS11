@@ -43,6 +43,11 @@ jobs:
           make install
           make test
 
+      - name: pylint
+        run: |
+          source temp/bin/activate
+          make pylint
+
       - name: tox
         shell: bash
         run: |
