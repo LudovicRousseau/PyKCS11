@@ -799,6 +799,7 @@ class Mechanism:
             self._mech.ulParameterLen = len(param)
 
     def to_native(self):
+        """convert mechanism to native format"""
         return self._mech
 
 
@@ -836,6 +837,7 @@ class AES_GCM_Mechanism:
         self._mech.ulParameterLen = PyKCS11.LowLevel.CK_GCM_PARAMS_LENGTH
 
     def to_native(self):
+        """convert mechanism to native format"""
         return self._mech
 
 
@@ -859,6 +861,7 @@ class AES_CTR_Mechanism:
         self._mech.ulParameterLen = PyKCS11.LowLevel.CK_AES_CTR_PARAMS_LENGTH
 
     def to_native(self):
+        """convert mechanism to native format"""
         return self._mech
 
 
@@ -889,6 +892,7 @@ class RSAOAEPMechanism:
         self._mech.ulParameterLen = PyKCS11.LowLevel.CK_RSA_PKCS_OAEP_PARAMS_LENGTH
 
     def to_native(self):
+        """convert mechanism to native format"""
         return self._mech
 
 
@@ -915,6 +919,7 @@ class RSA_PSS_Mechanism:
         self._mech.ulParameterLen = PyKCS11.LowLevel.CK_RSA_PKCS_PSS_PARAMS_LENGTH
 
     def to_native(self):
+        """convert mechanism to native format"""
         return self._mech
 
 
@@ -949,6 +954,7 @@ class ECDH1_DERIVE_Mechanism:
         self._mech.ulParameterLen = PyKCS11.LowLevel.CK_ECDH1_DERIVE_PARAMS_LENGTH
 
     def to_native(self):
+        """convert mechanism to native format"""
         return self._mech
 
 
@@ -967,6 +973,7 @@ class CONCATENATE_BASE_AND_KEY_Mechanism:
         self._mech.ulParameterLen = PyKCS11.LowLevel.CK_OBJECT_HANDLE_LENGTH
 
     def to_native(self):
+        """convert mechanism to native format"""
         return self._mech
 
 
@@ -992,6 +999,7 @@ class KEY_DERIVATION_STRING_DATA_MechanismBase:
         )
 
     def to_native(self):
+        """convert mechanism to native format"""
         return self._mech
 
 
@@ -1043,6 +1051,7 @@ class EXTRACT_KEY_FROM_KEY_Mechanism:
         self._mech.ulParameterLen = PyKCS11.LowLevel.CK_EXTRACT_PARAMS_LENGTH
 
     def to_native(self):
+        """convert mechanism to native format"""
         return self._mech
 
 
