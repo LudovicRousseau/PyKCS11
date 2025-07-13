@@ -32,6 +32,8 @@ from PyKCS11 import (
     PyKCS11Lib,
 )
 
+# pylint: disable=duplicate-code
+
 pkcs11 = PyKCS11Lib()
 pkcs11.load()  # define environment variable PYKCS11LIB=YourPKCS11Lib
 

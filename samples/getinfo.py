@@ -26,6 +26,7 @@ import sys
 import PyKCS11
 
 
+# pylint: disable=duplicate-code
 # pylint: disable=missing-class-docstring
 # pylint: disable=missing-function-docstring
 class getInfo:

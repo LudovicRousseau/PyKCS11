@@ -21,6 +21,7 @@
 
 import os
 
+# pylint: disable=duplicate-code
 # pylint: disable=wildcard-import
 # pylint: disable=unused-wildcard-import
 from PyKCS11.LowLevel import *

@@ -20,6 +20,8 @@
 
 import PyKCS11
 
+# pylint: disable=duplicate-code
+
 # the key_id has to be the same for both objects
 key_id = (0x22,)
 

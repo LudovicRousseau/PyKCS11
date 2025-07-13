@@ -22,6 +22,8 @@ import os
 
 import PyKCS11.LowLevel
 
+# pylint: disable=duplicate-code
+
 a = PyKCS11.LowLevel.CPKCS11Lib()
 info = PyKCS11.LowLevel.CK_INFO()
 slotInfo = PyKCS11.LowLevel.CK_SLOT_INFO()
