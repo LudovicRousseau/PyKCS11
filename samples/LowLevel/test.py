@@ -29,7 +29,7 @@ info = PyKCS11.LowLevel.CK_INFO()
 slotInfo = PyKCS11.LowLevel.CK_SLOT_INFO()
 lib = os.getenv("PYKCS11LIB")
 if lib is None:
-    raise Exception("Define PYKCS11LIB")
+    raise ValueError("Define PYKCS11LIB")
 session = PyKCS11.LowLevel.CK_SESSION_HANDLE()
 sessionInfo = PyKCS11.LowLevel.CK_SESSION_INFO()
 tokenInfo = PyKCS11.LowLevel.CK_TOKEN_INFO()

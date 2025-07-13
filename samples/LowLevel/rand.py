@@ -27,7 +27,8 @@ info = PyKCS11.LowLevel.CK_INFO()
 slotInfo = PyKCS11.LowLevel.CK_SLOT_INFO()
 lib = os.getenv("PYKCS11LIB")
 if lib is None:
-    raise Exception("Define PYKCS11LIB")
+    # pylint: disable=broad-exception-raised
+    raise ValueError("Define PYKCS11LIB")
 session = PyKCS11.LowLevel.CK_SESSION_HANDLE()
 slotList = PyKCS11.LowLevel.ckulonglist()
 rand = PyKCS11.LowLevel.ckbytelist(20)
