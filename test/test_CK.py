@@ -3,6 +3,10 @@
 # execute using:
 # python test/test_CK.py
 
+# pylint: disable=missing-module-docstring
+# pylint: disable=missing-class-docstring
+# pylint: disable=missing-function-docstring
+
 import unittest
 
 import PyKCS11
