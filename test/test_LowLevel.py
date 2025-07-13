@@ -38,7 +38,7 @@ class TestUtil(unittest.TestCase):
 
         lib = os.getenv("PYKCS11LIB")
         if lib is None:
-            raise (Exception("Define PYKCS11LIB"))
+            raise Exception("Define PYKCS11LIB")
 
         session = PyKCS11.LowLevel.CK_SESSION_HANDLE()
         self.assertIsNotNone(session)
