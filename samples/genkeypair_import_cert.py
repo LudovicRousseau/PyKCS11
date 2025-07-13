@@ -78,8 +78,10 @@ session.generateKeyPair(public_template, private_template)
 # it with the key.
 # It can be done with OpenSSL by typing the commands below in a terminal
 # 1. openssl
-# 2. engine dynamic -pre SO_PATH:/usr/lib/engines/engine_pkcs11.so -pre ID:pkcs11 -pre LIST_ADD:1 -pre LOAD -pre MODULE_PATH:libacospkcs11.so
-# 3. req -engine pkcs11 -keyform engine -key 0:1 -new -text -out /tmp/newcert.csr -subj "/O=users/CN=Test User"
+# 2. engine dynamic -pre SO_PATH:/usr/lib/engines/engine_pkcs11.so -pre
+#    ID:pkcs11 -pre LIST_ADD:1 -pre LOAD -pre MODULE_PATH:libacospkcs11.so
+# 3. req -engine pkcs11 -keyform engine -key 0:1 -new -text -out
+#    /tmp/newcert.csr -subj "/O=users/CN=Test User"
 # Note that `-key 0:1` means "use slot 0, with key id 1"
 # The CSR will be printed to stdout and saved to /tmp/newcert.csr
 
