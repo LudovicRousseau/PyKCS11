@@ -21,6 +21,8 @@
 
 import os
 
+# pylint: disable=wildcard-import
+# pylint: disable=unused-wildcard-import
 from PyKCS11.LowLevel import *
 
 a = CPKCS11Lib()
