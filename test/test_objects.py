@@ -204,6 +204,7 @@ class TestGetSetAttributeValues(unittest.TestCase):
         old_state = self.session.getAttributeValue(self.AESKey, [_ATTR])[0]
         new_state = CK_TRUE if old_state == CK_FALSE else CK_FALSE  # switch the state
 
+        # pylint: disable=assignment-from-no-return
         rv = self.session.setAttributeValue(self.AESKey, [(_ATTR, new_state)])
         assert rv is None
 
@@ -233,6 +234,7 @@ class TestGetSetAttributeValues(unittest.TestCase):
             new_value = CK_TRUE if old_attributes[i] == CK_FALSE else CK_FALSE
             flipped_attributes.append((attributes_to_switch[i], new_value))
 
+        # pylint: disable=assignment-from-no-return
         rv = self.session.setAttributeValue(self.AESKey, flipped_attributes)
         assert rv is None
 
