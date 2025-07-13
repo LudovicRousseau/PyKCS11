@@ -193,7 +193,8 @@ class TestUtil(unittest.TestCase):
         self.session.destroyObject(pvtKey)
 
     def test_deriveKey_CKM_CONCATENATE_BASE_AND_KEY(self):
-        # This mechanism is not supported in the current release of SoftHSM (2.6.1), however available in develop branch,
+        # This mechanism is not supported in the current release of
+        # SoftHSM (2.6.1), however available in develop branch,
         # see https://github.com/opendnssec/SoftHSMv2/commit/fa595c07a185656382c18ea2a6a12cad825d48b4
         if self.SoftHSMversion <= (2, 6):
             self.skipTest(
@@ -237,7 +238,8 @@ class TestUtil(unittest.TestCase):
         self.session.destroyObject(concKey)
 
     def test_deriveKey_CKM_CONCATENATE_BASE_AND_DATA(self):
-        # This mechanism is not supported in the current release of SoftHSM (2.6.1), however available in develop branch,
+        # This mechanism is not supported in the current release of
+        # SoftHSM (2.6.1), however available in develop branch,
         # see https://github.com/opendnssec/SoftHSMv2/commit/dba00d73e1b69f65b68397d235e7f73bbf59ab6a
         if self.SoftHSMversion <= (2, 6):
             self.skipTest(
@@ -268,7 +270,8 @@ class TestUtil(unittest.TestCase):
         self.session.destroyObject(derivedKey)
 
     def test_deriveKey_CKM_CONCATENATE_DATA_AND_BASE(self):
-        # This mechanism is not supported in the current release of SoftHSM (2.6.1), however available in develop branch,
+        # This mechanism is not supported in the current release of
+        # SoftHSM (2.6.1), however available in develop branch,
         # see https://github.com/opendnssec/SoftHSMv2/commit/fae0d9f769ac30d25f563c5fc6c417e9199e4403
         if self.SoftHSMversion <= (2, 6):
             self.skipTest(
