@@ -45,7 +45,7 @@ def dump(src, length=16):
         h, src = src[:length], src[length:]
         text_hexa = " ".join([f"{x:02X}" for x in h])
         text_ascii = "".join(map(to_ascii, h))
-        result += "%04X   %-*s   %s\n" % (N, length * 3, text_hexa, text_ascii)
+        result += f"{N:04X}   {text_hexa:{length * 3}}   {text_ascii}\n"
         N += length
     return result
 
