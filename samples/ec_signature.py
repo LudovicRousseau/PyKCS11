@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 
+"""
 #   Copyright (C) 2015 Roman Pasechnik
 #   Copyright (C) 2018 Ludovic Rousseau
 #   Copyright (C) 2019 Atte Pellikka
@@ -17,6 +18,7 @@
 # You should have received a copy of the GNU General Public License
 # along with this program; if not, write to the Free Software
 # Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301 USA.
+"""
 
 
 import binascii

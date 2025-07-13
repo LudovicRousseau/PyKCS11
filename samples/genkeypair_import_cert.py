@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 
+"""
 #   contributed by Alex Railean, a dot railean at dekart.com
 #
 # This file is free software; you can redistribute it and/or modify it
@@ -15,6 +16,7 @@
 # You should have received a copy of the GNU General Public License
 # along with this program; if not, write to the Free Software
 # Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301 USA.
+"""
 
 import PyKCS11
 
