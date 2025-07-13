@@ -28,6 +28,7 @@ if __name__ == "__main__":
     import sys
 
     def usage():
+        """usage"""
         print("Usage:", sys.argv[0], end=" ")
         print("[-p pin][--pin=pin] (use 'NULL' for pinpad)", end=" ")
         print("[-c lib][--lib=lib]", end=" ")
