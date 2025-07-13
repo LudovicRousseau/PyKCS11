@@ -19,6 +19,7 @@
 """
 
 
+import getopt
 import platform
 import sys
 
@@ -110,20 +111,7 @@ def usage():
     print("[-h][--help]")
 
 
-if __name__ == "__main__":
-    import getopt
-
-    try:
-        opts, args = getopt.getopt(
-            sys.argv[1:],
-            "p:s:c:ham",
-            ["pin=", "slot=", "lib=", "help", "all", "mechanisms"],
-        )
-    except getopt.GetoptError:
-        # print help information and exit:
-        usage()
-        sys.exit(2)
-
+def main(opts):
     slot = None
     lib = None
     pin = ""
@@ -171,3 +159,18 @@ if __name__ == "__main__":
                 gi.getMechanismInfo(slot)
         except PyKCS11.PyKCS11Error as e:
             print("Error:", e)
+
+
+if __name__ == "__main__":
+    try:
+        options, args = getopt.getopt(
+            sys.argv[1:],
+            "p:s:c:ham",
+            ["pin=", "slot=", "lib=", "help", "all", "mechanisms"],
+        )
+    except getopt.GetoptError:
+        # print help information and exit:
+        usage()
+        sys.exit(2)
+
+    main(options)
