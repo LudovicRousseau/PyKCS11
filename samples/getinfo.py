@@ -112,6 +112,7 @@ def usage():
 
 
 def main(opts):
+    # pylint: disable=too-many-branches
     slot = None
     lib = None
     pin = ""
