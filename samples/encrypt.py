@@ -19,23 +19,23 @@
 
 import binascii
 
-from PyKCS11 import *
+import PyKCS11
 
-pkcs11 = PyKCS11Lib()
+pkcs11 = PyKCS11.PyKCS11Lib()
 pkcs11.load()  # define environment variable PYKCS11LIB=YourPKCS11Lib
 
 # get 1st slot
 slot = pkcs11.getSlotList(tokenPresent=True)[0]
 
-session = pkcs11.openSession(slot, CKF_SERIAL_SESSION | CKF_RW_SESSION)
+session = pkcs11.openSession(slot, PyKCS11.CKF_SERIAL_SESSION | PyKCS11.CKF_RW_SESSION)
 session.login("1234")
 
 # "Hello world" in hex
 message = "48656c6c6f20776f726c640d0a"
 
 # get first public and private keys
-pubKey = session.findObjects([(CKA_CLASS, CKO_PUBLIC_KEY)])[0]
-privKey = session.findObjects([(CKA_CLASS, CKO_PRIVATE_KEY)])[0]
+pubKey = session.findObjects([(PyKCS11.CKA_CLASS, PyKCS11.CKO_PUBLIC_KEY)])[0]
+privKey = session.findObjects([(PyKCS11.CKA_CLASS, PyKCS11.CKO_PRIVATE_KEY)])[0]
 enc = session.encrypt(pubKey, binascii.unhexlify(message))
 dec = session.decrypt(privKey, enc)
 
