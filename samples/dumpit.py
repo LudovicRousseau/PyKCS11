@@ -32,6 +32,8 @@ import PyKCS11
 
 
 def dump(src, length=16):
+    """dump a binary buffer"""
+
     def to_ascii(x):
         if 32 <= x <= 127:
             return chr(x)
@@ -49,6 +51,7 @@ def dump(src, length=16):
 
 
 def usage():
+    """usage"""
     print("Usage:", sys.argv[0], end=" ")
     print("[-a][--all]", end=" ")
     print("[-p pin][--pin=pin] (use --pin=NULL for pinpad)", end=" ")
