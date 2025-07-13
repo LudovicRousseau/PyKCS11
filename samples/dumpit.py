@@ -40,9 +40,9 @@ def dump(src, length=16):
     N = 0
     result = ""
     while src:
-        s, src = src[:length], src[length:]
-        text_hexa = " ".join(["%02X" % x for x in s])
-        text_ascii = "".join(map(to_ascii, s))
+        h, src = src[:length], src[length:]
+        text_hexa = " ".join(["%02X" % x for x in h])
+        text_ascii = "".join(map(to_ascii, h))
         result += "%04X   %-*s   %s\n" % (N, length * 3, text_hexa, text_ascii)
         N += length
     return result
