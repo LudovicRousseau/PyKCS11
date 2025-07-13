@@ -20,7 +20,6 @@
 import os
 
 import PyKCS11.LowLevel
-from PyKCS11 import ckbytelist
 
 a = PyKCS11.LowLevel.CPKCS11Lib()
 info = PyKCS11.LowLevel.CK_INFO()
@@ -31,9 +30,9 @@ if lib is None:
 session = PyKCS11.LowLevel.CK_SESSION_HANDLE()
 sessionInfo = PyKCS11.LowLevel.CK_SESSION_INFO()
 tokenInfo = PyKCS11.LowLevel.CK_TOKEN_INFO()
-slotList = PyKCS11.LowLevel.ckintlist()
-pin = ckbytelist("123456")
-puk = ckbytelist("12345678")
+slotList = PyKCS11.LowLevel.ckulonglist()
+pin = PyKCS11.LowLevel.ckbytelist(b"123456")
+puk = PyKCS11.LowLevel.ckbytelist(b"12345678")
 Label = "PyKCS#11 Initialized Token      "
 
 print("Load of " + lib + ": " + str(a.Load(lib)))
