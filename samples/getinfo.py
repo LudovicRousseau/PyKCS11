@@ -25,6 +25,8 @@ import sys
 import PyKCS11
 
 
+# pylint: disable=missing-class-docstring
+# pylint: disable=missing-function-docstring
 class getInfo:
     red = blue = magenta = normal = ""
 
