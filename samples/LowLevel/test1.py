@@ -44,13 +44,13 @@ del info
 print("C_GetSlotList(NULL): " + hex(a.C_GetSlotList(0, slotList)))
 print("\tAvailable Slots: " + str(len(slotList)))
 
-for x in range(len(slotList)):
-    print("\tC_SlotInfo(): " + hex(a.C_GetSlotInfo(slotList[x], slotInfo)))
+for index, slot in enumerate(slotList):
+    print("\tC_SlotInfo(): " + hex(a.C_GetSlotInfo(slot, slotInfo)))
     print(
         "\t\tSlot N."
-        + str(x)
+        + str(index)
         + ": ID="
-        + str(slotList[x])
+        + str(slot)
         + ", name='"
         + slotInfo.GetSlotDescription()
         + "'"
@@ -59,7 +59,7 @@ for x in range(len(slotList)):
         "\tC_OpenSession(): "
         + hex(
             a.C_OpenSession(
-                slotList[x],
+                slot,
                 PyKCS11.LowLevel.CKF_SERIAL_SESSION | PyKCS11.LowLevel.CKF_RW_SESSION,
                 session,
             )
@@ -74,7 +74,7 @@ for x in range(len(slotList)):
         + hex(sessionInfo.flags)
     )
 
-    print("\tC_GetTokenInfo(): " + hex(a.C_GetTokenInfo(slotList[x], tokenInfo)))
+    print("\tC_GetTokenInfo(): " + hex(a.C_GetTokenInfo(slot, tokenInfo)))
     print(
         "\t\tTokenInfo: Label="
         + tokenInfo.GetLabel()
