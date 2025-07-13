@@ -19,7 +19,6 @@
 
 import os
 
-from PyKCS11 import ckbytelist
 from PyKCS11.LowLevel import *
 
 a = CPKCS11Lib()
@@ -32,7 +31,7 @@ session = CK_SESSION_HANDLE()
 sessionInfo = CK_SESSION_INFO()
 tokenInfo = CK_TOKEN_INFO()
 slotList = ckulonglist()
-pin = ckbytelist("1234")
+pin = ckbytelist(b"1234")
 
 print("Load of " + lib + ": " + str(a.Load(lib)))
 print("C_GetInfo:", hex(a.C_GetInfo(info)))
