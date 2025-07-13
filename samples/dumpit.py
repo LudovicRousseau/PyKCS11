@@ -36,8 +36,7 @@ def dump(src, length=16):
     def to_ascii(x):
         if x >= 32 and x <= 127:
             return chr(x)
-        else:
-            return "."
+        return "."
 
     N = 0
     result = ""
