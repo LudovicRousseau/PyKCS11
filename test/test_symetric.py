@@ -193,7 +193,7 @@ class TestUtil(unittest.TestCase):
         self.session.encryptFinal()
 
     def test_multi_part_aead(self):
-        if not "CKM_AES_GCM" in self.pkcs11.getMechanismList(self.slot):
+        if "CKM_AES_GCM" not in self.pkcs11.getMechanismList(self.slot):
             self.skipTest("CKM_AES_GCM is not supported by the token")
 
         keyID = (0x03,)
