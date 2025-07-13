@@ -97,6 +97,7 @@ class TestUtil(unittest.TestCase):
 
         template = [(PyKCS11.CKA_HW_FEATURE_TYPE, PyKCS11.CKH_USER_INTERFACE)]
         o = self.session.findObjects(template)
+        self.assertListEqual(o, [])
 
     def test_BoolAttributes(self):
         # dictionary of attributes expected to be bool and their expected values
