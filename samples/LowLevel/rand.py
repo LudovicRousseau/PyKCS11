@@ -53,11 +53,11 @@ print(
     )
 )
 
-print(" ".join("%02X" % i for i in seed))
+print(" ".join(f"{i:02X}" for i in seed))
 print("C_SeedRandom(): " + hex(a.C_SeedRandom(session, seed)))
 
 print("C_GenerateRandom(): " + hex(a.C_GenerateRandom(session, rand)))
-print(" ".join("%02X" % i for i in rand))
+print(" ".join(f"{i:02X}" for i in rand))
 
 print("C_CloseSession(): " + hex(a.C_CloseSession(session)))
 print("C_Finalize(): " + hex(a.C_Finalize()))
