@@ -16,9 +16,9 @@
 # along with this program; if not, write to the Free Software
 # Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301 USA.
 
-from PyKCS11 import *
+import PyKCS11
 
-pkcs11 = PyKCS11Lib()
+pkcs11 = PyKCS11.PyKCS11Lib()
 pkcs11.load()  # define environment variable PYKCS11LIB=YourPKCS11Lib
 
 slot = pkcs11.getSlotList(tokenPresent=True)[0]
