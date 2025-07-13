@@ -19,7 +19,16 @@
 
 import binascii
 
-from PyKCS11 import *
+from PyKCS11 import (
+    CKA_CLASS,
+    CKF_RW_SESSION,
+    CKF_SERIAL_SESSION,
+    CKM_SHA256_RSA_PKCS,
+    CKO_PRIVATE_KEY,
+    CKO_PUBLIC_KEY,
+    Mechanism,
+    PyKCS11Lib,
+)
 
 pkcs11 = PyKCS11Lib()
 pkcs11.load()  # define environment variable PYKCS11LIB=YourPKCS11Lib
