@@ -77,7 +77,7 @@ class TestUtil(unittest.TestCase):
         the_exception = cm.exception
         self.assertEqual(the_exception.value, -1)
         self.assertEqual(the_exception.text, lib)
-        self.assertEqual(str(the_exception), "Load (%s)" % lib)
+        self.assertEqual(str(the_exception), f"Load ({lib})")
         self.assertEqual(len(self.pkcs11._loaded_libs), 0)
 
         # C_GetFunctionList() not found
@@ -96,7 +96,7 @@ class TestUtil(unittest.TestCase):
         the_exception = cm.exception
         self.assertEqual(the_exception.value, -4)
         self.assertEqual(the_exception.text, lib)
-        self.assertEqual(str(the_exception), "C_GetFunctionList() not found (%s)" % lib)
+        self.assertEqual(str(the_exception), f"C_GetFunctionList() not found ({lib})")
         self.assertEqual(len(self.pkcs11._loaded_libs), 0)
 
         # try to load the improper lib another time
@@ -105,7 +105,7 @@ class TestUtil(unittest.TestCase):
         the_exception = cm.exception
         self.assertEqual(the_exception.value, -4)
         self.assertEqual(the_exception.text, lib)
-        self.assertEqual(str(the_exception), "C_GetFunctionList() not found (%s)" % lib)
+        self.assertEqual(str(the_exception), f"C_GetFunctionList() not found ({lib})")
         self.assertEqual(len(self.pkcs11._loaded_libs), 0)
 
         # finally, load a valid library
