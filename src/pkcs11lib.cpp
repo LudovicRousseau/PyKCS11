@@ -86,7 +86,16 @@ void CPKCS11Lib::Duplicate(CPKCS11Lib *ref)
 CK_RV CPKCS11Lib::C_Initialize()
 {
 	CK_RV rv;
-	rv = m_pFunc->C_Initialize(NULL);
+    CK_C_INITIALIZE_ARGS args = {
+        .CreateMutex = NULL,
+        .DestroyMutex = NULL,
+        .LockMutex = NULL,
+        .UnlockMutex = NULL,
+        .flags = CKF_OS_LOCKING_OK,
+        .pReserved = NULL,
+    };
+
+	rv = m_pFunc->C_Initialize(&args);
 	return rv;
 }
 
