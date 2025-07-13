@@ -50,6 +50,7 @@ tox:
 
 pylint:
 	$(PYTHON) -m pylint PyKCS11
+	$(PYTHON) -m pylint samples
 
 doc:
 	cd docs ; ./generate.sh
