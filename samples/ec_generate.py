@@ -18,14 +18,14 @@
 
 from asn1crypto.keys import ECDomainParameters, NamedCurve
 
-from PyKCS11 import *
+import PyKCS11
 
 pkcs11 = PyKCS11.PyKCS11Lib()
 pkcs11.load()
 
 slot = pkcs11.getSlotList(tokenPresent=True)[0]
 
-session = pkcs11.openSession(slot, CKF_SERIAL_SESSION | CKF_RW_SESSION)
+session = pkcs11.openSession(slot, PyKCS11.CKF_SERIAL_SESSION | PyKCS11.CKF_RW_SESSION)
 session.login("1234")
 
 key_id = (0x22,)
