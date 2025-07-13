@@ -41,7 +41,8 @@ class getInfo:
             if type == "flags":
                 self.colorize(left, ", ".join(dico[key]))
             elif type == "pair":
-                self.colorize(left, "%d.%d" % dico[key])
+                p1, p2 = dico[key]
+                self.colorize(left, f"{p1}.{p2}")
             else:
                 self.colorize(left, dico[key])
 
@@ -57,11 +58,7 @@ class getInfo:
 
     def getSlotInfo(self, slot, slot_index, nb_slots):
         print()
-        print(
-            self.red
-            + "Slot %d/%d (number %d):" % (slot_index, nb_slots, slot)
-            + self.normal
-        )
+        print(self.red + f"Slot {slot_index}/{nb_slots} (number {slot}):" + self.normal)
         self.display(self.pkcs11.getSlotInfo(slot), " ")
 
     def getTokenInfo(self, slot):
@@ -92,7 +89,7 @@ class getInfo:
             if pin is None:
                 print("(using pinpad)")
             else:
-                print("(using pin: %s)" % pin)
+                print(f"(using pin: {pin})")
             session.login(pin)
         else:
             print()
