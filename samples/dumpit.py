@@ -123,7 +123,7 @@ for s in slots:
         print(format_normal % ("firmwareVersion", i.firmwareVersion))
         print(format_normal % ("flags          ", ", ".join(i.flags2text())))
 
-        if not (i.flags & PyKCS11.CKF_TOKEN_PRESENT):
+        if not i.flags & PyKCS11.CKF_TOKEN_PRESENT:
             print("  Token not present")
             continue
 
