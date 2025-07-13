@@ -36,11 +36,11 @@ class getInfo:
     def display(self, obj, indent=""):
         dico = obj.to_dict()
         for key in sorted(dico.keys()):
-            type = obj.fields[key]
+            ck_type = obj.fields[key]
             left = indent + key + ":"
-            if type == "flags":
+            if ck_type == "flags":
                 self.colorize(left, ", ".join(dico[key]))
-            elif type == "pair":
+            elif ck_type == "pair":
                 p1, p2 = dico[key]
                 self.colorize(left, f"{p1}.{p2}")
             else:
