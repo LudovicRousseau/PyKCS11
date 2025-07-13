@@ -34,7 +34,7 @@ import PyKCS11
 
 def dump(src, length=16):
     def to_ascii(x):
-        if x >= 32 and x <= 127:
+        if 32 <= x <= 127:
             return chr(x)
         return "."
 
