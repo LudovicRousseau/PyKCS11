@@ -48,7 +48,7 @@ extra_link_args = []
 if platform.system().lower() == "windows":
     source_files.append("src/dyn_win32.c")
     libraries_val = ["python%d%d" % pyver[:2]]
-    extra_compile_args = ["/Fdvc70.pdb", "/Zi", "/GR", "/EHsc"]
+    extra_compile_args = ["/Fdvc70.pdb", "/Zi", "/GR", "/EHsc", "/std:c++20"]
     extra_link_args = [
         "/DEBUG",
         "/PDB:_LowLevel.pdb",
