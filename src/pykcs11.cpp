@@ -16,8 +16,6 @@
 // Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301 USA.
 
 // PyKCS11.cpp : Defines the entry point for the DLL application.
-//
-#include "stdafx.h"
 
 #if defined(WIN32) || defined(_WIN32)
 #include <windows.h>
