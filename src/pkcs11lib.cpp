@@ -54,7 +54,7 @@ CK_RV CPKCS11Lib::Load(const char* szLib)
 		return rv;
 	}
 
-	rv = m_pFunc->C_Initialize(NULL);
+	rv = C_Initialize();
 	if (CKR_OK != rv  && CKR_CRYPTOKI_ALREADY_INITIALIZED != rv)
 		return rv;
 
@@ -65,7 +65,7 @@ bool CPKCS11Lib::Unload()
 {
 	bool bRes = false;
 	if (m_hLib && m_pFunc)
-		m_pFunc->C_Finalize(NULL);
+		C_Finalize();
 	if (m_hLib)
 	{
 		bRes = true;
