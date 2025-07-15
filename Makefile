@@ -36,7 +36,7 @@ pypi: clean
 	$(PYTHON) -m twine upload dist/*
 
 test:
-	$(PYTHON) run_test.py
+	$(PYTHON) run_pytest.py
 
 coverage:
 	$(COVERAGE) erase
