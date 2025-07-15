@@ -21,6 +21,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301 USA.
 
 import os
 import sys
+import threading
 
 import PyKCS11.LowLevel
 
@@ -459,6 +460,7 @@ class PyKCS11Lib:
 
     # shared by all instances
     _loaded_libs = {}
+    _lock = threading.Lock()
 
     def __init__(self):
         self.lib = PyKCS11.LowLevel.CPKCS11Lib()
@@ -489,37 +491,38 @@ class PyKCS11Lib:
         :returns: a :class:`PyKCS11Lib` object
         :raises: :class:`PyKCS11Error` (-1): when the load fails
         """
-        if pkcs11dll_filename is None:
-            pkcs11dll_filename = os.getenv("PYKCS11LIB")
+        with PyKCS11Lib._lock:
             if pkcs11dll_filename is None:
-                raise PyKCS11Error(
-                    -1, "No PKCS11 library specified (set PYKCS11LIB env variable)"
-                )
+                pkcs11dll_filename = os.getenv("PYKCS11LIB")
+                if pkcs11dll_filename is None:
+                    raise PyKCS11Error(
+                        -1, "No PKCS11 library specified (set PYKCS11LIB env variable)"
+                    )
 
-        if self.pkcs11dll_filename is not None:
-            self.unload()  # unload the previous library
-            # if the instance was previously initialized,
-            # create a new low level library object for it
-            self.lib = PyKCS11.LowLevel.CPKCS11Lib()
+            if self.pkcs11dll_filename is not None:
+                self._unload_locked()  # unload the previous library
+                # if the instance was previously initialized,
+                # create a new low level library object for it
+                self.lib = PyKCS11.LowLevel.CPKCS11Lib()
 
-        # if the lib is already in use: reuse it
-        if pkcs11dll_filename in PyKCS11Lib._loaded_libs:
-            self.lib.Duplicate(PyKCS11Lib._loaded_libs[pkcs11dll_filename]["ref"])
-        else:
-            # else load it
-            rv = self.lib.Load(pkcs11dll_filename)
-            if rv != CKR_OK:
-                raise PyKCS11Error(rv, pkcs11dll_filename)
-            PyKCS11Lib._loaded_libs[pkcs11dll_filename] = {
-                "ref": self.lib,
-                "nb_users": 0,
-            }
+            # if the lib is already in use: reuse it
+            if pkcs11dll_filename in PyKCS11Lib._loaded_libs:
+                self.lib.Duplicate(PyKCS11Lib._loaded_libs[pkcs11dll_filename]["ref"])
+            else:
+                # else load it
+                rv = self.lib.Load(pkcs11dll_filename)
+                if rv != CKR_OK:
+                    raise PyKCS11Error(rv, pkcs11dll_filename)
+                PyKCS11Lib._loaded_libs[pkcs11dll_filename] = {
+                    "ref": self.lib,
+                    "nb_users": 0,
+                }
 
-        # remember the lib file name
-        self.pkcs11dll_filename = pkcs11dll_filename
+            # remember the lib file name
+            self.pkcs11dll_filename = pkcs11dll_filename
 
-        # increase user number
-        PyKCS11Lib._loaded_libs[pkcs11dll_filename]["nb_users"] += 1
+            # increase user number
+            PyKCS11Lib._loaded_libs[pkcs11dll_filename]["nb_users"] += 1
 
         return self
 
