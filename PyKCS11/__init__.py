@@ -530,6 +530,14 @@ class PyKCS11Lib:
         """
         unload the current instance of a PKCS#11 library
         """
+        with PyKCS11Lib._lock:
+            self._unload_locked()
+
+    def _unload_locked(self):
+        """
+        unload the current instance of a PKCS#11 library
+        The lock is already held
+        """
 
         # in case NO library was found and used
         if self.pkcs11dll_filename is None:
