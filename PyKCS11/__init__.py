@@ -491,14 +491,14 @@ class PyKCS11Lib:
         :returns: a :class:`PyKCS11Lib` object
         :raises: :class:`PyKCS11Error` (-1): when the load fails
         """
-        with PyKCS11Lib._lock:
+        if pkcs11dll_filename is None:
+            pkcs11dll_filename = os.getenv("PYKCS11LIB")
             if pkcs11dll_filename is None:
-                pkcs11dll_filename = os.getenv("PYKCS11LIB")
-                if pkcs11dll_filename is None:
-                    raise PyKCS11Error(
-                        -1, "No PKCS11 library specified (set PYKCS11LIB env variable)"
-                    )
+                raise PyKCS11Error(
+                    -1, "No PKCS11 library specified (set PYKCS11LIB env variable)"
+                )
 
+        with PyKCS11Lib._lock:
             if self.pkcs11dll_filename is not None:
                 self._unload_locked()  # unload the previous library
                 # if the instance was previously initialized,
