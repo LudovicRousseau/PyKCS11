@@ -87,11 +87,10 @@ class TestUtil(unittest.TestCase):
         mecha = PyKCS11.Mechanism(PyKCS11.CKM_ECDSA, None)
 
         # sign/verify
-        try:
+        with self.assertRaises(PyKCS11.PyKCS11Error) as cm:
             self.session.sign(self.privKey, toSign, mecha)
-        except PyKCS11.PyKCS11Error as e:
-            # should return PyKCS11.PyKCS11Error: Unknown format (<class 'int'>)
-            self.assertEqual(e.value, -3)
+        # should return PyKCS11.PyKCS11Error: Unknown format (<class 'int'>)
+        self.assertEqual(cm.exception.value, -3)
 
     def test_sign_text(self):
         toSign = "Hello World!"
@@ -195,11 +194,10 @@ class TestEDDSA(unittest.TestCase):
         (pubKey, privKey) = self._generate_edwards_key_pair("ed25519")
 
         # sign/verify
-        try:
+        with self.assertRaises(PyKCS11.PyKCS11Error) as cm:
             self.session.sign(privKey, toSign, mecha)
-        except PyKCS11.PyKCS11Error as e:
-            # should return PyKCS11.PyKCS11Error: Unknown format (<class 'int'>)
-            self.assertEqual(e.value, -3)
+        # should return PyKCS11.PyKCS11Error: Unknown format (<class 'int'>)
+        self.assertEqual(cm.exception.value, -3)
 
         self.session.destroyObject(pubKey)
         self.session.destroyObject(privKey)
