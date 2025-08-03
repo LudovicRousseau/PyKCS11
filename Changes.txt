@@ -1,6 +1,20 @@
 History
 =======
 
+1.5.18 - August 2025, Ludovic Rousseau
+  - add CKM_EXTRACT_KEY_FROM_KEY mechanism
+  - add CKM_EDDSA and CK_EDDSA_PARAMS support
+  - C_Initialize(): allow OS locking
+  - PyKCS11.load() & .unload(): make the methods tread-safe
+  - bugfix: store CKM_CONCATENATE_BASE_AND_KEY parameter in mechanism context
+  - IsNum(): CKA_HW_FEATURE_TYPE is also a numeric value
+  - improve support for multi-part encryption/decryption
+  - fix some Python typing issues
+  - Fix issue with vendor defined (CKM_VENDOR_DEFINED) mechanisms
+  - fix/ignore all pylint warnings
+  - use pytest for running tests
+  - minor improvements
+
 1.5.17 - October 2024, Ludovic Rousseau
   - Add AES in counter mode support (CKM_AES_CTR)
   - Add simple derivation mechanisms support (CMK_CONCATENATE_*)
