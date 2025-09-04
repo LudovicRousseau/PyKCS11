@@ -20,7 +20,6 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301 USA.
 # pylint: disable=too-many-lines
 
 import os
-import sys
 import threading
 
 import PyKCS11.LowLevel
