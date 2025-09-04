@@ -2,7 +2,7 @@
 ifeq (, $(PYTHON))
 PYTHON=python3
 endif
-COVERAGE ?= python3-coverage
+COVERAGE ?= $(PYTHON) -m coverage
 
 build:
 	$(PYTHON) -m build
