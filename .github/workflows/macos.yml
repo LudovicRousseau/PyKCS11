@@ -12,7 +12,20 @@ jobs:
 
     - name: Install build tools
       run: |
-        brew install swig softhsm
+        brew install swig autoconf automake libtool
+
+    - name: clone SoftHSMv2
+      uses: actions/checkout@v5
+      with:
+        repository: softhsm/SoftHSMv2
+        path: resources/softhsm
+
+    - name: build SoftHSMv2
+      run: |
+        cd resources/softhsm
+        ./autogen.sh
+        ./configure --prefix=/tmp/softhsm --with-openssl=/opt/homebrew/opt/openssl
+        make install
 
     - name: Build
       run: |
@@ -23,7 +36,7 @@ jobs:
 
     - name: Tests
       run: |
-        softhsm2-util --init-token --slot 0 --label "A token" --pin 1234 --so-pin 123456
+        /tmp/softhsm/bin/softhsm2-util --init-token --slot 0 --label "A token" --pin 1234 --so-pin 123456
         source temp/bin/activate
         make install
-        make test
+        PYKCS11LIB=/tmp/softhsm/lib/softhsm/libsofthsm2.so make test
