@@ -68,7 +68,6 @@ class MyBuild(build_py):
             print("")
             exit(1)
         self.run_command("build_ext")
-        shutil.copy("src/LowLevel.py", "PyKCS11")
         build_py.run(self)
 
 
@@ -88,6 +87,7 @@ setup(
     download_url="http://sourceforge.net/projects/pkcs11wrap/files/pykcs11/",
     license="GPL",
     cmdclass={"build_py": MyBuild},
+    package_dir = {"": "src"},
     ext_modules=[
         Extension(
             name="PyKCS11._LowLevel",
@@ -96,7 +96,7 @@ setup(
             library_dirs=lib_dirs,
             libraries=libraries_val,
             define_macros=define_macros,
-            swig_opts=["-c++"],
+            swig_opts=["-c++", "-outdir", "src/PyKCS11"],
             extra_compile_args=extra_compile_args,
             extra_link_args=extra_link_args,
         )

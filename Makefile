@@ -8,9 +8,8 @@ build:
 	$(PYTHON) -m build
 
 constants:
-	mv PyKCS11/__init__.py PyKCS11/__init__.py.x
-	$(PYTHON) generate_constants.py > PyKCS11/constants.py
-	mv PyKCS11/__init__.py.x PyKCS11/__init__.py
+	$(PYTHON) generate_constants.py > constants.py
+	mv constants.py src/PyKCS11/
 
 install:
 	$(PYTHON) -m pip install --editable .
@@ -18,11 +17,10 @@ install:
 clean distclean:
 	$(PYTHON) setup.py clean
 	rm -f src/pykcs11_wrap.cpp
-	rm -f src/LowLevel.py
 	rm -rf build
 	rm -f *.pyc PyKCS11/*.pyc
-	rm -f PyKCS11/LowLevel.py
-	rm -f PyKCS11/_LowLevel*
+	rm -f src/PyKCS11/LowLevel.py
+	rm -f src/PyKCS11/_LowLevel*
 	rm -f build-stamp
 	rm -f test/*.pyc
 	find . -name .DS_Store -exec rm {} \;
