@@ -46,7 +46,7 @@ coverage:
 
 tox:
 	./get_PYKCS11LIB.py > tox.env
-	tox
+	tox -- -v
 
 pylint:
 	$(PYTHON) -m pylint PyKCS11
