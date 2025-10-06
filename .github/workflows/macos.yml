@@ -7,8 +7,17 @@ jobs:
 
     runs-on: macos-latest
 
+    strategy:
+      matrix:
+        python-version: ['3.12', '3.13']
+
     steps:
     - uses: actions/checkout@v5
+
+    - name: Set up Python ${{ matrix.python-version }}
+      uses: actions/setup-python@v6
+      with:
+        python-version: ${{ matrix.python-version }}
 
     - name: Install build tools
       run: |
@@ -29,10 +38,11 @@ jobs:
 
     - name: Build
       run: |
-        python3 -m venv temp
+        python -m venv temp
         source temp/bin/activate
         pip3 install -r dev-requirements.txt
         make
+        python setup.py bdist_wheel
 
     - name: Tests
       run: |
@@ -40,3 +50,33 @@ jobs:
         source temp/bin/activate
         make install
         PYKCS11LIB=/tmp/softhsm/lib/softhsm/libsofthsm2.so make test
+
+    - uses: actions/upload-artifact@v5
+      with:
+        name: wheel-${{ matrix.python-version }}-${{ matrix.windows-arch }}
+        path: dist/*.whl
+
+  publish:
+    name: "PyPI Publish"
+    needs: "build"
+    if: github.event_name == 'push' && contains(github.ref, 'refs/tags/')
+    runs-on: "ubuntu-latest"
+    environment:
+      name: pypi
+      url: https://pypi.org/p/pyscard
+    permissions:
+      id-token: write
+
+    steps:
+
+      - name: Download artifacts
+        uses: actions/download-artifact@634f93cb2916e3fdff6788551b99b062d0335ce0 # 5.0.0
+
+      - name: move wheels to dist/
+        run: |
+          mkdir -v dist
+          mv -v wheel-*/*.whl dist/
+          ls -al dist/
+
+      - name: Publish wheels to PyPI
+        uses: pypa/gh-action-pypi-publish@ed0c53931b1dc9bd32cbe73a98c7f6766f8a527e # v1.13.0
