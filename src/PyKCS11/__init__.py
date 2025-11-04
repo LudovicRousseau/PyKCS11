@@ -433,7 +433,13 @@ class CK_MECHANISM_INFO(CkClass):
 
 
 class PyKCS11Error(Exception):
-    """define the possible PyKCS11 exceptions"""
+    """define the possible PyKCS11 exceptions
+
+    Positives values are for CKR_* codes
+    -1: error in load()
+    -2: error in template or attribute
+    -3: error in ckbytelist()
+    """
 
     def __init__(self, value, text=""):
         self.value = value
