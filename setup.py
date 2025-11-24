@@ -87,7 +87,7 @@ setup(
     download_url="http://sourceforge.net/projects/pkcs11wrap/files/pykcs11/",
     license="GPL",
     cmdclass={"build_py": MyBuild},
-    package_dir = {"": "src"},
+    package_dir={"": "src"},
     ext_modules=[
         Extension(
             name="PyKCS11._LowLevel",
