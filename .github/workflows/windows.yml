@@ -57,7 +57,7 @@ jobs:
         c:\\SoftHSM2\\bin\\softhsm2-util --init-token --slot 0 --label "A token" --pin 1234 --so-pin 123456
         python run_test.py
 
-    - uses: actions/upload-artifact@v5
+    - uses: actions/upload-artifact@v6
       with:
         name: wheel-${{ matrix.python-version }}-${{ matrix.windows-arch }}
         path: dist/*.whl

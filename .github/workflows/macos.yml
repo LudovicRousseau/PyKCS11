@@ -51,7 +51,7 @@ jobs:
         make install
         PYKCS11LIB=/tmp/softhsm/lib/softhsm/libsofthsm2.so make test
 
-    - uses: actions/upload-artifact@v5
+    - uses: actions/upload-artifact@v6
       with:
         name: wheel-${{ matrix.python-version }}-${{ matrix.windows-arch }}
         path: dist/*.whl
