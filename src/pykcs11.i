@@ -535,6 +535,9 @@ typedef struct CK_MECHANISM_INFO {
 
 typedef unsigned long CK_RV;
 
+/* use deprecated symbols for now */
+#define PKCS11_DEPRECATED
+
 #define FALSE 0
 #define TRUE !(FALSE)
 
