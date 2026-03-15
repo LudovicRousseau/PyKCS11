@@ -746,10 +746,17 @@ class PyKCS11Lib:
             raise PyKCS11Error(rv)
 
         m = []
+        mechanismList.append(0x1D)
         for mechanism in mechanismList:
-            if mechanism >= CKM_VENDOR_DEFINED:
-                mecha = mechanism - CKM_VENDOR_DEFINED
-                k = f"CKM_VENDOR_DEFINED_0x{mecha:X}"
+            # Dynamically add unknown mechanisms:
+            if mechanism not in CKM:
+                if mechanism >= CKM_VENDOR_DEFINED:
+                    # Vendor defined mechanism
+                    mecha = mechanism - CKM_VENDOR_DEFINED
+                    k = f"CKM_VENDOR_DEFINED_0x{mecha:X}"
+                else:
+                    # Not yet known mechanism
+                    k = f"CKM_UNKNOWN_0x{mechanism:X}"
                 CKM[k] = mechanism
                 CKM[mechanism] = k
             m.append(CKM[mechanism])
