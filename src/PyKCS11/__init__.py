@@ -1718,7 +1718,6 @@ class Session:
             CKA_NEVER_EXTRACTABLE,
             CKA_PRIVATE,
             CKA_RESET_ON_INIT,
-            CKA_SECONDARY_AUTH,
             CKA_SENSITIVE,
             CKA_SIGN,
             CKA_SIGN_RECOVER,
