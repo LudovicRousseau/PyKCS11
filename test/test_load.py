@@ -56,6 +56,12 @@ class TestUtil(unittest.TestCase):
         self.openSession(lib2)
         self.assertEqual(len(lib2._loaded_libs), 1)
 
+        # unload the second library
+        del lib2
+        gc.collect()
+
+        self.assertEqual(len(self.pkcs11._loaded_libs), 0)
+
     def test_multiple_load(self):
         # load two different libraries
         lib1 = PyKCS11.PyKCS11Lib().load(self.lib1_name)
