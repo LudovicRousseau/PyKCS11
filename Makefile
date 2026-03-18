@@ -14,6 +14,11 @@ constants:
 install:
 	$(PYTHON) -m pip install --editable .
 
+venv:
+	rm -rf temp
+	$(PYTHON) -m venv temp
+	./temp/bin/pip3 install -r dev-requirements.txt
+
 clean distclean:
 	$(PYTHON) setup.py clean
 	rm -f src/pykcs11_wrap.cpp
