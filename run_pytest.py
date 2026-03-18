@@ -6,6 +6,8 @@ Run unit tests
 use:
 ./run_pytest.py
 ./run_pytest.py -k ckbytelist
+
+# install module pytest-run-parallel for parallel testing
 ./run_pytest.py --parallel-threads=5 --iterations=5
 """
 
