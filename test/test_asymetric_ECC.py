@@ -19,6 +19,9 @@ class TestUtil(unittest.TestCase):
         # get SoftHSM major version
         self.SoftHSMversion = self.pkcs11.getInfo().libraryVersion[0]
 
+        if self.SoftHSMversion < 2:
+            self.skipTest("ECDSA only supported by SoftHSM >= 2")
+
         self.slot = self.pkcs11.getSlotList(tokenPresent=True)[0]
         self.session = self.pkcs11.openSession(
             self.slot, PyKCS11.CKF_SERIAL_SESSION | PyKCS11.CKF_RW_SESSION
@@ -60,9 +63,6 @@ class TestUtil(unittest.TestCase):
             (PyKCS11.CKA_LABEL, label),
             (PyKCS11.CKA_ID, keyID),
         ]
-
-        if self.SoftHSMversion < 2:
-            self.skipTest("ECDSA only supported by SoftHSM >= 2")
 
         (self.pubKey, self.privKey) = self.session.generateKeyPair(
             ec_public_tmpl, ec_priv_tmpl, mecha=PyKCS11.MechanismECGENERATEKEYPAIR
