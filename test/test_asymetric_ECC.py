@@ -20,6 +20,7 @@ class TestUtil(unittest.TestCase):
         self.SoftHSMversion = self.pkcs11.getInfo().libraryVersion[0]
 
         if self.SoftHSMversion < 2:
+            self.pkcs11.unload()
             self.skipTest("ECDSA only supported by SoftHSM >= 2")
 
         self.slot = self.pkcs11.getSlotList(tokenPresent=True)[0]
