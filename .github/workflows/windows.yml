@@ -50,7 +50,7 @@ jobs:
     - name: Tests
       shell: cmd
       run: |
-        curl -Lo softhsm.zip https://github.com/disig/SoftHSM2-for-Windows/releases/download/v2.4.0/SoftHSM2-2.4.0-portable.zip
+        curl -Lo softhsm.zip https://github.com/disig/SoftHSM2-for-Windows/releases/download/v2.5.0/SoftHSM2-2.5.0-portable.zip
         7z -bb3 -oc:\\ x softhsm.zip
         set SOFTHSM2_CONF=C:\SoftHSM2\etc\softhsm2.conf
         set PATH=%PATH%;C:\SoftHSM2\lib\
