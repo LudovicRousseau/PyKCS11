@@ -31,7 +31,7 @@ jobs:
         # We need wheel installed to build wheels
         pip install wheel
 
-        choco install swig --version 2.0.12 --allow-empty-checksums --yes --limit-output
+        choco install swig
         swig -version
 
     - name: Build
