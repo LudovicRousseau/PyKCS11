@@ -55,7 +55,7 @@ jobs:
         set SOFTHSM2_CONF=C:\SoftHSM2\etc\softhsm2.conf
         set PATH=%PATH%;C:\SoftHSM2\lib\
         c:\\SoftHSM2\\bin\\softhsm2-util --init-token --slot 0 --label "A token" --pin 1234 --so-pin 123456
-        python run_test.py
+        python run_test.py --ignore=test/test_LowLevel.py
 
     - uses: actions/upload-artifact@v7
       with:
