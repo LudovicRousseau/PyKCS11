@@ -42,9 +42,7 @@ jobs:
           source temp/bin/activate
           make install
           # test_symetric_ECC blocks on GNU/Linux for now
-          ./run_pytest.py \
-            --ignore=test/test_symetric_ECC.py \
-            --ignore=test/test_derive.py
+          ./run_test.py
 
       - name: pylint
         run: |
