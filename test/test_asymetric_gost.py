@@ -60,7 +60,7 @@ class TestUtil(unittest.TestCase):
         # test generate gost key pair
         gen_mechanism = PyKCS11.Mechanism(PyKCS11.CKM_GOSTR3410_KEY_PAIR_GEN, None)
         try:
-            (self.pubKey, self.privKey) = self.session.generateKeyPair(
+            self.pubKey, self.privKey = self.session.generateKeyPair(
                 pubTemplate, privTemplate, gen_mechanism
             )
         except PyKCS11.PyKCS11Error as e:

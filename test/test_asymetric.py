@@ -49,7 +49,7 @@ class TestUtil(unittest.TestCase):
             (PyKCS11.CKA_ID, keyID),
         ]
 
-        (self.pubKey, self.privKey) = self.session.generateKeyPair(
+        self.pubKey, self.privKey = self.session.generateKeyPair(
             pubTemplate, privTemplate
         )
         self.assertIsNotNone(self.pubKey)

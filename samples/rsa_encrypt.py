@@ -56,7 +56,7 @@ privTemplate = [
     (PyKCS11.CKA_ID, (0x43,)),
 ]
 
-(pubKey, privKey) = session.generateKeyPair(pubTemplate, privTemplate)
+pubKey, privKey = session.generateKeyPair(pubTemplate, privTemplate)
 
 PLAINTEXT = "A test string"
 mech = PyKCS11.RSAOAEPMechanism(PyKCS11.CKM_SHA_1, PyKCS11.CKG_MGF1_SHA1)
