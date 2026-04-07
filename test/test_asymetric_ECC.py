@@ -65,7 +65,7 @@ class TestUtil(unittest.TestCase):
             (PyKCS11.CKA_ID, keyID),
         ]
 
-        (self.pubKey, self.privKey) = self.session.generateKeyPair(
+        self.pubKey, self.privKey = self.session.generateKeyPair(
             ec_public_tmpl, ec_priv_tmpl, mecha=PyKCS11.MechanismECGENERATEKEYPAIR
         )
         self.assertIsNotNone(self.pubKey)
@@ -176,7 +176,7 @@ class TestEDDSA(unittest.TestCase):
         ec_params = PrivateKeyAlgorithmId(curve).dump()
         ec_public_tmpl = self.ec_public_tmpl + [(PyKCS11.CKA_EC_PARAMS, ec_params)]
 
-        (pubKey, privKey) = self.session.generateKeyPair(
+        pubKey, privKey = self.session.generateKeyPair(
             ec_public_tmpl,
             self.ec_priv_tmpl,
             mecha=PyKCS11.Mechanism(PyKCS11.CKM_EC_EDWARDS_KEY_PAIR_GEN, None),
@@ -192,7 +192,7 @@ class TestEDDSA(unittest.TestCase):
     def test_sign_integer(self):
         toSign = 1234567890
         mecha = PyKCS11.EDDSA_Mechanism()
-        (pubKey, privKey) = self._generate_edwards_key_pair("ed25519")
+        pubKey, privKey = self._generate_edwards_key_pair("ed25519")
 
         # sign/verify
         with self.assertRaises(PyKCS11.PyKCS11Error) as cm:
@@ -225,7 +225,7 @@ class TestEDDSA(unittest.TestCase):
         for curve, phflag, context in schemes:
             with self.subTest(curve=curve, phflag=phflag, context=context):
                 mech = self._get_eddsa_mechanism(phflag, context)
-                (pubKey, privKey) = self._generate_edwards_key_pair(curve)
+                pubKey, privKey = self._generate_edwards_key_pair(curve)
                 # sign/verify
                 signature = self.session.sign(privKey, toSign, mech)
 

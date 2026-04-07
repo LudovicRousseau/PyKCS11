@@ -59,7 +59,7 @@ privTemplate = [
     (PyKCS11.CKA_ID, key_id),
 ]
 
-(pubKey, privKey) = session.generateKeyPair(pubTemplate, privTemplate)
+pubKey, privKey = session.generateKeyPair(pubTemplate, privTemplate)
 
 # logout
 session.logout()

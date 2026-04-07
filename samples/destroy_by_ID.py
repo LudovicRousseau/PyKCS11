@@ -18,7 +18,6 @@
 # Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301 USA.
 """
 
-
 import PyKCS11
 
 # the CKA_ID of the objects to destroy

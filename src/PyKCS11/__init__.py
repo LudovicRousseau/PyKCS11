@@ -795,7 +795,7 @@ class PyKCS11Lib:
         :rtype: integer
         """
         tmp = 0
-        (rv, slot) = self.lib.C_WaitForSlotEvent(flags, tmp)
+        rv, slot = self.lib.C_WaitForSlotEvent(flags, tmp)
         if rv != CKR_OK:
             raise PyKCS11Error(rv)
 

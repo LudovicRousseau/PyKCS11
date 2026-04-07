@@ -65,7 +65,7 @@ ec_priv_tmpl = [
     (PyKCS11.CKA_ID, key_id),
 ]
 
-(pub_key, priv_key) = session.generateKeyPair(
+pub_key, priv_key = session.generateKeyPair(
     ec_public_tmpl, ec_priv_tmpl, mecha=PyKCS11.MechanismECGENERATEKEYPAIR
 )
 
