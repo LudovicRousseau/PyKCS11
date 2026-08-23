@@ -13,6 +13,9 @@ jobs:
   # This workflow contains a single job called "build"
   build:
     runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        python-version: ['3.9', '3.10', '3.11', '3.12', '3.13', '3.14']
 
     # Steps represent a sequence of tasks that will be executed as part of
     # the job
@@ -21,9 +24,16 @@ jobs:
       # can access it
       - uses: actions/checkout@v7
 
+      - name: Set up Python ${{ matrix.python-version }}
+        uses: actions/setup-python@v7
+        with:
+          python-version: ${{ matrix.python-version }}
+
       - name: setup prerequisites (linux)
         shell: bash
-        run: sudo apt install python3-all-dev python3-setuptools softhsm2 swig tox
+        run: |
+          sudo apt install softhsm2 swig
+          pip install tox
 
       - name: Build
         run: |
@@ -53,7 +63,8 @@ jobs:
         shell: bash
         run: |
           ./get_PYKCS11LIB.py > tox.env
-          tox -e py312
+          ENV_NAME="py$(echo ${{ matrix.python-version }} | tr -d '.')"
+          tox -e $ENV_NAME
 
       - name: coverage
         shell: bash
@@ -67,3 +78,46 @@ jobs:
         uses: AndreMiras/coveralls-python-action@develop
         with:
           github-token: ${{ secrets.GITHUB_TOKEN }}
+
+  build_wheels:
+    name: Build wheels on Linux
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+
+      - name: Install swig
+        run: sudo apt-get update && sudo apt-get install -y swig
+
+      - name: Build wheels
+        uses: pypa/cibuildwheel@v2.21.3
+        env:
+          CIBW_BEFORE_BUILD: "yum install -y swig || apk add swig || apt-get install -y swig"
+
+      - uses: actions/upload-artifact@v7
+        with:
+          name: cibw-wheels-linux
+          path: ./wheelhouse/*.whl
+
+  publish:
+    name: "PyPI Publish"
+    needs: ["build", "build_wheels"]
+    if: github.event_name == 'push' && contains(github.ref, 'refs/tags/')
+    runs-on: "ubuntu-latest"
+    environment:
+      name: pypi
+      url: https://pypi.org/p/pyscard
+    permissions:
+      id-token: write
+
+    steps:
+      - name: Download artifacts
+        uses: actions/download-artifact@3e5f45b2cfb9172054b4087a40e8e0b5a5461e7c # 8.0.1
+
+      - name: move wheels to dist/
+        run: |
+          mkdir -v dist
+          mv -v cibw-wheels-linux/*.whl dist/
+          ls -al dist/
+
+      - name: Publish wheels to PyPI
+        uses: pypa/gh-action-pypi-publish@dc37677b2e1c63e2034f94d8a5b11f265b73ba33 # v1.14.2
