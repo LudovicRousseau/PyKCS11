@@ -63,7 +63,7 @@ using namespace std;
 }
 
 %typemap(out) CK_RV {
-   $result = PyInt_FromLong((long)$1);
+   $result = PyLong_FromLong((long)$1);
 }
 
 #else
