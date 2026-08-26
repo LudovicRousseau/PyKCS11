@@ -3,9 +3,12 @@
 # pylint: disable=missing-function-docstring
 
 import unittest
+import logging
 
 from PyKCS11 import PyKCS11
 
+test_logger = logging.getLogger('test_logger')
+test_logger.setLevel(logging.DEBUG)
 
 class TestUtil(unittest.TestCase):
     def setUp(self):
@@ -124,12 +127,16 @@ class TestUtil(unittest.TestCase):
         aad = "plaintext aad"
         tagBits = AES_GCM_TAG_SIZE * 8
         mechanism = PyKCS11.AES_GCM_Mechanism(iv, aad, tagBits)
+        test_logger.info(mechanism._source_iv)
 
         DataOut = self.session.encrypt(symKey, DataIn, mechanism)
         # print("DataOut", DataOut)
+        # mechanism._source_iv[0] = 12
+        test_logger.info(mechanism._source_iv)
 
         DataCheck = self.session.decrypt(symKey, DataOut, mechanism)
         # print("DataCheck:", DataCheck)
+        test_logger.info(mechanism._source_iv)
 
         self.assertSequenceEqual(DataIn, DataCheck)
 
