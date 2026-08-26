@@ -1088,8 +1088,8 @@ class EXTRACT_KEY_FROM_KEY_Mechanism:
     def __init__(self, extractParams):
         """
         :param extractParams: the index of the first bit of the original
-        key to be used in the newly-derived key.  For example if
-        extractParams=5 then the 5 first bits are skipped and not used.
+         key to be used in the newly-derived key.  For example if
+         extractParams=5 then the 5 first bits are skipped and not used.
         """
         self._param = PyKCS11.LowLevel.CK_EXTRACT_PARAMS()
         self._param.assign(extractParams)
@@ -1111,8 +1111,8 @@ class EDDSA_Mechanism:
 
     def __init__(self, phFlag=None, contextData=None):
         """
-        :param phFlag: prehash flag [True|False]. If this parameter is not set,
-        Ed25519 in pure mode without context is assumed.
+        :param phFlag: prehash flag [True|False]. If this parameter is not
+         set, Ed25519 in pure mode without context is assumed.
         :param context: context data (optional)
         """
         self._param = PyKCS11.LowLevel.CK_EDDSA_PARAMS()
