@@ -1,6 +1,17 @@
 History
 =======
 
+1.5.19 - August 2026, Ludovic Rousseau
+  - Add support of swig 4.5.0
+  - getMechanismList(): do not fail on unknown mechanisms
+  - Remove use of deprecated CKA_SECONDARY_AUTH
+  - test/reset_softHSM:
+   - add support of Homebrew on arm64
+   - add some output traces
+  - setup: Rename the project in lower case
+  - Move source code in src/
+  - minor improvements
+
 1.5.18 - August 2025, Ludovic Rousseau
   - add CKM_EXTRACT_KEY_FROM_KEY mechanism
   - add CKM_EDDSA and CK_EDDSA_PARAMS support
