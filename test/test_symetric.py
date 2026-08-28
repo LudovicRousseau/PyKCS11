@@ -2,13 +2,14 @@
 # pylint: disable=missing-class-docstring
 # pylint: disable=missing-function-docstring
 
-import unittest
 import logging
+import unittest
 
 from PyKCS11 import PyKCS11
 
-test_logger = logging.getLogger('test_logger')
+test_logger = logging.getLogger("test_logger")
 test_logger.setLevel(logging.DEBUG)
+
 
 class TestUtil(unittest.TestCase):
     def setUp(self):
