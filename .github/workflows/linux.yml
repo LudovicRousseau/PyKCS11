@@ -87,13 +87,9 @@ jobs:
     steps:
       - uses: actions/checkout@v7
 
-      - name: Install swig
-        run: sudo apt-get update && sudo apt-get install -y swig
-
       - name: Build wheels
         uses: pypa/cibuildwheel@v2.21.3
         env:
-          CIBW_BEFORE_BUILD: "yum install -y swig || apk add swig || apt-get install -y swig"
           CIBW_PRERELEASE_PYTHONS: "True"
           CIBW_BUILD: "cp39-* cp310-* cp311-* cp312-* cp313-* cp313t-* cp314-* cp314t-*"
 
