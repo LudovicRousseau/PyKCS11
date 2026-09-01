@@ -16,7 +16,6 @@ The wrapper has been generated with the help of the SWIG compiler."""
 classifiers = [
     "Development Status :: 5 - Production/Stable",
     "Intended Audience :: Developers",
-    "License :: OSI Approved :: GNU General Public License (GPL)",
     "Natural Language :: English",
     "Operating System :: Microsoft :: Windows",
     "Operating System :: OS Independent",
@@ -85,7 +84,7 @@ setup(
     maintainer_email="ludovic.rousseau@free.fr",
     url="https://github.com/LudovicRousseau/PyKCS11",
     download_url="http://sourceforge.net/projects/pkcs11wrap/files/pykcs11/",
-    license="GPL",
+    license="GPL-2.0-or-later",
     cmdclass={"build_py": MyBuild},
     package_dir={"": "src"},
     ext_modules=[
