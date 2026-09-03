@@ -1259,6 +1259,10 @@ typedef CK_RV (* CK_DESTROYMUTEX)(void *);
 typedef CK_RV (* CK_LOCKMUTEX)(void *);
 typedef CK_RV (* CK_UNLOCKMUTEX)(void *);
 
+#if defined(_WIN32)
+#pragma pack(push, cryptoki, 1)
+#endif
+
 /* General Structure definitions */
 struct CK_ATTRIBUTE {
     CK_ATTRIBUTE_TYPE type;
@@ -2770,6 +2774,9 @@ struct CK_FUNCTION_LIST {
     CK_C_WaitForSlotEvent C_WaitForSlotEvent;
 };
 
+#if defined(_WIN32)
+#pragma pack(pop, cryptoki)
+#endif
 
 // clang-format on
 #endif
