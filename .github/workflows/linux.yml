@@ -53,8 +53,7 @@ jobs:
           softhsm2-util --init-token --slot 0 --label "A token" --pin 1234 --so-pin 123456
           source temp/bin/activate
           make install
-          # test_symetric_ECC blocks on GNU/Linux for now
-          ./run_test.py
+          make test
 
       - name: pylint
         run: |
