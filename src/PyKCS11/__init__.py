@@ -746,7 +746,6 @@ class PyKCS11Lib:
             raise PyKCS11Error(rv)
 
         m = []
-        mechanismList.append(0x1D)
         for mechanism in mechanismList:
             # Dynamically add unknown mechanisms:
             if mechanism not in CKM:
