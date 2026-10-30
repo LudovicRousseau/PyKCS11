@@ -64,3 +64,9 @@ class TestUtil(unittest.TestCase):
         info = self.pkcs11.getMechanismInfo(self.slot, mechanisms[0])
         text = str(info)
         self.assertIsNotNone(text)
+
+        # check all mechanisms
+        for mechanism in mechanisms:
+            info = self.pkcs11.getMechanismInfo(self.slot, mechanism)
+            text = str(info)
+            self.assertIsNotNone(text)
