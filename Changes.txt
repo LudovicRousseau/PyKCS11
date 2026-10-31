@@ -1,6 +1,11 @@
 History
 =======
 
+1.5.21 - October 2026, Ludovic Rousseau
+  - getMechanismList(): do not return mechanism 0x1D (debug code
+    introduced by mistake in release 1.5.19)
+  - build binary wheels for Pyuthon 3.15
+
 1.5.20 - September 2026, Ludovic Rousseau
   - fix C_Initialize() crash on Windows
 

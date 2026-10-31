@@ -72,7 +72,7 @@ class MyBuild(build_py):
 
 setup(
     name="pykcs11",
-    version="1.5.20",
+    version="1.5.21",
     description="A Full PKCS#11 wrapper for Python",
     keywords="crypto,pki,pkcs11,c++",
     classifiers=classifiers,
